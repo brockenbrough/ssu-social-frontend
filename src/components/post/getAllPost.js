@@ -11,7 +11,7 @@ const GetAllPost = () => {
 
   const fetchPosts = async () => {
     const res = await axios
-      .get("http://localhost:8095/posts/getAllPosts")
+      .get(`${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getAllPosts`)
 
       .then((res) => {
         setPosts(res.data);
