@@ -1,0 +1,18 @@
+.username {
+    color: violet;
+    font-style: italic;
+}
+.userId {
+    color: pink;
+    font-style: italic;
+}
+
+.email{
+    color:  yellowgreen;
+    font-style: italic;
+}
+
+.password{
+    color:  lightcoral;
+    font-style: italic;
+}

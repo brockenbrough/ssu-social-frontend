@@ -1,0 +1,39 @@
+#unfollowButton:hover {
+    content:"Unfollow";
+    border-color: #d60d0d;
+    background-color: #bd0f0f00;
+    color: #d60d0d;
+  }
+  
+  #unfollowButton:hover .message {
+    display: none;
+  }
+  
+  #unfollowButton:hover:before {
+    content: "Unfollow"
+  }
+  
+  #followButton {
+    width: 180px;
+    height: 48px;
+  }
+  
+  #unfollowButton {
+    width: 180px;
+    height: 48px;
+  }
+  
+  #editProfileButton {
+    width: 180px;
+    height: 48px;
+    background-color: #bd0f0f00;
+    color: #0D6EFD;
+  }
+
+  #followPage {
+    margin: auto;
+    width: 50%;
+    border: 3px solid green;
+    padding: 10px;
+    text-align: center;
+  }
