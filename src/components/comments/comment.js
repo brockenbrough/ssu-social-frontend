@@ -8,7 +8,7 @@ import Stack from "react-bootstrap/Stack";
 const Comment = (props) => {
   const comment = props.record;
   const deleteComment = async (comment) => {
-    axios.delete(`http://localhost:8095/comments/comment/${comment._id}`)
+    axios.delete(`${process.env.REACT_APP_BACKEND_SERVER_URI}/comments/comment/${comment._id}`)
         .then(response => {
             alert('Comment deleted.')
         })

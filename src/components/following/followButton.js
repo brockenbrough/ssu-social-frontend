@@ -53,7 +53,7 @@ useEffect(() => {setUser(getUserInfo())}, []) // Get user's info
       userId: props.username,
       targetUserId: props.targetUserId,
     }
-    const url = "http://localhost:8095/followers/unfollow";
+    const url = `${process.env.REACT_APP_BACKEND_SERVER_URI}/followers/unfollow`;
 
     const res = await axios.delete(url, {
       data: unFollow,

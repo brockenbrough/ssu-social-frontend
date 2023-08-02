@@ -19,7 +19,7 @@ export default function EditComment() {
     async function fetchData() {
       const id = params.id.toString();
       const response = await fetch(
-        `http://localhost:8095/comments/comment/${params.id.toString()}`
+        `${process.env.REACT_APP_BACKEND_SERVER_URI}/comments/comment/${params.id.toString()}`
       );
 
       if (!response.ok) {
@@ -63,7 +63,7 @@ export default function EditComment() {
 
     // This will send a post request to update the data in the database.
     await fetch(
-      `http://localhost:8095/comments/comment/update/${params.id.toString()}`,
+      `${process.env.REACT_APP_BACKEND_SERVER_URI}/comments/comment/update/${params.id.toString()}`,
       {
         method: "PUT",
         body: JSON.stringify(editedComment),

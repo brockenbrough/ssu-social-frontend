@@ -20,7 +20,7 @@ export default function FollowingList() {
     // Define a function to get the user's following. People that they follow.
     async function getFollowing() {
 
-      const response = await fetch(`http://localhost:8095/following/${params.id.toString()}`);
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_SERVER_URI}/following/${params.id.toString()}`);
 
       if (!response.ok) {
         const message = `An error occurred: ${response.statusText}`;
