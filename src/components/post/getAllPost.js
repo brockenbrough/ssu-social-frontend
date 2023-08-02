@@ -1,9 +1,5 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import Button from "react-bootstrap/Button";
-import Card from "react-bootstrap/Card";
-import moment from "moment";
 import Post from "./post";
 
 const GetAllPost = () => {
