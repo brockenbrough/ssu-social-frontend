@@ -15,25 +15,25 @@ export default function PostList() {
     let feed = [];
     let postData = [];
     if (user !== null) {
-      const res = await axios.get(`http://localhost:8093/feed/${user.username}`)
+      const res = await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_URI}/feed/${user.username}`)
       .then(res => {
         feed = res.data.feed
       })
-      .catch(error => alert("An error has occure while fetching feed data"))
+      .catch(error => alert(`Failed to fetch feed for user: ${process.env.REACT_APP_BACKEND_SERVER_URI}/feed/${user.username}`))
     }
     else {
-      const res = await axios.get(`http://localhost:8093/feed/`)
+      const res = await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_URI}/feed/`)
       .then(res => {
         feed = res.data.feed
       })
-      .catch(error => alert("An error has occure while fetching feed data"))
+      .catch(error => alert(`Failed to fetch public feed: ${process.env.REACT_APP_BACKEND_SERVER_URI}/feed/`))
     }
     for (let i = 0; i < feed.length; i++) {
-      const res = await axios.get(`http://localhost95/posts/getPostById/${feed[i]}`)
+      const res = await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getPostById/${feed[i]}`)
         .then(res => {
           postData.push(res.data)
         })
-        .catch(error => alert("An error has occured while fetching post data"))
+        .catch(error => alert(`Failed to fetch a post in feed: ${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getPostById/${feed[i]}`))
     }
     setPosts(postData)
   }
@@ -62,7 +62,7 @@ export default function PostList() {
         Welcome to your feed {user.username}
       </h1>
       <p>
-        If you are not seeing any posts, try <a href="http://localhost:8096/publicfeed">the public feed page</a>
+        If you are not seeing any posts, try the public feed page.
       </p>
       <Button variant="primary" className="mx-1 my-1" href={`/createpost/`}>
         Create Post
