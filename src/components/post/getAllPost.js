@@ -15,7 +15,7 @@ const GetAllPost = () => {
       .then((res) => {
         setPosts(res.data);
       })
-      .catch((error) => alert(`Unable to fetch data from ${url}:`));
+      .catch((error) => alert(`Unable to fetch data from ${url}.`));
   };
 
   useEffect(() => {
@@ -30,13 +30,14 @@ const GetAllPost = () => {
   };
 
   const deletePost = async (posts) => {
+    const url = `${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/deletePost/${posts._id}`;
     axios
-      .delete(`http://localhost:8095/posts/deletePost/${posts._id}`)
+      .delete(url)
       .then((response) => {
         alert("Post deleted successfully");
         fetchPosts();
       })
-      .catch((error) => alert("Error deleting post"));
+      .catch((error) => alert(`Error deleting post: ${url}.`));
   };
 
   return (
