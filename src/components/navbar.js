@@ -24,6 +24,8 @@ export default function Navbar() {
       <Nav className="me-auto">
         <Nav.Link href="/feed">Home</Nav.Link>
         <Nav.Link href="/project-notes/contributors">About</Nav.Link>
+        <Nav.Link href="/project-notes-contributors1">About1</Nav.Link>
+        <Nav.Link href="/project-notes-contributors2">About2</Nav.Link>
         <Nav.Link href="/privateUserProfile">Profile</Nav.Link>
         <Nav.Link href="/createpost">Create-Post</Nav.Link>
         <Nav.Link href="/getallpost">Post-List</Nav.Link>
