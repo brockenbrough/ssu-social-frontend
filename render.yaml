@@ -1,0 +1,4 @@
+routes:
+  - path: "/*"
+    staticDirectory: "build"
+    cleanUrls: true
