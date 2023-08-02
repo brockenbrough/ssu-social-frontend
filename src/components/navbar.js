@@ -22,8 +22,7 @@ export default function Navbar() {
     <ReactNavbar bg="dark" variant="dark">
     <Container>
       <Nav className="me-auto">
-        <Nav.Link href="/feed">Home</Nav.Link>
-        <Nav.Link href="/feed1">Home1</Nav.Link>
+        <Nav.Link href="/feed-algorithm">Feed</Nav.Link>
         <Nav.Link href="/project-notes-contributors">About</Nav.Link>
         <Nav.Link href="/privateUserProfile">Profile</Nav.Link>
         <Nav.Link href="/createpost">Create-Post</Nav.Link>

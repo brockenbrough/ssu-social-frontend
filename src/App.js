@@ -59,8 +59,7 @@ const App = () => {
           <Route path="/project-notes/create" element={<CreateContributor />} />
           <Route path="/project-notes/contributors" element={<ContributorList />}/>
           <Route path="/oldfeed" element={<Feed />} />
-          <Route path="/feed" element={<CreatePost />} />
-          <Route path="/feed1" element={<FeedPage />} />
+          <Route path="/feed-algorithm" element={<FeedPage />} />
           <Route path="/publicFeed" element={<PublicFeedPage />} />
           <Route path="/comments/comment" element={<CommentList />} />
           <Route path="/comments/editComment/:id" element={<EditComment />} />
