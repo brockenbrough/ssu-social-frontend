@@ -29,7 +29,7 @@ export default function CreateContributor() {
     // When a post request is sent to the create url, we'll add a new record to the database.
     const newPerson = { ...form };
 
-    await fetch("http://localhost:8095/project_notes/contributor/add", {
+    await fetch(`${process.env.REACT_APP_BACKEND_SERVER_URI}/project_notes/contributor/add`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

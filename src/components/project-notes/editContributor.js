@@ -19,7 +19,7 @@ export default function EditContributor() {
   useEffect(() => {
     async function fetchData() {
       const id = params.id.toString();
-      const response = await fetch(`http://localhost:8095/project_notes/contributor/${params.id.toString()}`);
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_SERVER_URI}/project_notes/contributor/${params.id.toString()}`);
 
       if (!response.ok) {
         const message = `An error has occured: ${response.statusText}`;
@@ -60,7 +60,7 @@ export default function EditContributor() {
     };
 
     // This will send a post request to update the data in the database.
-    await fetch(`http://localhost:8095/project_notes/contributor/update/${params.id.toString()}`, {
+    await fetch(`${process.env.REACT_APP_BACKEND_SERVER_URI}/project_notes/contributor/update/${params.id.toString()}`, {
       method: "PUT",
       body: JSON.stringify(editedPerson),
       headers: {

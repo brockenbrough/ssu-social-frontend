@@ -4,11 +4,10 @@ import axios from "axios";
 import "./register.css";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import getUserInfo from "../../utilities/decodeJwt";
 
 const PRIMARY_COLOR = "#cc5c99";
 const SECONDARY_COLOR = "#0c0c1f";
-const url = "http://localhost:8095/user/signup";
+const url = `${process.env.REACT_APP_BACKEND_SERVER_URI}/user/signup`;
 const Register = () => {
   const [data, setData] = useState({ username: "", email: "", password: "" });
   const [error, setError] = useState("");
@@ -56,7 +55,7 @@ const Register = () => {
         error.response.status >= 400 &&
         error.response.status <= 500
       ) {
-        setError(error.response.data.message);
+        setError(`Error while making a request to ${url}: ${error.response.data.message}`);
       }
     }
   };

@@ -22,10 +22,10 @@ export default function ContributorList() {
     // Define a function to get records. We are going to call it below.
     // We use async keyword so we can later say "await" to block on finish.
     async function getRecords() {
-      const response = await fetch(`http://localhost:8095/project_notes/contributor/`);
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_SERVER_URI}/project_notes/contributor/`);
       
       if (!response.ok) {
-        const message = `An error occured: ${response.statusText}`;
+        const message = `An error occured: ${response.statusText}  ${process.env.REACT_APP_BACKEND_SERVER_URI}/project_notes/contributor/`;
         window.alert(message);
         return;
       }
@@ -41,12 +41,12 @@ export default function ContributorList() {
   }, [contributors.length]);  // If record length ever changes, this useEffect() is automatically called.
 
   const deleteContributor = async (_id) => {
-    await axios.delete(`http://localhost:8095/project_notes/contributor/${_id}`)
+    await axios.delete(`${process.env.REACT_APP_BACKEND_SERVER_URI}/project_notes/contributor/${_id}`)
         .then(response => {
             // alert('Contributor deleted.')
             console.log('deleted')
         })
-        .catch(error => alert('Error deleting contributor'));
+        .catch(error => alert(`Error deleting contributor: ${process.env.REACT_APP_BACKEND_SERVER_URI}/project_notes/contributor/${_id}`));
 
             // We're going to patch up our state by removing the records corresponding to id in our current state.
     const newRecords = contributors.filter((el) => el._id !== _id);
