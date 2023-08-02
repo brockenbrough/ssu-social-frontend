@@ -46,7 +46,6 @@ const App = () => {
       <UserContext.Provider value={user}>
         <Routes>
           <Route exact path="/" element={<LandingPage />} />
-          <Route exact path="/abc" element={<LandingPage />} />
           <Route exact path="/login" element={<Login />} />
           <Route exact path="/signup" element={<Signup />} />
           <Route exact path="/editUserPage" element={<EditUserPage />} />
@@ -55,13 +54,13 @@ const App = () => {
           <Route path="/postLikedByPage" element={<postLikedByPage />}/>
           <Route path="/publicProfilePage/:username" element={<PublicProfilePage />} />
           <Route path="/publicUser" element={<PublicUser />} />
+          <Route path="/project-notes-contributors" element={<ContributorList />}/>
           <Route path="/project-notes/editContributor/:id" element={<EditContributor />} />
           <Route path="/project-notes/create" element={<CreateContributor />} />
           <Route path="/project-notes/contributors" element={<ContributorList />}/>
-          <Route path="/project-notes-contributors1" element={<ContributorList />}/>
-          <Route path="/project-notes-contributors2" element={<CreatePost />}/>
           <Route path="/oldfeed" element={<Feed />} />
-          <Route path="/feed" element={<FeedPage />} />
+          <Route path="/feed" element={<CreatePost />} />
+          <Route path="/feed1" element={<FeedPage />} />
           <Route path="/publicFeed" element={<PublicFeedPage />} />
           <Route path="/comments/comment" element={<CommentList />} />
           <Route path="/comments/editComment/:id" element={<EditComment />} />
