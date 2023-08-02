@@ -53,6 +53,7 @@ const App = () => {
       <UserContext.Provider value={user}>
         <Routes>
           <Route exact path="/" element={<LandingPage />} />
+          <Route exact path="/abc" element={<LandingPage />} />
           <Route exact path="/login" element={<Login />} />
           <Route exact path="/signup" element={<Signup />} />
           <Route exact path="/editUserPage" element={<EditUserPage />} />
