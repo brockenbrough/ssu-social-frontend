@@ -49,11 +49,11 @@ const PrivateUserProfile = () => {
 
   const fetchPosts = async () => {
     const res = await axios
-      .get(`http://localhost:8095/posts/getAllByUsername/${username}`)
+      .get(`${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getAllByUsername/${username}`)
       .then((res) => {
         setPosts(res.data);
       })
-      .catch((error) => alert("error fetching data"));
+      .catch((error) => alert(`Unable to get posts from ${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getAllByUsername/${username}`));
   };
 
   useEffect(() => {
@@ -70,21 +70,21 @@ const PrivateUserProfile = () => {
     const { content } = form;
     const post = { content, username };
     await axios
-      .post(" http://localhost:8095/posts/createPost", post)
+      .post(`${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/createPost`, post)
       .then((response) => {
         fetchPosts();
         form.content = "";
       })
-      .catch((error) => alert("Error creating new post."));
+      .catch((error) => alert(`Unable to create post: ${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/createPost`));
   };
 
   const deleteConfirm = async (posts) => {
     axios
-      .delete(`http://localhost:8095/posts/deletePost/${posts._id}`)
+      .delete(`${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/deletePost/${posts._id}`)
       .then((response) => {
         fetchPosts();
       })
-      .catch((error) => alert("Error deleting post"));
+      .catch((error) => alert(`Unable to delete post: ${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/deletePost/${posts._id}`));
   };
 
   const followerButtonOnClick = () => {};

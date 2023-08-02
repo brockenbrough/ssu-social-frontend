@@ -28,11 +28,11 @@ const PublicUser = () => {
 
 
 	const fetchPosts = async () => {
-	  const res = await axios.get(`http://localhost:8095/posts/getAllPosts/${posts}`)
+	  const res = await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getAllPosts/${posts}`)
 		  .then(res => {
 			  setPosts(res.data)
 		  })
-		  .catch(error => alert('error fetching data'))
+		  .catch(error => alert(`Unable to fetch all posts: ${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getAllPosts/${posts}`))
 	}
 
 	useEffect(() => {

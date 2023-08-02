@@ -25,8 +25,8 @@ export default function Navbar() {
         <Nav.Link href="/feed-algorithm">Feed</Nav.Link>
         <Nav.Link href="/project-notes-contributors">About</Nav.Link>
         <Nav.Link href="/privateUserProfile">Profile</Nav.Link>
-        <Nav.Link href="/createpost">Create-Post</Nav.Link>
-        <Nav.Link href="/getallpost">Post-List</Nav.Link>
+        <Nav.Link href="/createpost">Create Post</Nav.Link>
+        <Nav.Link href="/getallpost">All Posts</Nav.Link>
       
       </Nav>
     </Container>

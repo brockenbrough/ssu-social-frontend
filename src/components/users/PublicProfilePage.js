@@ -25,11 +25,11 @@ export default function PublicUserList() {
   const [posts, setPosts] = useState([])
  
   const fetchPosts = async () => {
-	  const res = await axios.get(`http://localhost:8095/posts/getAllByUsername/${username}`)
+	  const res = await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getAllByUsername/${username}`)
 		  .then(res => {
 			  setPosts(res.data)
 		  })
-		  .catch(error => alert('error fetching data'))
+		  .catch(error => alert(`Unable to fetch posts: ${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getAllByUsername/${username}`))
 	}
 
   // 2. function getUserId

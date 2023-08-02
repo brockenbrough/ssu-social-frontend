@@ -7,7 +7,7 @@ import getUserInfo from "../../utilities/decodeJwt";
 
 const PRIMARY_COLOR = "#cc5c99";
 const SECONDARY_COLOR = '#0c0c1f'
-const url = "http://localhost:8095/user/login";
+const url = `${process.env.REACT_APP_BACKEND_SERVER_URI}/user/login`;
 
 const Login = () => {
   const [user, setUser] = useState(null)
