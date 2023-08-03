@@ -1,9 +1,9 @@
 import axios from 'axios';
 
 export default axios.create({
-    baseURL: 'http://localhost:8095/statistics/post-likes'
+    baseURL: `${process.env.REACT_APP_BACKEND_SERVER_URI}/statistics/post-likes`
 })
 
 export const postURL = axios.create({
-    baseURL: 'http://localhost:/posts'
+    baseURL: `http://localhost:/posts`
 })

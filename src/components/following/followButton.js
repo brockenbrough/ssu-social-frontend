@@ -36,7 +36,7 @@ useEffect(() => {setUser(getUserInfo())}, []) // Get user's info
       userId: props.username,
       targetUserId: props.targetUserId,
     }
-    const url = "http://localhost:8095/followers/follow";
+    const url = `${process.env.REACT_APP_BACKEND_SERVER_URI}/followers/follow`;
 
     const res = await axios.post(url, addFollowing)
     setIsFollowing(true); // Follow state, to true. Sets the button UI view.
@@ -71,7 +71,7 @@ useEffect(() => {setUser(getUserInfo())}, []) // Get user's info
 
 
     const response = await fetch(
-      `http://localhost:8095/followers/${props.targetUserId}`
+      `${process.env.REACT_APP_BACKEND_SERVER_URI}/followers/${props.targetUserId}`
     );
 
     if (!response.ok) {

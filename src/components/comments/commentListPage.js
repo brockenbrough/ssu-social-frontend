@@ -22,7 +22,7 @@ export default function CommentList() {
     // We use async keyword so we can later say "await" to block on finish.
      async function getRecords() {
       const response = await fetch(
-        `http://localhost:8095/comments/comment/`
+        `${process.env.REACT_APP_BACKEND_SERVER_URI}/comments/comment/`
       );
 
       if (!response.ok) {
@@ -43,7 +43,7 @@ export default function CommentList() {
 
   // A method to delete a contributor
   async function deleteComment(id) {
-    await fetch(`http://localhost:8095/comments/comment/${id}`, {
+    await fetch(`${process.env.REACT_APP_BACKEND_SERVER_URI}/comments/comment/${id}`, {
       method: "DELETE",
     });
 

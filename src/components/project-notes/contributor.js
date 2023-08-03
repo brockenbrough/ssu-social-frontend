@@ -6,7 +6,7 @@ import Button from 'react-bootstrap/Button';
 import Stack from 'react-bootstrap/Stack';
 
 // const deleteContributor = async (contributor) => {
-//   axios.delete(`http://localhost:8095/project_notes/contributor/${contributor._id}`)
+//   axios.delete(`${process.env.REACT_APP_BACKEND_SERVER_URI}/project_notes/contributor/${contributor._id}`)
 //       .then(response => {
 //           alert('Contributor deleted.')
 //       })

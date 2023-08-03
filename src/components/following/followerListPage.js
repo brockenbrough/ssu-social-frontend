@@ -48,7 +48,7 @@ export default function FollowerList() {
         userId: userId,
         targetUserId: targetUserId,
       }
-    const url = "http://localhost:8095/followers/unfollow";
+    const url = `${process.env.REACT_APP_BACKEND_SERVER_URI}/followers/unfollow`;
 
     await axios.delete(url, {
         data: deleteFollower,

@@ -26,6 +26,13 @@ const Test = () => {
       <Alert variant='primary' className="mx-2">
         {JSON.stringify(value, null, 2)}
       </Alert>
+      <div className="mx-2">
+        <h4>Backend</h4>
+      </div>
+      <Alert variant='primary' className="mx-2">
+           ${process.env.REACT_APP_BACKEND_SERVER_URI}
+      </Alert>
+      
     </Stack>
   )
 }

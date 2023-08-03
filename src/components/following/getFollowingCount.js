@@ -13,7 +13,7 @@ export default function FollowingCount(props) {
     // Gets the following count of the user.
     async function getFollowingCount() {
 
-      const response = await fetch(`http://localhost:8095/following/${props.username}`);
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_SERVER_URI}/following/${props.username}`);
 
       if (!response.ok) {
         const message = `An error occurred: ${response.statusText}`;
