@@ -45,16 +45,23 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      alert(`About to post to: ${url}`);
       const { data: res } = await axios.post(url, data);
+      alert("POST request successful");
+      alert("Response object: " + JSON.stringify(res));
+
       // const {accessToken} = res
       //store token in localStorage
       navigate("/login");
+      alert("Navigated to /login");
     } catch (error) {
+      alert(`Error: ${url}: ${error.response.data.message}`);
       if (
         error.response &&
         error.response.status >= 400 &&
         error.response.status <= 500
       ) {
+        alert(`Error while making a request to ${url}: ${error.response.data.message}`);
         setError(`Error while making a request to ${url}: ${error.response.data.message}`);
       }
     }
@@ -95,7 +102,7 @@ const Register = () => {
                     type="email"
                     name="email"
                     onChange={handleChange}
-                    placeholder="Enter Email Please"
+                    placeholder="Enter email"
                   />
                   <Form.Text className="text-muted">
                     We just might sell your data
@@ -106,7 +113,7 @@ const Register = () => {
                   <Form.Control
                     type="password"
                     name="password"
-                    placeholder="Password"
+                    placeholder="Enter password"
                     onChange={handleChange}
                   />
                 </Form.Group>
