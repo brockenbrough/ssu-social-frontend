@@ -5,9 +5,36 @@ on:
     branches: [ main ]
 
 jobs:
-       
+
+  test:
+
+    name: Empty Test
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.x]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: NPM install, build, there is no test for now.
+        run: |
+          npm install
+        env:
+          REACT_APP_BACKEND_SERVER_URI: ${{ secrets.REACT_APP_BACKEND_SERVER_URI }}
+          
   deploy:
     name: Deploy
+    needs: [test]
     runs-on: ubuntu-latest
 
     steps:
