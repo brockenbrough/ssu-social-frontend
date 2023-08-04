@@ -57,12 +57,9 @@ const Login = () => {
       localStorage.setItem("accessToken", accessToken);
       navigate("/feed");
     } catch (error) {
-      if (
-        error.response &&
-        error.response.status >= 400 &&
-        error.response.status <= 500
-      ) {
-        setError(error.response.data.message);
+      alert(`Error: ${error.response.data.message}. ${error.response.status} ${url}`);
+      if (error.response) {
+        setError(`${error.response.data.message}`);
       }
     }
   };

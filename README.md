@@ -1,7 +1,16 @@
+# Set Up
+
+In development mode, you are locally running this frontend and a backend.
+You must have a .env file in same directory as package.json.
+The .env must define the path to the backend services.
+For example: REACT_APP_BACKEND_SERVER_URI=http://localhost:8095
+You must have the backend server up and running.
+The backend is available in a separate respository.
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-Jean Tokam 
+ 
 ## Available Scripts
 
 In the project directory, you can run:
