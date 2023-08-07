@@ -53,10 +53,17 @@ const Register = () => {
       //store token in localStorage
       navigate("/login");
     } catch (error) {
-      alert(`Error: ${error.response.data.message}. ${error.response.status} ${url}`);
       if (error.response) {
-        setError(`${error.response.data.message}`);
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        alert(`Error: ${error.response.data} ${error.response.status} ${url}`);
+        console.log(error.response.data);
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        alert(`${error.message}.  An error occured contacting ${url}`);
+        console.log('Error', error.message);
       }
+      setError("Something went wrong. Please try again.");
     }
   };
 
