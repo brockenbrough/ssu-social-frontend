@@ -1,13 +1,21 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Form, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import getUserInfo from "../../utilities/decodeJwt";
+import { Link } from "react-router-dom";
 
 const CreatePost = () => {
+  const [user, setUser] = useState(null);
   const [state, setState] = useState({
     content: "",
     username: "",
   });
+
+  useEffect(() => {
+    setUser(getUserInfo());
+  }, []);
+
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -28,6 +36,20 @@ const CreatePost = () => {
     await axios.post(`${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/createPost`, post);
     navigate("/");
   };
+
+  if (!user) {
+    return (
+      <div>
+        <h3>
+          You are not authorized to view this page, Please Login in{" "}
+          <Link to={"/login"}>
+            <a href="#">here</a>
+          </Link>
+        </h3>
+      </div>
+    );
+  }
+
 
   return (
     <Form onSubmit={handleSubmit}>
