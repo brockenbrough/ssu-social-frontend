@@ -13,8 +13,10 @@ const CreatePost = () => {
   });
 
   useEffect(() => {
-    setUser(getUserInfo());
+    const currentUser = getUserInfo();
+    setUser(currentUser);
   }, []);
+  
 
   const navigate = useNavigate();
 
@@ -27,15 +29,17 @@ const CreatePost = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    const { content, username } = state;
-    const post = {
-      content,
-      username,
-    };
-    await axios.post(`${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/createPost`, post);
-    navigate("/");
+  e.preventDefault();
+  const { content, username } = state;
+  const post = {
+    id: user.id, // Access userId directly
+    content,
+    username,
   };
+  await axios.post(`${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/createPost`, post);
+  navigate("/");
+};
+
 
   if (!user) {
     return (
