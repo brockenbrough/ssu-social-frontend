@@ -98,6 +98,8 @@ const PrivateUserProfile = () => {
 
   const followerButtonOnClick = () => {};
 
+
+
   // 	<span><b>{<FollowerCount username = {username}/>}</b></span>&nbsp;
   // <span><b>{<FollowingCount username = {username}/>}</b></span>;
   return (
@@ -202,7 +204,7 @@ const PrivateUserProfile = () => {
                   {}
                 </Card.Title>
                 {posts.content}
-                <p>{moment(posts.createdAt).format("MMM DD yyyy")}</p>
+                <p>{moment(posts.date).format("MMMM Do YYYY, h:mm:ss a")}</p>
                 <Link
                   style={{ marginRight: "1cm" }}
                   to={`/updatePost/${posts._id}`}

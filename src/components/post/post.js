@@ -5,6 +5,10 @@ import Button from "react-bootstrap/Button";
 import moment from "moment";
 
 const Post = ({ posts, isLiked }) => {
+
+  const formattedDate = moment(posts.date).format("MMMM Do YYYY, h:mm:ss a");
+
+
   return (
     <div className="d-inline-flex p-2">
       <Card style={{ width: "18rem" }}>
@@ -20,7 +24,7 @@ const Post = ({ posts, isLiked }) => {
               <Button variant="outline-danger">Like</Button>
             )}
           </div>
-          <p>{moment(posts.createdAt).format("MMM DD yyyy")}</p>
+          <p>{formattedDate}</p>
           <Link
             style={{ marginRight: "1cm" }}
             to={`/updatePost/${posts._id}`}
