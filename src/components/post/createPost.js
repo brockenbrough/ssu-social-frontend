@@ -37,7 +37,7 @@ const CreatePost = () => {
     username,
   };
   await axios.post(`${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/createPost`, post);
-  navigate("/");
+  navigate("/getAllPost");
 };
 
 
