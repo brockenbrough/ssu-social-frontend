@@ -9,7 +9,6 @@ import CreateContributor from "./components/project-notes/createContributor";
 import LandingPage from "./components/users/Landingpage";
 import Login from "./components/users/Login";
 import Signup from "./components/register/Register";
-import Feed from "./components/feed/Feed";
 import FeedPage from "./components/post/feedPage";
 import PublicFeedPage from "./components/post/publicFeedPage";
 import EditUserPage from "./components/users/editUserPage";
@@ -58,7 +57,7 @@ const App = () => {
           <Route path="/project-notes/editContributor/:id" element={<EditContributor />} />
           <Route path="/project-notes/create" element={<CreateContributor />} />
           <Route path="/project-notes/contributors" element={<ContributorList />}/>
-          <Route path="/oldfeed" element={<Feed />} />
+          
           <Route path="/feed-algorithm" element={<FeedPage />} />
           <Route path="/publicFeed" element={<PublicFeedPage />} />
           <Route path="/comments/comment" element={<CommentList />} />

@@ -30,16 +30,17 @@ const CreatePost = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Prevent the default form submission behavior.
-    const { content, username } = state; // Destructure content and username from state.
-    const post = {
-      id: user.id, // Access userId directly from the user object.
-      content,
-      username,
-    };
-    await axios.post(`${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/createPost`, post); // Send a POST request to create a new post.
-    navigate("/"); // Navigate to the root page after creating the post.
+  e.preventDefault();
+  const { content, username } = state;
+  const post = {
+    id: user.id, // Access userId directly
+    content,
+    username,
   };
+  await axios.post(`${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/createPost`, post);
+  navigate("/");
+};
+
 
   if (!user) {
     // If there is no user (not authorized), render a message and a link to login.

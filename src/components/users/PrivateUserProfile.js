@@ -27,6 +27,12 @@ const PrivateUserProfile = () => {
   const [form, setValues] = useState({ content: "" });
   const [posts, setPosts] = useState([]);
   const navigate = useNavigate();
+  const [postToDelete, setPostToDelete] = useState(null);
+
+  const openDeleteModal = (post) => {
+    setPostToDelete(post);
+    handleShow();
+  };
 
   const followerRouteChange = () => {
     navigate(`/followers/${username}`); // To use in the follower's button to switch to the user's follower's list.
@@ -79,15 +85,20 @@ const PrivateUserProfile = () => {
   };
 
   const deleteConfirm = async (posts) => {
-    axios
-      .delete(`${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/deletePost/${posts._id}`)
-      .then((response) => {
-        fetchPosts();
-      })
-      .catch((error) => alert(`Unable to delete post: ${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/deletePost/${posts._id}`));
+    if (postToDelete) {
+      axios
+        .delete(`${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/deletePost/${postToDelete._id}`)
+        .then((response) => {
+          handleClose();
+          fetchPosts();
+        })
+        .catch((error) => alert(`Unable to delete post: ${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/deletePost/${postToDelete._id}`));
+    }
   };
 
   const followerButtonOnClick = () => {};
+
+
 
   // 	<span><b>{<FollowerCount username = {username}/>}</b></span>&nbsp;
   // <span><b>{<FollowingCount username = {username}/>}</b></span>;
@@ -193,7 +204,7 @@ const PrivateUserProfile = () => {
                   {}
                 </Card.Title>
                 {posts.content}
-                <p>{moment(posts.createdAt).format("MMM DD yyyy")}</p>
+                <p>{moment(posts.date).format("MMMM Do YYYY, h:mm:ss a")}</p>
                 <Link
                   style={{ marginRight: "1cm" }}
                   to={`/updatePost/${posts._id}`}
@@ -201,7 +212,7 @@ const PrivateUserProfile = () => {
                 >
                   Update
                 </Link>
-                <Button variant="danger" onClick={() => deleteConfirm(posts)}>
+                <Button variant="danger" onClick={() => openDeleteModal(posts)}>
                   Delete
                 </Button>
               </Card.Body>
@@ -209,8 +220,23 @@ const PrivateUserProfile = () => {
           </div>
         ))}
       </div>
+      <Modal show={show} onHide={handleClose} backdrop="static" keyboard={false}>
+        <Modal.Header closeButton>
+          <Modal.Title>Delete Confirmation</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Are you sure you want to delete this post?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            No
+          </Button>
+          <Button variant="primary" onClick={deleteConfirm}>
+            Yes
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };
-
 export default PrivateUserProfile;
