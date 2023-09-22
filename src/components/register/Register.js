@@ -56,7 +56,7 @@ const Register = () => {
       if (error.response) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
-        alert(`Error: ${error.response.data} ${error.response.status} ${url}`);
+        alert(`Error: ${JSON.stringify(error.response.data)}  ${error.response.status} ${url}`);
         console.log(error.response.data);
       } else {
         // Something happened in setting up the request that triggered an Error
