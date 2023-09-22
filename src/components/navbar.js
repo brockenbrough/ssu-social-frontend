@@ -15,9 +15,7 @@ export default function Navbar() {
   setUser(getUserInfo())
   }, [])
   
-  // if (!user) return null   - for now, let's show the bar even not logged in.
-  // we have an issue with getUserInfo() returning null after a few minutes
-  // it seems.
+  
   return (
     <ReactNavbar bg="dark" variant="dark">
     <Container>
