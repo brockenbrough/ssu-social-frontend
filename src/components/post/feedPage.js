@@ -50,20 +50,7 @@ export default function PostList() {
         }
       }
     }
-    
-    for (let i = 0; i < feed.length; i++) {
-      try {
-        const res = await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getPostById/${feed[i]}`);
-        postData.push(res.data);
-      } catch (error) {
-        if (error.response && error.response.status === 400) {
-          // Handle 400 error here, e.g., log it or display a message
-          console.log(`Bad Request: Failed to fetch a post in feed: ${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getPostById/${feed[i]}`);
-        } else {
-          alert(`Failed to fetch a post in feed: ${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getPostById/${feed[i]}`);
-        }
-      }
-    }
+
     setPosts(postData)
   }
 
