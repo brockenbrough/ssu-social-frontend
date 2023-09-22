@@ -50,6 +50,14 @@ const Post = ({ posts, isLiked }) => {
           >
             Update
           </Link>
+          <Link
+          to=" /createComment.js"
+          className="btn btn-waring"
+          >
+            Comment
+            
+          </Link>
+
         </Card.Body>
       </Card>
     </div>
