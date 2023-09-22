@@ -27,6 +27,7 @@ export default function Navbar() {
         <Nav.Link href="/getallpost">All Posts</Nav.Link>
         <Nav.Link href="/comments/comment">Comments</Nav.Link>
 
+
       </Nav>
     </Container>
   </ReactNavbar>
