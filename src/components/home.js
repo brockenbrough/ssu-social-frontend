@@ -46,7 +46,7 @@ export default function Home() {
   // This following section will display the form that takes input from the user to update the data.
   return (
     <div>
-      <h1>Welcome to the amazing Social Media App!</h1>
+      <h1>Welcome to the truly amazing Social Media App!</h1>
       <br></br>
       <h3>Add a Comment</h3>
       {/* <form onSubmit={this.onSubmit} > */}

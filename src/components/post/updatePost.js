@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import {useParams, useNavigate } from "react-router";
 import Navbar from '../navbar';
+import getUserInfo from "../../utilities/decodeJwt";
+import { Link } from "react-router-dom";
 
 import { Form, Button } from 'react-bootstrap'
 
-
-
     const UpdatePost = (props) => {
+
+        const [user, setUser] = useState(null);
         const [state, setState] = useState({
             username: '',
             content: '',
@@ -15,6 +17,10 @@ import { Form, Button } from 'react-bootstrap'
         const params = useParams()
 
        const navigate = useNavigate();
+
+       useEffect(() => {
+        setUser(getUserInfo());
+      }, []);
 
         useEffect(() => {
             axios.get(`${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getPostById/${params.postId}`)
@@ -49,7 +55,18 @@ import { Form, Button } from 'react-bootstrap'
 
         const showUpdateForm =()=>{
 
-            
+            if (!user) {
+                return (
+                  <div>
+                    <h3>
+                      You are not authorized to view this page, Please Login in{" "}
+                      <Link to={"/login"}>
+                        <a href="#">here</a>
+                      </Link>
+                    </h3>
+                  </div>
+                );
+              }
 
             return(
 
