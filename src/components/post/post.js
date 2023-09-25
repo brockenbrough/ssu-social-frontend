@@ -13,7 +13,7 @@ const Post = ({ posts }) => {
     fetch(`${process.env.REACT_APP_BACKEND_SERVER_URI}/count/likes-for-post/${posts._id}`)
       .then((response) => response.json())
       .then((data) => {
-        setLikeCount(data); // Store the like count from the API response (Someone will do this)
+        setLikeCount(data); // Contain the like count from the API response (Someone will do this)
       })
       .catch((error) => {
         console.error("Error fetching like count:", error);
