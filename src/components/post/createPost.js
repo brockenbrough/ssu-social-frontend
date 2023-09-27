@@ -29,16 +29,16 @@ const CreatePost = () => {
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  const { content, username } = state;
-  const post = {
-    id: user.id, // Access userId directly
-    content,
-    username: user.username,
+    e.preventDefault();
+    const { content, username } = state;
+    const post = {
+      id: user.id, // Access userId directly
+      content,
+      username: user.username,
+    };
+    await axios.post(`${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/createPost`, post);
+    navigate("/getAllPost");
   };
-  await axios.post(`${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/createPost`, post);
-  navigate("/getAllPost");
-};
 
 
   if (!user) {
@@ -55,34 +55,48 @@ const CreatePost = () => {
     );
   }
 
-  // If there is a user, render a form to create a post.
   return (
-    <Form onSubmit={handleSubmit}>
-
-      <Form.Group className="mb-3" controlId="formBasicPassword">
+    <Form
+      onSubmit={handleSubmit}
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        height: "100vh", // Adjust as needed
+        backgroundColor: "#f6f8fa", // Light gray background color
+      }}
+    >
+      <Form.Group className="mb-3" controlId="formBasicPassword" style={{ width: "60%" }}>
         <Form.Control
           type="text"
-          placeholder="Content"
+          placeholder="What's on your mind?"
           name="content"
           value={state.content}
           onChange={handleChange}
           style={{
             height: "3cm",
-            width: "12cm",
-            marginLeft: "10cm",
-            marginTop: "2cm",
+            width: "100%",
           }}
         />
       </Form.Group>
       <Button
-        style={{ width: "4cm", marginLeft: "10cm", marginTop: "2cm" }}
+        style={{
+          width: "8cm", // Make the button wider
+          marginTop: "1cm", // Adjust the margin
+          backgroundColor: "#28a745", // Green button color
+          borderColor: "#28a745", // Green border color
+        }}
         variant="primary"
         type="submit"
+        size="lg" // Make the button larger
       >
         Create Post
       </Button>
     </Form>
   );
+  
+  
 };
 
 export default CreatePost;

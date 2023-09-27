@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useCallback } from "react";
 import { Image } from "react-bootstrap";
 import { Row, Col } from "react-bootstrap";
-import ToggleButton from "react-bootstrap/ToggleButton";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
@@ -13,106 +12,133 @@ import getUserInfo from "../../utilities/decodeJwt";
 import Form from "react-bootstrap/Form";
 import FollowerCount from "../following/getFollowerCount";
 import FollowingCount from "../following/getFollowingCount";
-import likes from "../privateUserLikeList/PrivateUserLikeListPage";
-
-//link to service
-//http://localhost:8096/privateUserProfile
 
 const PrivateUserProfile = () => {
-  const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  // State for showing delete confirmation modal
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+  const handleCloseDeleteConfirmation = () => setShowDeleteConfirmation(false);
+  const handleShowDeleteConfirmation = () => setShowDeleteConfirmation(true);
+
+  // State for showing logout confirmation modal
+  const [showLogoutConfirmation, setShowLogoutConfirmation] = useState(false);
+  const handleCloseLogoutConfirmation = () => setShowLogoutConfirmation(false);
+  const handleShowLogoutConfirmation = () => setShowLogoutConfirmation(true);
+
+  // Fetch the user context
   const user = useContext(UserContext);
-  const username = getUserInfo().username;
-  const [form, setValues] = useState({ content: "" });
+  const username = user ? getUserInfo().username : null; // Check if user is defined
+
+  // State for the form to create a new post
+  const [form, setForm] = useState({ content: "" });
+
+  // State to store user's posts
   const [posts, setPosts] = useState([]);
+
+  // Used for navigation
   const navigate = useNavigate();
+
+  // State for the post to be deleted
   const [postToDelete, setPostToDelete] = useState(null);
 
+  // Function to open the delete confirmation modal
   const openDeleteModal = (post) => {
     setPostToDelete(post);
-    handleShow();
+    handleShowDeleteConfirmation();
   };
 
+  // Function to navigate to follower list
   const followerRouteChange = () => {
-    navigate(`/followers/${username}`); // To use in the follower's button to switch to the user's follower's list.
+    navigate(`/followers/${username}`);
   };
 
+  // Function to navigate to following list
   const followingRouteChange = () => {
-    navigate(`/following/${username}`); // To use in the following button to switch to the user's following list.
+    navigate(`/following/${username}`);
   };
 
-  // handle logout button
-  const handleLogout = (async) => {
+  // Function to handle user logout
+  const handleLogout = () => {
     localStorage.clear();
     navigate("/");
   };
 
-  // handle Edit User Information button
-  const handleEditUser = (async) => {
+  // Function to navigate to user edit page
+  const handleEditUser = () => {
     navigate("/editUserPage");
   };
 
-  const fetchPosts = async () => {
-    const res = await axios
-      .get(`${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getAllByUsername/${username}`)
-      .then((res) => {
-        setPosts(res.data);
-      })
-      .catch((error) => alert(`Unable to get posts from ${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getAllByUsername/${username}`));
-  };
+  // Function to fetch user's posts
+  const fetchPosts = useCallback(async () => {
+    try {
+      const res = await axios.get(
+        `${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getAllByUsername/${username}`
+      );
+      setPosts(res.data);
+    } catch (error) {
+      alert(
+        `Unable to get posts from ${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getAllByUsername/${username}`
+      );
+    }
+  }, [username]); // Include only the username as a dependency
 
+  // Fetch user's posts when the component mounts and when username changes
   useEffect(() => {
     fetchPosts();
-    //setUser(getUserInfo())
-  }, []);
+  }, [username, fetchPosts]); // Include username and fetchPosts as dependencies
 
-  const handleChange = ({ currentTarget: input }) => {
-    setValues({ ...form, [input.id]: input.value });
+  // Handle changes in the form input
+  const handleChange = (event) => {
+    const { id, value } = event.target;
+    setForm({ ...form, [id]: value });
   };
 
+  // Handle the submission of a new post
   const handleSubmit = async (event) => {
     event.preventDefault();
     const { content } = form;
-    const post = { content, username };
-    await axios
-      .post(`${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/createPost`, post)
-      .then((response) => {
-        fetchPosts();
-        form.content = "";
-      })
-      .catch((error) => alert(`Unable to create post: ${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/createPost`));
+    const newPost = { content, username };
+    try {
+      await axios.post(
+        `${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/createPost`,
+        newPost
+      );
+      fetchPosts();
+      setForm({ content: "" });
+    } catch (error) {
+      alert(
+        `Unable to create post: ${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/createPost`
+      );
+    }
   };
-
-  const deleteConfirm = async (posts) => {
+ 
+  // Handle the deletion of a post
+  const deleteConfirm = async () => {
     if (postToDelete) {
-      axios
-        .delete(`${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/deletePost/${postToDelete._id}`)
-        .then((response) => {
-          handleClose();
-          fetchPosts();
-        })
-        .catch((error) => alert(`Unable to delete post: ${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/deletePost/${postToDelete._id}`));
+      try {
+        await axios.delete(
+          `${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/deletePost/${postToDelete._id}`
+        );
+        handleCloseDeleteConfirmation();
+        fetchPosts();
+      } catch (error) {
+        alert(
+          `Unable to delete post: ${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/deletePost/${postToDelete._id}`
+        );
+      }
     }
   };
 
-  const followerButtonOnClick = () => {};
-
-
-
-  // 	<span><b>{<FollowerCount username = {username}/>}</b></span>&nbsp;
-  // <span><b>{<FollowingCount username = {username}/>}</b></span>;
   return (
-    <div class="container">
-      <div class="col-md-12 text-center">
+    <div className="container">
+      <div className="col-md-12 text-center">
         <h1>{user && user.username}</h1>
-        <div class="col-md-12 text-center">
+        <div className="col-md-12 text-center">
           <Image
             roundedCircle
             src={"https://robohash.org/" + Math.random() + "?set=set5"}
           />
         </div>
-        <div class="col-md-12 text-center">
+        <div className="col-md-12 text-center">
           <ul>
             <Button onClick={followerRouteChange} variant="light">
               {<FollowerCount username={username} />}
@@ -123,14 +149,14 @@ const PrivateUserProfile = () => {
             <Button variant="light">800 Likes</Button>{" "}
           </ul>
         </div>
-        <div class="col-md-12 text-center">
+        <div className="col-md-12 text-center">
           <>
-            <Button className="me-2" onClick={handleShow}>
+            <Button className="me-2" onClick={handleShowLogoutConfirmation}>
               Log Out
             </Button>
             <Modal
-              show={show}
-              onHide={handleClose}
+              show={showLogoutConfirmation}
+              onHide={handleCloseLogoutConfirmation}
               backdrop="static"
               keyboard={false}
             >
@@ -139,7 +165,7 @@ const PrivateUserProfile = () => {
               </Modal.Header>
               <Modal.Body>Are you sure you want to Log Out?</Modal.Body>
               <Modal.Footer>
-                <Button variant="secondary" onClick={handleClose}>
+                <Button variant="secondary" onClick={handleCloseLogoutConfirmation}>
                   Close
                 </Button>
                 <Button variant="primary" onClick={handleLogout}>
@@ -151,7 +177,7 @@ const PrivateUserProfile = () => {
           </>
         </div>
       </div>
-      <h3 class="txt">Create Post</h3>
+      <h3 className="txt">Create Post</h3>
 
       <Card.Header>{user && user.username}</Card.Header>
       <div>
@@ -168,13 +194,12 @@ const PrivateUserProfile = () => {
       </div>
       <Form.Group
         className="mb-3"
-        controlId="formContent"
+        controlId="content"
         style={{ width: "50rem" }}
       >
         <Form.Control
           type="text"
           placeholder="Enter post here"
-          id="content"
           value={form.content}
           onChange={handleChange}
         />
@@ -183,11 +208,10 @@ const PrivateUserProfile = () => {
         <Button variant="primary" type="submit" onClick={handleSubmit}>
           Submit
         </Button>
-        <></>
       </div>
       <div>
         <h3>All Posts</h3>
-        {posts.map((posts, index) => (
+        {posts.map((post, index) => (
           <div key={index}>
             <Card
               style={{
@@ -200,19 +224,18 @@ const PrivateUserProfile = () => {
               <Card.Body>
                 <Card.Title>
                   <h5>Username:</h5>
-                  <Link to={"/publicprofilepage"}>{posts.username}</Link>
-                  {}
+                  <Link to={"/publicprofilepage"}>{post.username}</Link>
                 </Card.Title>
                 {posts.content}
                 <p>{moment(posts.date).format("MMMM Do YYYY, h:mm A")}</p>
                 <Link
                   style={{ marginRight: "1cm" }}
-                  to={`/updatePost/${posts._id}`}
+                  to={`/updatePost/${post._id}`}
                   className="btn btn-warning "
                 >
                   Update
                 </Link>
-                <Button variant="danger" onClick={() => openDeleteModal(posts)}>
+                <Button variant="danger" onClick={() => openDeleteModal(post)}>
                   Delete
                 </Button>
               </Card.Body>
@@ -220,7 +243,7 @@ const PrivateUserProfile = () => {
           </div>
         ))}
       </div>
-      <Modal show={show} onHide={handleClose} backdrop="static" keyboard={false}>
+      <Modal show={showDeleteConfirmation} onHide={handleCloseDeleteConfirmation} backdrop="static" keyboard={false}>
         <Modal.Header closeButton>
           <Modal.Title>Delete Confirmation</Modal.Title>
         </Modal.Header>
@@ -228,7 +251,7 @@ const PrivateUserProfile = () => {
           Are you sure you want to delete this post?
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
+          <Button variant="secondary" onClick={handleCloseDeleteConfirmation}>
             No
           </Button>
           <Button variant="primary" onClick={deleteConfirm}>
@@ -239,4 +262,5 @@ const PrivateUserProfile = () => {
     </div>
   );
 };
+
 export default PrivateUserProfile;
