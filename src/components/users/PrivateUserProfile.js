@@ -110,7 +110,7 @@ const PrivateUserProfile = () => {
       );
     }
   };
-
+ 
   // Handle the deletion of a post
   const deleteConfirm = async () => {
     if (postToDelete) {
