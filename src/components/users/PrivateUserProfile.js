@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useCallback } from "react";
 import { Image } from "react-bootstrap";
 import { Row, Col } from "react-bootstrap";
 import Card from "react-bootstrap/Card";
@@ -68,7 +68,7 @@ const PrivateUserProfile = () => {
   };
 
   // Function to fetch user's posts
-  const fetchPosts = async () => {
+  const fetchPosts = useCallback(async () => {
     try {
       const res = await axios.get(
         `${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getAllByUsername/${username}`
@@ -79,12 +79,12 @@ const PrivateUserProfile = () => {
         `Unable to get posts from ${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getAllByUsername/${username}`
       );
     }
-  };
+  }, [username]); // Include only the username as a dependency
 
-  // Fetch user's posts when the component mounts
+  // Fetch user's posts when the component mounts and when username changes
   useEffect(() => {
     fetchPosts();
-  }, []);
+  }, [username, fetchPosts]); // Include username and fetchPosts as dependencies
 
   // Handle changes in the form input
   const handleChange = (event) => {
