@@ -1,9 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import getUserInfo from "../../utilities/decodeJwt";
 
 function CreateComment() {
+  const [user, setUser] = useState(null);
   const { postId } = useParams();
   const navigate = useNavigate();
+  
+  useEffect(() => {
+    // Use the useEffect hook to run code after the component has rendered.
+    const currentUser = getUserInfo(); // Decode the JWT token to get user info.
+    setUser(currentUser); // Set the user state with the decoded user info.
+  }, []);
 
   const [formData, setFormData] = useState({
     commentContent: '',
@@ -12,7 +20,8 @@ function CreateComment() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const userId = ''; // Replace with logic to get the user's ID
+    const userId = user.id;
+    const username = user.username;
     const { commentContent } = formData;
     const submissionDate = new Date();
 
@@ -20,6 +29,7 @@ function CreateComment() {
     const newComment = {
       postId,
       userId,
+      username,
       commentContent,
       submissionDate,
     };
