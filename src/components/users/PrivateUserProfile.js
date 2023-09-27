@@ -225,18 +225,18 @@ const PrivateUserProfile = () => {
               <Card.Body>
                 <Card.Title>
                   <h5>Username:</h5>
-                  <Link to={"/publicprofilepage"}>{post.username}</Link>
+                  <Link to={"/publicprofilepage"}>{posts.username}</Link>
                 </Card.Title>
                 {posts.content}
                 <p>{moment(posts.date).format("MMMM Do YYYY, h:mm A")}</p>
                 <Link
                   style={{ marginRight: "1cm" }}
-                  to={`/updatePost/${post._id}`}
+                  to={`/updatePost/${posts._id}`}
                   className="btn btn-warning "
                 >
                   Update
                 </Link>
-                <Button variant="danger" onClick={() => openDeleteModal(post)}>
+                <Button variant="danger" onClick={() => openDeleteModal(posts)}>
                   Delete
                 </Button>
               </Card.Body>
