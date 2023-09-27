@@ -204,7 +204,7 @@ const PrivateUserProfile = () => {
                   {}
                 </Card.Title>
                 {posts.content}
-                <p>{moment(posts.date).format("MMMM Do YYYY, h:mm:ss a")}</p>
+                <p>{moment(posts.date).format("MMMM Do YYYY, h:mm A")}</p>
                 <Link
                   style={{ marginRight: "1cm" }}
                   to={`/updatePost/${posts._id}`}

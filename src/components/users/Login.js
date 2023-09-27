@@ -55,7 +55,7 @@ const Login = () => {
       const { accessToken } = res;
       //store token in localStorage
       localStorage.setItem("accessToken", accessToken);
-      navigate("/feed");
+      navigate("/feed-algorithm");
     } catch (error) {
       if (error.response) {
         // The request was made and the server responded with a status code

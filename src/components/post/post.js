@@ -4,25 +4,36 @@ import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import moment from "moment";
 
-const Post = ({ posts, isLiked }) => {
+const Post = ({ posts }) => {
   const [likeCount, setLikeCount] = useState(null);
-  const formattedDate = moment(posts.date).format("MMMM Do YYYY, h:mm:ss a");
-  const l = 0;
+  const [viewCount, setViewCount] = useState(null);
+  const [isLiked, setIsLiked] = useState(false);
+  const formattedDate = moment(posts.date).format("MMMM Do YYYY, h:mm A");
+
   useEffect(() => {
-    //
-    fetch(`${process.env.REACT_APP_BACKEND_SERVER_URI}/count/likes-for-post/${posts._id}`)  //this 
+    fetch(`${process.env.REACT_APP_BACKEND_SERVER_URI}/count/likes-for-post/${posts._id}`)
       .then((response) => response.json())
       .then((data) => {
-       // console.log("API Response:", data); // 
-        setLikeCount(data);
-        
+        setLikeCount(data); // Contain the like count from the API response (Someone will do this)
       })
       .catch((error) => {
         console.error("Error fetching like count:", error);
       });
+      fetch(`${process.env.REACT_APP_BACKEND_SERVER_URI}/views/${posts._id}`)  
+      .then((response) => response.json())
+      .then((data) => {
+       console.log("API Response:", data); // 
+        setViewCount(data);
+        
+      })
+      .catch((error) => {
+        console.error("Error fetching view count:", error);
+      });
   }, [posts._id]);
   
-  
+  const handleLikeClick = () => {
+    setIsLiked(!isLiked);
+  };
 
   return (
     <div className="d-inline-flex p-2">
@@ -33,16 +44,20 @@ const Post = ({ posts, isLiked }) => {
           </Link>
           <Card.Text>{posts.content}</Card.Text>
           <div class="text-center">
-            {isLiked ? (
-              <Button variant="danger">Unlike</Button>
-            ) : (
-              <Button variant="outline-danger">Like</Button>
-            )}
+            <Button
+              variant={isLiked ? "danger" : "outline-danger"}
+              onClick={handleLikeClick}
+            >
+              {isLiked ? 'Unlike' : 'Like'}
+            </Button>
           </div>
-          <p>{formattedDate}</p>
-          
-            <p>{likeCount} Likes</p>
-          
+          <p>{formattedDate}</p> {/* Display formattedDate */}
+          {likeCount !== null && (
+            <p>{`Likes: ${likeCount}`}</p> // Display likeCount if it's not null
+          )}
+          {viewCount !== null && (
+            <p>{`Views: ${viewCount}`}</p> // Display viewCount if it's not null
+          )}
           <Link
             style={{ marginRight: "1cm" }}
             to={`/updatePost/${posts._id}`}
