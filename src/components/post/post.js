@@ -68,7 +68,7 @@ const Post = ({ posts }) => {
           >
             Update
           </Link>
-          <Link to="/createComment" style={{ marginRight: "1cm" }} className="btn btn-warning">
+          <Link to={`/createComment/${posts._id}`} style={{ marginRight: "1cm" }} className="btn btn-warning">
             Comment
           </Link>
 

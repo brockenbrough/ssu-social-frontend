@@ -1,89 +1,80 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router";
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
-import Card from "react-bootstrap/Card";
-import { Link } from "react-router-dom";
+import React, { useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 
-export default function CreateComments() {
-  const currentDate = new Date();
-  // We define the state for the form.
-  const [form, setForm] = useState({
-    commentContent: "",
-    date: currentDate,
-  });
+function CreateComment() {
+  const { postId } = useParams();
   const navigate = useNavigate();
 
-  // These methods will update the state properties.
-  // It is called with a specific value (name, position or level) that changed.
-  // We update the state of the form.
-  function updateForm(value) {
-    return setForm((prev) => {
-      return { ...prev, ...value };
-    });
-  }
+  const [formData, setFormData] = useState({
+    commentContent: '',
+  });
 
-  // This function will handle the submission.
-  async function onSubmit(e) {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // When a post request is sent to the create url, we'll add a new record to the database.
-    const newComment = { ...form };
+    const userId = ''; // Replace with logic to get the user's ID
+    const { commentContent } = formData;
+    const submissionDate = new Date();
 
-    await fetch(
-      `${process.env.REACT_APP_BACKEND_SERVER_URI}/comments/comment/add`,
-      {
-        method: "POST",
+    // Create a new comment object
+    const newComment = {
+      postId,
+      userId,
+      commentContent,
+      submissionDate,
+    };
+
+    try {
+      // Send a POST request to create the comment in MongoDB
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_SERVER_URI}/comments/comment/add`, {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(newComment),
+      });
+
+      if (response.ok) {
+        // Comment created successfully, navigate back to the post page
+        navigate(`/getallpost`);
+      } else {
+        // Handle errors if needed
+        console.error('Error:', response.status);
+        // Handle the error and provide user feedback
       }
-    ).catch((error) => {
-      window.alert(error);
-      return;
-    });
+    } catch (error) {
+      console.error('Error:', error);
+      // Handle any other errors that may occur during the fetch request
+      // Provide user feedback as needed
+    }
+  };
 
-    setForm({ commentContent: "" });
-    navigate("/comments/comment");
-  }
+  const handleCancel = () => {
+    // Navigate back to the post page
+    navigate(`/getallpost`);
+  };  
 
-  // This following section will display the form that takes the input from the user.
-  // We refer to the functions we defined above for handling form changes.
   return (
     <div>
-      <navbarComment />
-      <Card
-        body
-        outline
-        color="success"
-        className="mx-1 my-2"
-        style={{ width: "30rem" }}
-      >
-        <Card.Title>Add Comment</Card.Title>
-        <Card.Body>
-          <Form>
-            <Form.Group className="mb-3" controlId="formName">
-              <Form.Label>Comment</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter comment"
-                id="comment"
-                value={form.commentContent}
-                onChange={(e) => updateForm({ commentContent: e.target.value })}
-              />
-            </Form.Group>
-
-            <Button variant="primary" type="submit" onClick={onSubmit}>
-              submit comment
-            </Button>
-       
-            <Button variant="primary" onClick={() => navigate("/getallpost")}  style={{ marginLeft: "10px" }}>
-            cancel
-            </Button>
-          </Form>
-        </Card.Body>
-      </Card>
+      <h1>Create Comment</h1>
+      <form onSubmit={handleSubmit}>
+        <div className="form-group">
+          <label htmlFor="commentContent">Comment Content</label>
+          <input
+            type="text"
+            className="form-control"
+            id="commentContent"
+            name="commentContent"
+            value={formData.commentContent}
+            onChange={(e) => setFormData({ ...formData, commentContent: e.target.value })}
+            required
+          />
+        </div>
+        <button type="submit" className="btn btn-primary">Submit</button>
+        <button type="button" className="btn btn-secondary" onClick={handleCancel}>Cancel</button>
+      </form>
     </div>
   );
 }
+
+export default CreateComment;
