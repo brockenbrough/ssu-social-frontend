@@ -8,7 +8,7 @@ const Post = ({ posts }) => {
   const [likeCount, setLikeCount] = useState(null);
   const [viewCount, setViewCount] = useState(null);
   const [isLiked, setIsLiked] = useState(false);
-  const formattedDate = moment(posts.date).format("MMMM Do YYYY, h:mm:ss a");
+  const formattedDate = moment(posts.date).format("MMMM Do YYYY, h:mm A");
 
   useEffect(() => {
     fetch(`${process.env.REACT_APP_BACKEND_SERVER_URI}/count/likes-for-post/${posts._id}`)
