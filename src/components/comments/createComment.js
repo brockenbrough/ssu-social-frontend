@@ -3,10 +3,10 @@ import { useNavigate } from "react-router";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Card from "react-bootstrap/Card";
-
+import { Link } from "react-router-dom";
 
 export default function CreateComments() {
-     const currentDate = new Date();
+  const currentDate = new Date();
   // We define the state for the form.
   const [form, setForm] = useState({
     commentContent: "",
@@ -30,13 +30,16 @@ export default function CreateComments() {
     // When a post request is sent to the create url, we'll add a new record to the database.
     const newComment = { ...form };
 
-    await fetch(`${process.env.REACT_APP_BACKEND_SERVER_URI}/comments/comment/add`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(newComment),
-    }).catch((error) => {
+    await fetch(
+      `${process.env.REACT_APP_BACKEND_SERVER_URI}/comments/comment/add`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newComment),
+      }
+    ).catch((error) => {
       window.alert(error);
       return;
     });
@@ -73,6 +76,10 @@ export default function CreateComments() {
 
             <Button variant="primary" type="submit" onClick={onSubmit}>
               submit comment
+            </Button>
+       
+            <Button variant="primary" onClick={() => navigate("/getallpost")}  style={{ marginLeft: "10px" }}>
+            cancel
             </Button>
           </Form>
         </Card.Body>

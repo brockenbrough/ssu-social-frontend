@@ -15,32 +15,26 @@ export default function PostList() {
     let feed = [];
     let postData = [];
     if (user !== null) {
-      try {
-        const res = await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_URI}/feed/${user.username}`);
-        feed = res.data.feed;
-      } catch (error) {
-        console.error(`Failed to fetch feed for user: ${process.env.REACT_APP_BACKEND_SERVER_URI}/feed/${user.username}`);
-      }
-    } else {
-      try {
-        const res = await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_URI}/feed/`);
-        feed = res.data.feed;
-      } catch (error) {
-        console.error(`Failed to fetch public feed: ${process.env.REACT_APP_BACKEND_SERVER_URI}/feed/`);
-      }
+      const res = await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_URI}/feed/${user.username}`)
+      .then(res => {
+        feed = res.data.feed
+      })
+      .catch(error => alert(`Failed to fetch feed for user: ${process.env.REACT_APP_BACKEND_SERVER_URI}/feed/${user.username}`))
     }
-    
+    else {
+      const res = await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_URI}/feed/`)
+      .then(res => {
+        feed = res.data.feed
+      })
+      .catch(error => alert(`Failed to fetch public feed: ${process.env.REACT_APP_BACKEND_SERVER_URI}/feed/`))
+    }
     for (let i = 0; i < feed.length; i++) {
-      try {
-        const res = await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getPostById/${feed[i]}`);
-        postData.push(res.data);
-      } catch (error) {
-        console.error(`Failed to fetch a post in feed: ${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getPostById/${feed[i]}`);
-      }
+      const res = await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getPostById/${feed[i]}`)
+        .then(res => {
+          postData.push(res.data)
+        })
+        .catch(error => alert(`Failed to fetch a post in feed: ${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getPostById/${feed[i]}`))
     }
-    
-    
-    
     setPosts(postData)
   }
 
@@ -48,9 +42,7 @@ export default function PostList() {
     setUser(getUserInfo());
     getPosts(user);
   }, [posts.length]);
-  
 
-  
   if (!user) {
     return (
       <div>
@@ -69,26 +61,33 @@ export default function PostList() {
       <h1>
         Welcome to your feed {user.username}
       </h1>
-      {posts.length === 0 ? (
-        <p>
-          {user.username}, your feed is empty. Visit the{" "}
-          <Link to={"/getallpost"}>
-            <a href="#">public feed</a>
-          </Link>{" "}
-          to discover posts from other users. Once you follow other users, their posts will show up here!
-        </p>
-      ) : (
-        <>
-          <Button variant="primary" className="mx-1 my-1" href={`/createpost/`}>
-            Create Post
-          </Button>
-          <div>
-            {posts.map(e => {
-              return <Post posts={e} isLiked={"true"} />
-            })}
+      <p>
+        If you are not seeing any posts, try the public feed page.
+      </p>
+      <Button variant="primary" className="mx-1 my-1" href={`/createpost/`}>
+        Create Post
+      </Button>
+      {/* <div>
+        {posts.map((posts, index) => (
+          <div key={index}>
+            <Card style={{ width: '18rem' , marginTop:'1cm', marginLeft:'.5cm',background:'aliceblue'}}>       
+              <Card.Body>
+                <Card.Title><Link to={'/publicprofilepage'} state={{ publicUser : posts }}>{posts.username}</Link>{}</Card.Title>
+                {posts.content}
+                <div>
+                  <ToggleButton href='#'>👍</ToggleButton>
+                </div>
+              </Card.Body>
+              <Card.Footer>{posts.date}</Card.Footer>
+            </Card>
           </div>
-        </>
-      )}
+        ))}
+      </div> */}
+      <div>
+        {posts.map(e => {
+          return <Post posts = {e} isLiked={"true"}/>
+        })}
+      </div>
     </div>
   );
 }

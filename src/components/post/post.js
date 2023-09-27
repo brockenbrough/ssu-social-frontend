@@ -68,12 +68,8 @@ const Post = ({ posts }) => {
           >
             Update
           </Link>
-          <Link
-          to=" /createComment.js"
-          className="btn btn-warning"
-          >
+          <Link to="/createComment" style={{ marginRight: "1cm" }} className="btn btn-warning">
             Comment
-            
           </Link>
 
         </Card.Body>
