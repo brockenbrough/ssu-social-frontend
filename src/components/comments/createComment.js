@@ -79,7 +79,7 @@ export default function CreateComments() {
             </Button>
        
             <Button variant="primary" onClick={() => navigate("/getallpost")}  style={{ marginLeft: "10px" }}>
-              Cancel
+              cancel
             </Button>
           </Form>
         </Card.Body>
