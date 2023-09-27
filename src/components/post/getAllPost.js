@@ -1,9 +1,11 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import Post from "./post";
+import "./postStyles.css";
 
 const GetAllPost = () => {
   const [posts, setPosts] = useState([]);
+  const [darkMode, setDarkMode] = useState(false);
 
   const fetchPosts = async () => {
     const url = `${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getAllPosts`;
@@ -12,6 +14,10 @@ const GetAllPost = () => {
         setPosts(res.data);
       })
       .catch((error) => alert(`Unable to fetch data from ${url}.`));
+  };
+
+  const toggleDarkMode = () => {
+    setDarkMode(!darkMode);
   };
 
   useEffect(() => {
@@ -38,11 +44,18 @@ const GetAllPost = () => {
 
   return (
     <>
+    <div div className={`App ${darkMode ? "dark-mode" : ""}`}>
+    <div className="toggle-container">
+        <button onClick={toggleDarkMode} id="darkButton">
+          Dark Mode
+        </button>
+      </div>
       <h1>All Posts</h1>
-      <div className="d-flex flex-wrap">
+      <div  className="d-flex flex-wrap">
         {posts.map((posts, index) => (
-          <Post posts={posts} />
+          <Post id="cards" posts={posts} />
         ))}
+      </div>
       </div>
     </>
   );

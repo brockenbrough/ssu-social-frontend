@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import moment from "moment";
+import "./postStyles.css";
 
 const Post = ({ posts }) => {
   const [likeCount, setLikeCount] = useState(null);
@@ -35,15 +36,17 @@ const Post = ({ posts }) => {
     setIsLiked(!isLiked);
   };
 
+  
+
   return (
     <div className="d-inline-flex p-2">
-      <Card style={{ width: "18rem" }}>
+      <Card id="fullCard" style={{ width: "18rem" }}>
         <Card.Body>
-          <Link to={`/publicprofilepage/${posts.username}`}>
+          <Link to={`/publicprofilepage/${posts.username}`} id="username">
             {posts.username}
           </Link>
           <Card.Text>{posts.content}</Card.Text>
-          <div class="text-center">
+          <div class="text-center" id="likeButton">
             <Button
               variant={isLiked ? "danger" : "outline-danger"}
               onClick={handleLikeClick}

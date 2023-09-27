@@ -187,6 +187,7 @@ const PrivateUserProfile = () => {
       </div>
       <div>
         <h3>All Posts</h3>
+        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-start', gap: '1rem' }}>
         {posts.map((posts, index) => (
           <div key={index}>
             <Card
@@ -219,6 +220,7 @@ const PrivateUserProfile = () => {
             </Card>
           </div>
         ))}
+        </div>
       </div>
       <Modal show={show} onHide={handleClose} backdrop="static" keyboard={false}>
         <Modal.Header closeButton>
