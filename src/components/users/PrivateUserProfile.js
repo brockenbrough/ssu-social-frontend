@@ -226,8 +226,8 @@ const PrivateUserProfile = () => {
                   <h5>Username:</h5>
                   <Link to={"/publicprofilepage"}>{post.username}</Link>
                 </Card.Title>
-                {post.content}
-                <p>{moment(post.date).format("MMMM Do YYYY, h:mm:ss a")}</p>
+                {posts.content}
+                <p>{moment(posts.date).format("MMMM Do YYYY, h:mm A")}</p>
                 <Link
                   style={{ marginRight: "1cm" }}
                   to={`/updatePost/${post._id}`}
