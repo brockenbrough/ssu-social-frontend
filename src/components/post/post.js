@@ -4,25 +4,26 @@ import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import moment from "moment";
 
+
+
 const Post = ({ posts, isLiked }) => {
   const [likeCount, setLikeCount] = useState(null);
   const formattedDate = moment(posts.date).format("MMMM Do YYYY, h:mm:ss a");
   const l = 0;
   useEffect(() => {
     //
-    fetch(`${process.env.REACT_APP_BACKEND_SERVER_URI}/count/likes-for-post/${posts._id}`)  //this 
+    fetch(
+      `${process.env.REACT_APP_BACKEND_SERVER_URI}/count/likes-for-post/${posts._id}`
+    ) //this
       .then((response) => response.json())
       .then((data) => {
-       // console.log("API Response:", data); // 
+        // console.log("API Response:", data); //
         setLikeCount(data);
-        
       })
       .catch((error) => {
         console.error("Error fetching like count:", error);
       });
   }, [posts._id]);
-  
-  
 
   return (
     <div className="d-inline-flex p-2">
@@ -40,9 +41,9 @@ const Post = ({ posts, isLiked }) => {
             )}
           </div>
           <p>{formattedDate}</p>
-          
-            <p>{likeCount} Likes</p>
-          
+
+          <p>{likeCount} Likes</p>
+
           <Link
             style={{ marginRight: "1cm" }}
             to={`/updatePost/${posts._id}`}
@@ -50,6 +51,10 @@ const Post = ({ posts, isLiked }) => {
           >
             Update
           </Link>
+          <Link to="/createComment" style={{ marginRight: "1cm" }} className="btn btn-warning">
+            Comment
+          </Link>
+          
         </Card.Body>
       </Card>
     </div>
