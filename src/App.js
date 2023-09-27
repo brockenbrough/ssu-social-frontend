@@ -26,9 +26,11 @@ import getUserInfo from "./utilities/decodeJwt";
 import CreatePost from "./components/post/createPost";
 import GetAllPost from "./components/post/getAllPost";
 import UpdatePost from "./components/post/updatePost";
+import createComment from "./components/comments/createComment";
 
 import Test from "./Test";
 import { createContext, useState, useEffect } from "react";
+import Comment from "./components/comments/comment";
 
 export const UserContext = createContext();
 
@@ -70,6 +72,8 @@ const App = () => {
           <Route path="/createpost" element={<CreatePost />} />
           <Route path="/getallpost" element={<GetAllPost />} />
           <Route path="/updatepost/:postId" element={<UpdatePost />} />
+          <Route path="/createComment" element={<CreateComments />} />
+
         </Routes>
       </UserContext.Provider>
     </>
