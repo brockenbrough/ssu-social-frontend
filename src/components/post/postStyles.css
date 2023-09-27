@@ -1,0 +1,21 @@
+.dark-mode{
+    background-color: black;
+    color: white;
+}
+
+
+.dark-mode p{
+    color: white;
+}
+
+.dark-mode #fullCard{
+    background-color: #181818;
+}
+
+.dark-mode #username{
+    color: white;
+}
+
+#darkButton{
+    float: right;
+}

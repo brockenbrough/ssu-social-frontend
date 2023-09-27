@@ -211,7 +211,8 @@ const PrivateUserProfile = () => {
       </div>
       <div>
         <h3>All Posts</h3>
-        {posts.map((post, index) => (
+        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-start', gap: '1rem' }}>
+        {posts.map((posts, index) => (
           <div key={index}>
             <Card
               style={{
@@ -224,24 +225,25 @@ const PrivateUserProfile = () => {
               <Card.Body>
                 <Card.Title>
                   <h5>Username:</h5>
-                  <Link to={"/publicprofilepage"}>{post.username}</Link>
+                  <Link to={"/publicprofilepage"}>{posts.username}</Link>
                 </Card.Title>
                 {posts.content}
                 <p>{moment(posts.date).format("MMMM Do YYYY, h:mm A")}</p>
                 <Link
                   style={{ marginRight: "1cm" }}
-                  to={`/updatePost/${post._id}`}
+                  to={`/updatePost/${posts._id}`}
                   className="btn btn-warning "
                 >
                   Update
                 </Link>
-                <Button variant="danger" onClick={() => openDeleteModal(post)}>
+                <Button variant="danger" onClick={() => openDeleteModal(posts)}>
                   Delete
                 </Button>
               </Card.Body>
             </Card>
           </div>
         ))}
+        
       </div>
       <Modal show={showDeleteConfirmation} onHide={handleCloseDeleteConfirmation} backdrop="static" keyboard={false}>
         <Modal.Header closeButton>
@@ -260,7 +262,9 @@ const PrivateUserProfile = () => {
         </Modal.Footer>
       </Modal>
     </div>
+    </div>
   );
 };
+
 
 export default PrivateUserProfile;
