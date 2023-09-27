@@ -9,7 +9,6 @@ const CreatePost = () => {
   const [user, setUser] = useState(null); // Initialize user state to null.
   const [state, setState] = useState({
     content: "",
-    username: "",
   }); // Initialize state for content and username.
 
   useEffect(() => {
@@ -35,10 +34,10 @@ const CreatePost = () => {
   const post = {
     id: user.id, // Access userId directly
     content,
-    username,
+    username: user.username,
   };
   await axios.post(`${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/createPost`, post);
-  navigate("/");
+  navigate("/getAllPost");
 };
 
 
@@ -59,21 +58,6 @@ const CreatePost = () => {
   // If there is a user, render a form to create a post.
   return (
     <Form onSubmit={handleSubmit}>
-      <Form.Group className="mb-3" controlId="formBasicEmail">
-        <Form.Control
-          type="text"
-          placeholder="Enter username"
-          value={state.username}
-          onChange={handleChange}
-          name="username"
-          style={{
-            height: "2cm",
-            width: "12cm",
-            marginLeft: "10cm",
-            marginTop: "2cm",
-          }}
-        />
-      </Form.Group>
 
       <Form.Group className="mb-3" controlId="formBasicPassword">
         <Form.Control
