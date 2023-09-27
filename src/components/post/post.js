@@ -52,7 +52,7 @@ const Post = ({ posts, isLiked }) => {
           </Link>
           <Link
           to=" /createComment.js"
-          className="btn btn-waring"
+          className="btn btn-warning"
           >
             Comment
             
