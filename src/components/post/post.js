@@ -3,13 +3,12 @@ import { Link } from "react-router-dom";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import moment from "moment";
-import "./postStyles.css";
 
 const Post = ({ posts }) => {
   const [likeCount, setLikeCount] = useState(null);
   const [viewCount, setViewCount] = useState(null);
   const [isLiked, setIsLiked] = useState(false);
-  const formattedDate = moment(posts.date).format("MMMM Do YYYY, h:mm A");
+  const formattedDate = moment(posts.date).format("MMMM Do YYYY, h:mm:ss a");
 
   useEffect(() => {
     fetch(`${process.env.REACT_APP_BACKEND_SERVER_URI}/count/likes-for-post/${posts._id}`)
@@ -36,17 +35,15 @@ const Post = ({ posts }) => {
     setIsLiked(!isLiked);
   };
 
-  
-
   return (
     <div className="d-inline-flex p-2">
-      <Card id="fullCard" style={{ width: "18rem" }}>
+      <Card style={{ width: "18rem" }}>
         <Card.Body>
-          <Link to={`/publicprofilepage/${posts.username}`} id="username">
+          <Link to={`/publicprofilepage/${posts.username}`}>
             {posts.username}
           </Link>
           <Card.Text>{posts.content}</Card.Text>
-          <div class="text-center" id="likeButton">
+          <div class="text-center">
             <Button
               variant={isLiked ? "danger" : "outline-danger"}
               onClick={handleLikeClick}
@@ -68,8 +65,12 @@ const Post = ({ posts }) => {
           >
             Update
           </Link>
-          <Link to={`/createComment/${posts._id}`} style={{ marginRight: "1cm" }} className="btn btn-warning">
+          <Link
+          to=" /createComment.js"
+          className="btn btn-waring"
+          >
             Comment
+            
           </Link>
 
         </Card.Body>
