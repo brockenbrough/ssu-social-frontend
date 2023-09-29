@@ -72,7 +72,7 @@ const App = () => {
           <Route path="/createpost" element={<CreatePost />} />
           <Route path="/getallpost" element={<GetAllPost />} />
           <Route path="/updatepost/:postId" element={<UpdatePost />} />
-          <Route path="/createComment/:postId" element={<CreateComments />} />
+          <Route path="/createComment" element={<CreateComments />} />
 
         </Routes>
       </UserContext.Provider>
