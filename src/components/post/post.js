@@ -84,7 +84,6 @@ const Post = ({ posts }) => {
             {posts.username}
           </Link>
           <Card.Text>{posts.content}</Card.Text>
-          <Card.Text>{postId}</Card.Text>
           <div class="text-center">
             <Button
               variant={isLiked ? "danger" : "outline-danger"}
