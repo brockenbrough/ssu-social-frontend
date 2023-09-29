@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import getUserInfo from '../../utilities/decodeJwt';
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import getUserInfo from "../../utilities/decodeJwt";
 
 function CreateComment() {
   const [user, setUser] = useState(null);
@@ -14,7 +14,7 @@ function CreateComment() {
   }, []);
 
   const [formData, setFormData] = useState({
-    commentContent: '',
+    commentContent: "",
   });
 
   const handleSubmit = async (e) => {
@@ -39,9 +39,9 @@ function CreateComment() {
       const response = await fetch(
         `${process.env.REACT_APP_BACKEND_SERVER_URI}/comments/comment/add`,
         {
-          method: 'POST',
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify(newComment),
         }
@@ -52,11 +52,11 @@ function CreateComment() {
         navigate(`/getallpost`);
       } else {
         // Handle errors if needed
-        console.error('Error:', response.status);
+        console.error("Error:", response.status);
         // Handle the error and provide user feedback
       }
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
       // Handle any other errors that may occur during the fetch request
       // Provide user feedback as needed
     }
@@ -85,7 +85,7 @@ function CreateComment() {
               setFormData({ ...formData, commentContent: e.target.value })
             }
             required
-            style={{ resize: 'vertical', wordWrap: 'break-word' }}
+            style={{ resize: "vertical", wordWrap: "break-word" }}
           />
         </div>
         <div className="d-grid gap-2">
