@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import getUserInfo from '../../utilities/decodeJwt';
+import getUserInfo from "../../utilities/decodeJwt";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import moment from "moment";
@@ -17,7 +17,9 @@ const Post = ({ posts }) => {
   useEffect(() => {
     const currentUser = getUserInfo(); // Decode the JWT token to get user info.
     setUser(currentUser);
-    fetch(`${process.env.REACT_APP_BACKEND_SERVER_URI}/count/likes-for-post/${posts._id}`)
+    fetch(
+      `${process.env.REACT_APP_BACKEND_SERVER_URI}/count/likes-for-post/${posts._id}`
+    )
       .then((response) => response.json())
       .then((data) => {
         setLikeCount(data); // Contain the like count from the API response (Someone will do this)
@@ -26,25 +28,33 @@ const Post = ({ posts }) => {
         console.error("Error fetching like count:", error);
       });
   }, [posts._id]);
-  
+
   //function to handle the creation of and deletion of a like.
   const handleLikeClick = () => {
     const userId = user.id;
     handleIsLiked();
-    if (!isLiked){
+    if (!isLiked) {
       try {
-        axios.post(`${process.env.REACT_APP_BACKEND_SERVER_URI}/likes/like`,  {postId, userId});
+        axios.post(`${process.env.REACT_APP_BACKEND_SERVER_URI}/likes/like`, {
+          postId,
+          userId,
+        });
         handleIsLiked();
       } catch (error) {
-        if (error.response && error.response.status >= 400 && error.response.status <= 500) {
+        if (
+          error.response &&
+          error.response.status >= 400 &&
+          error.response.status <= 500
+        ) {
           console.error("Error liking:", error.response.data.message);
         }
       }
     } else {
       try {
-        axios.delete(`${process.env.REACT_APP_BACKEND_SERVER_URI}/likes/unLike`, {
-          data: { postId, userId }, // Use 'data' field for DELETE requests to send the payload
-        })
+        axios
+          .delete(`${process.env.REACT_APP_BACKEND_SERVER_URI}/likes/unLike`, {
+            data: { postId, userId }, // Use 'data' field for DELETE requests to send the payload
+          })
           .then((response) => {
             console.log("Unlike response:", response.data); // Log the response for debugging
             handleIsLiked();
@@ -62,10 +72,12 @@ const Post = ({ posts }) => {
   const handleIsLiked = async () => {
     const userId = user.id;
     try {
-      const response = await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_URI}/user-likes/${userId}`);
+      const response = await axios.get(
+        `${process.env.REACT_APP_BACKEND_SERVER_URI}/user-likes/${userId}`
+      );
       const userLikes = response.data;
       const postLiked = userLikes.find((likes) => likes.postId === postId);
-  
+
       if (postLiked) {
         setIsLiked(true); // User has liked the post
       } else {
@@ -91,7 +103,7 @@ const Post = ({ posts }) => {
               onMouseOver={handleIsLiked}
               onClick={handleLikeClick}
             >
-              {isLiked ? 'Unlike' : 'Like'}
+              {isLiked ? "Unlike" : "Like"}
             </Button>
           </div>
           <p>{formattedDate}</p> {/* Display formattedDate */}
@@ -105,14 +117,9 @@ const Post = ({ posts }) => {
           >
             Update
           </Link>
-          <Link
-          to=" /createComment.js"
-          className="btn btn-waring"
-          >
+          <Link to="/createComment" className="btn btn-warning">
             Comment
-            
           </Link>
-
         </Card.Body>
       </Card>
     </div>
