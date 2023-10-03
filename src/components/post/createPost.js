@@ -5,6 +5,9 @@ import { useNavigate } from "react-router-dom"; // Import the useNavigate hook f
 import getUserInfo from "../../utilities/decodeJwt"; // Import a utility function for decoding JWT tokens.
 import { Link } from "react-router-dom"; // Import the Link component from React Router.
 
+
+
+
 const CreatePost = () => {
   const [user, setUser] = useState(null); // Initialize user state to null.
   const [state, setState] = useState({
@@ -80,6 +83,12 @@ const CreatePost = () => {
           }}
         />
       </Form.Group>
+
+      <div style={{ display: 'flex', justifyContent: 'space-between', width: '60%' }}>
+        <img src="/add-img-icon.png" alt="Add Image Icon" style={{ width: '60px', height: '60px', marginTop: '.5cm' }} />
+        <img src="/addVideo.png" alt="Add Video Icon" style={{ width: '60px', height: '60px', marginTop: '.5cm' }} />
+      </div>
+
       <Button
         style={{
           width: "8cm", // Make the button wider
@@ -95,8 +104,8 @@ const CreatePost = () => {
       </Button>
     </Form>
   );
-  
-  
+
+
 };
 
 export default CreatePost;
