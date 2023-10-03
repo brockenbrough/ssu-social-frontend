@@ -5,6 +5,8 @@ import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import moment from "moment";
 import axios from "axios"; // Import Axios
+import "./postStyles.css"
+
 
 const Post = ({ posts }) => {
   const [likeCount, setLikeCount] = useState(null);
@@ -90,9 +92,9 @@ const Post = ({ posts }) => {
 
   return (
     <div className="d-inline-flex p-2">
-      <Card style={{ width: "18rem" }}>
+      <Card id="postCard" style={{ width: "18rem" }}>
         <Card.Body>
-          <Link to={`/publicprofilepage/${posts.username}`}>
+          <Link id="username" to={`/publicprofilepage/${posts.username}`}>
             {posts.username}
           </Link>
           <Card.Text>{posts.content}</Card.Text>
