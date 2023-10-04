@@ -46,6 +46,7 @@ function CreateComment() {
           body: JSON.stringify(newComment),
         }
       );
+      
 
       if (response.ok) {
         // Comment created successfully, navigate back to the post page
@@ -60,11 +61,17 @@ function CreateComment() {
       // Handle any other errors that may occur during the fetch request
       // Provide user feedback as needed
     }
+ 
   };
 
   const handleCancel = () => {
     // Navigate back to the post page
     navigate(`/getallpost`);
+  };
+
+  // Navigate back to view all comments
+  const viewAllComments = () => {
+    navigate("/comments/comment");
   };
 
   return (
@@ -99,6 +106,15 @@ function CreateComment() {
           >
             Cancel
           </button>
+
+          <button
+            type="View All Comments"
+            className="btn btn-primary"
+            onClick={viewAllComments}
+          >
+            View All Comments 
+          </button>
+         
         </div>
       </form>
     </div>
