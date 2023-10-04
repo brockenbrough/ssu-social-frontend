@@ -64,7 +64,6 @@ const App = () => {
           <Route path="/publicFeed" element={<PublicFeedPage />} />
           <Route path="/comments/comment" element={<CommentList />} />
           <Route path="/comments/editComment/:id" element={<EditComment />} />
-          <Route path="/comments/create" element={<CreateComments />} />
           <Route path="/test" element={<Test />} />
           <Route path="/followers/:id" element={<FollowerList />} />
           <Route path="/following/:id" element={<FollowingList />} />
@@ -72,7 +71,7 @@ const App = () => {
           <Route path="/createpost" element={<CreatePost />} />
           <Route path="/getallpost" element={<GetAllPost />} />
           <Route path="/updatepost/:postId" element={<UpdatePost />} />
-          <Route path="/createComment" element={<CreateComments />} />
+          <Route path="/createComment/:postid" element={<CreateComments />} />
 
         </Routes>
       </UserContext.Provider>

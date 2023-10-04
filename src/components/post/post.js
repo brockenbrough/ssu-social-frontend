@@ -124,7 +124,7 @@ const Post = ({ posts }) => {
             Update 
           </Link>
 
-          <Link to="/createComment" className="btn btn-warning">
+          <Link to={`/createComment/${posts._id}`} className="btn btn-warning">
             Comment
           </Link>
         </Card.Body>
