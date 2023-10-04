@@ -21,10 +21,10 @@ export default function Navbar() {
     <Container>
       <Nav className="me-auto">
         <Nav.Link href="/feed-algorithm">Feed</Nav.Link>
-      
-        <Nav.Link href="/privateUserProfile">Profile</Nav.Link>
         <Nav.Link href="/createpost">Create Post</Nav.Link>
        <Nav.Link href="/getallpost">Explore</Nav.Link>
+       <Nav.Link href="/privateUserProfile">Profile</Nav.Link>
+   
   
 
       </Nav>

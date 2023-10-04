@@ -4,9 +4,10 @@ import getUserInfo from "../../utilities/decodeJwt";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import moment from "moment";
-import axios from "axios"; // Import Axios
-import "./postStyles.css"
-
+import axios from "axios";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faComment } from '@fortawesome/free-solid-svg-icons';
+import "./postStyles.css";
 
 const Post = ({ posts }) => {
   const [likeCount, setLikeCount] = useState(null);
@@ -15,23 +16,21 @@ const Post = ({ posts }) => {
   const { _id: postId } = posts;
   const [user, setUser] = useState(null);
 
-  //function to count likes on a post
   useEffect(() => {
-    const currentUser = getUserInfo(); // Decode the JWT token to get user info.
+    const currentUser = getUserInfo();
     setUser(currentUser);
     fetch(
       `${process.env.REACT_APP_BACKEND_SERVER_URI}/count/likes-for-post/${posts._id}`
     )
       .then((response) => response.json())
       .then((data) => {
-        setLikeCount(data); // Contain the like count from the API response (Someone will do this)
+        setLikeCount(data);
       })
       .catch((error) => {
         console.error("Error fetching like count:", error);
       });
   }, [posts._id]);
 
-  //function to handle the creation of and deletion of a like.
   const handleLikeClick = () => {
     const userId = user.id;
     handleIsLiked();
@@ -55,10 +54,10 @@ const Post = ({ posts }) => {
       try {
         axios
           .delete(`${process.env.REACT_APP_BACKEND_SERVER_URI}/likes/unLike`, {
-            data: { postId, userId }, // Use 'data' field for DELETE requests to send the payload
+            data: { postId, userId },
           })
           .then((response) => {
-            console.log("Unlike response:", response.data); // Log the response for debugging
+            console.log("Unlike response:", response.data);
             handleIsLiked();
           })
           .catch((error) => {
@@ -70,7 +69,6 @@ const Post = ({ posts }) => {
     }
   };
 
-  //handle isLiked variable for like button
   const handleIsLiked = async () => {
     const userId = user.id;
     try {
@@ -81,9 +79,9 @@ const Post = ({ posts }) => {
       const postLiked = userLikes.find((likes) => likes.postId === postId);
 
       if (postLiked) {
-        setIsLiked(true); // User has liked the post
+        setIsLiked(true); 
       } else {
-        setIsLiked(false); // User has not liked the post
+        setIsLiked(false);
       }
     } catch (error) {
       console.error("Error checking user likes:", error);
@@ -98,7 +96,7 @@ const Post = ({ posts }) => {
             {posts.username}
           </Link>
           <Card.Text>{posts.content}</Card.Text>
-          <div class="text-center">
+          <div className="text-center">
             <Button
               variant={isLiked ? "danger" : "outline-danger"}
               onPrint={handleIsLiked}
@@ -108,9 +106,9 @@ const Post = ({ posts }) => {
               {isLiked ? "Unlike" : "Like"}
             </Button>
           </div>
-          <p>{formattedDate}</p> {/* Display formattedDate */}
+          <p>{formattedDate}</p>
           {likeCount !== null && (
-            <p>{`Likes: ${likeCount}`}</p> // Display likeCount if it's not null
+            <p>{`Likes: ${likeCount}`}</p>
           )}
           <Link
             style={{ marginRight: "1cm" }}
@@ -119,6 +117,12 @@ const Post = ({ posts }) => {
           >
             Update
           </Link>
+
+          {/* Clickable Comment Icon */}
+          <Link to="/comments/comment" style={{ marginRight: "10px" }}>
+            <FontAwesomeIcon icon={faComment} />
+          </Link>
+
           <Link to="/createComment" className="btn btn-warning">
             Comment
           </Link>
