@@ -72,7 +72,7 @@ const Login = () => {
   };
 
   if(user) {
-    navigate('/feed')
+    navigate('/feed-algorithm')
     return
   }
 
