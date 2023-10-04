@@ -30,7 +30,7 @@ const PrivateUserProfile = () => {
   const handleCloseUploadModal = () => setShowUploadModal(false);
   const handleShowUploadModal = () => setShowUploadModal(true);
 
-  const { userId } = useParams();
+  const { username } = useParams();
 
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
@@ -44,22 +44,24 @@ const PrivateUserProfile = () => {
 };
 
 
-const onUpload = async (e) => {
-  const file = e.target.files[0];
-  setSelectedFile(file);
-  setSelectedImage(URL.createObjectURL(file));
-  const formData = new FormData();
-  formData.append("profileImage", file);
+const onUpload = async () => {
+  if (selectedFile) {
+    const formData = new FormData();
+    formData.append("profileImage", selectedFile);
 
-  try {
-    const res = await axios.post(`/user/updateProfileImage/${userId}`, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
-    setUserProfileImage(res.data.filePath);  // Update the profile image in the state
-  } catch (error) {
-    console.error("Error uploading profile image:", error);
+    try {
+      console.log('Username:', username);
+      const res = await axios.post(`${process.env.REACT_APP_BACKEND_SERVER_URI}/user/updateProfileImage/${username}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      setUserProfileImage(res.data.filePath);  // Update the profile image in the state
+    } catch (error) {
+      console.error("Error uploading profile image:", error);
+    }
+  } else {
+    console.error("No files selected");
   }
 };
 
@@ -69,7 +71,7 @@ const onUpload = async (e) => {
 
   // Fetch the user context
   const user = useContext(UserContext);
-  const username = user ? user.username : null;
+  const handleUsername = user ? user.username : null;
   
 
   // State for the form to create a new post
@@ -175,15 +177,20 @@ const onUpload = async (e) => {
   useEffect(() => {
     async function fetchProfileImage() {
       try {
-        const res = await axios.get(`/user/profileImage/${userId}`);
+        // Get the filename associated with the user
+        const response = await axios.get(`/some-endpoint-to-get-filename/${username}`);
+        const filename = response.data.filename;
+  
+        // Now use the filename to get the image
+        const res = await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_URI}/user/profileImage/${filename}`);
         setUserProfileImage(res.data.filePath);
       } catch (error) {
         console.error("Error fetching profile image:", error);
       }
     }
-
+  
     fetchProfileImage();
-  }, [userId]);
+  }, [username]);
 
 
   return (
