@@ -32,6 +32,9 @@ const Post = ({ posts }) => {
   }, [posts._id]);
 
   const handleLikeClick = () => {
+    if (!user||!user.id){
+      return; //prevents errors when user is NOT logged in
+    }
     const userId = user.id;
     handleIsLiked();
     if (!isLiked) {
@@ -70,6 +73,9 @@ const Post = ({ posts }) => {
   };
 
   const handleIsLiked = async () => {
+    if (!user||!user.id){
+      return; //prevents errors when user is NOT logged in
+    }
     const userId = user.id;
     try {
       const response = await axios.get(
