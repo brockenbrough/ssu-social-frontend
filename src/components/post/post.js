@@ -5,9 +5,9 @@ import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import moment from "moment";
 import axios from "axios";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faComment } from '@fortawesome/free-solid-svg-icons';
+
 import "./postStyles.css";
+ import "./postStyles.css";
 
 const Post = ({ posts }) => {
   const [likeCount, setLikeCount] = useState(null);
@@ -116,11 +116,6 @@ const Post = ({ posts }) => {
             className="btn btn-warning"
           >
             Update
-          </Link>
-
-          {/* Clickable Comment Icon */}
-          <Link to="/comments/comment" style={{ marginRight: "10px" }}>
-            <FontAwesomeIcon icon={faComment} />
           </Link>
 
           <Link to="/createComment" className="btn btn-warning">
