@@ -24,6 +24,7 @@ export default function Navbar() {
         <Nav.Link href="/createpost">Create Post</Nav.Link>
        <Nav.Link href="/getallpost">Explore</Nav.Link>
        <Nav.Link href="/privateUserProfile">Profile</Nav.Link>
+   
   
 
       </Nav>
