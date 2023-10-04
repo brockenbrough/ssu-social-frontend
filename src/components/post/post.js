@@ -121,7 +121,7 @@ const Post = ({ posts }) => {
             to={`/updatePost/${posts._id}`}
             className="btn btn-warning"
           >
-            Update
+            Update 
           </Link>
 
           <Link to="/createComment" className="btn btn-warning">
