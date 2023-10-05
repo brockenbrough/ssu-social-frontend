@@ -12,8 +12,6 @@ import getUserInfo from "../../utilities/decodeJwt";
 import Form from "react-bootstrap/Form";
 import FollowerCount from "../following/getFollowerCount";
 import FollowingCount from "../following/getFollowingCount";
-import { useParams } from 'react-router-dom';
-
 
 const PrivateUserProfile = () => {
   // State for showing delete confirmation modal
@@ -26,53 +24,9 @@ const PrivateUserProfile = () => {
   const handleCloseLogoutConfirmation = () => setShowLogoutConfirmation(false);
   const handleShowLogoutConfirmation = () => setShowLogoutConfirmation(true);
 
-  const [showUploadModal, setShowUploadModal] = useState(false);
-  const handleCloseUploadModal = () => setShowUploadModal(false);
-  const handleShowUploadModal = () => setShowUploadModal(true);
-
-  const { username } = useParams();
-
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [profileImageFilename, setProfileImageFilename] = useState("");
-  const [userProfileImage, setUserProfileImage] = useState("");
-  
-  
-
-  const onFileChange = event => {
-    setSelectedFile(event.target.files[0]);
-};
-
-
-const onUpload = async () => {
-  if (selectedFile) {
-    const formData = new FormData();
-    formData.append("profileImage", selectedFile);
-
-    try {
-      console.log('Username:', username);
-      const res = await axios.post(`${process.env.REACT_APP_BACKEND_SERVER_URI}/user/updateProfileImage/${username}`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      setUserProfileImage(res.data.filePath);  // Update the profile image in the state
-    } catch (error) {
-      console.error("Error uploading profile image:", error);
-    }
-  } else {
-    console.error("No files selected");
-  }
-};
-
-
-  const profileImageUrl = profileImageFilename ? `./routes/users/user.images/image/${profileImageFilename}` : "https://robohash.org/" + Math.random() + "?set=set5";
-
-
   // Fetch the user context
   const user = useContext(UserContext);
-  const handleUsername = user ? user.username : null;
-  
+  const username = user ? getUserInfo().username : null; // Check if user is defined
 
   // State for the form to create a new post
   const [form, setForm] = useState({ content: "" });
@@ -174,84 +128,70 @@ const onUpload = async () => {
     }
   };
 
-  useEffect(() => {
-    async function fetchProfileImage() {
-      try {
-        // Get the filename associated with the user
-        const response = await axios.get(`/some-endpoint-to-get-filename/${username}`);
-        const filename = response.data.filename;
-  
-        // Now use the filename to get the image
-        const res = await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_URI}/user/profileImage/${filename}`);
-        setUserProfileImage(res.data.filePath);
-      } catch (error) {
-        console.error("Error fetching profile image:", error);
-      }
-    }
-  
-    fetchProfileImage();
-  }, [username]);
-
-
   return (
     <div className="container">
       <div className="col-md-12 text-center">
         <h1>{user && user.username}</h1>
         <div className="col-md-12 text-center">
-        <Image roundedCircle src={profileImageFilename} />
-          <Button onClick={handleShowUploadModal}>Change Profile Picture</Button>
+          <Image
+            roundedCircle
+            src={"https://robohash.org/" + Math.random() + "?set=set5"}
+          />
         </div>
-        
         <div className="col-md-12 text-center">
           <ul>
             <Button onClick={followerRouteChange} variant="light">
               {<FollowerCount username={username} />}
-            </Button>
+            </Button>{" "}
             <Button onClick={followingRouteChange} variant="light">
               {<FollowingCount username={username} />}
-            </Button>
-            <Button variant="light">800 Likes</Button>
+            </Button>{" "}
+            <Button variant="light">800 Likes</Button>{" "}
           </ul>
         </div>
-
         <div className="col-md-12 text-center">
-          <Button className="me-2" onClick={handleShowLogoutConfirmation}>
-            Log Out
-          </Button>
-          <Modal
-            show={showLogoutConfirmation}
-            onHide={handleCloseLogoutConfirmation}
-            backdrop="static"
-            keyboard={false}
-          >
-            <Modal.Header closeButton>
-              <Modal.Title>Log Out</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>Are you sure you want to Log Out?</Modal.Body>
-            <Modal.Footer>
-              <Button variant="secondary" onClick={handleCloseLogoutConfirmation}>
-                Close
-              </Button>
-              <Button variant="primary" onClick={handleLogout}>
-                Yes
-              </Button>
-            </Modal.Footer>
-          </Modal>
-          <Button onClick={handleEditUser}>Edit User Information</Button>
+          <>
+            <Button className="me-2" onClick={handleShowLogoutConfirmation}>
+              Log Out
+            </Button>
+            <Modal
+              show={showLogoutConfirmation}
+              onHide={handleCloseLogoutConfirmation}
+              backdrop="static"
+              keyboard={false}
+            >
+              <Modal.Header closeButton>
+                <Modal.Title>Log Out</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>Are you sure you want to Log Out?</Modal.Body>
+              <Modal.Footer>
+                <Button variant="secondary" onClick={handleCloseLogoutConfirmation}>
+                  Close
+                </Button>
+                <Button variant="primary" onClick={handleLogout}>
+                  Yes
+                </Button>
+              </Modal.Footer>
+            </Modal>
+            <Button onClick={handleEditUser}>Edit User Information</Button>
+          </>
         </div>
       </div>
-
       <h3 className="txt">Create Post</h3>
+
       <Card.Header>{user && user.username}</Card.Header>
       <div>
         <Row>
           <Col xs={12} sm={4} md={4}>
-          <Image roundedCircle src={profileImageUrl} />
+            <Image
+              width="150"
+              roundedCircle
+              src={"https://robohash.org/" + Math.random()}
+            />
           </Col>
         </Row>
         <Card style={{ width: "5rem" }}></Card>
       </div>
-
       <Form.Group
         className="mb-3"
         controlId="content"
@@ -264,14 +204,15 @@ const onUpload = async () => {
           onChange={handleChange}
         />
       </Form.Group>
-
-      <Button variant="primary" type="submit" onClick={handleSubmit}>
-        Submit
-      </Button>
-
-      <h3>All Posts</h3>
-      <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-start', gap: '1rem' }}>
-        {posts.map((post, index) => (
+      <div>
+        <Button variant="primary" type="submit" onClick={handleSubmit}>
+          Submit
+        </Button>
+      </div>
+      <div>
+        <h3>All Posts</h3>
+        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-start', gap: '1rem' }}>
+        {posts.map((posts, index) => (
           <div key={index}>
             <Card
               style={{
@@ -284,26 +225,26 @@ const onUpload = async () => {
               <Card.Body>
                 <Card.Title>
                   <h5>Username:</h5>
-                  <Link to={"/publicprofilepage"}>{post.username}</Link>
+                  <Link to={"/publicprofilepage"}>{posts.username}</Link>
                 </Card.Title>
-                {post.content}
-                <p>{moment(post.date).format("MMMM Do YYYY, h:mm A")}</p>
+                {posts.content}
+                <p>{moment(posts.date).format("MMMM Do YYYY, h:mm A")}</p>
                 <Link
                   style={{ marginRight: "1cm" }}
-                  to={`/updatePost/${post._id}`}
-                  className="btn btn-warning"
+                  to={`/updatePost/${posts._id}`}
+                  className="btn btn-warning "
                 >
                   Update
                 </Link>
-                <Button variant="danger" onClick={() => openDeleteModal(post)}>
+                <Button variant="danger" onClick={() => openDeleteModal(posts)}>
                   Delete
                 </Button>
               </Card.Body>
             </Card>
           </div>
         ))}
+        
       </div>
-
       <Modal show={showDeleteConfirmation} onHide={handleCloseDeleteConfirmation} backdrop="static" keyboard={false}>
         <Modal.Header closeButton>
           <Modal.Title>Delete Confirmation</Modal.Title>
@@ -320,31 +261,10 @@ const onUpload = async () => {
           </Button>
         </Modal.Footer>
       </Modal>
-              
-<Modal show={showUploadModal} onHide={handleCloseUploadModal}>
-    <Modal.Header closeButton>
-        <Modal.Title>Change Profile Picture</Modal.Title>
-    </Modal.Header>
-    <Modal.Body>
-        <input type="file" onChange={onFileChange} />
-        {selectedImage && (
-            <img 
-                src={URL.createObjectURL(selectedImage)} 
-                alt="Selected Profile" 
-                style={{ width: '100%', marginTop: '10px' }} 
-            />
-        )}
-    </Modal.Body>
-    <Modal.Footer>
-        <Button variant="secondary" onClick={handleCloseUploadModal}>
-            Close
-        </Button>
-        <Button onClick={onUpload}>Upload Profile Image</Button>
-    </Modal.Footer>
-</Modal>
-
     </div>
-);
+    </div>
+  );
 };
+
 
 export default PrivateUserProfile;
