@@ -5,10 +5,6 @@ import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import moment from "moment";
 import axios from "axios";
-<<<<<<< HEAD
-=======
-
->>>>>>> f4236ca5de6947b61db1a00f21514f0dca172986
 import "./postStyles.css";
  import "./postStyles.css";
 
@@ -127,11 +123,7 @@ const Post = ({ posts }) => {
             Update 
           </Link>
 
-<<<<<<< HEAD
-          <Link to="/createComment" className="btn btn-warning">
-=======
           <Link to={`/createComment/${posts._id}`} className="btn btn-warning">
->>>>>>> f4236ca5de6947b61db1a00f21514f0dca172986
             Comment
           </Link>
         </Card.Body>

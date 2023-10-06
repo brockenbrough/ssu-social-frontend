@@ -24,57 +24,6 @@ const PrivateUserProfile = () => {
   const handleCloseLogoutConfirmation = () => setShowLogoutConfirmation(false);
   const handleShowLogoutConfirmation = () => setShowLogoutConfirmation(true);
 
-<<<<<<< HEAD
-  const [showUploadModal, setShowUploadModal] = useState(false);
-  const handleCloseUploadModal = () => setShowUploadModal(false);
-  const handleShowUploadModal = () => setShowUploadModal(true);
-
-  const { userId } = useParams();
-
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [profileImageFilename, setProfileImageFilename] = useState("");
-  const [userProfileImage, setUserProfileImage] = useState("");
-  const [selectedPost, setSelectedPost] = useState(null);
-  const [showModal, setShowPostModal] = useState(false);
-
-  const handleOpenPostModal = (post) => {
-    setSelectedPost(post);
-    setShowPostModal(true);
-  };
-
-  
-
-  const onFileChange = event => {
-    setSelectedFile(event.target.files[0]);
-};
-
-
-const onUpload = async (e) => {
-  const file = e.target.files[0];
-  setSelectedFile(file);
-  setSelectedImage(URL.createObjectURL(file));
-  const formData = new FormData();
-  formData.append("profileImage", file);
-
-  try {
-    const res = await axios.post(`/user/updateProfileImage/${userId}`, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
-    setUserProfileImage(res.data.filePath);  // Update the profile image in the state
-  } catch (error) {
-    console.error("Error uploading profile image:", error);
-  }
-};
-
-
-  const profileImageUrl = profileImageFilename ? `./routes/users/user.images/image/${profileImageFilename}` : "https://robohash.org/" + Math.random() + "?set=set5";
-
-
-=======
->>>>>>> f4236ca5de6947b61db1a00f21514f0dca172986
   // Fetch the user context
   const user = useContext(UserContext);
   const username = user ? getUserInfo().username : null; // Check if user is defined
@@ -255,17 +204,6 @@ const onUpload = async (e) => {
           onChange={handleChange}
         />
       </Form.Group>
-<<<<<<< HEAD
-
-      <Button variant="primary" type="submit" onClick={handleSubmit}>
-        Submit
-      </Button>
-
-      <h3>All Posts</h3>
-      <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-start', gap: '1rem' }}>
-        {posts.map((post, index) => (
-          <div key={index} onClick={() => handleOpenPostModal(post)}>
-=======
       <div>
         <Button variant="primary" type="submit" onClick={handleSubmit}>
           Submit
@@ -276,7 +214,6 @@ const onUpload = async (e) => {
         <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-start', gap: '1rem' }}>
         {posts.map((posts, index) => (
           <div key={index}>
->>>>>>> f4236ca5de6947b61db1a00f21514f0dca172986
             <Card
               style={{
                 width: "18rem",
@@ -324,57 +261,6 @@ const onUpload = async (e) => {
           </Button>
         </Modal.Footer>
       </Modal>
-<<<<<<< HEAD
-
-
-    <Modal show={showModal} onHide={() => setShowPostModal(false)}>
-      <Modal.Header closeButton>
-        <Modal.Title>Post Details</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        {/* Display the details of selectedPost here */}
-        {selectedPost && (
-          <>
-            <h5>Username: {selectedPost.username}</h5>
-            <p>{selectedPost.content}</p>
-            <p>{moment(selectedPost.date).format("MMMM Do YYYY, h:mm A")}</p>
-            {/* Add any other details you want to display */}
-          </>
-        )}
-      </Modal.Body>
-      <Modal.Footer>
-      <Button variant="secondary" onClick={() => setShowPostModal(false)}>
-        Close
-      </Button>
-    </Modal.Footer>
-    </Modal>
-
-      
-              
-<Modal show={showUploadModal} onHide={handleCloseUploadModal}>
-    <Modal.Header closeButton>
-        <Modal.Title>Change Profile Picture</Modal.Title>
-    </Modal.Header>
-    <Modal.Body>
-        <input type="file" onChange={onFileChange} />
-        {selectedImage && (
-            <img 
-                src={URL.createObjectURL(selectedImage)} 
-                alt="Selected Profile" 
-                style={{ width: '100%', marginTop: '10px' }} 
-            />
-        )}
-    </Modal.Body>
-    <Modal.Footer>
-        <Button variant="secondary" onClick={handleCloseUploadModal}>
-            Close
-        </Button>
-        <Button onClick={onUpload}>Upload Profile Image</Button>
-    </Modal.Footer>
-</Modal>
-
-=======
->>>>>>> f4236ca5de6947b61db1a00f21514f0dca172986
     </div>
     </div>
   );
