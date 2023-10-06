@@ -13,12 +13,20 @@ const GetAllPost = () => {
 
   const fetchPosts = async () => {
     const url = `${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getAllPosts`;
-    const res = await axios.get(url)
+    await axios.get(url)
       .then((res) => {
         setPosts(res.data);
       })
-      .catch((error) => alert(`Unable to fetch data from ${url}.`));
+      .catch((error) => {
+        alert(`Unable to fetch data from ${url}.`);
+        setPosts([]);  // Set posts to an empty array in case of an error
+      });
   };
+
+  const now = new Date();
+  const todayPosts = posts.filter(post => (now - new Date(post.date)) <= 24 * 60 * 60 * 1000);
+  const thisWeekPosts = posts.filter(post => (now - new Date(post.date)) > 24 * 60 * 60 * 1000 && (now - new Date(post.date)) <= 7 * 24 * 60 * 60 * 1000);
+  const aWhileAgoPosts = posts.filter(post => (now - new Date(post.date)) > 7 * 24 * 60 * 60 * 1000);
 
   const toggleDarkMode = () => {
     setDarkMode(!darkMode);
@@ -71,6 +79,7 @@ const GetAllPost = () => {
 
   return (
     <>
+<<<<<<< HEAD
       <div div className={`App ${darkMode ? "dark-mode" : ""}`}>
         <div className="toggle-container">
           <button onClick={toggleDarkMode} id="darkButton">
@@ -97,4 +106,52 @@ const GetAllPost = () => {
     </>
   );
       }
+=======
+        <div className={`App ${darkMode ? "dark-mode" : ""}`}>
+            <div className="toggle-container">
+                <button onClick={toggleDarkMode} id="darkButton">
+                  Dark Mode
+                </button>
+            </div>
+            <div className="text-center"><h1>Welcome to the Explore Page</h1></div>
+
+            {todayPosts.length > 0 && (
+                <>
+                    <div className="text-center"><h2>Today</h2></div>
+                    <hr />
+                    <div className="d-flex flex-wrap">
+                        {todayPosts.map((post, index) => (
+                            <Post id="cards" posts={post} />
+                        ))}
+                    </div>
+                </>
+            )}
+            {thisWeekPosts.length > 0 && (
+                <>
+                    <div className="text-center"><h2>This Week</h2></div>
+                    <hr />
+                    <div className="d-flex flex-wrap">
+                        {thisWeekPosts.map((post, index) => (
+                            <Post id="cards" posts={post} />
+                        ))}
+                    </div>
+                </>
+            )}
+            {aWhileAgoPosts.length > 0 && (
+                <>
+                    <div className="text-center"><h2>A While Ago</h2></div>
+                    <hr />
+                    <div className="d-flex flex-wrap">
+                        {aWhileAgoPosts.map((post, index) => (
+                            <Post id="cards" posts={post} />
+                        ))}
+                    </div>
+                </>
+            )}
+        </div>
+    </>
+);
+};
+
+>>>>>>> f4236ca5de6947b61db1a00f21514f0dca172986
 export default GetAllPost;

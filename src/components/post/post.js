@@ -5,7 +5,12 @@ import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import moment from "moment";
 import axios from "axios";
+<<<<<<< HEAD
+=======
+
+>>>>>>> f4236ca5de6947b61db1a00f21514f0dca172986
 import "./postStyles.css";
+ import "./postStyles.css";
 
 const Post = ({ posts }) => {
   const [likeCount, setLikeCount] = useState(null);
@@ -30,6 +35,9 @@ const Post = ({ posts }) => {
   }, [posts._id]);
 
   const handleLikeClick = () => {
+    if (!user||!user.id){
+      return; //prevents errors when user is NOT logged in
+    }
     const userId = user.id;
     handleIsLiked();
     if (!isLiked) {
@@ -68,6 +76,9 @@ const Post = ({ posts }) => {
   };
 
   const handleIsLiked = async () => {
+    if (!user||!user.id){
+      return; //prevents errors when user is NOT logged in
+    }
     const userId = user.id;
     try {
       const response = await axios.get(
@@ -113,10 +124,14 @@ const Post = ({ posts }) => {
             to={`/updatePost/${posts._id}`}
             className="btn btn-warning"
           >
-            Update
+            Update 
           </Link>
 
+<<<<<<< HEAD
           <Link to="/createComment" className="btn btn-warning">
+=======
+          <Link to={`/createComment/${posts._id}`} className="btn btn-warning">
+>>>>>>> f4236ca5de6947b61db1a00f21514f0dca172986
             Comment
           </Link>
         </Card.Body>

@@ -12,35 +12,36 @@ export default function PostList() {
   const [posts, setPosts] = useState([]);
 
   async function getPosts(user) {
-    let feed = [];
-    let postData = [];
-    if (user !== null) {
-      try {
-        const res = await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_URI}/feed/${user.username}`);
-        feed = res.data.feed;
-      } catch (error) {
-        console.error(`Failed to fetch feed for user: ${process.env.REACT_APP_BACKEND_SERVER_URI}/feed/${user.username}`);
-      }
-    } else {
-      try {
-        const res = await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_URI}/feed/`);
-        feed = res.data.feed;
-      } catch (error) {
-        console.error(`Failed to fetch public feed: ${process.env.REACT_APP_BACKEND_SERVER_URI}/feed/`);
-      }
+    try {
+        // Construct the URL to fetch the feed based on whether a user is provided
+        const feedUrl = user 
+            ? `${process.env.REACT_APP_BACKEND_SERVER_URI}/feed/${user.username}` 
+            : `${process.env.REACT_APP_BACKEND_SERVER_URI}/feed/`;
+
+        // Fetch the feed
+        const { data: { feed } } = await axios.get(feedUrl);
+
+        // Fetch posts in parallel using Promise.all
+        const postsPromises = feed.map(postId => 
+            axios.get(`${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getPostById/${postId}`)
+            .catch(error => {
+                console.error(`Failed to fetch a post with ID ${postId}:`, error);
+                return null;  // Return null on error to filter out later
+            })
+        );
+        
+        // Wait for all post fetching promises to complete
+        const postsResponses = await Promise.all(postsPromises);
+
+        // Filter out any null or undefined responses and extract post data
+        const postData = postsResponses.filter(response => response !== null).map(response => response.data);
+
+        // Update the state with fetched posts
+        setPosts(postData);
+    } catch (error) {
+        console.error('Failed to fetch feed:', error.message);
     }
-    
-    for (let i = 0; i < feed.length; i++) {
-      try {
-        const res = await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getPostById/${feed[i]}`);
-        postData.push(res.data);
-      } catch (error) {
-        console.error(`Failed to fetch a post in feed: ${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getPostById/${feed[i]}`);
-      }
-    }
-    
-    setPosts(postData)
-  }
+}
 
   useEffect(() => {
     setUser(getUserInfo());
@@ -60,31 +61,52 @@ export default function PostList() {
     );
   }
 
-  return (
-    <div>
-      <h1>
-        Welcome to your feed {user.username}
-      </h1>
-      {posts.length === 0 ? (
-        <p>
-          {user.username}, your feed is empty. Visit the{" "}
-          <Link to={"/getallpost"}>
-            <a href="#">public feed</a>
-          </Link>{" "}
-          to discover posts from other users.
-        </p>
-      ) : (
-        <>
-          <Button variant="primary" className="mx-1 my-1" href={`/createpost/`}>
-            Create Post
-          </Button>
-          <div>
-            {posts.map(e => {
-              return <Post posts={e} isLiked={"true"} />
-            })}
-          </div>
-        </>
-      )}
-    </div>
-  );
+  const now = new Date();
+  const todayPosts = posts.filter(post => (now - new Date(post.date)) <= 24 * 60 * 60 * 1000);
+  const thisWeekPosts = posts.filter(post => (now - new Date(post.date)) > 24 * 60 * 60 * 1000 && (now - new Date(post.date)) <= 7 * 24 * 60 * 60 * 1000);
+  const aWhileAgoPosts = posts.filter(post => (now - new Date(post.date)) > 7 * 24 * 60 * 60 * 1000);
+  
+
+
+return (
+    <>
+        <div className="container">
+        <div className="text-center"><h1>Welcome to your feed {user.username}</h1></div>
+            {todayPosts.length > 0 && (
+                <>
+                    <div className="text-center"><h2>Today</h2></div>
+                    <hr />
+                    <div className="d-flex flex-wrap">
+                        {todayPosts.map((post, index) => (
+                            <Post id="cards" posts={post} />
+                        ))}
+                    </div>
+                </>
+            )}
+            {thisWeekPosts.length > 0 && (
+                <>
+                    <div className="text-center"><h2>This Week</h2></div>
+                    <hr />
+                    <div className="d-flex flex-wrap">
+                        {thisWeekPosts.map((post, index) => (
+                            <Post id="cards" posts={post} />
+                        ))}
+                    </div>
+                </>
+            )}
+            {aWhileAgoPosts.length > 0 && (
+                <>
+                    <div className="text-center"><h2>A while ago</h2></div>
+                    <hr />
+                    <div className="d-flex flex-wrap">
+                        {aWhileAgoPosts.map((post, index) => (
+                            <Post id="cards" posts={post} />
+                        ))}
+                    </div>
+                </>
+            )}
+        </div>
+    </>
+);
+
 }
