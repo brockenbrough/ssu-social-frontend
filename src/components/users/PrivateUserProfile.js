@@ -36,7 +36,14 @@ const PrivateUserProfile = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [profileImageFilename, setProfileImageFilename] = useState("");
   const [userProfileImage, setUserProfileImage] = useState("");
-  
+  const [selectedPost, setSelectedPost] = useState(null);
+  const [showModal, setShowPostModal] = useState(false);
+
+  const handleOpenPostModal = (post) => {
+    setSelectedPost(post);
+    setShowPostModal(true);
+  };
+
   
 
   const onFileChange = event => {
@@ -265,7 +272,7 @@ const onUpload = async (e) => {
       <h3>All Posts</h3>
       <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-start', gap: '1rem' }}>
         {posts.map((post, index) => (
-          <div key={index}>
+          <div key={index} onClick={() => handleOpenPostModal(post)}>
             <Card
               style={{
                 width: "18rem",
@@ -313,6 +320,31 @@ const onUpload = async (e) => {
           </Button>
         </Modal.Footer>
       </Modal>
+
+
+    <Modal show={showModal} onHide={() => setShowPostModal(false)}>
+      <Modal.Header closeButton>
+        <Modal.Title>Post Details</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        {/* Display the details of selectedPost here */}
+        {selectedPost && (
+          <>
+            <h5>Username: {selectedPost.username}</h5>
+            <p>{selectedPost.content}</p>
+            <p>{moment(selectedPost.date).format("MMMM Do YYYY, h:mm A")}</p>
+            {/* Add any other details you want to display */}
+          </>
+        )}
+      </Modal.Body>
+      <Modal.Footer>
+      <Button variant="secondary" onClick={() => setShowPostModal(false)}>
+        Close
+      </Button>
+    </Modal.Footer>
+    </Modal>
+
+      
               
 <Modal show={showUploadModal} onHide={handleCloseUploadModal}>
     <Modal.Header closeButton>
