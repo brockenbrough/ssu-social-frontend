@@ -25,6 +25,8 @@ import PrivateUserLikeList from "./components/privateUserLikeList/PrivateUserLik
 import getUserInfo from "./utilities/decodeJwt";
 import CreatePost from "./components/post/createPost";
 import GetAllPost from "./components/post/getAllPost";
+import UploadImages from "./components/images/uploadImages";
+import ViewImages from "./components/images/viewImages";
 import UpdatePost from "./components/post/updatePost";
 import createComment from "./components/comments/createComment";
 
@@ -72,7 +74,8 @@ const App = () => {
           <Route path="/getallpost" element={<GetAllPost />} />
           <Route path="/updatepost/:postId" element={<UpdatePost />} />
           <Route path="/createComment/:postid" element={<CreateComments />} />
-
+          <Route path="/uploadImages" element={<UploadImages />} />
+          <Route path="/viewImages" element={<ViewImages />} />
         </Routes>
       </UserContext.Provider>
     </>
