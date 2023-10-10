@@ -16,29 +16,25 @@ export default function ViewImages() {
       const response = await fetch(`${process.env.REACT_APP_BACKEND_SERVER_URI}/images/getAll`);
       const data = await response.json();
       setImages(data);
+      console.log(data);
     } catch (error) {
       console.error('Error fetching images:', error);
     }
   }
 
-  if (!user) return (<div><h3>You are not authorized to view this page, Please Login in <Link to={'/login'}><a href='#'>here</a></Link></h3></div>);
+  if (!user) return (<div><h3>You are not authorized to view this page, Please Login in <Link to={'/login'}>here</Link></h3></div>);
 
   return (
     <div>
-      <h1>Uploaded Images</h1>
+      <h1>View Images</h1>
 
       <div>
         {images.map((image, index) => (
           <div key={index}>
             <h5>{image.name}</h5>
             <p>{image.desc}</p>
-            <img src={`data:${image.img.contentType};base64,${image.img.data.toString('base64')}`} alt={image.name} />
-          
-            <div>
-          <img
-            src="data:image/<%=image.img.contentType%>;base64,
-                    <%=image.img.data.toString('base64')%>"
-          />
+            <img src={`data:${image.img.contentType};base64,${image.base64Data}`} alt={image.name} />
+          <div>
         </div>
           
           </div>
