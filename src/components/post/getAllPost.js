@@ -79,34 +79,6 @@ const GetAllPost = () => {
 
   return (
     <>
-<<<<<<< HEAD
-      <div div className={`App ${darkMode ? "dark-mode" : ""}`}>
-        <div className="toggle-container">
-          <button onClick={toggleDarkMode} id="darkButton">
-            Dark Mode
-          </button>
-        </div>
-        <h1>All Posts</h1>
-        <div className="d-flex flex-wrap">
-          {posts.map((posts, index) => (
-            <div
-              key={posts._id}
-              className="post-card" // You can style this class for the post card
-              onClick={() => handlePostClick(posts)} // Handle click event
-            >
-              <Post id="cards" posts={posts} />
-            </div>
-          ))}
-        </div>
-      </div>
-  
-      {selectedPost && (
-        <PostModal post={selectedPost} onClose={() => setShowModal(false)} />
-      )}
-    </>
-  );
-      }
-=======
         <div className={`App ${darkMode ? "dark-mode" : ""}`}>
             <div className="toggle-container">
                 <button onClick={toggleDarkMode} id="darkButton">
@@ -153,5 +125,4 @@ const GetAllPost = () => {
 );
 };
 
->>>>>>> f4236ca5de6947b61db1a00f21514f0dca172986
 export default GetAllPost;
