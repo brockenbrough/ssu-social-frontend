@@ -16,7 +16,7 @@ const EditUserPage = () =>{
   // form validation checks
   const [ errors, setErrors ] = useState({})
   const findFormErrors = () => {
-    const {username, email, password} = form
+    const {username, email, password, biography} = form
     const newErrors = {}
     // username validation checks
     if (!username || username === '') newErrors.name = 'Input a valid username'
@@ -31,7 +31,7 @@ const EditUserPage = () =>{
   }
 
   // initialize form values and get userId on render
-  const [form, setValues] = useState({userId : "", username: "", email: "", password: "" })
+  const [form, setValues] = useState({userId : "", username: "", email: "", password: "", biography: "" })
   useEffect(() => {
     setValues({userId : getUserInfo().id})
   }, [])
@@ -77,10 +77,40 @@ const EditUserPage = () =>{
     }
   }
 
+    // initialize checkbox state
+  const [keepUsername, setKeepUsername] = useState(false);
+  const [keepEmail, setKeepEmail] = useState(false);
+
   // handle cancel button
   const handleCancel = async => {
     navigate("/privateuserprofile");
   }
+
+  // handle keep username checkbox change
+  const handleKeepUsernameChange = () => {
+    setKeepUsername(!keepUsername);
+    if (!keepUsername) {
+      setValues({ ...form, username: getUserInfo().username });
+    } else {
+      setValues({ ...form, username: "" });
+    }
+    if (form.username && !keepUsername) {
+      setValues({ ...form, username: "" });
+    }
+  };
+
+  // handle keep email checkbox change
+  const handleKeepEmailChange = () => {
+    setKeepEmail(!keepEmail);
+    if (!keepEmail) {
+      setValues({ ...form, email: getUserInfo().email });
+    } else {
+      setValues({ ...form, email: "" });
+    }
+    if (form.email && !keepEmail) {
+      setValues({ ...form, email: "" });
+    }
+  };
 
   return(
     <div>
@@ -92,40 +122,73 @@ const EditUserPage = () =>{
           <Form.Group className="mb-3" controlId="formName">
             <Form.Label>Username</Form.Label>
             <Form.Control type="text" placeholder="Enter new username" 
-                        id="username"
-                        value={form.username}
-                        onChange={handleChange}
-                        isInvalid={ !!errors.name }
+              id="username"
+              value={form.username}
+              onChange={handleChange}
+              isInvalid={ !!errors.name }
+              disabled={keepUsername}
             />
             <Form.Control.Feedback type='invalid'>
               { errors.name }
             </Form.Control.Feedback>
           </Form.Group>
 
+          <Form.Group className="mb-3" controlId="formKeepUsername">
+            <Form.Check
+              type="checkbox"
+              label="Keep username"
+              checked={keepUsername}
+              onChange={handleKeepUsernameChange}
+            />
+          </Form.Group>
+
           <Form.Group className="mb-3" controlId="formEmail">
              <Form.Label>Email address</Form.Label>
              <Form.Control type="text" placeholder="Enter new email address" 
-                         id="email"
-                         value={form.email}
-                         onChange={handleChange}
-                         isInvalid = { !!errors.email }
+                id="email"
+                value={form.email}
+                onChange={handleChange}
+                isInvalid = { !!errors.email }
+                disabled = {keepEmail}
              />
              <Form.Control.Feedback type='invalid'>
               { errors.email }
              </Form.Control.Feedback>
           </Form.Group>
 
+          <Form.Group className="mb-3" controlId="formKeepEmail">
+            <Form.Check
+              type="checkbox"
+              label="Keep email"
+              checked={keepEmail}
+              onChange={handleKeepEmailChange}
+            />
+          </Form.Group>
+
           <Form.Group className="mb-3" controlId="formPassword">
-             <Form.Label>Password</Form.Label>
-             <Form.Control type="text" placeholder="Enter new password" 
-                         id="password"
-                         value={form.password}
-                         onChange={handleChange}
-                         isInvalid = { !!errors.password }
-             />
-             <Form.Control.Feedback type='invalid'>
-              { errors.password }
-             </Form.Control.Feedback>
+            <Form.Label>Password</Form.Label>
+            <Form.Control
+              type="password"
+              placeholder="Enter new password"
+              id="password"
+              value={form.password}
+              onChange={handleChange}
+              isInvalid={!!errors.password}
+            />
+            <Form.Control.Feedback type="invalid">
+              {errors.password}
+            </Form.Control.Feedback>
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="formBiography">
+            <Form.Label>Biography</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Enter your bio"
+              id="biography"
+              value={form.biography}
+              onChange={handleChange}
+            />
           </Form.Group>
 
         <Row>
