@@ -35,8 +35,7 @@ const PrivateUserProfile = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [profileImageFilename, setProfileImageFilename] = useState("");
   const [userProfileImage, setUserProfileImage] = useState("");
-  const [followerCount, setFollowerCount] = useState(0);
-  const [followingCount, setFollowingCount] = useState(0);
+
   
   
 
@@ -72,13 +71,16 @@ const onUpload = async () => {
 
   // Fetch the user context
   const user = useContext(UserContext);
-  const username = user ? getUserInfo().username : null; // Check if user is defined
+  const username = user ? getUserInfo().username : null; // Check if the user is defined
 
   // State for the form to create a new post
   const [form, setForm] = useState({ content: "" });
 
   // State to store user's posts
   const [posts, setPosts] = useState([]);
+
+  const [followerCount, setFollowerCount] = useState(0);
+  const [followingCount, setFollowingCount] = useState(0);
 
   // Used for navigation
   const navigate = useNavigate();
@@ -156,6 +158,42 @@ const onUpload = async () => {
       );
     }
   };
+  const fetchFollowerCount = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_BACKEND_SERVER_URI}/followers/${username}`
+      );
+      if (response.data.length > 0) {
+        setFollowerCount(response.data[0].followers.length);
+      } else {
+        setFollowerCount(0);
+      }
+    } catch (error) {
+      console.error(`Error fetching follower count: ${error.message}`);
+    }
+  };
+
+  // Function to fetch following count
+  const fetchFollowingCount = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_BACKEND_SERVER_URI}/following/${username}`
+      );
+      if (response.data.length > 0) {
+        setFollowingCount(response.data[0].following.length);
+      } else {
+        setFollowingCount(0);
+      }
+    } catch (error) {
+      console.error(`Error fetching following count: ${error.message}`);
+    }
+  };
+  useEffect(() => {
+    fetchPosts();
+    fetchFollowerCount(); // Fetch follower count
+    fetchFollowingCount(); // Fetch following count
+  }, [username, fetchPosts]); // Include username and fetchPosts as dependencies
+
   const fetchTotalLikes = useCallback(async () => {
       try {
         console.log(username);
@@ -224,11 +262,13 @@ const deleteConfirm = async () => {
         <div className="col-md-12 text-center">
           <ul>
             <Button onClick={followerRouteChange} variant="light">
-              {<FollowerCount username={username} />}
+              {<followerCount username={username} />}
             </Button>
             <Button onClick={followingRouteChange} variant="light">
-              {<FollowingCount username={username} />}
+              {<followingCount username={username} />}
             </Button>
+            <Button variant="light">{followerCount} Followers</Button>{" "}
+            <Button variant="light">{followingCount} Following</Button>{" "}
             <Button variant="light">{totalLikes} Likes</Button>
           </ul>
         </div>
