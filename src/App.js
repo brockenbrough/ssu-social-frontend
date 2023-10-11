@@ -27,6 +27,8 @@ import CreatePost from "./components/post/createPost";
 import GetAllPost from "./components/post/getAllPost";
 import UpdatePost from "./components/post/updatePost";
 import createComment from "./components/comments/createComment";
+import UploadImages from "./components/images/uploadImages";
+import ViewImages from "./components/images/viewImages";
 
 import Test from "./Test";
 import { createContext, useState, useEffect } from "react";
