@@ -112,7 +112,7 @@ const CreatePost = () => {
           style={{ width: "60%" }}
         >
           <Form.Control
-            type="text"
+            as = "textarea"
             placeholder="What's on your mind?"
             name="content"
             value={state.content}
