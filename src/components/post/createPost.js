@@ -4,11 +4,13 @@ import { Form, Button, Modal } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import getUserInfo from "../../utilities/decodeJwt";
 import { Link } from "react-router-dom";
+import "../post/postStyles.css";
 
 const CreatePost = () => {
-
+  
   // User UseStates
   const [user, setUser] = useState(null);
+  const [darkMode, setDarkMode] = useState(false);
   const [state, setState] = useState({
     content: "",
   });
@@ -17,6 +19,10 @@ const CreatePost = () => {
     setUser(currentUser);
 
   }, []);
+
+  const toggleDarkMode = () => {
+    setDarkMode(!darkMode);
+  };
 
   const navigate = useNavigate();
   const handleChange = (e) => {
@@ -81,7 +87,13 @@ const CreatePost = () => {
 
   return (
     <>
-      <Form
+      <div className={`App ${darkMode ? "dark-mode" : "light-mode"}`}>
+            <div className="toggle-container">
+                <button onClick={toggleDarkMode} id="darkButton">
+                {darkMode ? "Light" : "Dark"}
+                </button>
+            </div>
+      <Form id="createPostID"
         onSubmit={handleSubmit}
         style={{
           display: "flex",
@@ -90,6 +102,8 @@ const CreatePost = () => {
           justifyContent: "center",
           height: "100vh",
           backgroundColor: "#f6f8fa",
+          backgroundColor: darkMode ? "#000" : "#f6f8fa", // Change background color
+          color: darkMode ? "#fff" : "#000",
         }}
       >
         <Form.Group
@@ -106,6 +120,9 @@ const CreatePost = () => {
             style={{
               height: "3cm",
               width: "100%",
+              backgroundColor: darkMode ? "#181818" : "white",
+              color: darkMode ? "white" : "#000",
+
             }}
           />
         </Form.Group>
@@ -120,11 +137,11 @@ const CreatePost = () => {
           }}
         >
           <img
-            src="/add-img-icon.png"
+            src={darkMode ? "/addImageLight.png" : "/add-img-icon.png"}
             alt="Add Image Icon"
             style={{ width: "60px", height: "60px", marginTop: ".5cm" }}
           />
-          <img src="/addVideo.png" alt="Add Video Icon" style={{ width: '60px', height: '60px', marginTop: '.5cm' }} />
+          <img src={darkMode ? "/addVideoWhite.png" : "/addVideo.png"} alt="Add Video Icon" style={{ width: '60px', height: '60px', marginTop: '.5cm'}} />
 
           {/* Add other icons as needed */}
           <input
@@ -184,7 +201,7 @@ const CreatePost = () => {
           </Button>
         </Modal.Footer>
       </Modal>
-
+      </div>
     </>
   );
 };
