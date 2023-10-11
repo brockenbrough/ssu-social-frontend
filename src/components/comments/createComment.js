@@ -50,7 +50,7 @@ function CreateComment() {
 
       if (response.ok) {
         // Comment created successfully, navigate back to the post page
-        navigate(`/getallpost`);
+        navigate(`/comments/comment`);
       } else {
         // Handle errors if needed
         console.error("Error:", response.status);
