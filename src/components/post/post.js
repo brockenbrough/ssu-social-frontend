@@ -11,6 +11,7 @@ import "./postStyles.css";
 const Post = ({ posts }) => {
   const [likeCount, setLikeCount] = useState(null);
   const [isLiked, setIsLiked] = useState(false);
+  const [dataLoaded, setDataLoaded] = useState(false); // Track if data is loaded
   const formattedDate = moment(posts.date).format("MMMM Do YYYY, h:mm A");
   const { _id: postId } = posts;
   const [user, setUser] = useState(null);
@@ -24,11 +25,19 @@ const Post = ({ posts }) => {
       .then((response) => response.json())
       .then((data) => {
         setLikeCount(data);
+        setDataLoaded(true);
       })
       .catch((error) => {
         console.error("Error fetching like count:", error);
+        setDataLoaded(true);
       });
   }, [posts._id]);
+
+  useEffect(() => {
+    if (dataLoaded) {
+      handleIsLiked();
+    }
+  }, [dataLoaded]);
 
   const handleLikeClick = () => {
     if (!user||!user.id){
@@ -104,7 +113,6 @@ const Post = ({ posts }) => {
           <div className="text-center">
             <Button
               variant={isLiked ? "danger" : "outline-danger"}
-              onPrint={handleIsLiked}
               onMouseOver={handleIsLiked}
               onClick={handleLikeClick}
             >
