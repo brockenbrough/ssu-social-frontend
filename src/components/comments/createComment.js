@@ -45,7 +45,7 @@ function CreateComment() {
           },
           body: JSON.stringify(newComment),
         }
-      );
+      ); 
       
 
       if (response.ok) {
