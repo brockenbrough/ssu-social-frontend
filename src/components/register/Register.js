@@ -119,7 +119,7 @@ const Register = () => {
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formBasicCheckbox">
                   <Form.Text className="text-muted pt-1">
-                    User account not found.
+                    Need an account?
                     <span>
                       <Link to="/signup" style={labelStyling}>
                         {" "}

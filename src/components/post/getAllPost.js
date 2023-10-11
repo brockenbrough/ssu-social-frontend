@@ -24,9 +24,17 @@ const GetAllPost = () => {
   };
 
   const now = new Date();
-  const todayPosts = posts.filter(post => (now - new Date(post.date)) <= 24 * 60 * 60 * 1000);
-  const thisWeekPosts = posts.filter(post => (now - new Date(post.date)) > 24 * 60 * 60 * 1000 && (now - new Date(post.date)) <= 7 * 24 * 60 * 60 * 1000);
-  const aWhileAgoPosts = posts.filter(post => (now - new Date(post.date)) > 7 * 24 * 60 * 60 * 1000);
+  const todayPosts = posts
+  .filter(post => (now - new Date(post.date)) <= 24 * 60 * 60 * 1000)
+  .sort((a, b) => new Date(b.date) - new Date(a.date));
+
+  const thisWeekPosts = posts
+    .filter(post => (now - new Date(post.date)) > 24 * 60 * 60 * 1000 && (now - new Date(post.date)) <= 7 * 24 * 60 * 60 * 1000)
+    .sort((a, b) => new Date(b.date) - new Date(a.date));
+
+  const aWhileAgoPosts = posts
+    .filter(post => (now - new Date(post.date)) > 7 * 24 * 60 * 60 * 1000)
+    .sort((a, b) => new Date(b.date) - new Date(a.date));
 
   const toggleDarkMode = () => {
     setDarkMode(!darkMode);
@@ -81,9 +89,10 @@ const GetAllPost = () => {
     <>
         <div className={`App ${darkMode ? "dark-mode" : ""}`}>
             <div className="toggle-container">
-                <button onClick={toggleDarkMode} id="darkButton">
-                  Dark Mode
-                </button>
+            <button onClick={toggleDarkMode} id="darkButton">
+                    {darkMode ? "Light Mode" : "Dark Mode"}
+                    </button>
+
             </div>
             <div className="text-center"><h1>Welcome to the Explore Page</h1></div>
 

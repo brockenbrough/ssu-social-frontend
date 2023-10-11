@@ -68,45 +68,55 @@ export default function PostList() {
   
 
 
-return (
+  return (
     <>
-        <div className="container">
-        <div className="text-center"><h1>Welcome to your feed {user.username}</h1></div>
-            {todayPosts.length > 0 && (
-                <>
-                    <div className="text-center"><h2>Today</h2></div>
-                    <hr />
-                    <div className="d-flex flex-wrap">
-                        {todayPosts.map((post, index) => (
-                            <Post id="cards" posts={post} />
-                        ))}
-                    </div>
-                </>
-            )}
-            {thisWeekPosts.length > 0 && (
-                <>
-                    <div className="text-center"><h2>This Week</h2></div>
-                    <hr />
-                    <div className="d-flex flex-wrap">
-                        {thisWeekPosts.map((post, index) => (
-                            <Post id="cards" posts={post} />
-                        ))}
-                    </div>
-                </>
-            )}
-            {aWhileAgoPosts.length > 0 && (
-                <>
-                    <div className="text-center"><h2>A while ago</h2></div>
-                    <hr />
-                    <div className="d-flex flex-wrap">
-                        {aWhileAgoPosts.map((post, index) => (
-                            <Post id="cards" posts={post} />
-                        ))}
-                    </div>
-                </>
-            )}
-        </div>
+        {posts.length === 0 ? (
+            <div className="text-center" style={{fontSize: "1.5em"}}>
+                <p>
+                    <strong>{user.username}</strong>, your feed is empty. Visit the{" "}
+                    <Link to={"/getallpost"}>
+                        <a href="#">public feed</a>
+                    </Link>{" "}
+                    to discover posts from other users.
+                </p>
+            </div>
+        ) : (
+            <div className="App">
+                {todayPosts.length > 0 && (
+                    <>
+                        <div className="text-center"><h2>Today</h2></div>
+                        <hr />
+                        <div className="d-flex flex-wrap">
+                            {todayPosts.map((post, index) => (
+                                <Post id="cards" posts={post} />
+                            ))}
+                        </div>
+                    </>
+                )}
+                {thisWeekPosts.length > 0 && (
+                    <>
+                        <div className="text-center"><h2>This Week</h2></div>
+                        <hr />
+                        <div className="d-flex flex-wrap">
+                            {thisWeekPosts.map((post, index) => (
+                                <Post id="cards" posts={post} />
+                            ))}
+                        </div>
+                    </>
+                )}
+                {aWhileAgoPosts.length > 0 && (
+                    <>
+                        <div className="text-center"><h2>A while ago</h2></div>
+                        <hr />
+                        <div className="d-flex flex-wrap">
+                            {aWhileAgoPosts.map((post, index) => (
+                                <Post id="cards" posts={post} />
+                            ))}
+                        </div>
+                    </>
+                )}
+            </div>
+        )}
     </>
 );
-
 }

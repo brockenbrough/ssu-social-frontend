@@ -130,140 +130,150 @@ const PrivateUserProfile = () => {
 
   return (
     <div className="container">
-      <div className="col-md-12 text-center">
-        <h1>{user && user.username}</h1>
-        <div className="col-md-12 text-center">
-          <Image
-            roundedCircle
-            src={"https://robohash.org/" + Math.random() + "?set=set5"}
-          />
-        </div>
-        <div className="col-md-12 text-center">
-          <ul>
-            <Button onClick={followerRouteChange} variant="light">
-              {<FollowerCount username={username} />}
-            </Button>{" "}
-            <Button onClick={followingRouteChange} variant="light">
-              {<FollowingCount username={username} />}
-            </Button>{" "}
-            <Button variant="light">800 Likes</Button>{" "}
-          </ul>
-        </div>
-        <div className="col-md-12 text-center">
-          <>
-            <Button className="me-2" onClick={handleShowLogoutConfirmation}>
-              Log Out
-            </Button>
-            <Modal
-              show={showLogoutConfirmation}
-              onHide={handleCloseLogoutConfirmation}
-              backdrop="static"
-              keyboard={false}
-            >
-              <Modal.Header closeButton>
-                <Modal.Title>Log Out</Modal.Title>
-              </Modal.Header>
-              <Modal.Body>Are you sure you want to Log Out?</Modal.Body>
-              <Modal.Footer>
-                <Button variant="secondary" onClick={handleCloseLogoutConfirmation}>
-                  Close
+      {user ? (
+        <>
+          <div className="col-md-12 text-center">
+            <h1>{user && user.username}</h1>
+            <div className="col-md-12 text-center">
+              <Image
+                roundedCircle
+                src={"https://robohash.org/" + Math.random() + "?set=set5"}
+              />
+            </div>
+            <div className="col-md-12 text-center">
+              <ul>
+                <Button onClick={followerRouteChange} variant="light">
+                  {<FollowerCount username={username} />}
+                </Button>{" "}
+                <Button onClick={followingRouteChange} variant="light">
+                  {<FollowingCount username={username} />}
+                </Button>{" "}
+                <Button variant="light">800 Likes</Button>{" "}
+              </ul>
+            </div>
+            <div className="col-md-12 text-center">
+              <>
+                <Button className="me-2" onClick={handleShowLogoutConfirmation}>
+                  Log Out
                 </Button>
-                <Button variant="primary" onClick={handleLogout}>
+                <Modal
+                  show={showLogoutConfirmation}
+                  onHide={handleCloseLogoutConfirmation}
+                  backdrop="static"
+                  keyboard={false}
+                >
+                  <Modal.Header closeButton>
+                    <Modal.Title>Log Out</Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>Are you sure you want to Log Out?</Modal.Body>
+                  <Modal.Footer>
+                    <Button variant="secondary" onClick={handleCloseLogoutConfirmation}>
+                      Close
+                    </Button>
+                    <Button variant="primary" onClick={handleLogout}>
+                      Yes
+                    </Button>
+                  </Modal.Footer>
+                </Modal>
+                <Button onClick={handleEditUser}>Edit User Information</Button>
+              </>
+            </div>
+          </div>
+          <h3 className="txt">Create Post</h3>
+  
+          <Card.Header>{user && user.username}</Card.Header>
+          <div>
+            <Row>
+              <Col xs={12} sm={4} md={4}>
+                <Image
+                  width="150"
+                  roundedCircle
+                  src={"https://robohash.org/" + Math.random()}
+                />
+              </Col>
+            </Row>
+            <Card style={{ width: "5rem" }}></Card>
+          </div>
+          <Form.Group
+            className="mb-3"
+            controlId="content"
+            style={{ width: "50rem" }}
+          >
+            <Form.Control
+              type="text"
+              placeholder="Enter post here"
+              value={form.content}
+              onChange={handleChange}
+            />
+          </Form.Group>
+          <div>
+            <Button variant="primary" type="submit" onClick={handleSubmit}>
+              Submit
+            </Button>
+          </div>
+          <div>
+            <h3>Your Posts</h3>
+            <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-start', gap: '1rem' }}>
+            {posts.map((posts, index) => (
+              <div key={index}>
+                <Card
+                  style={{
+                    width: "18rem",
+                    marginTop: "1cm",
+                    marginLeft: ".5cm",
+                    background: "aliceblue",
+                  }}
+                >
+                  <Card.Body>
+                    <Card.Title>
+                      <h5>Username:</h5>
+                      <Link to={"/publicprofilepage"}>{posts.username}</Link>
+                    </Card.Title>
+                    {posts.content}
+                    <p>{moment(posts.date).format("MMMM Do YYYY, h:mm A")}</p>
+                    <Link
+                      style={{ marginRight: "1cm" }}
+                      to={`/updatePost/${posts._id}`}
+                      className="btn btn-warning "
+                    >
+                      Update
+                    </Link>
+                    <Button variant="danger" onClick={() => openDeleteModal(posts)}>
+                      Delete
+                    </Button>
+                  </Card.Body>
+                </Card>
+              </div>
+            ))}
+            </div>
+            <Modal show={showDeleteConfirmation} onHide={handleCloseDeleteConfirmation} backdrop="static" keyboard={false}>
+              <Modal.Header closeButton>
+                <Modal.Title>Delete Confirmation</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                Are you sure you want to delete this post?
+              </Modal.Body>
+              <Modal.Footer>
+                <Button variant="secondary" onClick={handleCloseDeleteConfirmation}>
+                  No
+                </Button>
+                <Button variant="primary" onClick={deleteConfirm}>
                   Yes
                 </Button>
               </Modal.Footer>
             </Modal>
-            <Button onClick={handleEditUser}>Edit User Information</Button>
-          </>
-        </div>
-      </div>
-      <h3 className="txt">Create Post</h3>
-
-      <Card.Header>{user && user.username}</Card.Header>
-      <div>
-        <Row>
-          <Col xs={12} sm={4} md={4}>
-            <Image
-              width="150"
-              roundedCircle
-              src={"https://robohash.org/" + Math.random()}
-            />
-          </Col>
-        </Row>
-        <Card style={{ width: "5rem" }}></Card>
-      </div>
-      <Form.Group
-        className="mb-3"
-        controlId="content"
-        style={{ width: "50rem" }}
-      >
-        <Form.Control
-          type="text"
-          placeholder="Enter post here"
-          value={form.content}
-          onChange={handleChange}
-        />
-      </Form.Group>
-      <div>
-        <Button variant="primary" type="submit" onClick={handleSubmit}>
-          Submit
-        </Button>
-      </div>
-      <div>
-        <h3>All Posts</h3>
-        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-start', gap: '1rem' }}>
-        {posts.map((posts, index) => (
-          <div key={index}>
-            <Card
-              style={{
-                width: "18rem",
-                marginTop: "1cm",
-                marginLeft: ".5cm",
-                background: "aliceblue",
-              }}
-            >
-              <Card.Body>
-                <Card.Title>
-                  <h5>Username:</h5>
-                  <Link to={"/publicprofilepage"}>{posts.username}</Link>
-                </Card.Title>
-                {posts.content}
-                <p>{moment(posts.date).format("MMMM Do YYYY, h:mm A")}</p>
-                <Link
-                  style={{ marginRight: "1cm" }}
-                  to={`/updatePost/${posts._id}`}
-                  className="btn btn-warning "
-                >
-                  Update
-                </Link>
-                <Button variant="danger" onClick={() => openDeleteModal(posts)}>
-                  Delete
-                </Button>
-              </Card.Body>
-            </Card>
           </div>
-        ))}
-        
-      </div>
-      <Modal show={showDeleteConfirmation} onHide={handleCloseDeleteConfirmation} backdrop="static" keyboard={false}>
-        <Modal.Header closeButton>
-          <Modal.Title>Delete Confirmation</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          Are you sure you want to delete this post?
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseDeleteConfirmation}>
-            No
-          </Button>
-          <Button variant="primary" onClick={deleteConfirm}>
-            Yes
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    </div>
+        </>
+      ) : (
+        <div className="col-md-12 text-center" style={{ fontSize: '24px', fontWeight: 'bold' }}>
+          <p>
+            Please <Link to="/login" style={{ textDecoration: 'underline' }}>log in</Link> to view your profile.
+          </p>
+        </div>
+      )}
     </div>
   );
+  
 };
 
 
