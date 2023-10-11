@@ -8,6 +8,10 @@ import "../post/postStyles.css";
 
 const CreatePost = () => {
   
+
+  const [textAreaCount, setTextAreaCount] = React.useState(0);
+  const maxText = 280;  
+  var [color, setColor] = React.useState('gainsboro');
   // User UseStates
   const [user, setUser] = useState(null);
   const [darkMode, setDarkMode] = useState(false);
@@ -26,6 +30,19 @@ const CreatePost = () => {
 
   const navigate = useNavigate();
   const handleChange = (e) => {
+
+    setTextAreaCount(e.target.value.length);  //used for char counting
+    if(textAreaCount == maxText-1 || textAreaCount == maxText){
+      setColor('red');
+    }
+    else if(textAreaCount/maxText >= .75){
+      setColor('gold');
+    }
+    else{
+      setColor('gainsboro')
+    }
+
+
     const { name, value } = e.target;
     setState({
       ...state,
@@ -117,6 +134,7 @@ const CreatePost = () => {
             name="content"
             value={state.content}
             onChange={handleChange}
+            maxlength = {maxText}   
             style={{
               height: "3cm",
               width: "100%",
@@ -125,6 +143,7 @@ const CreatePost = () => {
 
             }}
           />
+          <p><span style={{color:color}} onChange={handleChange}> {`${textAreaCount}/${maxText}`} </span></p>  
         </Form.Group>
 
         <div
