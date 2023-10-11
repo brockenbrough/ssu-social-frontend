@@ -89,9 +89,10 @@ const GetAllPost = () => {
     <>
         <div className={`App ${darkMode ? "dark-mode" : ""}`}>
             <div className="toggle-container">
-                <button onClick={toggleDarkMode} id="darkButton">
-                  Dark Mode
-                </button>
+            <button onClick={toggleDarkMode} id="darkButton">
+                    {darkMode ? "Light Mode" : "Dark Mode"}
+                    </button>
+
             </div>
             <div className="text-center"><h1>Welcome to the Explore Page</h1></div>
 
