@@ -83,13 +83,6 @@ const Login = () => {
           <div
             className="row d-flex justify-content-center align-items-center h-100 "
             style={backgroundStyling}>
-            <div className="col-md-9 col-lg-6 col-xl-5">
-              <img
-                src="https://cdn.dribbble.com/users/1080950/screenshots/11585265/media/01aaa0e9a2325d1032112e98d5c78474.png?compress=1&resize=700x600"
-                className="img-fluid"
-                alt="test image"
-              />
-            </div>
             <div className="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
               <Form>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -115,7 +108,7 @@ const Login = () => {
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formBasicCheckbox">
                   <Form.Text className="text-muted pt-1">
-                    User account not found.
+                    Need an account?
                     <span>
                       <Link to="/signup" style={labelStyling}> Sign up
                       </Link>
