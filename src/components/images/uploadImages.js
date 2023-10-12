@@ -6,6 +6,7 @@ export default function UploadImages() {
   const [user, setUser] = useState({});
   const [name, setName] = useState(""); 
   const [desc, setDesc] = useState(""); 
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     setUser(getUserInfo());
@@ -38,15 +39,20 @@ export default function UploadImages() {
       console.error('Error:', error);
     }
   };
+  
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
 
   return (
-    <div>
-      <h1>Upload Images</h1>
-
-      <div>
+    <div style={{ maxWidth: '400px', margin: '50px auto', padding: '20px', backgroundColor: '#fff', borderRadius: '8px', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)' }}>
+      <h1 style={{ textAlign: 'center', color: '#333' }}>Upload Images</h1>
+  
+      <div style={{ marginTop: '20px' }}>
         <form onSubmit={handleSubmit} encType="multipart/form-data">
-          <div>
-            <label htmlFor="name">Image Title</label>
+          <div style={{ marginBottom: '15px' }}>
+            <label htmlFor="name" style={{ display: 'block', marginBottom: '5px', color: '#555' }}>Image Title</label>
             <input
               type="text"
               id="name"
@@ -55,10 +61,11 @@ export default function UploadImages() {
               name="name"
               onChange={(e) => setName(e.target.value)}
               required
+              style={{ width: '100%', padding: '8px', border: '1px solid #ccc', borderRadius: '4px' }}
             />
           </div>
-          <div>
-            <label htmlFor="desc">Image Description</label>
+          <div style={{ marginBottom: '15px' }}>
+            <label htmlFor="desc" style={{ display: 'block', marginBottom: '5px', color: '#555' }}>Image Description</label>
             <textarea
               id="desc"
               name="desc"
@@ -67,19 +74,23 @@ export default function UploadImages() {
               placeholder="Description"
               onChange={(e) => setDesc(e.target.value)}
               required
+              style={{ width: '100%', padding: '8px', border: '1px solid #ccc', borderRadius: '4px' }}
             />
           </div>
-          <div>
-            <label htmlFor="image">Upload Image</label>
-            <input type="file" id="image" name="image" accept="image/*" required />
+          <div style={{ marginBottom: '15px' }}>
+            <label htmlFor="image" style={{ display: 'block', marginBottom: '5px', color: '#555' }}>Upload Image</label>
+            <input type="file" id="image" name="image" accept="image/*" required style={{ width: '100%', padding: '8px', border: '1px solid #ccc', borderRadius: '4px' }} />
           </div>
-          <div>
-            <button type="submit">Submit</button>
+          <div style={{ marginBottom: '15px', display: 'flex' }}>
+            <button type="submit" style={{ flex: 2, backgroundColor: '#4caf50', color: '#fff', padding: '10px', border: 'none', borderRadius: '4px', cursor: 'pointer', marginRight: '5px' }}>Submit</button>
           </div>
+
+
         </form>
       </div>
-
-      <hr />
+  
+      <hr style={{ marginTop: '20px' }} />
     </div>
+    
   );
 }
