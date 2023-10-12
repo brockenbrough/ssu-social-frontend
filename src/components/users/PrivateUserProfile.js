@@ -66,7 +66,7 @@ const onUpload = async () => {
 };
 
 
-  const profileImageUrl = profileImageFilename ? `./routes/users/user.images/image/${profileImageFilename}` : "https://robohash.org/" + Math.random() + "?set=set5";
+const profileImageUrl = profileImageFilename ? `./routes/users/user.images/image/${profileImageFilename}` : null;
 
 
   // Fetch the user context
@@ -252,116 +252,108 @@ const deleteConfirm = async () => {
 
   return (
     <div className="container">
-      <div className="col-md-12 text-center">
-        <h1>{user && user.username}</h1>
-        <div className="col-md-12 text-center">
-        <Image roundedCircle src={profileImageFilename} />
-          <Button onClick={handleShowUploadModal}>Change Profile Picture</Button>
-        </div>
-        
-        <div className="col-md-12 text-center">
-          <ul>
-            <Button onClick={followerRouteChange} variant="light">
-              {<followerCount username={username} />}
-            </Button>
-            <Button onClick={followingRouteChange} variant="light">
-              {<followingCount username={username} />}
-            </Button>
-            <Button variant="light">{followerCount} Followers</Button>{" "}
-            <Button variant="light">{followingCount} Following</Button>{" "}
-            <Button variant="light">{totalLikes} Likes</Button>
-          </ul>
-        </div>
-        <div className="col-md-12 text-center">
-          <Button className="me-2" onClick={handleShowLogoutConfirmation}>
-            Log Out
-          </Button>
-          <Modal
-            show={showLogoutConfirmation}
-            onHide={handleCloseLogoutConfirmation}
-            backdrop="static"
-            keyboard={false}
-          >
-            <Modal.Header closeButton>
-              <Modal.Title>Log Out</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>Are you sure you want to Log Out?</Modal.Body>
-            <Modal.Footer>
-              <Button variant="secondary" onClick={handleCloseLogoutConfirmation}>
-                Close
-              </Button>
-              <Button variant="primary" onClick={handleLogout}>
-                Yes
-              </Button>
-            </Modal.Footer>
-          </Modal>
-          <Button onClick={handleEditUser}>Edit User Information</Button>
-        </div>
-      </div>
-
-      <h3 className="txt">Create Post</h3>
-      <Card.Header>{user && user.username}</Card.Header>
-      <div>
+      {user ? (
         <Row>
-          <Col xs={12} sm={4} md={4}>
-          <Image roundedCircle src={profileImageUrl} />
+          <Col md={3} className="text-center">
+            <h1>{user.username}</h1>
+            <Image roundedCircle src={profileImageFilename} />
+            <Button onClick={handleShowUploadModal}>Change Profile Picture</Button>
+            <ul>
+            <Button variant="light" onClick={followerRouteChange}> {followerCount} Followers</Button>
+            <Button variant="light" onClick={followingRouteChange}>{followingCount} Following</Button>
+            <Button variant="light">{totalLikes} Likes</Button>
+            </ul>
+            <Button className="me-2" onClick={handleShowLogoutConfirmation}>
+              Log Out
+            </Button>
+            <Modal
+              show={showLogoutConfirmation}
+              onHide={handleCloseLogoutConfirmation}
+              backdrop="static"
+              keyboard={false}
+            >
+              <Modal.Header closeButton>
+                <Modal.Title>Log Out</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>Are you sure you want to Log Out?</Modal.Body>
+              <Modal.Footer>
+                <Button variant="secondary" onClick={handleCloseLogoutConfirmation}>
+                  Close
+                </Button>
+                <Button variant="primary" onClick={handleLogout}>
+                  Yes
+                </Button>
+              </Modal.Footer>
+            </Modal>
+            <Button onClick={handleEditUser}>Edit User Information</Button>
+          </Col>
+          <Col md={9}>
+            <h3 className="txt">Create Post</h3>
+            <Card.Header>{user.username}</Card.Header>
+            <Row>
+              <Col xs={12} sm={4} md={4}>
+                <Image roundedCircle src={profileImageUrl} />
+              </Col>
+            </Row>
+            <Card style={{ width: "5rem" }}></Card>
+            <Form.Group
+              className="mb-3"
+              controlId="content"
+              style={{ width: "50rem" }}
+            >
+              <Form.Control
+                type="text"
+                placeholder="Enter post here"
+                value={form.content}
+                onChange={handleChange}
+              />
+              <Button variant="primary" type="submit" onClick={handleSubmit}>
+                Submit
+              </Button>
+            </Form.Group>
+            <h3>Your Posts</h3>
+            <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-start', gap: '1rem' }}>
+              {posts.map((post, index) => (
+                <div key={index}>
+                  <Card
+                    style={{
+                      width: "16rem",
+                      marginTop: "1cm",
+                      marginLeft: ".5cm",
+                      background: "aliceblue",
+                    }}
+                  >
+                    <Card.Body>
+                      <Card.Title>
+                        <h5>Username:</h5>
+                        <Link to={"/publicprofilepage"}>{post.username}</Link>
+                      </Card.Title>
+                      {post.content}
+                      <p>{moment(post.date).format("MMMM Do YYYY, h:mm A")}</p>
+                      <Link
+                        style={{ marginRight: "1cm" }}
+                        to={`/updatePost/${post._id}`}
+                        className="btn btn-warning"
+                      >
+                        Update
+                      </Link>
+                      <Button variant="danger" onClick={() => openDeleteModal(post)}>
+                        Delete
+                      </Button>
+                    </Card.Body>
+                  </Card>
+                </div>
+              ))}
+            </div>
           </Col>
         </Row>
-        <Card style={{ width: "5rem" }}></Card>
-      </div>
-
-      <Form.Group
-        className="mb-3"
-        controlId="content"
-        style={{ width: "50rem" }}
-      >
-        <Form.Control
-          type="text"
-          placeholder="Enter post here"
-          value={form.content}
-          onChange={handleChange}
-        />
-      </Form.Group>
-
-      <Button variant="primary" type="submit" onClick={handleSubmit}>
-        Submit
-      </Button>
-
-      <h3>All Posts</h3>
-      <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-start', gap: '1rem' }}>
-        {posts.map((post, index) => (
-          <div key={index}>
-            <Card
-              style={{
-                width: "18rem",
-                marginTop: "1cm",
-                marginLeft: ".5cm",
-                background: "aliceblue",
-              }}
-            >
-              <Card.Body>
-                <Card.Title>
-                  <h5>Username:</h5>
-                  <Link to={"/publicprofilepage"}>{post.username}</Link>
-                </Card.Title>
-                {post.content}
-                <p>{moment(post.date).format("MMMM Do YYYY, h:mm A")}</p>
-                <Link
-                  style={{ marginRight: "1cm" }}
-                  to={`/updatePost/${post._id}`}
-                  className="btn btn-warning"
-                >
-                  Update
-                </Link>
-                <Button variant="danger" onClick={() => openDeleteModal(post)}>
-                  Delete
-                </Button>
-              </Card.Body>
-            </Card>
-          </div>
-        ))}
-      </div>
-
+      ) : (
+        <div className="col-md-12 text-center" style={{ fontSize: '24px', fontWeight: 'bold' }}>
+          <p>
+            Please <Link to="/login" style={{ textDecoration: 'underline' }}>log in</Link> to view your profile.
+          </p>
+        </div>
+      )}
       <Modal show={showDeleteConfirmation} onHide={handleCloseDeleteConfirmation} backdrop="static" keyboard={false}>
         <Modal.Header closeButton>
           <Modal.Title>Delete Confirmation</Modal.Title>
@@ -378,31 +370,30 @@ const deleteConfirm = async () => {
           </Button>
         </Modal.Footer>
       </Modal>
-              
-<Modal show={showUploadModal} onHide={handleCloseUploadModal}>
-    <Modal.Header closeButton>
-        <Modal.Title>Change Profile Picture</Modal.Title>
-    </Modal.Header>
-    <Modal.Body>
-        <input type="file" onChange={onFileChange} />
-        {selectedImage && (
+      <Modal show={showUploadModal} onHide={handleCloseUploadModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Change Profile Picture</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <input type="file" onChange={onFileChange} />
+          {selectedImage && (
             <img 
-                src={URL.createObjectURL(selectedImage)} 
-                alt="Selected Profile" 
-                style={{ width: '100%', marginTop: '10px' }} 
+              src={URL.createObjectURL(selectedImage)} 
+              alt="Selected Profile" 
+              style={{ width: '100%', marginTop: '10px' }} 
             />
-        )}
-    </Modal.Body>
-    <Modal.Footer>
-        <Button variant="secondary" onClick={handleCloseUploadModal}>
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseUploadModal}>
             Close
-        </Button>
-        <Button onClick={onUpload}>Upload Profile Image</Button>
-    </Modal.Footer>
-</Modal>
-
+          </Button>
+          <Button onClick={onUpload}>Upload Profile Image</Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
+  
   
 };
 
