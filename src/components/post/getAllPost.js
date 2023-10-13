@@ -3,31 +3,16 @@ import React, { useState, useEffect } from "react";
 import Post from "./post";
 import "./postStyles.css";
 import { Modal, Button } from "react-bootstrap";
+import ScrollToTop from "./ScrollToTop";
+
 
 const GetAllPost = () => {
   const [posts, setPosts] = useState([]);
   const [darkMode, setDarkMode] = useState(false);
   const [showModal, setShowModal] = useState(false); 
   const [selectedPost, setSelectedPost] = useState(null);
-  const [showScrollButton, setShowScrollButton] = useState(false);
-  
 
-  const checkScrollTop = () => {
-    if (!showScrollButton && window.pageYOffset > 400){
-      setShowScrollButton(true);
-    } else if (showScrollButton && window.pageYOffset <= 400){
-      setShowScrollButton(false);
-    }
-  };
 
-  useEffect(() => {
-    window.addEventListener('scroll', checkScrollTop);
-    return () => window.removeEventListener('scroll', checkScrollTop);
-  }, []);
-
-  const scrollTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
 
   const fetchPosts = async () => {
     const url = `${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getAllPosts`;
@@ -147,11 +132,7 @@ const GetAllPost = () => {
                 </>
             )}
         </div>
-        {showScrollButton && 
-            <button onClick={scrollTop} style={{position: 'fixed', bottom: '5%', right: '5%', zIndex: 1000}}>
-                Scroll to Top
-            </button>
-        }
+        <ScrollToTop />
     </>
 );
 
