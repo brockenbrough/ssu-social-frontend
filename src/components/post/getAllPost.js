@@ -1,14 +1,23 @@
 import axios from "axios";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Post from "./post";
-import "./postStyles.css";
 import { Modal, Button } from "react-bootstrap";
+import { useDarkMode } from '../DarkModeContext.js';
+
+
 
 const GetAllPost = () => {
   const [posts, setPosts] = useState([]);
-  const [darkMode, setDarkMode] = useState(false);
   const [showModal, setShowModal] = useState(false); 
   const [selectedPost, setSelectedPost] = useState(null);
+  const { darkMode } = useDarkMode();
+
+  const containerStyle = {
+    background: darkMode ? 'black' : 'white',
+    color: darkMode ? 'white' : 'black',
+    // Add other styles here
+  };
+
 
 
   const fetchPosts = async () => {
@@ -36,9 +45,7 @@ const GetAllPost = () => {
     .filter(post => (now - new Date(post.date)) > 7 * 24 * 60 * 60 * 1000)
     .sort((a, b) => new Date(b.date) - new Date(a.date));
 
-  const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
-  };
+ 
 
   useEffect(() => {
     fetchPosts();
@@ -69,7 +76,7 @@ const GetAllPost = () => {
 
   const PostModal = ({ post, onClose }) => {
     return (
-      <Modal show={showModal} onHide={onClose}>
+      <Modal show={showModal} onHide={onClose} >
         <Modal.Header closeButton>
           <Modal.Title>Post</Modal.Title>
         </Modal.Header>
@@ -87,11 +94,9 @@ const GetAllPost = () => {
 
   return (
     <>
-        <div className={`App ${darkMode ? "dark-mode" : "light-mode"}`}>
+        <div style={containerStyle}>
             <div className="toggle-container">
-                <button onClick={toggleDarkMode} id="darkButton">
-                {darkMode ? "Light Mode" : "Dark Mode"}
-                </button>
+        
             </div>
             <div className="text-center"><h1>Welcome to the Explore Page</h1></div>
 
@@ -121,9 +126,9 @@ const GetAllPost = () => {
                 <>
                     <div className="text-center"><h2>A While Ago</h2></div>
                     <hr />
-                    <div className="d-flex flex-wrap">
+                    <div className="d-flex flex-wrap" >
                         {aWhileAgoPosts.map((post, index) => (
-                            <Post id="cards" posts={post} />
+                            <Post id="cards" posts={post}  />
                         ))}
                     </div>
                 </>

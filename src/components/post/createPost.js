@@ -4,13 +4,14 @@ import { Form, Button, Modal } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import getUserInfo from "../../utilities/decodeJwt";
 import { Link } from "react-router-dom";
-import "../post/postStyles.css";
+import {useDarkMode } from '../DarkModeContext';
 
 const CreatePost = () => {
   
+  const { darkMode } = useDarkMode();
   // User UseStates
   const [user, setUser] = useState(null);
-  const [darkMode, setDarkMode] = useState(false);
+
   const [state, setState] = useState({
     content: "",
   });
@@ -20,8 +21,10 @@ const CreatePost = () => {
 
   }, []);
 
-  const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
+  const containerStyle = {
+    background: darkMode ? 'black' : 'white',
+    color: darkMode ? 'white' : 'black',
+    // Add other styles here
   };
 
   const navigate = useNavigate();
@@ -87,11 +90,9 @@ const CreatePost = () => {
 
   return (
     <>
-      <div className={`App ${darkMode ? "dark-mode" : "light-mode"}`}>
+      <div className="App">
             <div className="toggle-container">
-                <button onClick={toggleDarkMode} id="darkButton">
-                {darkMode ? "Light" : "Dark"}
-                </button>
+          
             </div>
       <Form id="createPostID"
         onSubmit={handleSubmit}

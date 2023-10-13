@@ -1,5 +1,5 @@
 import React from "react";
-
+import { DarkModeProvider } from "./components/DarkModeContext";
 import { Route, Routes } from "react-router-dom";
 
 import Navbar from "./components/navbar";
@@ -47,6 +47,7 @@ const App = () => {
     <>
       <Navbar />
       <UserContext.Provider value={user}>
+      <DarkModeProvider>
         <Routes>
           <Route exact path="/" element={<LandingPage />} />
           <Route exact path="/login" element={<Login />} />
@@ -78,6 +79,7 @@ const App = () => {
           <Route path="/viewImages" element={<ViewImages />} />
 
         </Routes>
+        </DarkModeProvider>
       </UserContext.Provider>
     </>
   );

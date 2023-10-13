@@ -12,8 +12,27 @@ import getUserInfo from "../../utilities/decodeJwt";
 import Form from "react-bootstrap/Form";
 import FollowerCount from "../following/getFollowerCount";
 import FollowingCount from "../following/getFollowingCount";
+import DarkModeButton from "../DarkModeButton";
+import {useDarkMode } from '../DarkModeContext';
 
 const PrivateUserProfile = () => {
+
+  const { darkMode } = useDarkMode();
+
+  const containerStyle = {
+    background: darkMode ? 'black' : 'white',
+    color: darkMode ? 'white' : 'black',
+    // Add other styles here
+  };
+
+  const cardStyle = {
+
+    background: darkMode ? '#181818' : '',
+    color: darkMode ? 'white' : '',
+
+  }
+
+  
   // State for showing delete confirmation modal
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const handleCloseDeleteConfirmation = () => setShowDeleteConfirmation(false);
@@ -129,7 +148,8 @@ const PrivateUserProfile = () => {
   };
 
   return (
-    <div className="container">
+    <div className="container" style={containerStyle}>
+       <DarkModeButton />
       {user ? (
         <>
           <div className="col-md-12 text-center">
@@ -222,12 +242,14 @@ const PrivateUserProfile = () => {
                     marginTop: "1cm",
                     marginLeft: ".5cm",
                     background: "aliceblue",
+                    background: darkMode ? '#181818' : '',
+                    color: darkMode ? 'white' : '',
                   }}
                 >
                   <Card.Body>
                     <Card.Title>
                       <h5>Username:</h5>
-                      <Link to={"/publicprofilepage"}>{posts.username}</Link>
+                      <Link to={"/publicprofilepage"} style={{color: darkMode ? 'white' : '',}}>{posts.username}</Link>
                     </Card.Title>
                     {posts.content}
                     <p>{moment(posts.date).format("MMMM Do YYYY, h:mm A")}</p>

@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import getUserInfo from "../../utilities/decodeJwt";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import moment from "moment";
 import axios from "axios";
-import "./postStyles.css";
- import "./postStyles.css";
+import { DarkModeProvider } from "../DarkModeContext";
+
+import {useDarkMode } from '../DarkModeContext';
 
 const Post = ({ posts }) => {
   const [likeCount, setLikeCount] = useState(null);
@@ -15,6 +16,8 @@ const Post = ({ posts }) => {
   const formattedDate = moment(posts.date).format("MMMM Do YYYY, h:mm A");
   const { _id: postId } = posts;
   const [user, setUser] = useState(null);
+  const { darkMode } = useDarkMode();
+
 
   useEffect(() => {
     const currentUser = getUserInfo();
@@ -104,12 +107,12 @@ const Post = ({ posts }) => {
 
   return (
     <div className="d-inline-flex p-2">
-      <Card id="postCard" style={{ width: "18rem" }}>
+      <Card id="postCard" style={{ backgroundColor: darkMode ? "#181818" : "#f6f8fa" }}>
         <Card.Body>
-          <Link id="username" to={`/publicprofilepage/${posts.username}`}>
+          <Link id="username" style={{color: darkMode ? "white" : ""}}to={`/publicprofilepage/${posts.username}`}>
             {posts.username}
           </Link>
-          <Card.Text>{posts.content}</Card.Text>
+          <Card.Text style={{color: darkMode ? "white" : ""}}>{posts.content}</Card.Text>
           <div className="text-center">
             <Button
               variant={isLiked ? "danger" : "outline-danger"}
@@ -119,9 +122,9 @@ const Post = ({ posts }) => {
               {isLiked ? "Unlike" : "Like"}
             </Button>
           </div>
-          <p>{formattedDate}</p>
+          <p style={{color: darkMode ? "white" : ""}}>{formattedDate}</p>
           {likeCount !== null && (
-            <p>{`Likes: ${likeCount}`}</p>
+            <p style={{color: darkMode ? "white" : ""}}>{`Likes: ${likeCount}`}</p>
           )}
           <Link
             style={{ marginRight: "1cm" }}
