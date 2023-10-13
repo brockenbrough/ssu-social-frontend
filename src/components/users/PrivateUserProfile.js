@@ -36,6 +36,21 @@ const PrivateUserProfile = () => {
   const [profileImageFilename, setProfileImageFilename] = useState("");
   const [userProfileImage, setUserProfileImage] = useState("");
 
+  const [showPostModal, setShowPostModal] = useState(false);
+  const [selectedPost, setSelectedPost] = useState(null);
+
+  // Function to open the post modal
+  const openPostModal = (post) => {
+    setSelectedPost(post);
+    setShowPostModal(true);
+  };
+
+  // Function to close the post modal
+  const closePostModal = () => {
+    setShowPostModal(false);
+    setSelectedPost(null);
+  };
+
   
   
 
@@ -314,7 +329,7 @@ const deleteConfirm = async () => {
             <h3>Your Posts</h3>
             <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-start', gap: '1rem' }}>
               {posts.map((post, index) => (
-                <div key={index}>
+                <div key={index} onClick={() => openPostModal(post)}>
                   <Card
                     style={{
                       width: "16rem",
@@ -389,6 +404,27 @@ const deleteConfirm = async () => {
             Close
           </Button>
           <Button onClick={onUpload}>Upload Profile Image</Button>
+        </Modal.Footer>
+      </Modal>
+
+      <Modal show={showPostModal} onHide={closePostModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Post</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {selectedPost && (
+            <div>
+              {/* Display post content, author, etc. */}
+              <p>Username: {selectedPost.username}</p>
+              <p>{selectedPost.content}</p>
+              <p>{moment(selectedPost.date).format("MMMM Do YYYY, h:mm A")}</p>
+            </div>
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={closePostModal}>
+            Close
+          </Button>
         </Modal.Footer>
       </Modal>
     </div>
