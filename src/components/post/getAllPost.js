@@ -4,6 +4,7 @@ import Post from "./post";
 import { Modal, Button } from "react-bootstrap";
 import { useDarkMode } from '../DarkModeContext.js';
 
+import ScrollToTop from "./ScrollToTop";
 
 
 const GetAllPost = () => {
@@ -29,14 +30,7 @@ const GetAllPost = () => {
     }
   };
 
-  useEffect(() => {
-    window.addEventListener('scroll', checkScrollTop);
-    return () => window.removeEventListener('scroll', checkScrollTop);
-  }, []);
 
-  const scrollTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
 
   const fetchPosts = async () => {
     const url = `${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getAllPosts`;
@@ -152,11 +146,7 @@ const GetAllPost = () => {
                 </>
             )}
         </div>
-        {showScrollButton && 
-            <button onClick={scrollTop} style={{position: 'fixed', bottom: '5%', right: '5%', zIndex: 1000}}>
-                Scroll to Top
-            </button>
-        }
+        <ScrollToTop />
     </>
 );
 

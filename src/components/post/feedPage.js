@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import getUserInfo from "../../utilities/decodeJwt";
 import Post from "./post";
 import "./feedPageStyle.css";
+import ScrollToTop from "./ScrollToTop";
+
 
 
 import Card from 'react-bootstrap/Card';
@@ -142,7 +144,9 @@ return (
                         ))}
                     </>
                 )}
+            <ScrollToTop />
             </div>
+            
         )}
     </>
 );
