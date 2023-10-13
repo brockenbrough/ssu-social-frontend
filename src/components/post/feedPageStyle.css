@@ -1,0 +1,18 @@
+/* Add this to your CSS file */
+/* Add this to your CSS file */
+
+.cards {
+    flex: 0 0 auto;
+    max-width: 30%;
+    margin: 10px;
+    box-sizing: border-box;
+}
+
+.d-flex {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.justify-content-center {
+    justify-content: center;
+}
