@@ -350,7 +350,7 @@ const deleteConfirm = async () => {
                         marginTop: "1cm",
                         marginLeft: ".5cm",
                         background: "aliceblue",
-                        background: darkMode ? 'black' : 'white',
+                        background: darkMode ? '#181818' : 'white',
                         color: darkMode ? 'white' : 'black',
 
                       }}
