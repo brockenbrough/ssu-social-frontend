@@ -5,7 +5,6 @@ import getUserInfo from '../../utilities/decodeJwt'
 export default function UploadImages() {
   const [user, setUser] = useState({});
   const [name, setName] = useState(""); 
-  const [desc, setDesc] = useState(""); 
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
@@ -19,8 +18,7 @@ export default function UploadImages() {
     e.preventDefault();
 
     const formData = new FormData();
-    formData.append('name', name);
-    formData.append('desc', desc);
+    formData.append('name', user.username);
     formData.append('image', e.target.elements.image.files[0]);
 
     try {
@@ -52,29 +50,16 @@ export default function UploadImages() {
       <div style={{ marginTop: '20px' }}>
         <form onSubmit={handleSubmit} encType="multipart/form-data">
           <div style={{ marginBottom: '15px' }}>
-            <label htmlFor="name" style={{ display: 'block', marginBottom: '5px', color: '#555' }}>Image Title</label>
+            <label htmlFor="name" style={{ display: 'block', marginBottom: '5px', color: '#555' }}>Username</label>
             <input
               type="text"
               id="name"
               placeholder="Name"
-              value={name}
+              value={user.username}
               name="name"
               onChange={(e) => setName(e.target.value)}
               required
-              style={{ width: '100%', padding: '8px', border: '1px solid #ccc', borderRadius: '4px' }}
-            />
-          </div>
-          <div style={{ marginBottom: '15px' }}>
-            <label htmlFor="desc" style={{ display: 'block', marginBottom: '5px', color: '#555' }}>Image Description</label>
-            <textarea
-              id="desc"
-              name="desc"
-              value={desc}
-              rows="2"
-              placeholder="Description"
-              onChange={(e) => setDesc(e.target.value)}
-              required
-              style={{ width: '100%', padding: '8px', border: '1px solid #ccc', borderRadius: '4px' }}
+              style={{ width: '100%', padding: '8px', border: '1px solid #ccc', borderRadius: '4px', color: 'gray' }}
             />
           </div>
           <div style={{ marginBottom: '15px' }}>

@@ -31,8 +31,7 @@ export default function ViewImages() {
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap' }}>
         {images.map((image, index) => (
           <div key={index} style={{ border: '1px solid #ccc', borderRadius: '8px', margin: '10px', padding: '15px', width: '300px' }}>
-            <h5 style={{ fontSize: '18px', color: '#444' }}>Image Title: {image.name}</h5>
-            <p style={{ fontSize: '14px', color: '#666' }}>Image Description: {image.desc}</p>
+            <h5 style={{ fontSize: '18px', color: '#444' }}>Username: {image.name}</h5>
             <img
               src={`data:${image.img.contentType};base64,${image.base64Data}`}
               alt={image.name}
