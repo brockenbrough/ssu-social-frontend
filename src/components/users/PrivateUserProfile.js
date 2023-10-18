@@ -23,6 +23,7 @@ const PrivateUserProfile = () => {
     const containerStyle = {
     background: darkMode ? 'black' : 'white',
     color: darkMode ? 'white' : 'black',
+    minHeight: '100vh',
     // Add other styles here
   };
   // State for showing delete confirmation modal
