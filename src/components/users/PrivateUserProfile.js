@@ -332,6 +332,10 @@ const deleteConfirm = async () => {
               >
                 <Form.Control
                   type="text"
+                  style={{
+                    background: darkMode ? '#181818' : 'white',
+                    color: darkMode ? 'white' : 'black',
+                  }}
                   placeholder="Enter post here"
                   value={form.content}
                   onChange={handleChange}
