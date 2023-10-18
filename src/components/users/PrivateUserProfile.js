@@ -280,7 +280,7 @@ const deleteConfirm = async () => {
 
 
   return (
-    <div className="container" style={containerStyle}>
+    <div style={containerStyle}>
       <DarkModeButton />
       {user ? (
         <>
