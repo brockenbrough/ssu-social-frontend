@@ -208,10 +208,16 @@ const CreatePost = () => {
 
          {/* Modal for uploading images */}
       <Modal show={showModal} onHide={handleCloseModal}>
-        <Modal.Header closeButton style={{ backgroundColor: "#007bff", color: "#fff" }}>
+        <Modal.Header closeButton style={{
+                    background: darkMode ? '#181818' : 'white',
+                    color: darkMode ? 'white' : 'black',
+                  }}>
           <Modal.Title>Upload Images</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body style={{
+                    background: darkMode ? '#181818' : 'white',
+                    color: darkMode ? 'white' : 'black',
+                  }}>
           {/* Render the UploadImages component directly within the modal */}
           <UploadImages
             ref={inputRefModal} // Pass the new ref to the UploadImages component

@@ -291,15 +291,24 @@ const deleteConfirm = async () => {
                 src={"https://robohash.org/" + Math.random() + "?set=set5"}
               />
               <ul>
-                <Button onClick={followerRouteChange} variant="light">
+                <Button onClick={followerRouteChange} variant="light" style={{
+                    background: darkMode ? '#181818' : 'white',
+                    color: darkMode ? 'white' : 'black',
+                  }}>
                   {<FollowerCount username={username} />}
                 </Button>{" "}
-                <Button onClick={followingRouteChange} variant="light">
+                <Button onClick={followingRouteChange} variant="light" style={{
+                    background: darkMode ? '#181818' : 'white',
+                    color: darkMode ? 'white' : 'black',
+                  }}>
                   {<FollowingCount username={username} />}
                 </Button>{" "}
-                <Button variant="light">{totalLikes} Likes</Button>{" "}
+                <Button variant="light" style={{
+                    background: darkMode ? '#181818' : 'white',
+                    color: darkMode ? 'white' : 'black',
+                  }}>{totalLikes} Likes</Button>{" "}
               </ul>
-              <Button className="me-2" onClick={handleShowLogoutConfirmation}>
+              <Button className="me-2" onClick={handleShowLogoutConfirmation} >
                 Log Out
               </Button>
               <Modal
@@ -308,11 +317,20 @@ const deleteConfirm = async () => {
                 backdrop="static"
                 keyboard={false}
               >
-                <Modal.Header closeButton>
+                <Modal.Header closeButton style={{
+                    background: darkMode ? '#181818' : 'white',
+                    color: darkMode ? 'white' : 'black',
+                  }}>
                   <Modal.Title>Log Out</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>Are you sure you want to Log Out?</Modal.Body>
-                <Modal.Footer>
+                <Modal.Body style={{
+                    background: darkMode ? '#181818' : 'white',
+                    color: darkMode ? 'white' : 'black',
+                  }}>Are you sure you want to Log Out?</Modal.Body>
+                <Modal.Footer style={{
+                    background: darkMode ? '#181818' : 'white',
+                    color: darkMode ? 'white' : 'black',
+                  }}>
                   <Button variant="secondary" onClick={handleCloseLogoutConfirmation}>
                     Close
                   </Button>
