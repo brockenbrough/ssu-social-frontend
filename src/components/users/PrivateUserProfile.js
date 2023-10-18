@@ -8,7 +8,7 @@ import { UserContext } from "../../App";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import moment from "moment";
-import getUserInfo from "../../utilities/decodeJwt";
+import getUserInfoAsync from "../../utilities/decodeJwtAsync";
 import Form from "react-bootstrap/Form";
 import FollowerCount from "../following/getFollowerCount";
 import FollowingCount from "../following/getFollowingCount";
@@ -97,10 +97,10 @@ const onUpload = async () => {
 const profileImageUrl = profileImageFilename ? `./routes/users/user.images/image/${profileImageFilename}` : null;
 
 
+ 
   // Fetch the user context
   const user = useContext(UserContext);
-  const username = user ? getUserInfo().username : null; // Check if the user is defined
-
+  const [username, setUsername] = useState(null); // Update username state
   // State for the form to create a new post
   const [form, setForm] = useState({ content: "" });
 
@@ -143,6 +143,21 @@ const profileImageUrl = profileImageFilename ? `./routes/users/user.images/image
   const handleEditUser = () => {
     navigate("/editUserPage");
   };
+
+  const fetchUserInfo = async () => {
+    try {
+      const userInfo = await getUserInfoAsync();
+      if (userInfo) {
+        setUsername(userInfo.username);
+      }
+    } catch (error) {
+      console.error("Error fetching user info:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchUserInfo(); // Fetch user info
+  }, []);
 
   // Function to fetch user's posts
   const fetchPosts = useCallback(async () => {
