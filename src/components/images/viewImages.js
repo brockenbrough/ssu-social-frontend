@@ -32,7 +32,6 @@ export default function ViewImages() {
         {images.map((image, index) => (
           <div key={index}>
             <h5>{image.name}</h5>
-            <p>{image.desc}</p>
             <img src={`data:${image.img.contentType};base64,${image.base64Data}`} alt={image.name} />
           <div>
         </div>
