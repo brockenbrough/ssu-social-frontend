@@ -16,7 +16,7 @@ const EditUserPage = () =>{
   // form validation checks
   const [ errors, setErrors ] = useState({})
   const findFormErrors = () => {
-    const {username, email, password, biography} = form
+    const {username, email, password} = form
     const newErrors = {}
     // username validation checks
     if (!username || username === '') newErrors.name = 'Input a valid username'

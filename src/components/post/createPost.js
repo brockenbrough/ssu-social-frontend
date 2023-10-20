@@ -4,18 +4,19 @@ import { Form, Button, Modal } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import getUserInfo from "../../utilities/decodeJwt";
 import { Link } from "react-router-dom";
-import "../post/postStyles.css";
+import {useDarkMode } from '../DarkModeContext';
 import UploadImages from "../images/uploadImages";
+
 
 const CreatePost = () => {
 
-
+  const { darkMode } = useDarkMode();
   const [textAreaCount, setTextAreaCount] = React.useState(0);
   const maxText = 280;
   var [color, setColor] = React.useState('gainsboro');
   // User UseStates
   const [user, setUser] = useState(null);
-  const [darkMode, setDarkMode] = useState(false);
+
   const [state, setState] = useState({
     content: "",
   });
@@ -25,8 +26,10 @@ const CreatePost = () => {
 
   }, []);
 
-  const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
+  const containerStyle = {
+    background: darkMode ? 'black' : 'white',
+    color: darkMode ? 'white' : 'black',
+    // Add other styles here
   };
 
   const navigate = useNavigate();
@@ -123,42 +126,39 @@ const CreatePost = () => {
 
   return (
     <>
-      <div className={`App ${darkMode ? "dark-mode" : "light-mode"}`}>
-        <div className="toggle-container">
-          <button onClick={toggleDarkMode} id="darkButton">
-            {darkMode ? "Light" : "Dark"}
-          </button>
-        </div>
-        <Form id="createPostID"
-          onSubmit={handleSubmit}
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            height: "100vh",
-            backgroundColor: "#f6f8fa",
-            backgroundColor: darkMode ? "#000" : "#f6f8fa", // Change background color
-            color: darkMode ? "#fff" : "#000",
-          }}
+      <div className="App">
+            <div className="toggle-container">
+          
+            </div>
+      <Form id="createPostID"
+        onSubmit={handleSubmit}
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          height: "100vh",
+          backgroundColor: "#f6f8fa",
+          backgroundColor: darkMode ? "#000" : "#f6f8fa", // Change background color
+          color: darkMode ? "#fff" : "#000",
+        }}
+      >
+        <Form.Group
+          className="mb-3"
+          controlId="formBasicPassword"
+          style={{ width: "60%" }}
         >
-          <Form.Group
-            className="mb-3"
-            controlId="formBasicPassword"
-            style={{ width: "60%" }}
-          >
-            <Form.Control
-              as="textarea"
-              placeholder="What's on your mind?"
-              name="content"
-              value={state.content}
-              onChange={handleChange}
-              maxlength={maxText}
-              style={{
-                height: "3cm",
-                width: "100%",
-                backgroundColor: darkMode ? "#181818" : "white",
-                color: darkMode ? "white" : "#000",
+          <Form.Control
+            as = "textarea"
+            placeholder="What's on your mind?"
+            name="content"
+            value={state.content}
+            onChange={handleChange}
+            style={{
+              height: "3cm",
+              width: "100%",
+              backgroundColor: darkMode ? "#181818" : "white",
+              color: darkMode ? "white" : "#000",
 
               }}
             />
@@ -181,15 +181,15 @@ const CreatePost = () => {
             />
             <img src={darkMode ? "/addVideoWhite.png" : "/addVideo.png"} alt="Add Video Icon" style={{ width: '60px', height: '60px', marginTop: '.5cm' }} />
 
-            {/* Add other icons as needed */}
-            <input
-              type="file"
-              ref={inputRef}
-              onChange={handleImageChange}
-              multiple // Allow multiple file selection
-              style={{ display: "none" }}
-            />
-          </div>
+          {/* Add other icons as needed */}
+          <input
+            type="file"
+            ref={inputRef}
+            onChange={handleImageChange}
+            multiple // Allow multiple file selection
+            style={{ display: "none" }}
+          />
+        </div>
 
           <Button
             style={{
@@ -208,10 +208,16 @@ const CreatePost = () => {
 
          {/* Modal for uploading images */}
       <Modal show={showModal} onHide={handleCloseModal}>
-        <Modal.Header closeButton style={{ backgroundColor: "#007bff", color: "#fff" }}>
+        <Modal.Header closeButton style={{
+                    background: darkMode ? '#181818' : 'white',
+                    color: darkMode ? 'white' : 'black',
+                  }}>
           <Modal.Title>Upload Images</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body style={{
+                    background: darkMode ? '#181818' : 'white',
+                    color: darkMode ? 'white' : 'black',
+                  }}>
           {/* Render the UploadImages component directly within the modal */}
           <UploadImages
             ref={inputRefModal} // Pass the new ref to the UploadImages component
@@ -225,8 +231,10 @@ const CreatePost = () => {
       </Modal>
     
       </div>
+   
     </>
   );
 };
+
 
 export default CreatePost;

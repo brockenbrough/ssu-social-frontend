@@ -2,13 +2,14 @@ import React from 'react'
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-
+import { DarkModeProvider } from "./components/DarkModeContext";
 
 import { Link } from 'react-router-dom';
 
 const defaultLayout = () => {
 
     return (
+        <DarkModeProvider>
         <Navbar bg="orange" expand="lg" style={{ background: 'lightpink' }}>
             <Container>
                 <Navbar.Brand>Social</Navbar.Brand>
@@ -22,6 +23,7 @@ const defaultLayout = () => {
                 </Navbar.Collapse>
             </Container>
         </Navbar>
+        </DarkModeProvider>
     );
 
 
