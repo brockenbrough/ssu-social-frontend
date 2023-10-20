@@ -5,7 +5,7 @@ import getUserInfo from "../../utilities/decodeJwt";
 import Post from "./post";
 import "./feedPageStyle.css";
 import ScrollToTop from "./ScrollToTop";
-
+import {useDarkMode } from '../DarkModeContext';
 
 
 import Card from 'react-bootstrap/Card';
@@ -13,6 +13,7 @@ import Button from "react-bootstrap/Button";
 import ToggleButton from 'react-bootstrap/ToggleButton';
 
 export default function PostList() {
+    const { darkMode } = useDarkMode();
   const [user, setUser] = useState(null);
   const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -104,7 +105,7 @@ return (
                 </p>
             </div>
         ) : (
-            <div className="App">
+            <div className="App" style={{backgroundColor: darkMode ? "#000" : "#f6f8fa", color: darkMode ? "#fff" : "#000", minHeight: '100vh',}}>
                 {todayPosts.length > 0 && (
                     <>
                         <div className="text-center"><h2>Today</h2></div>
@@ -120,7 +121,7 @@ return (
                 )}
                 {thisWeekPosts.length > 0 && (
                     <>
-                        <div className="text-center"><h2>This Week</h2></div>
+                        <div className="text-center" style={{backgroundColor: darkMode ? "#000" : "#f6f8fa", color: darkMode ? "#fff" : "#000",}}><h2>This Week</h2></div>
                         <hr />
                         {chunkArray(thisWeekPosts, 3).map((chunk, index) => (
                             <div className="d-flex flex-wrap justify-content-center">
@@ -133,7 +134,7 @@ return (
                 )}
                 {aWhileAgoPosts.length > 0 && (
                     <>
-                        <div className="text-center"><h2>A while ago</h2></div>
+                        <div className="text-center" style={{backgroundColor: darkMode ? "#000" : "#f6f8fa", color: darkMode ? "#fff" : "#000",}}><h2>A while ago</h2></div>
                         <hr />
                         {chunkArray(aWhileAgoPosts, 3).map((chunk, index) => (
                             <div className="d-flex flex-wrap justify-content-center">

@@ -4,11 +4,11 @@ import {useParams, useNavigate } from "react-router";
 import Navbar from '../navbar';
 import getUserInfo from "../../utilities/decodeJwt";
 import { Link } from "react-router-dom";
-
+import {useDarkMode } from '../DarkModeContext';
 import { Form, Button } from 'react-bootstrap'
 
     const UpdatePost = (props) => {
-
+        const { darkMode } = useDarkMode();
         const [user, setUser] = useState(null);
         const [state, setState] = useState({
             username: '',
@@ -71,7 +71,7 @@ import { Form, Button } from 'react-bootstrap'
             return(
 
              
-                <div className="container">
+                <div className="container" style={{backgroundColor: darkMode ? "#000" : "#f6f8fa", color: darkMode ? "#fff" : "#000",}}>
                    
                     <div className="row">
                         <div className="col-md-6 offset-md-3">
@@ -79,11 +79,13 @@ import { Form, Button } from 'react-bootstrap'
                             <Form onSubmit={handleSubmit}>
                                 <Form.Group className="mb-3" controlId="formBasicEmail">
     
-                                    <Form.Control type="text" placeholder="Enter username" value={state.username} onChange={handleChange} name="username" style={{ height: '2cm', width: '12cm', marginLeft: '10cm', marginTop: '2cm' }} />
+                                    <Form.Control type="text" placeholder="Enter username" value={state.username} onChange={handleChange} name="username" style={{ height: '2cm', width: '12cm', marginLeft: '10cm', marginTop: '2cm', background: darkMode ? '#181818' : 'white',
+                    color: darkMode ? 'white' : 'black', }} />
                                 </Form.Group>
     
                                 <Form.Group className="mb-3" controlId="formBasicPassword">
-                                    <Form.Control type="text" placeholder="Content" name="content" value={state.content} onChange={handleChange}  style={{ height: '3cm', width: '12cm', marginLeft: '10cm', marginTop: '2cm' }} />
+                                    <Form.Control type="text" placeholder="Content" name="content" value={state.content} onChange={handleChange}  style={{ height: '3cm', width: '12cm', marginLeft: '10cm', marginTop: '2cm', background: darkMode ? '#181818' : 'white',
+                    color: darkMode ? 'white' : 'black', }} />
                                 </Form.Group>
                             
                                 <Button style={{ width: '4cm', marginLeft: '10cm', marginTop: '2cm' }} variant="primary" type="submit">
@@ -101,7 +103,7 @@ import { Form, Button } from 'react-bootstrap'
     
       return (
          
-        <div className="container pb-5">
+        <div  style={{backgroundColor: darkMode ? "#000" : "#f6f8fa", color: darkMode ? "#fff" : "#000", textAlign: 'center', minHeight: '100vh',}}>
         <h1>UPDATE POST</h1>
         {showUpdateForm()}
     </div>

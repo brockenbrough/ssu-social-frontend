@@ -7,9 +7,10 @@ import Row from 'react-bootstrap/Row';
 import axios from 'axios'
 import { Link, useNavigate } from 'react-router-dom'
 import getUserInfo from '../../utilities/decodeJwt';
+import {useDarkMode } from '../DarkModeContext';
 
 const EditUserPage = () =>{
-
+  const { darkMode } = useDarkMode();
   const url = `${process.env.REACT_APP_BACKEND_SERVER_URI}/user/editUser`;
   const navigate = useNavigate();
 
@@ -113,20 +114,22 @@ const EditUserPage = () =>{
   };
 
   return(
-    <div>
-      <Card body outline color="success" className="mx-1 my-2" style={{ width: '30rem' }}>
+    <div style={{backgroundColor: darkMode ? "#000" : "#f6f8fa", color: darkMode ? "#fff" : "#000", minHeight: '100vh', paddingTop: '15px',}}>
+      <Card body outline color="success" className="mx-1 my-2" style={{ width: '30rem', backgroundColor: darkMode ? "#181818" : "#f6f8fa", color: darkMode ? "#fff" : "#000",}}>
         <Card.Title>Edit User Information</Card.Title>
         <Card.Body> 
         <Form>
 
-          <Form.Group className="mb-3" controlId="formName">
-            <Form.Label>Username</Form.Label>
+          <Form.Group className="mb-3" controlId="formName" >
+            <Form.Label >Username</Form.Label>
             <Form.Control type="text" placeholder="Enter new username" 
               id="username"
               value={form.username}
               onChange={handleChange}
               isInvalid={ !!errors.name }
               disabled={keepUsername}
+              style={{background: darkMode ? '#181818' : 'white',
+                    color: darkMode ? 'white' : 'black', }}
             />
             <Form.Control.Feedback type='invalid'>
               { errors.name }
@@ -150,6 +153,8 @@ const EditUserPage = () =>{
                 onChange={handleChange}
                 isInvalid = { !!errors.email }
                 disabled = {keepEmail}
+                style={{background: darkMode ? '#181818' : 'white',
+                    color: darkMode ? 'white' : 'black', }}
              />
              <Form.Control.Feedback type='invalid'>
               { errors.email }
@@ -174,6 +179,8 @@ const EditUserPage = () =>{
               value={form.password}
               onChange={handleChange}
               isInvalid={!!errors.password}
+              style={{background: darkMode ? '#181818' : 'white',
+                    color: darkMode ? 'white' : 'black', }}
             />
             <Form.Control.Feedback type="invalid">
               {errors.password}
@@ -188,6 +195,8 @@ const EditUserPage = () =>{
               id="biography"
               value={form.biography}
               onChange={handleChange}
+              style={{background: darkMode ? '#181818' : 'white',
+                    color: darkMode ? 'white' : 'black', }}
             />
           </Form.Group>
 
