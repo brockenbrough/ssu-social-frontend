@@ -22,7 +22,34 @@ export default function ViewImages() {
     }
   }
 
-  if (!user) return (<div><h3>You are not authorized to view this page, Please Login in <Link to={'/login'}>here</Link></h3></div>);
+  const handleRemoveImage = async (imageId) => {
+    const confirmDelete = window.confirm('Are you sure you want to delete this image?');
+    if (!confirmDelete) {
+      return;
+    }
+  
+    try {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_SERVER_URI}/images/${imageId}`, {
+        method: 'DELETE',
+      });
+  
+      if (response.ok) {
+        // Update the images state after successful deletion
+        setImages(images.filter((image) => image._id !== imageId));
+      } else {
+        const data = await response.json();
+        console.error('Error removing image:', data.message);
+      }
+    } catch (error) {
+      console.error('Error removing image:', error);
+    }
+  };
+
+  if (!user) return (
+    <div>
+      <h3>You are not authorized to view this page, Please Login in <Link to={'/login'}>here</Link></h3>
+    </div>
+  );
 
   return (
     <div style={{ textAlign: 'center', padding: '20px' }}>
@@ -32,12 +59,24 @@ export default function ViewImages() {
         {images.map((image, index) => (
           <div key={index} style={{ border: '1px solid #ccc', borderRadius: '8px', margin: '10px', padding: '15px', width: '300px' }}>
             <h5 style={{ fontSize: '18px', color: '#444' }}>Image Title: {image.name}</h5>
-            <p style={{ fontSize: '14px', color: '#666' }}>Image Description: {image.desc}</p>
+      
             <img
               src={`data:${image.img.contentType};base64,${image.base64Data}`}
               alt={image.name}
               style={{ maxWidth: '100%', height: 'auto', marginTop: '10px' }}
             />
+            <button
+              style={{
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                color: 'red',
+                transition: 'color 0.3s ease',
+              }}
+              onClick={() => handleRemoveImage(image._id)}
+            >
+              Remove
+            </button>
           </div>
         ))}
       </div>
