@@ -65,7 +65,13 @@ function PostList({ type, username }) {
   const aWhileAgoPosts = posts
       .filter(post => (now - new Date(post.date)) > 7 * 24 * 60 * 60 * 1000)
       .sort((a, b) => new Date(b.date) - new Date(a.date));
-      
+
+      const timeCategories = [
+        { title: "Today", posts: todayPosts },
+        { title: "This Week", posts: thisWeekPosts },
+        { title: "A while ago", posts: aWhileAgoPosts },
+    ];
+    
       const chunkArray = (array, size) => {
         const chunked_arr = [];
         let copied = [...array];  
@@ -100,46 +106,26 @@ function PostList({ type, username }) {
                 </div>
             ) : (
                 <div className="App" style={{backgroundColor: darkMode ? "#000" : "#f6f8fa", color: darkMode ? "#fff" : "#000", minHeight: '100vh',}}>
-                    {todayPosts.length > 0 && (
+                    {timeCategories.map((category) => {
+                    return (
+                        category.posts.length > 0 && (
                         <>
-                            <div className="text-center"><h2>Today</h2></div>
+                            <div className="text-center">
+                            <h2>{category.title}</h2>
+                            </div>
                             <hr />
-                            {chunkArray(todayPosts, 3).map((chunk, index) => (
-                                <div className="d-flex flex-wrap justify-content-center">
-                                    {chunk.map((post) => (
-                                        <Post posts={post} className="cards m-2" />
-                                    ))}
-                                </div>
+                            {chunkArray(category.posts, 3).map((chunk, index) => (
+                            <div className="d-flex flex-wrap justify-content-center">
+                                {chunk.map((post) => (
+                                <Post posts={post} className="cards m-2" />
+                                ))}
+                            </div>
                             ))}
                         </>
-                    )}
-                    {thisWeekPosts.length > 0 && (
-                        <>
-                            <div className="text-center" style={{backgroundColor: darkMode ? "#000" : "#f6f8fa", color: darkMode ? "#fff" : "#000",}}><h2>This Week</h2></div>
-                            <hr />
-                            {chunkArray(thisWeekPosts, 3).map((chunk, index) => (
-                                <div className="d-flex flex-wrap justify-content-center">
-                                    {chunk.map((post) => (
-                                        <Post posts={post} className="cards m-2" />
-                                    ))}
-                                </div>
-                            ))}
-                        </>
-                    )}
-                    {aWhileAgoPosts.length > 0 && (
-                        <>
-                            <div className="text-center" style={{backgroundColor: darkMode ? "#000" : "#f6f8fa", color: darkMode ? "#fff" : "#000",}}><h2>A while ago</h2></div>
-                            <hr />
-                            {chunkArray(aWhileAgoPosts, 3).map((chunk, index) => (
-                                <div className="d-flex flex-wrap justify-content-center">
-                                    {chunk.map((post) => (
-                                        <Post posts={post} className="cards m-2" />
-                                    ))}
-                                </div>
-                            ))}
-                        </>
-                    )}
-                <ScrollToTop />
+                        )
+                    );
+                    })}
+                    <ScrollToTop />
                 </div>
                 
             )}
