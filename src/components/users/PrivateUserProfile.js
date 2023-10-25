@@ -381,7 +381,7 @@ const deleteConfirm = async () => {
               <h3>Your Posts</h3>
               <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-start', gap: '1rem' }}>
                 {posts.map((post, index) => (
-                  <div key={index}>
+                  <div key={index} onClick={() =>openPostModal(post)} >
                     <Card
                       style={{
                         width: "16rem",
