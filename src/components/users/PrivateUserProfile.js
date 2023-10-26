@@ -10,8 +10,6 @@ import axios from "axios";
 import moment from "moment";
 import getUserInfoAsync from "../../utilities/decodeJwtAsync";
 import Form from "react-bootstrap/Form";
-import FollowerCount from "../following/getFollowerCount";
-import FollowingCount from "../following/getFollowingCount";
 import { useDarkMode } from '../DarkModeContext.js';
 import DarkModeButton from "../DarkModeButton";
 
@@ -99,8 +97,10 @@ const profileImageUrl = profileImageFilename ? `./routes/users/user.images/image
 
  
   // Fetch the user context
-  const user = useContext(UserContext);
-  const [username, setUsername] = useState(null); // Update username state
+  const [user, setUser] = useState(null);
+  const [userId, setUserId] = useState(null);
+  const [username, setUsername] = useState(null);
+
   // State for the form to create a new post
   const [form, setForm] = useState({ content: "" });
 
@@ -148,7 +148,9 @@ const profileImageUrl = profileImageFilename ? `./routes/users/user.images/image
     try {
       const userInfo = await getUserInfoAsync();
       if (userInfo) {
+        setUser(userInfo);
         setUsername(userInfo.username);
+        setUserId(userInfo.id);
       }
     } catch (error) {
       console.error("Error fetching user info:", error);
@@ -159,7 +161,51 @@ const profileImageUrl = profileImageFilename ? `./routes/users/user.images/image
     fetchUserInfo(); // Fetch user info
   }, []);
 
-  // Function to fetch user's posts
+  const fetchFollowerCount = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_BACKEND_SERVER_URI}/followers/${username}`
+      );
+      if (response.data.length > 0) {
+        setFollowerCount(response.data[0].followers.length);
+      } else {
+        setFollowerCount(0);
+      }
+    } catch (error) {
+      console.error(`Error fetching follower count: ${error.message}`);
+    }
+  };
+
+  // Function to fetch following count
+  const fetchFollowingCount = async () => {
+    var followCount;
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_BACKEND_SERVER_URI}/following/${username}`
+      );
+      if (response.data.length > 0) {
+        setFollowingCount(response.data[0].following.length);
+        followCount = response.data[0].following.length;
+      
+      }
+    } catch (error) {
+      console.error(`Error fetching following count: ${error.message}`);
+    }
+    console.log("Post call Following Count:", followingCount);
+  };
+
+  const fetchTotalLikes = async () => {
+    try {
+      console.log(username);
+      const res = await axios.get(
+        `${process.env.REACT_APP_BACKEND_SERVER_URI}/user-totallikes/${username}`
+      );
+    setTotalLikes(res.data);
+  } catch (error) {
+    console.error("Error fetching total likes:", error);
+  }
+  }; 
+
   const fetchPosts = useCallback(async () => {
     try {
       const res = await axios.get(
@@ -174,9 +220,6 @@ const profileImageUrl = profileImageFilename ? `./routes/users/user.images/image
   }, [username]); // Include only the username as a dependency
 
   // Fetch user's posts when the component mounts and when username changes
-  useEffect(() => {
-    fetchPosts();
-  }, [username, fetchPosts]); // Include username and fetchPosts as dependencies
 
   // Handle changes in the form input
   const handleChange = (event) => {
@@ -202,59 +245,14 @@ const profileImageUrl = profileImageFilename ? `./routes/users/user.images/image
       );
     }
   };
-  const fetchFollowerCount = async () => {
-    try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_BACKEND_SERVER_URI}/followers/${username}`
-      );
-      if (response.data.length > 0) {
-        setFollowerCount(response.data[0].followers.length);
-      } else {
-        setFollowerCount(0);
-      }
-    } catch (error) {
-      console.error(`Error fetching follower count: ${error.message}`);
-    }
-  };
 
-  // Function to fetch following count
-  const fetchFollowingCount = async () => {
-    try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_BACKEND_SERVER_URI}/following/${username}`
-      );
-      if (response.data.length > 0) {
-        setFollowingCount(response.data[0].following.length);
-      } else {
-        setFollowingCount(0);
-      }
-    } catch (error) {
-      console.error(`Error fetching following count: ${error.message}`);
-    }
-  };
   useEffect(() => {
     fetchPosts();
     fetchFollowerCount(); // Fetch follower count
     fetchFollowingCount(); // Fetch following count
-  }, [username, fetchPosts]); // Include username and fetchPosts as dependencies
-
-  const fetchTotalLikes = useCallback(async () => {
-      try {
-        console.log(username);
-        const res = await axios.get(
-          `${process.env.REACT_APP_BACKEND_SERVER_URI}/user-totallikes/${username}`
-        );
-      setTotalLikes(res.data);
-    } catch (error) {
-      console.error("Error fetching total likes:", error);
-    }
-  }, [username]); 
-
-  useEffect(() => {
     fetchTotalLikes();
-  }, [username, fetchTotalLikes]);
-
-  
+  }, [username, fetchPosts]); // Include username and fetchPosts as dependencies
+ 
 
 const deleteConfirm = async () => {
     if (postToDelete) {
@@ -308,21 +306,23 @@ const deleteConfirm = async () => {
               />
               <ul>
                 <Button onClick={followerRouteChange} variant="light" style={{
-                    background: darkMode ? '#181818' : 'white',
-                    color: darkMode ? 'white' : 'black',
-                  }}>
-                  {<FollowerCount username={username} />}
+                  background: darkMode ? '#181818' : 'white',
+                  color: darkMode ? 'white' : 'black',
+                }}>
+                  Follower Count: {followerCount}
                 </Button>{" "}
                 <Button onClick={followingRouteChange} variant="light" style={{
-                    background: darkMode ? '#181818' : 'white',
-                    color: darkMode ? 'white' : 'black',
-                  }}>
-                  {<FollowingCount username={username} />}
+                  background: darkMode ? '#181818' : 'white',
+                  color: darkMode ? 'white' : 'black',
+                }}>
+                  Following Count: {followingCount}
                 </Button>{" "}
                 <Button variant="light" style={{
-                    background: darkMode ? '#181818' : 'white',
-                    color: darkMode ? 'white' : 'black',
-                  }}>{totalLikes} Likes</Button>{" "}
+                  background: darkMode ? '#181818' : 'white',
+                  color: darkMode ? 'white' : 'black',
+                }}>
+                  {totalLikes} Likes
+                </Button>{" "}
               </ul>
               <Button className="me-2" onClick={handleShowLogoutConfirmation} >
                 Log Out
@@ -486,4 +486,3 @@ const deleteConfirm = async () => {
 };
 
 export default PrivateUserProfile;
-
