@@ -9,7 +9,7 @@ export default function UploadImages() {
   const [showModal, setShowModal] = useState(false);
   const fetchUserInfo = async () => {
     try {
-      const userInfo = await getUserInfoAsync();
+      const userInfo = await getUserInfo();
       if (userInfo) {
         setUser(userInfo);
       }
