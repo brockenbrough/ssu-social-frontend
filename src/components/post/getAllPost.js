@@ -6,19 +6,13 @@ import { useDarkMode } from '../DarkModeContext';
 
 function GetAllPostsPage() {
     const { darkMode } = useDarkMode();
-    const user = getUserInfo();
 
-    if (!user) {
-        return (
-            <div>
-                <h3>
-                    You are not authorized to view this page. Please Login in{" "}
-                    <Link to="/login">here</Link>
-                </h3>
-            </div>
-        );
-    }
-    return <PostList type="all" />;
+    return (
+        <div style={{backgroundColor: darkMode ? "#000" : "#f6f8fa", color: darkMode ? "#fff" : "#000", minHeight: '100vh', }}>
+        <h2 style={{textAlign: 'center'}}>Welcome to the explore page</h2>
+            <PostList type="all" />
+        </div>
+    );
 }
 
 export default GetAllPostsPage;
