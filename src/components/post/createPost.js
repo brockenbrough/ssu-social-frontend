@@ -150,6 +150,7 @@ const CreatePost = () => {
         >
           <Form.Control
             as = "textarea"
+            maxlength="280"
             placeholder="What's on your mind?"
             name="content"
             value={state.content}
