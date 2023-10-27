@@ -6,6 +6,7 @@ import Button from "react-bootstrap/Button";
 import moment from "moment";
 import axios from "axios";
 import { DarkModeProvider } from "../DarkModeContext";
+import Modal from "react-bootstrap/Modal";
 
 import { useDarkMode } from '../DarkModeContext';
 
@@ -18,6 +19,16 @@ const Post = ({ posts }) => {
   const { _id: postId } = posts;
   const [user, setUser] = useState(null);
   const { darkMode } = useDarkMode();
+
+  const [showPostModal, setShowPostModal] = useState(false);
+
+  const handleShowPostModal = () => {
+    setShowPostModal(true);
+  };
+
+  const handleClosePostModal = () => {
+    setShowPostModal(false);
+  };
 
   useEffect(() => {
     const currentUser = getUserInfoAsync();
@@ -126,6 +137,7 @@ const Post = ({ posts }) => {
       <Card
         id="postCard"
         style={{ backgroundColor: darkMode ? "#181818" : "#f6f8fa" }}
+        onClick={handleShowPostModal}
       >
         <Card.Body>
           <Link
@@ -169,6 +181,21 @@ const Post = ({ posts }) => {
           </Link>
         </Card.Body>
       </Card>
+      <Modal show={showPostModal} onHide={handleClosePostModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Post</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>Username: {posts.username}</p>
+          <p>{posts.content}</p>
+          <p>{formattedDate}</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClosePostModal}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };
