@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
-import getUserInfo from "../../utilities/decodeJwt";
+import getUserInfoAsync from "../../utilities/decodeJwt";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import moment from "moment";
@@ -20,7 +20,7 @@ const Post = ({ posts }) => {
   const { darkMode } = useDarkMode();
 
   useEffect(() => {
-    const currentUser = getUserInfo();
+    const currentUser = getUserInfoAsync();
     setUser(currentUser);
     fetch(
       `${process.env.REACT_APP_BACKEND_SERVER_URI}/count/likes-for-post/${posts._id}`
