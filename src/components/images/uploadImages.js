@@ -1,15 +1,26 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import getUserInfo from '../../utilities/decodeJwt'
+//import getUserInfo from '../../utilities/decodeJwt'
+import getUserInfoAsync from "../../utilities/decodeJwtAsync";
 
 export default function UploadImages() {
-  const [user, setUser] = useState({});
+  //const [user, setUser] = useState({});
+  const [user, setUser] = useState(null);
   const [name, setName] = useState(""); 
   const [showModal, setShowModal] = useState(false);
-
+  const fetchUserInfo = async () => {
+    try {
+      const userInfo = await getUserInfoAsync();
+      if (userInfo) {
+        setUser(userInfo);
+      }
+    } catch (error) {
+      console.error("Error fetching user info:", error);
+    }
+    
+    };
   useEffect(() => {
-    setUser(getUserInfo());
-    return; 
+    fetchUserInfo(); // Fetch user info
   }, []);
 
   if (!user) return (<div><h3>You are not authorized to view this page, Please Login in <Link to={'/login'}><a href='#'>here</a></Link></h3></div>)
@@ -45,7 +56,7 @@ export default function UploadImages() {
   return (
     <div style={{ maxWidth: '400px', margin: '50px auto', padding: '20px', backgroundColor: '#fff', borderRadius: '8px', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)' }}>
       <h1 style={{ textAlign: 'center', color: '#333' }}>Upload Images</h1>
-  
+      
       <div style={{ marginTop: '20px' }}>
         <form onSubmit={handleSubmit} encType="multipart/form-data">
           <div style={{ marginBottom: '15px' }}>
