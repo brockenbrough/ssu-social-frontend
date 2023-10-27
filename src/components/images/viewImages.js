@@ -1,16 +1,38 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import getUserInfo from '../../utilities/decodeJwt'
+import getUserInfoAsync from "../../utilities/decodeJwtAsync"
 import {useDarkMode } from '../DarkModeContext';
 export default function ViewImages() {
   const { darkMode } = useDarkMode();
   const [user, setUser] = useState({});
   const [images, setImages] = useState([]);
 
+  const fetchUserInfo = async () => {
+
+    try {
+    
+    const userInfo = await getUserInfoAsync();
+    
+    if (userInfo) {
+    
+    setUser(userInfo);
+    
+    }
+    
+    } catch (error) {
+    
+    console.error("Error fetching user info:", error);
+    
+    }
+  };
+
   useEffect(() => {
-    setUser(getUserInfo());
-    fetchImages();
+    fetchUserInfo(); // Fetch user info
   }, []);
+
+  useEffect(() => {
+    fetchImages();
+  }, [user]);
 
   const fetchImages = async () => {
     try {
