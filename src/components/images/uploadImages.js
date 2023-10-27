@@ -7,10 +7,19 @@ export default function UploadImages() {
   const [user, setUser] = useState({});
   const [name, setName] = useState(""); 
   const [showModal, setShowModal] = useState(false);
-
+  const fetchUserInfo = async () => {
+    try {
+      const userInfo = await getUserInfoAsync();
+      if (userInfo) {
+        setUser(userInfo);
+      }
+    } catch (error) {
+      console.error("Error fetching user info:", error);
+    }
+    
+    };
   useEffect(() => {
-    setUser(getUserInfo());
-    return; 
+    fetchUserInfo(); // Fetch user info
   }, []);
 
   if (!user) return (<div><h3>You are not authorized to view this page, Please Login in <Link to={'/login'}><a href='#'>here</a></Link></h3></div>)
