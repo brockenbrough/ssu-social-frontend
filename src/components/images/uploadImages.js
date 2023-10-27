@@ -69,7 +69,7 @@ export default function UploadImages() {
               name="name"
               onChange={(e) => setName(e.target.value)}
               required
-              style={{ width: '100%', padding: '8px', border: '1px solid #ccc', borderRadius: '4px', background: darkMode ? "#181818" : "#f6f8fa",}}
+              style={{ width: '100%', padding: '8px', border: '1px solid #ccc', borderRadius: '4px', background: darkMode ? "#181818" : "#f6f8fa", color: darkMode ? "#fff" : "#000"}}
             />
           </div>
           <div style={{ marginBottom: '15px' }}>
