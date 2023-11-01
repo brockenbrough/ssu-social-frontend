@@ -97,7 +97,7 @@ function CreateComment() {
 
       if (response.ok) {
         // Comment created successfully, navigate back to the post page
-        navigate(`/comments/comment`);
+        navigate("/comments/comment" , {state: postId});
        
         // After successfully creating a comment, update the comment count
         fetchCommentCount();
@@ -121,7 +121,7 @@ function CreateComment() {
 
 
   const viewAllComments = () => {
-    navigate("/comments/comment");
+    navigate("/comments/comment" , {state: postId});
   };
 
 
@@ -157,9 +157,9 @@ function CreateComment() {
           >
             Cancel
           </button>
-          <Link to="/comments/comment" className="btn btn-primary">
+          <button className="btn btn-primary" onClick={viewAllComments}>
             View All Comments ({commentCount}){/* Display the comment count */}
-          </Link>
+          </button>
         </div>
       </form>
     </div>
