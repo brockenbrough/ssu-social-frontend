@@ -1,83 +1,65 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { Image } from "react-bootstrap";
-import {Row, Col} from 'react-bootstrap';
-import ToggleButton from 'react-bootstrap/ToggleButton';
-import Card from 'react-bootstrap/Card';
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
-import {UserContext} from "../../App"
-import { Link, useNavigate } from 'react-router-dom'
-import axios from 'axios'
-import moment from "moment";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router";
+import { Container, Row, Col, Button } from "react-bootstrap";
 import getUserInfo from '../../utilities/decodeJwt';
-import Form from 'react-bootstrap/Form';
-import Post from '../post/post';
-import PostList from '../post/feedPage';
+import axios from 'axios';
+import Post from "../post/post";
+import FollowButton from '../following/followButton';
 
+export default function PublicUserList() {
+  const [user, setUser] = useState({});
+  const { username } = useParams();
+  const [posts, setPosts] = useState([]);
 
+  const fetchPosts = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getAllByUsername/${username}`
+      );
+      setPosts(response.data);
+    } catch (error) {
+      alert(`Unable to fetch posts by user: ${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getAllByUsername/${username}`);
+    }
+  };
 
-const PublicUser = () => {
-	const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
-	const handleShow = () => setShow(true);
-	const user = useContext(UserContext)
-	const [form, setValues] = useState({content : ""})
-	const [posts, setPosts] = useState([])
-	const navigate = useNavigate();
+  useEffect(() => {
+    fetchPosts();
+    const userInfo = getUserInfo();
+    setUser(userInfo);
+  }, []);
 
+  if (!user) return null; // Or a loading spinner, or some other placeholder
 
+  return (
+    <Container className="mt-5">
+      <Row className="mb-3">
+        <Col className="text-center">
+          <h2>
+            {username} 
+            <FollowButton
+              className="ml-3 btn-sm"
+              username={user.username}
+              targetUserId={username}
+            />
+          </h2>
+        </Col>
+      </Row>
 
-	const fetchPosts = async () => {
-	  const res = await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getAllPosts/${posts}`)
-		  .then(res => {
-			  setPosts(res.data)
-		  })
-		  .catch(error => alert(`Unable to fetch all posts: ${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getAllPosts/${posts}`))
-	}
+      <Row className="justify-content-center mt-1">
+        <Col md={8}>
+          <h4 className="text-left">Posts:</h4>
+        </Col>
+      </Row>
 
-	useEffect(() => {
-		  fetchPosts()
-	}, [])
-
-
-return(
-	<div class="container">
-		<div class="col-md-12 text-center">
-
-<h1>{Post && Post.PostList}</h1>
-        
-			<div class="text-center">
-			</div>
-			<div class = "text-center">
-			</div>
-		</div>
-	
-<Card.Header>{Post && Post.PostList}</Card.Header>
-          <div>
-          <h3>All Posts</h3>
-				  <Row>
-			</Row>
-			<Card style={{ width: '5rem' }}></Card>
-   </div>
-   <div>
-            {posts.map((posts, index) => (
-                <div class = "text-center" key={index}>
-                    <Card style={{ width: '18rem' , marginTop:'1cm', marginLeft:'.5cm',background:'aliceblue'}}>
-                            <Card.Title>
-                              <h5>User:</h5>
-                              <Link to={'/publicprofilepage'}>{posts.username}</Link>{}
-                              </Card.Title>
-                              {posts.content}
-                            <p>{moment(posts.createdAt).format("MMM DD yyyy")}</p>
-                    </Card>
-                </div>
-                
-            ))}
-   </div>
-  </div>
-)
-
-
+      <Row className="justify-content-center mt-3">
+        <Col md={8}>
+          {posts.map((post, index) => (
+            <div className="mb-3" key={index}>
+              <Post posts={post} />
+            </div>
+          ))}
+        </Col>
+      </Row>
+    </Container>
+  );
 }
-
-export default PublicUser

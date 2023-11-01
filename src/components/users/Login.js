@@ -80,37 +80,18 @@ const Login = () => {
     <>
       <section className="vh-100">
         <div className="container-fluid h-custom vh-100">
-          <div
-            className="row d-flex justify-content-center align-items-center h-100"
-            style={backgroundStyling}
-          >
+          <div className="row d-flex justify-content-center align-items-center h-100" style={backgroundStyling}>
             <div className="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
               <Form>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
                   <Form.Label style={labelStyling}>Username</Form.Label>
-                  <Form.Control
-                    type="username"
-                    name="username"
-                    onChange={handleChange}
-                    placeholder="Enter username"
-                  />
-                  <Form.Text className="text-muted">
-                    We just might sell your data
-                  </Form.Text>
+                  <Form.Control type="username" name="username" onChange={handleChange} placeholder="Enter username" />
+                  <Form.Text className="text-muted">We just might sell your data</Form.Text>
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formBasicPassword">
                   <Form.Label style={labelStyling}>Password</Form.Label>
-                  <Form.Control
-                    type={passwordVisible ? "text" : "password"}
-                    name="password"
-                    placeholder="Password"
-                    onChange={handleChange}
-                  />
-                  <Button
-                    variant="secondary"
-                    onClick={togglePasswordVisibility}
-                    className="mt-2"
-                  >
+                  <Form.Control type={passwordVisible ? "text" : "password"} name="password" placeholder="Password" onChange={handleChange} />
+                  <Button variant="secondary" onClick={togglePasswordVisibility} className="mt-2">
                     {passwordVisible ? "Hide Password" : "Show Password"}
                   </Button>
                 </Form.Group>
@@ -118,34 +99,18 @@ const Login = () => {
                   <Form.Text className="text-muted pt-1">
                     Need an account?
                     <span>
-                      <Link to="/signup" style={labelStyling}>
-                        Sign up
-                      </Link>
+                      <Link to="/signup" style={labelStyling}>Sign up</Link>
                     </span>
                   </Form.Text>
                 </Form.Group>
                 <div class="form-check form-switch">
-                  <input
-                    class="form-check-input"
-                    type="checkbox"
-                    role="switch"
-                    id="flexSwitchCheckDefault"
-                    onChange={() => {
-                      setLight(!light);
-                    }}
-                  />
+                  <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" onChange={() => { setLight(!light); }} />
                   <label class="form-check-label" for="flexSwitchCheckDefault" className="text-muted">
                     {bgText}
                   </label>
                 </div>
                 {error && <div style={labelStyling} className="pt-3">{error}</div>}
-                <Button
-                  variant="primary"
-                  type="submit"
-                  onClick={handleSubmit}
-                  style={buttonStyling}
-                  className="mt-2"
-                >
+                <Button variant="primary" type="submit" onClick={handleSubmit} style={buttonStyling} className="mt-2">
                   Submit
                 </Button>
               </Form>

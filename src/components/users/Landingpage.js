@@ -1,11 +1,6 @@
-import React, {useEffect} from 'react'
 import Card from 'react-bootstrap/Card';
 
-const Landingpage = () => {
-    // useEffect(() => {
-    //  localStorage.removeItem('accessToken')
-    // }, [])
-    
+const Landingpage = () => {    
     return (
         <Card style={{ width: '30rem' }} className="mx-2 my-2">
         <Card.Body>
@@ -19,5 +14,4 @@ const Landingpage = () => {
       </Card>
     )
 }
-
 export default Landingpage
