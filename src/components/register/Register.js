@@ -69,13 +69,13 @@ const Register = () => {
 
   return (
     <>
-      <section className="vh-100">
-        <div className="container-fluid h-custom vh-100">
+      <section style={{paddingTop: '200px', minHeight: '100vh', background: bgColor}}>
+        <div className="container-fluid h-custom">
           <div
-            className="row d-flex justify-content-center align-items-center h-100 "
+            className="row d-flex justify-content-center align-items-center"
             style={backgroundStyling}
           >
-            <div className="col-md-9 col-lg-6 col-xl-5">
+            <div>
               <img
                 src="https://cdn.dribbble.com/users/1080950/screenshots/11585265/media/01aaa0e9a2325d1032112e98d5c78474.png?compress=1&resize=700x600"
                 className="img-fluid"
