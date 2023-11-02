@@ -7,6 +7,8 @@ export default function UploadImages() {
   const [user, setUser] = useState({});
   const [name, setName] = useState(""); 
   const [showModal, setShowModal] = useState(false);
+
+  
   const fetchUserInfo = async () => {
     try {
       const userInfo = await getUserInfo();
@@ -27,7 +29,7 @@ export default function UploadImages() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData();
-    formData.append('name', name);
+    formData.append('name', user.username);
     formData.append('image', e.target.elements.image.files[0]);
 
     try {
@@ -60,15 +62,15 @@ export default function UploadImages() {
       <div style={{ marginTop: '20px' }}>
         <form onSubmit={handleSubmit} encType="multipart/form-data">
           <div style={{ marginBottom: '15px' }}>
-            <label htmlFor="name" style={{ display: 'block', marginBottom: '5px', color: darkMode ? "#fff" : "#555" }}>Image Title</label>
+            <label htmlFor="name" style={{ display: 'block', marginBottom: '5px', color: darkMode ? "#fff" : "#555" }}>Username</label>
             <input
               type="text"
               id="name"
-              placeholder="Name"
+              placeholder={user.username}
               value={name}
               name="name"
+              disabled
               onChange={(e) => setName(e.target.value)}
-              required
               style={{ width: '100%', padding: '8px', border: '1px solid #ccc', borderRadius: '4px', background: darkMode ? "#181818" : "#f6f8fa", color: darkMode ? "#fff" : "#000"}}
             />
           </div>

@@ -10,13 +10,8 @@ import UploadImages from "../images/uploadImages";
 
 const CreatePost = () => {
 
-  const { darkMode } = useDarkMode();
-  const [textAreaCount, setTextAreaCount] = React.useState(0);
-  const maxText = 280;
-  var [color, setColor] = React.useState('gainsboro');
   // User UseStates
   const [user, setUser] = useState(null);
-
   const [state, setState] = useState({
     content: "",
   });
@@ -25,16 +20,10 @@ const CreatePost = () => {
     setUser(currentUser);
 
   }, []);
-
-  const containerStyle = {
-    background: darkMode ? 'black' : 'white',
-    color: darkMode ? 'white' : 'black',
-    // Add other styles here
-  };
-
   const navigate = useNavigate();
-  const handleChange = (e) => {
 
+  //State for TextArea
+  const handleTextChange = (e) => {
     setTextAreaCount(e.target.value.length);  //used for char counting
     if (textAreaCount == maxText - 1 || textAreaCount == maxText) {
       setColor('red');
@@ -45,8 +34,6 @@ const CreatePost = () => {
     else {
       setColor('gainsboro')
     }
-
-
     const { name, value } = e.target;
     setState({
       ...state,
@@ -66,6 +53,17 @@ const CreatePost = () => {
     navigate("/getAllPost");
   };
 
+    //Dark Mode components.
+    const { darkMode } = useDarkMode();
+    const [textAreaCount, setTextAreaCount] = React.useState(0);
+    const maxText = 280;
+    var [color, setColor] = React.useState('gainsboro');
+    const containerStyle = {
+      background: darkMode ? 'black' : 'white',
+      color: darkMode ? 'white' : 'black',
+      // Add other styles here
+    };
+
   // Modal UseStates
   const inputRef = useRef(null);
   const [images, setImages] = useState([]);
@@ -77,14 +75,14 @@ const CreatePost = () => {
     setShowModal(true);
   };
 
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
+
   const handleImageChange = (event) => {
     const newFiles = event.target.files;
     setImages((prevImages) => [...prevImages, ...newFiles]); //Choose Multiple files
     setShowModal(true);
-  };
-
-  const handleCloseModal = () => {
-    setShowModal(false);
   };
 
   const handleImageSubmit = async (e) => {
@@ -109,8 +107,6 @@ const CreatePost = () => {
     }
   };
 
-
-
   if (!user) {
     return (
       <div>
@@ -127,54 +123,27 @@ const CreatePost = () => {
   return (
     <>
       <div className="App">
-            <div className="toggle-container">
-          
-            </div>
-      <Form id="createPostID"
-        onSubmit={handleSubmit}
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          height: "100vh",
-          backgroundColor: "#f6f8fa",
-          backgroundColor: darkMode ? "#000" : "#f6f8fa", // Change background color
-          color: darkMode ? "#fff" : "#000",
-        }}
-      >
-        <Form.Group
-          className="mb-3"
-          controlId="formBasicPassword"
-          style={{ width: "60%" }}
-        >
-          <Form.Control
-            as = "textarea"
-            maxlength="280"
-            placeholder="What's on your mind?"
-            name="content"
-            value={state.content}
-            onChange={handleChange}
-            style={{
-              height: "3cm",
-              width: "100%",
-              backgroundColor: darkMode ? "#181818" : "white",
-              color: darkMode ? "white" : "#000",
 
-              }}
-            />
-            <p><span style={{ color: color }} onChange={handleChange}> {`${textAreaCount}/${maxText}`} </span></p>
-          </Form.Group>
-
-          <div
-            name="img-icon"
-            onClick={handleImageClick}
+        <Form id="createPostID"
+          onSubmit={handleSubmit}
             style={{
               display: "flex",
-              justifyContent: "space-between",
-              width: "60%",
-            }}
-          >
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              height: "100vh",
+              backgroundColor: "#f6f8fa",
+              backgroundColor: darkMode ? "#000" : "#f6f8fa", // Change background color
+              color: darkMode ? "#fff" : "#000",
+            }}>
+          <Form.Group className="mb-3" controlId="formBasicPassword" style={{ width: "60%" }}>
+            <Form.Control as="textarea" maxlength="280" placeholder="What's on your mind?" name="content" value={state.content}
+             onChange={handleTextChange}
+              style={{ height: "3cm", width: "100%", backgroundColor: darkMode ? "#181818" : "white", color: darkMode ? "white" : "#000" }} />
+            <p><span style={{ color: color }} onChange={handleTextChange}> {`${textAreaCount}/${maxText}`} </span></p>
+          </Form.Group>
+
+          <div name="img-icon" onClick={handleImageClick} style={{ display: "flex", justifyContent: "space-between", width: "60%" }} >
             <img
               src={darkMode ? "/addImageLight.png" : "/add-img-icon.png"}
               alt="Add Image Icon"
@@ -182,60 +151,33 @@ const CreatePost = () => {
             />
             <img src={darkMode ? "/addVideoWhite.png" : "/addVideo.png"} alt="Add Video Icon" style={{ width: '60px', height: '60px', marginTop: '.5cm' }} />
 
-          {/* Add other icons as needed */}
-          <input
-            type="file"
-            ref={inputRef}
-            onChange={handleImageChange}
-            multiple // Allow multiple file selection
-            style={{ display: "none" }}
-          />
-        </div>
+            
+            <input //Let's the user choose file.
+              type="file"
+              ref={inputRef}
+              onChange={handleImageChange}
+              multiple // Allow multiple file selection
+              style={{ display: "none" }}
+            />
+          </div>
 
-          <Button
-            style={{
-              width: "8cm",
-              marginTop: "1cm",
-              backgroundColor: "#28a745",
-              borderColor: "#28a745",
-            }}
-            variant="primary"
-            type="submit"
-            size="lg"
-          >
+          <Button style={{ width: "8cm", marginTop: "1cm", backgroundColor: "#28a745", borderColor: "#28a745" }} variant="primary" type="submit" size="lg" >
             Create Post
-          </Button>
+          </Button> 
         </Form>
 
-         {/* Modal for uploading images */}
-      <Modal show={showModal} onHide={handleCloseModal}>
-        <Modal.Header closeButton style={{
-                    background: darkMode ? '#181818' : 'white',
-                    color: darkMode ? 'white' : 'black',
-                  }}>
-          <Modal.Title>Upload Images</Modal.Title>
-        </Modal.Header>
-        <Modal.Body style={{
-                    background: darkMode ? '#181818' : 'white',
-                    color: darkMode ? 'white' : 'black',
-                  }}>
-          {/* Render the UploadImages component directly within the modal */}
-          <UploadImages
-            ref={inputRefModal} // Pass the new ref to the UploadImages component
-            handleImageSubmit={handleImageSubmit} // Pass the handleImageSubmit function
-          />
-        </Modal.Body>
-        {/* ... (modal footer) */}
-        <button onClick={handleCloseModal} type='button' style={{flex: 0.5, backgroundColor: '#4caf50', color: '#fff', padding: '10px', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>Close</button>
+        <Modal show={showModal} onHide={handleCloseModal}>
+          <Modal.Header closeButton style={{ background: darkMode ? '#181818' : 'white', color: darkMode ? 'white' : 'black' }}>
+            <Modal.Title>Upload Images</Modal.Title>
+          </Modal.Header>
+          <Modal.Body style={{ background: darkMode ? '#181818' : 'white', color: darkMode ? 'white' : 'black' }}>
+            <UploadImages ref={inputRefModal} handleImageSubmit={handleImageSubmit} />
+          </Modal.Body>
+          <button onClick={handleCloseModal} type='button' style={{ flex: 0.5, backgroundColor: '#4caf50', color: '#fff', padding: '10px', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>Close</button>
+        </Modal>
 
-   
-      </Modal>
-    
       </div>
-   
     </>
   );
 };
-
-
 export default CreatePost;
