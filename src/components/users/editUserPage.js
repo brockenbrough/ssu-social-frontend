@@ -7,7 +7,7 @@ import Row from 'react-bootstrap/Row';
 import axios from 'axios'
 import { Link, useNavigate } from 'react-router-dom'
 import getUserInfo from '../../utilities/decodeJwt';
-import {useDarkMode } from '../DarkModeContext';
+import { useDarkMode } from '../DarkModeContext';
 
 const EditUserPage = () =>{
   const { darkMode } = useDarkMode();
@@ -16,8 +16,9 @@ const EditUserPage = () =>{
 
   // form validation checks
   const [ errors, setErrors ] = useState({})
+
   const findFormErrors = () => {
-    const {username, email, password} = form
+    const {username, email, password, biography} = form
     const newErrors = {}
     // username validation checks
     if (!username || username === '') newErrors.name = 'Input a valid username'
@@ -28,13 +29,18 @@ const EditUserPage = () =>{
     // password validation checks
     if (!password || password === '') newErrors.password = 'Input a valid password'
     else if (password.length < 8) newErrors.password = 'Password must be at least 8 characters'
+    // biography character limit check
+    if (biography.length > 200) newErrors.biography = 'Your bio is too long!'
     return newErrors
   }
 
   // initialize form values and get userId on render
   const [form, setValues] = useState({userId : "", username: "", email: "", password: "", biography: "" })
   useEffect(() => {
-    setValues({userId : getUserInfo().id})
+    setValues({userId : getUserInfo().id,
+    username : getUserInfo().username,
+    email : getUserInfo().email,
+    biography : getUserInfo().biography || ''})
   }, [])
 
   // handle form field changes
@@ -78,46 +84,16 @@ const EditUserPage = () =>{
     }
   }
 
-    // initialize checkbox state
-  const [keepUsername, setKeepUsername] = useState(false);
-  const [keepEmail, setKeepEmail] = useState(false);
-
   // handle cancel button
   const handleCancel = async => {
     navigate("/privateuserprofile");
   }
 
-  // handle keep username checkbox change
-  const handleKeepUsernameChange = () => {
-    setKeepUsername(!keepUsername);
-    if (!keepUsername) {
-      setValues({ ...form, username: getUserInfo().username });
-    } else {
-      setValues({ ...form, username: "" });
-    }
-    if (form.username && !keepUsername) {
-      setValues({ ...form, username: "" });
-    }
-  };
-
-  // handle keep email checkbox change
-  const handleKeepEmailChange = () => {
-    setKeepEmail(!keepEmail);
-    if (!keepEmail) {
-      setValues({ ...form, email: getUserInfo().email });
-    } else {
-      setValues({ ...form, email: "" });
-    }
-    if (form.email && !keepEmail) {
-      setValues({ ...form, email: "" });
-    }
-  };
-
   return(
     <div style={{backgroundColor: darkMode ? "#000" : "#f6f8fa", color: darkMode ? "#fff" : "#000", minHeight: '100vh', paddingTop: '15px',}}>
-      <Card body outline color="success" className="mx-1 my-2" style={{ width: '30rem', backgroundColor: darkMode ? "#181818" : "#f6f8fa", color: darkMode ? "#fff" : "#000",}}>
+      <Card body outline="true" color="success" className="mx-1 my-2" style={{ width: '30rem', backgroundColor: darkMode ? "#181818" : "#f6f8fa", color: darkMode ? "#fff" : "#000",}}>
         <Card.Title>Edit User Information</Card.Title>
-        <Card.Body> 
+        <Card.Body>
         <Form>
 
           <Form.Group className="mb-3" controlId="formName" >
@@ -125,9 +101,9 @@ const EditUserPage = () =>{
             <Form.Control type="text" placeholder="Enter new username" 
               id="username"
               value={form.username}
+              readOnly
               onChange={handleChange}
               isInvalid={ !!errors.name }
-              disabled={keepUsername}
               style={{background: darkMode ? '#181818' : 'white',
                     color: darkMode ? 'white' : 'black', }}
             />
@@ -136,23 +112,13 @@ const EditUserPage = () =>{
             </Form.Control.Feedback>
           </Form.Group>
 
-          <Form.Group className="mb-3" controlId="formKeepUsername">
-            <Form.Check
-              type="checkbox"
-              label="Keep username"
-              checked={keepUsername}
-              onChange={handleKeepUsernameChange}
-            />
-          </Form.Group>
-
           <Form.Group className="mb-3" controlId="formEmail">
              <Form.Label>Email address</Form.Label>
-             <Form.Control type="text" placeholder="Enter new email address" 
+             <Form.Control type="email" placeholder="Enter new email address" 
                 id="email"
                 value={form.email}
                 onChange={handleChange}
                 isInvalid = { !!errors.email }
-                disabled = {keepEmail}
                 style={{background: darkMode ? '#181818' : 'white',
                     color: darkMode ? 'white' : 'black', }}
              />
@@ -161,16 +127,7 @@ const EditUserPage = () =>{
              </Form.Control.Feedback>
           </Form.Group>
 
-          <Form.Group className="mb-3" controlId="formKeepEmail">
-            <Form.Check
-              type="checkbox"
-              label="Keep email"
-              checked={keepEmail}
-              onChange={handleKeepEmailChange}
-            />
-          </Form.Group>
-
-          <Form.Group className="mb-3" controlId="formPassword">
+          <Form.Group className="mb-3" controlId="formPassword" >
             <Form.Label>Password</Form.Label>
             <Form.Control
               type="password"
@@ -178,7 +135,7 @@ const EditUserPage = () =>{
               id="password"
               value={form.password}
               onChange={handleChange}
-              isInvalid={!!errors.password}
+              isInvalid={ !!errors.password }
               style={{background: darkMode ? '#181818' : 'white',
                     color: darkMode ? 'white' : 'black', }}
             />
@@ -187,17 +144,22 @@ const EditUserPage = () =>{
             </Form.Control.Feedback>
           </Form.Group>
 
-          <Form.Group className="mb-3" controlId="formBiography">
+          <Form.Group className="mb-3" controlId="formBio" >
             <Form.Label>Biography</Form.Label>
             <Form.Control
-              type="text"
+              as="textarea"
+              rows={4}
               placeholder="Enter your bio"
               id="biography"
               value={form.biography}
               onChange={handleChange}
+              isInvalid={ !!errors.biography }
               style={{background: darkMode ? '#181818' : 'white',
                     color: darkMode ? 'white' : 'black', }}
             />
+            <Form.Control.Feedback type="invalid">
+              {errors.biography}
+            </Form.Control.Feedback>
           </Form.Group>
 
         <Row>

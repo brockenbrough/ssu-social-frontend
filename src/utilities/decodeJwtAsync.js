@@ -13,7 +13,6 @@ const refreshAccessToken = async (decodedAccessToken) => {
         id: decodedAccessToken.id,
         email: decodedAccessToken.email,
         username: decodedAccessToken.username,
-        password: decodedAccessToken.password,
       }),
     });
 

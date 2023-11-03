@@ -1,7 +1,7 @@
 //This is a comment about imports
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import axios from 'axios'
+import { Link, useLocation } from "react-router-dom";
+
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import Stack from "react-bootstrap/Stack";
@@ -13,17 +13,18 @@ import Comment from "./comment";
 export default function CommentList() {
   const [user, setUser] = useState({});
   const [comments, setComments] = useState([]);
+  let location = useLocation();
   // Hook useState - we are saying: call our state 'records' and use 'setRecords' to change it's value.
 
   // This method fetches the records from the database.
   // Hook useEffect - this hook is used to invoke something after rendering.
   useEffect(() => {
     // Define a function to get records. We are going to call it below.
-    // We use async keyword so we can later say "await" to block on finish.
+    // We use async keyword so we can ．０later say "await" to block on finish.
      async function getRecords() {
-      const response = await fetch(
-        `${process.env.REACT_APP_BACKEND_SERVER_URI}/comments/comment/`
-      );
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_SERVER_URI}/comments/comment/getCommentById/${location.state}`, {
+        method: "GET",
+      })
 
       if (!response.ok) {
         const message = `An error occured: ${response.statusText}`;
@@ -31,15 +32,18 @@ export default function CommentList() {
         return;
       }
 
-      const fetchedRecords = await response.json();
-      setComments(fetchedRecords); // update state.  when state changes, we automatically re-render.
-    }
+      if(response != null){
+        const fetchedRecords = await response.json();
+        setComments(fetchedRecords); // update state.  when state changes, we automatically re-render.
+      }
+
+ }
 
     getRecords(); // Now that we defined it, call the function.
     setUser(getUserInfo());
 
     return;
-  }, [comments.length]); // If record length ever changes, this useEffect() is automatically called.
+  }, [comments?.length]); // If record length ever changes, this useEffect() is automatically called.
 
   // A method to delete a contributor
   async function deleteComment(id) {
@@ -52,12 +56,22 @@ export default function CommentList() {
     setComments(newRecords); // This causes a re-render because we change state.
   }
 
-  // This method will map out the records on the table.
+  // This method will map out the records onthe table.
   // Records.map means for each item in 'records' do something.
   // In our case we're return a presentation tag that will invoke rendering on a record.
   // We are returning component tags for records. See use in rendering below.
   // Note that component <Record> below has 3 props being passed (record, deleteRecord(), key)
   function commentList() {
+    if (comments ==null)
+    {
+      return(
+        <div>
+          <h3>
+            No Comment Found
+          </h3>
+          </div>
+      );
+    }
     return comments.map((comment) => {
       return (
         <Card
