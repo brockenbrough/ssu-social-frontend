@@ -10,7 +10,6 @@ import getUserInfo from '../../utilities/decodeJwt';
 import { useDarkMode } from '../DarkModeContext';
 
 const EditUserPage = () =>{
-  console.log(getUserInfo());
   const { darkMode } = useDarkMode();
   const url = `${process.env.REACT_APP_BACKEND_SERVER_URI}/user/editUser`;
   const navigate = useNavigate();
