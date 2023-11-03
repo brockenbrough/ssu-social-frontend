@@ -75,13 +75,7 @@ const Register = () => {
             className="row d-flex justify-content-center align-items-center"
             style={backgroundStyling}
           >
-            <div>
-              <img
-                src="https://cdn.dribbble.com/users/1080950/screenshots/11585265/media/01aaa0e9a2325d1032112e98d5c78474.png?compress=1&resize=700x600"
-                className="img-fluid"
-                alt="test image"
-              />
-            </div>
+
             <div className="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
               <Form>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -116,17 +110,6 @@ const Register = () => {
                     placeholder="Enter password"
                     onChange={handleChange}
                   />
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="formBasicCheckbox">
-                  <Form.Text className="text-muted pt-1">
-                    Need an account?
-                    <span>
-                      <Link to="/signup" style={labelStyling}>
-                        {" "}
-                        Sign up
-                      </Link>
-                    </span>
-                  </Form.Text>
                 </Form.Group>
                 <div class="form-check form-switch">
                   <input
