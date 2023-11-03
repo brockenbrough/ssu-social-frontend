@@ -166,7 +166,6 @@ const CreatePost = () => {
           <input type="file" id="image"
             name="image"
             accept="image/*"
-            required //Might Remove Later
             onChange={handleImageChange} //Call handleImageChange on file selection.
             style={{
               width: "100%",
