@@ -102,6 +102,7 @@ const EditUserPage = () =>{
             <Form.Control type="text" placeholder="Enter new username" 
               id="username"
               value={form.username}
+              readOnly
               onChange={handleChange}
               isInvalid={ !!errors.name }
               style={{background: darkMode ? '#181818' : 'white',
