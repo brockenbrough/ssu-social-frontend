@@ -96,10 +96,15 @@ const Post = ({ posts }) => {
 
   return (
     <div className="d-inline-flex p-2">
-      <Card id="postCard" style={{ backgroundColor: darkMode ? "#181818" : "#f6f8fa" }} onClick={handleShowPostModal}>
+      <Card id="postCard" style={{
+        maxWidth: '325px', 
+        minWidth: '325px',
+        minHeight: '150px',
+        backgroundColor: darkMode ? "#181818" : "#f6f8fa"
+      }} onClick={handleShowPostModal}>
         <Card.Body>
           <Link id="username" style={{ color: darkMode ? "white" : "" }} to={`/publicprofilepage/${posts.username}`}>{posts.username}</Link>
-          <Card.Text style={{ color: darkMode ? "white" : "" }}>{posts.content}</Card.Text>
+          <Card.Text style={{ color: darkMode ? "white" : "", wordBreak: 'break-all' }}>{posts.content}</Card.Text>
           <div className="text-center">
             <Button variant={isLiked ? "danger" : "outline-danger"} onClick={handleLikeClick}>
               {isLiked ? "Unlike" : "Like"}
