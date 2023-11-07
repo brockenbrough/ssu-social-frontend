@@ -37,10 +37,10 @@ export default function UploadImages() {
         method: 'POST',
         body: formData,
       });
-
+    
       if (response.ok) {
         const data = await response.json();
-        alert(data.msg);
+        alert(`Image created successfully. Image ID: ${data.imageId}`);
       } else {
         alert('Image was not saved. HTTP status code: ' + response.status);
       }
