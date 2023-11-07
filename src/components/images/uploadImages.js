@@ -37,16 +37,32 @@ export default function UploadImages() {
         method: 'POST',
         body: formData,
       });
-    
+
       if (response.ok) {
         const data = await response.json();
-        alert(`Image created successfully. Image ID: ${data.imageId}`);
+        alert(data.msg);
       } else {
         alert('Image was not saved. HTTP status code: ' + response.status);
       }
     } catch (error) {
       console.error('Error:', error);
     }
+    // try {
+    //   const response = await fetch(`${process.env.REACT_APP_BACKEND_SERVER_URI}/images/create`, {
+    //     method: 'POST',
+    //     body: formData,
+    //   });
+    
+    //   if (response.ok) {
+    //     const data = await response.json();
+    //     alert(`Image created successfully. Image ID: ${data.imageId}`);
+    //   } else {
+    //     alert('Image was not saved. HTTP status code: ' + response.status);
+    //   }
+    // } catch (error) {
+    //   console.error('Error:', error);
+    // }
+
   };
   
 
