@@ -55,6 +55,15 @@ const CreatePost = () => {
 
   const handleImageChange = (e) => {
     setSelectedImage(e.target.files[0]); //Store the selectedImage
+
+    if (e.target.files && e.target.files[0]) {
+      let reader = new FileReader();
+      reader.onload = function (event) {
+        const imgPreview = event.target.result;
+        document.getElementById('imagePreview').src = imgPreview; // Display the selected image
+      };
+      reader.readAsDataURL(e.target.files[0]);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -111,42 +120,15 @@ const CreatePost = () => {
         <Form
           id="createPostID"
           onSubmit={handleSubmit}
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            height: "100vh",
-            backgroundColor: "#f6f8fa",
-            backgroundColor: darkMode ? "#000" : "#f6f8fa", // Change background color
-            color: darkMode ? "#fff" : "#000",
-          }}
+          style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "100vh", 
+                  backgroundColor: "#f6f8fa", backgroundColor: darkMode ? "#000" : "#f6f8fa", color: darkMode ? "#fff" : "#000",
+                }}
         >
-          <Form.Group
-            className="mb-3"
-            controlId="formBasicPassword"
-            style={{ width: "60%" }}
-          >
-            <Form.Control
-              as="textarea"
-              maxlength="280"
-              placeholder="What's on your mind?"
-              name="content"
-              value={state.content}
-              onChange={handleTextChange}
-              style={{
-                height: "3cm",
-                width: "100%",
-                backgroundColor: darkMode ? "#181818" : "white",
-                color: darkMode ? "white" : "#000",
-              }}
-            />
-            <p>
-              <span style={{ color: color }} onChange={handleTextChange}>
-                {" "}
-                {`${textAreaCount}/${maxText}`}{" "}
-              </span>
-            </p>
+          <Form.Group className="mb-3" controlId="formBasicPassword" style={{ width: "60%" }} >
+            <Form.Control as="textarea" maxlength="280" placeholder="What's on your mind?" name="content" value={state.content} onChange={handleTextChange}
+              style={{ height: "3cm", width: "100%", backgroundColor: darkMode ? "#181818" : "white", color: darkMode ? "white" : "#000", }}/>
+
+            <p> <span style={{ color: color }} onChange={handleTextChange}> {" "}{`${textAreaCount}/${maxText}`}{" "} </span> </p>
           </Form.Group>
 
           <div name="img-icon" onClick={handleImageClick} style={{ display: "flex", justifyContent: "space-between", width: "60%", }} >
@@ -154,11 +136,6 @@ const CreatePost = () => {
             <img
               src={darkMode ? "/addImageLight.png" : "/add-img-icon.png"}
               alt="Add Image Icon"
-              style={{ width: "60px", height: "60px", marginTop: ".5cm" }}
-            />
-            <img
-              src={darkMode ? "/addVideoWhite.png" : "/addVideo.png"}
-              alt="Add Video Icon"
               style={{ width: "60px", height: "60px", marginTop: ".5cm" }}
             />
           </div>
@@ -171,8 +148,18 @@ const CreatePost = () => {
               width: "100%",
               padding: "8px",
               marginLeft: "610px",
+              display: 'none',
             }} />
             
+            
+            {selectedImage && ( // Use the 'selectedImage' state to conditionally display the image preview and text message
+          <div>
+            {/* <h4>Selected Image is:</h4> */}
+            <img id="imagePreview" alt="Selected Image" style={{ width: "200px", height: "auto", }}
+             src={URL.createObjectURL(selectedImage)} />
+          </div>
+        )}
+        
           <Button style={{ width: "8cm", marginTop: "1cm", backgroundColor: "#28a745", borderColor: "#28a745", }} variant="primary" type="submit" size="lg">
             Create Post
           </Button>
