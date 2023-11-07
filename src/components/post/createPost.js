@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { Form, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import getUserInfo from "../../utilities/decodeJwt";
+import getUserInfoAsync from "../../utilities/decodeJwtAsync";
 import { Link } from "react-router-dom";
 import { useDarkMode } from '../DarkModeContext';
 
@@ -14,10 +14,21 @@ const CreatePost = () => {
   const [state, setState] = useState({
     content: "",
   });
-  useEffect(() => {
-    const currentUser = getUserInfo();
-    setUser(currentUser);
 
+
+  const fetchUserInfo = async () => {
+    try {
+    const userInfo = await getUserInfoAsync();
+    if (userInfo) {
+    setUser(userInfo);
+    }
+    } catch (error) {
+  
+    console.error("Error fetching user info:", error);
+  }
+  };
+  useEffect(() => {
+  fetchUserInfo(); // Fetch user info
   }, []);
   const navigate = useNavigate();
 
