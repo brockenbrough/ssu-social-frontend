@@ -13,7 +13,7 @@ import Form from "react-bootstrap/Form";
 import { useDarkMode } from '../DarkModeContext.js';
 import DarkModeButton from "../DarkModeButton";
 import PostList from "../post/postlist";
-import TestUser from './editUserPage.js';
+import EditUser from './editUserPage.js';
 
 const PrivateUserProfile = () => {
   const { darkMode } = useDarkMode();
@@ -450,11 +450,8 @@ const deleteConfirm = async () => {
           <Modal.Title>Edit Profile</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <TestUser />
+          <EditUser />
         </Modal.Body>
-        <Modal.Footer>
-          <p>Footer</p>
-        </Modal.Footer>
       </Modal>
     </div>
   );
