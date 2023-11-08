@@ -10,7 +10,7 @@ import Card from 'react-bootstrap/Card';
 import Button from "react-bootstrap/Button";
 import ToggleButton from 'react-bootstrap/ToggleButton';
 
-function PostList({type}) {
+function PostList({type, profileUsername}) {
     const { darkMode } = useDarkMode();
     const [user, setUser] = useState(null);
     const [posts, setPosts] = useState([]);
@@ -50,6 +50,9 @@ function PostList({type}) {
         } 
         else if (type === "privateuserprofile") {
             url = `${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getAllByUsername/${username}`;
+        }
+        else if (type === "publicuserprofile") {
+            url = `${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getAllByUsername/${profileUsername}`;
         }
         else if (type === "all") {
             url = `${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getAllPosts`;

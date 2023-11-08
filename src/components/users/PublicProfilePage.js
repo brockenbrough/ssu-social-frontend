@@ -7,6 +7,7 @@ import getUserInfo from '../../utilities/decodeJwt';
 import { useDarkMode } from '../DarkModeContext.js';
 import DarkModeButton from '../DarkModeButton';
 import FollowButton from '../following/followButton';
+import PostList from '../post/postlist';
 
 export default function PublicUserList() {
   const { darkMode } = useDarkMode();
@@ -90,31 +91,12 @@ export default function PublicUserList() {
             </div>
           </Col>
           <Col md={8}>
-            <Row className="justify-content-center mt-3">
-              {posts.map((post, index) => (
-                <Col md={12} key={index} className="mb-3">
-                  <Card
-                    style={{
-                      background: darkMode ? '#181818' : 'aliceblue',
-                      color: darkMode ? 'white' : 'black',
-                    }}
-                  >
-                    <Card.Body>
-                      <Card.Title>
-                        <Link to={`/publicprofilepage/${post.username}`} style={{ color: darkMode ? 'white' : 'black' }}>
-                          {post.username}
-                        </Link>
-                      </Card.Title>
-                      {post.content}
-                      <p>{moment(post.date).format('MMMM Do YYYY, h:mm A')}</p>
-                    </Card.Body>
-                  </Card>
-                </Col>
-              ))}
-            </Row>
+            {/* Directly use PostList to display posts of the public user profile */}
+            <PostList type="publicuserprofile" profileUsername={username} />
           </Col>
         </Row>
       </Container>
     </div>
   );
+  
 }
