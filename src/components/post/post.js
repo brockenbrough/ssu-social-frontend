@@ -8,8 +8,10 @@ import axios from "axios";
 import { useDarkMode } from '../DarkModeContext';
 import Modal from "react-bootstrap/Modal";
 
-//import create comment 
-import CreateComment from "/Users/xio/Desktop/ssu-social/ssu-social-frontend/src/components/comments/createComment.js";
+import CreateComment from "../comments/createComment";
+
+
+
 
 
 const Post = ({ posts }) => {
