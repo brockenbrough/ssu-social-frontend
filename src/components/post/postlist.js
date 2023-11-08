@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import getUserInfo from "../../utilities/decodeJwt";
+import getUserInfoAsync from "../../utilities/decodeJwtAsync";
 import Post from "./post";
 import "./feedPageStyle.css"; 
 import ScrollToTop from "./ScrollToTop";
@@ -10,11 +10,36 @@ import Card from 'react-bootstrap/Card';
 import Button from "react-bootstrap/Button";
 import ToggleButton from 'react-bootstrap/ToggleButton';
 
-function PostList({ type, username }) {
+function PostList({type}) {
     const { darkMode } = useDarkMode();
     const [user, setUser] = useState(null);
     const [posts, setPosts] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [username, setUsername] = useState(null);
+    const [userId, setUserId] = useState(null);
+
+    const fetchUserInfo = async () => {
+        try {
+          const userInfo = await getUserInfoAsync();
+          if (userInfo) {
+            setUser(userInfo);
+            setUsername(userInfo.username);
+            setUserId(userInfo.id);
+          }
+        } catch (error) {
+          console.error("Error fetching user info:", error);
+        }
+      };
+
+    useEffect(() => {
+        fetchUserInfo();
+      }, [type]);
+
+      useEffect(() => {
+        if (username) {
+          getPosts();
+        }
+      }, [username]); 
 
     async function getPosts() {
         let url;
@@ -22,10 +47,14 @@ function PostList({ type, username }) {
             url = username 
                 ? `${process.env.REACT_APP_BACKEND_SERVER_URI}/feed/${username}` 
                 : `${process.env.REACT_APP_BACKEND_SERVER_URI}/feed/`;
-        } else if (type === "all") {
+        } 
+        else if (type === "privateuserprofile") {
+            url = `${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getAllByUsername/${username}`;
+        }
+        else if (type === "all") {
             url = `${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getAllPosts`;
         }
-
+        
         try {
             const response = await axios.get(url);
             if (type === "feed") {
@@ -47,12 +76,6 @@ function PostList({ type, username }) {
         }
     }
 
-    useEffect(() => {
-        const userInfo = getUserInfo();
-        setUser(userInfo);
-        getPosts();
-    }, [type, username]);
-    
       const now = new Date();
       const todayPosts = posts
       .filter(post => (now - new Date(post.date)) <= 24 * 60 * 60 * 1000)
@@ -95,14 +118,22 @@ function PostList({ type, username }) {
                     <img src="/loading.gif" alt="Loading..." style={{ width: '50px', height: '50px' }} /> 
                 </div>
             ) : posts.length === 0 ? (
-                <div className="text-center" style={{fontSize: "1.5em", }}>
-                    <p>
-                        <strong>{user.username}</strong>, your feed is empty. Visit the{" "}
-                        <Link to={"/getallpost"}>
-                            <a href="#">public feed</a>
-                        </Link>{" "}
-                        to discover posts from other users.
-                    </p>
+                <div className="text-center" style={{fontSize: "1.5em"}}>
+                    {type === "feed" ? (
+                        <p>
+                            <strong>{user.username}</strong>, your feed is empty. Visit the{" "}
+                            <Link to={"/getallpost"}>
+                                <a href="#">public feed</a>
+                            </Link>{" "}
+                            to discover posts from other users.
+                        </p>
+                    ) : type === "privateuserprofile" ? (
+                        <p>
+                            <strong>{user.username}</strong>, you haven't made any posts yet.
+                        </p>
+                    ) : (
+                        <p>No posts available.</p>
+                    )}
                 </div>
             ) : (
                 <div className="App" style={{backgroundColor: darkMode ? "#000" : "#f6f8fa", color: darkMode ? "#fff" : "#000", minHeight: '100vh',}}>

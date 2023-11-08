@@ -12,6 +12,7 @@ import getUserInfoAsync from "../../utilities/decodeJwtAsync";
 import Form from "react-bootstrap/Form";
 import { useDarkMode } from '../DarkModeContext.js';
 import DarkModeButton from "../DarkModeButton";
+import PostList from "../post/postlist";
 
 
 const PrivateUserProfile = () => {
@@ -380,40 +381,7 @@ const deleteConfirm = async () => {
               </Form.Group>
               <h3>Your Posts</h3>
               <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-start', gap: '1rem' }}>
-                {posts.map((post, index) => (
-                  <div key={index} onClick={() =>openPostModal(post)} >
-                    <Card
-                      style={{
-                        width: "16rem",
-                        marginTop: "1cm",
-                        marginLeft: ".5cm",
-                        background: "aliceblue",
-                        background: darkMode ? '#181818' : 'aliceblue',
-                        color: darkMode ? 'white' : 'black',
-
-                      }}
-                    >
-                      <Card.Body>
-                        <Card.Title>
-                          <h5>Username:</h5>
-                          <Link to={"/publicprofilepage"} style={{color: darkMode ? 'white' : '',}}>{post.username}</Link>
-                        </Card.Title>
-                        {post.content}
-                        <p>{moment(post.date).format("MMMM Do YYYY, h:mm A")}</p>
-                        <Link
-                          style={{ marginRight: "1cm" }}
-                          to={`/updatePost/${post._id}`}
-                          className="btn btn-warning "
-                        >
-                          Update
-                        </Link>
-                        <Button variant="danger" onClick={() => openDeleteModal(post)}>
-                          Delete
-                        </Button>
-                      </Card.Body>
-                    </Card>
-                  </div>
-                ))}
+                <PostList type="privateuserprofile" />
               </div>
             </Col>
           </Row>
