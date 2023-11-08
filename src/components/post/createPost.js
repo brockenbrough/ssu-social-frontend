@@ -79,38 +79,57 @@ const CreatePost = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Send the image to the image API
+  
+    let post = {}; // Initialize the post object outside the if-else block
+  
     if (selectedImage) {
       const formData = new FormData();
       formData.append('image', selectedImage);
-
+  
       try {
-        const imageResponse = await fetch(`${process.env.REACT_APP_BACKEND_SERVER_URI}/images/create`, {
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_SERVER_URI}/images/create`, {
           method: 'POST',
           body: formData,
         });
-
-        if (imageResponse.ok) {
-          const imageResponseData = await imageResponse.json();
-          alert(imageResponseData.msg);
+  
+        if (response.ok) {
+          const data = await response.json();
+          alert(`Image created successfully.`);
+          // Image ID: ${data.imageId}
+  
+          // Construct the post object with the imageId
+          const { content } = state;
+          post = {
+            id: user.id,
+            content,
+            username: user.username,
+            imageId: data.imageId,
+          };
         } else {
-          alert('Image was not saved. HTTP status code: ' + imageResponse.status);
+          alert('Image was not saved. HTTP status code: ' + response.status);
         }
       } catch (error) {
         console.error('Error:', error);
       }
     }
-    //Send Posts to Post API
-    const { content } = state;
-    const post = {
-      id: user.id,
-      content,
-      username: user.username,
-    };
-    const postResponse = await axios.post(`${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/createPost`, post);
-    navigate("/getAllPost");
+  
+    try {
+      // Send Posts to Post API
+      const { content } = state;
+      post = {
+        ...post, // Add imageId if available or keep the previous 'post' object
+        id: user.id,
+        content,
+        username: user.username,
+      };
+  
+      const postResponse = await axios.post(`${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/createPost`, post);
+      navigate("/getAllPost");
+    } catch (error) {
+      console.error('Error creating post:', error);
+    }
   };
+  
 
   if (!user) {
     return (
