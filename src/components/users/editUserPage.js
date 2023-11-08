@@ -1,24 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import Card from 'react-bootstrap/Card';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import axios from 'axios'
-import { Link, useNavigate } from 'react-router-dom'
-import getUserInfo from '../../utilities/decodeJwt';
-import { useDarkMode } from '../DarkModeContext';
+import getUserInfoAsync from "../../utilities/decodeJwtAsync";
 
-const EditUserPage = () =>{
-  const { darkMode } = useDarkMode();
+const EditUser = () => {
   const url = `${process.env.REACT_APP_BACKEND_SERVER_URI}/user/editUser`;
-  const navigate = useNavigate();
 
   // form validation checks
-  const [ errors, setErrors ] = useState({})
+  const [ errors, setErrors ] = useState({});
 
   const findFormErrors = () => {
-    const {username, email, password, biography} = form
+    const {username, email, password, biography} = form;
     const newErrors = {}
     // username validation checks
     if (!username || username === '') newErrors.name = 'Input a valid username'
@@ -35,12 +30,21 @@ const EditUserPage = () =>{
   }
 
   // initialize form values and get userId on render
-  const [form, setValues] = useState({userId : "", username: "", email: "", password: "", biography: "" })
+  const[form, setValues] = useState({userId: "", username: "", email: "", password: "", biography: ""});
   useEffect(() => {
-    setValues({userId : getUserInfo().id,
-    username : getUserInfo().username,
-    email : getUserInfo().email,
-    biography : getUserInfo().biography || ''})
+    getUserInfoAsync()
+      .then(userInfo => {
+        setValues({
+          userId: userInfo.id,
+          username: userInfo.username,
+          email: userInfo.email,
+          password: userInfo.password,
+          biography: userInfo.biography
+        })
+      })
+      .catch(error => {
+        console.error('Error getting user info:', error);
+      });
   }, [])
 
   // handle form field changes
@@ -65,11 +69,11 @@ const EditUserPage = () =>{
         const { accessToken } = res;
         //store token in localStorage
         localStorage.setItem("accessToken", accessToken);
-        navigate("/privateuserprofile");
+        window.location.reload(true);
       } catch (error) {
       if (
         error.response &&
-        error.response.status != 409 &&
+        error.response.status !== 409 &&
         error.response.status >= 400 &&
         error.response.status <= 500
       ) {
@@ -84,28 +88,16 @@ const EditUserPage = () =>{
     }
   }
 
-  // handle cancel button
-  const handleCancel = async => {
-    navigate("/privateuserprofile");
-  }
-
   return(
-    <div style={{backgroundColor: darkMode ? "#000" : "#f6f8fa", color: darkMode ? "#fff" : "#000", minHeight: '100vh', paddingTop: '15px',}}>
-      <Card body outline="true" color="success" className="mx-1 my-2" style={{ width: '30rem', backgroundColor: darkMode ? "#181818" : "#f6f8fa", color: darkMode ? "#fff" : "#000",}}>
-        <Card.Title>Edit User Information</Card.Title>
-        <Card.Body>
-        <Form>
-
+    <Form>
           <Form.Group className="mb-3" controlId="formName" >
             <Form.Label >Username</Form.Label>
             <Form.Control type="text" placeholder="Enter new username" 
               id="username"
               value={form.username}
-              readOnly
+              disabled={true}
               onChange={handleChange}
               isInvalid={ !!errors.name }
-              style={{background: darkMode ? '#181818' : 'white',
-                    color: darkMode ? 'white' : 'black', }}
             />
             <Form.Control.Feedback type='invalid'>
               { errors.name }
@@ -119,8 +111,6 @@ const EditUserPage = () =>{
                 value={form.email}
                 onChange={handleChange}
                 isInvalid = { !!errors.email }
-                style={{background: darkMode ? '#181818' : 'white',
-                    color: darkMode ? 'white' : 'black', }}
              />
              <Form.Control.Feedback type='invalid'>
               { errors.email }
@@ -136,8 +126,6 @@ const EditUserPage = () =>{
               value={form.password}
               onChange={handleChange}
               isInvalid={ !!errors.password }
-              style={{background: darkMode ? '#181818' : 'white',
-                    color: darkMode ? 'white' : 'black', }}
             />
             <Form.Control.Feedback type="invalid">
               {errors.password}
@@ -154,8 +142,6 @@ const EditUserPage = () =>{
               value={form.biography}
               onChange={handleChange}
               isInvalid={ !!errors.biography }
-              style={{background: darkMode ? '#181818' : 'white',
-                    color: darkMode ? 'white' : 'black', }}
             />
             <Form.Control.Feedback type="invalid">
               {errors.biography}
@@ -168,19 +154,10 @@ const EditUserPage = () =>{
             Submit
           </Button>
           </Col>
-
-          <Col>
-          <Button variant="primary" type="cancel" onClick={handleCancel}>
-            Cancel
-          </Button>
-          </Col>
         </Row>
 
         </Form>
-        </Card.Body>
-      </Card>
-      </div>
   )
 }
 
-export default EditUserPage;
+export default EditUser;
