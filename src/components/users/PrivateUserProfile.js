@@ -12,18 +12,19 @@ import getUserInfoAsync from "../../utilities/decodeJwtAsync";
 import Form from "react-bootstrap/Form";
 import { useDarkMode } from '../DarkModeContext.js';
 import DarkModeButton from "../DarkModeButton";
-
+import PostList from "../post/postlist";
+import EditUser from './editUserPage.js';
 
 const PrivateUserProfile = () => {
-
   const { darkMode } = useDarkMode();
 
-    const containerStyle = {
+  const containerStyle = {
     background: darkMode ? 'black' : 'white',
     color: darkMode ? 'white' : 'black',
     minHeight: '100vh',
     // Add other styles here
   };
+
   // State for showing delete confirmation modal
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const handleCloseDeleteConfirmation = () => setShowDeleteConfirmation(false);
@@ -62,9 +63,6 @@ const PrivateUserProfile = () => {
     setSelectedPost(null);
   };
 
-  
-  
-
   const onFileChange = event => {
     setSelectedFile(event.target.files[0]);
 };
@@ -93,8 +91,6 @@ const onUpload = async () => {
 
 
 const profileImageUrl = profileImageFilename ? `./routes/users/user.images/image/${profileImageFilename}` : null;
-
-
  
   // Fetch the user context
   const [user, setUser] = useState(null);
@@ -137,11 +133,6 @@ const profileImageUrl = profileImageFilename ? `./routes/users/user.images/image
   const handleLogout = () => {
     localStorage.clear();
     navigate("/");
-  };
-
-  // Function to navigate to user edit page
-  const handleEditUser = () => {
-    navigate("/editUserPage");
   };
 
   const fetchUserInfo = async () => {
@@ -291,7 +282,13 @@ const deleteConfirm = async () => {
   }, [username]);
   ; // Include username and fetchTotalLikes as dependencies
 
-
+  const [ userModal, setUserModal ] = useState(false);
+  const showUserModal = () => {
+    setUserModal(true);
+  };
+  const closeUserModal = () => {
+    setUserModal(false);
+  }
 
   return (
     <div style={containerStyle}>
@@ -355,7 +352,7 @@ const deleteConfirm = async () => {
                   </Button>
                 </Modal.Footer>
               </Modal>
-              <Button onClick={handleEditUser}>Edit User Information</Button>
+              <Button onClick={showUserModal}>Edit User Information</Button>
             </Col>
             <Col md={9}>
               <h3 className="txt">Create A Post</h3>
@@ -380,40 +377,7 @@ const deleteConfirm = async () => {
               </Form.Group>
               <h3>Your Posts</h3>
               <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-start', gap: '1rem' }}>
-                {posts.map((post, index) => (
-                  <div key={index} onClick={() =>openPostModal(post)} >
-                    <Card
-                      style={{
-                        width: "16rem",
-                        marginTop: "1cm",
-                        marginLeft: ".5cm",
-                        background: "aliceblue",
-                        background: darkMode ? '#181818' : 'aliceblue',
-                        color: darkMode ? 'white' : 'black',
-
-                      }}
-                    >
-                      <Card.Body>
-                        <Card.Title>
-                          <h5>Username:</h5>
-                          <Link to={"/publicprofilepage"} style={{color: darkMode ? 'white' : '',}}>{post.username}</Link>
-                        </Card.Title>
-                        {post.content}
-                        <p>{moment(post.date).format("MMMM Do YYYY, h:mm A")}</p>
-                        <Link
-                          style={{ marginRight: "1cm" }}
-                          to={`/updatePost/${post._id}`}
-                          className="btn btn-warning "
-                        >
-                          Update
-                        </Link>
-                        <Button variant="danger" onClick={() => openDeleteModal(post)}>
-                          Delete
-                        </Button>
-                      </Card.Body>
-                    </Card>
-                  </div>
-                ))}
+                <PostList type="privateuserprofile" />
               </div>
             </Col>
           </Row>
@@ -480,6 +444,14 @@ const deleteConfirm = async () => {
             Close
           </Button>
         </Modal.Footer>
+      </Modal>
+      <Modal show={userModal} onHide={closeUserModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Edit Profile</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <EditUser />
+        </Modal.Body>
       </Modal>
     </div>
   );

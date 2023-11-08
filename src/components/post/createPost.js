@@ -156,17 +156,17 @@ const CreatePost = () => {
         >
           <Form.Group className="mb-3" controlId="formBasicPassword" style={{ width: "60%" }} >
             <Form.Control as="textarea" maxlength="280" placeholder="What's on your mind?" name="content" value={state.content} onChange={handleTextChange}
-              style={{ height: "3cm", width: "100%", backgroundColor: darkMode ? "#181818" : "white", color: darkMode ? "white" : "#000", }}/>
+              style={{ marginTop: '-16%', height: "3.5cm", width: "100%", backgroundColor: darkMode ? "#181818" : "white", color: darkMode ? "white" : "#000", fontSize : '25px', fontFamily:'Times New Roman, Times, serif'}}/>
 
             <p> <span style={{ color: color }} onChange={handleTextChange}> {" "}{`${textAreaCount}/${maxText}`}{" "} </span> </p>
           </Form.Group>
 
-          <div name="img-icon" onClick={handleImageClick} style={{ display: "flex", justifyContent: "space-between", width: "60%", }} >
+          <div name="img-icon" onClick={handleImageClick} style={{ display: "flex", justifyContent: "space-between", width: "60%", height: '100px' }} >
             
             <img
               src={darkMode ? "/addImageLight.png" : "/add-img-icon.png"}
               alt="Add Image Icon"
-              style={{ width: "60px", height: "60px", marginTop: ".5cm" }}
+              style={{ width: "85px", height: "85px", marginTop: ".5cm" }}
             />
           </div>
 
@@ -185,12 +185,12 @@ const CreatePost = () => {
             {selectedImage && ( // Use the 'selectedImage' state to conditionally display the image preview and text message
           <div>
             {/* <h4>Selected Image is:</h4> */}
-            <img id="imagePreview" alt="Selected Image" style={{ width: "200px", height: "auto", }}
+            <img id="imagePreview" alt="Selected Image" style={{ width: "300px", height: "auto", }}
              src={URL.createObjectURL(selectedImage)} />
           </div>
         )}
         
-          <Button style={{ width: "8cm", marginTop: "1cm", backgroundColor: "#28a745", borderColor: "#28a745", }} variant="primary" type="submit" size="lg">
+          <Button style={{ width: "9cm",height : '5%', marginTop: "1cm", backgroundColor: "#28a745", borderColor: "#28a745", }} variant="primary" type="submit" size="lg">
             Create Post
           </Button>
         </Form>
