@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useState, useCallback, useLayoutEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Container, Row, Col, Card, Image } from 'react-bootstrap';
 import axios from 'axios';
@@ -27,33 +27,36 @@ export default function PublicUserList() {
       const postsResponse = await axios.get(
         `${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getAllByUsername/${username}`
       );
-      setPosts(postsResponse.data);
+      const sortedPosts = postsResponse.data.sort((a, b) => new Date(b.date) - new Date(a.date));
+      setPosts(sortedPosts);
 
       const followerResponse = await axios.get(
         `${process.env.REACT_APP_BACKEND_SERVER_URI}/followers/count/${username}`
       );
-      setFollowerCount(followerResponse.data.count); 
+      setFollowerCount(followerResponse.data.count);
 
       const followingResponse = await axios.get(
         `${process.env.REACT_APP_BACKEND_SERVER_URI}/following/count/${username}`
       );
-      setFollowingCount(followingResponse.data.count); 
+      setFollowingCount(followingResponse.data.count);
     } catch (error) {
       console.error(`Error fetching data: ${error.message}`);
-      // Handle errors as needed
     }
   }, [username]);
 
-  useEffect(() => {
-    fetchUserInfoAndPosts();
-  }, [fetchUserInfoAndPosts]);
-
-  useEffect(() => {
-    const userInfo = getUserInfo();
-    setUser(userInfo);
+  // Ensures the page starts at the top when the component is first rendered
+  useLayoutEffect(() => {
+    window.scrollTo(0, 0);
   }, []);
 
- 
+  // Fetch posts and user info when the component is mounted
+  useLayoutEffect(() => {
+    fetchUserInfoAndPosts();
+
+    const userInfo = getUserInfo();
+    setUser(userInfo);
+  }, [fetchUserInfoAndPosts]);
+
   if (!user) {
     return (
       <div style={{ textAlign: "center" }}>
@@ -63,7 +66,7 @@ export default function PublicUserList() {
       </div>
     );
   }
-    
+
   return (
     <div style={containerStyle}>
       <DarkModeButton />
