@@ -53,8 +53,17 @@ export default function PublicUserList() {
     setUser(userInfo);
   }, []);
 
-  if (!user) return null; 
-
+ 
+  if (!user) {
+    return (
+      <div style={{ textAlign: "center" }}>
+        <h4>
+          You must <a href="/login">log in</a> or <a href="/signup">register</a> to view this page
+        </h4>
+      </div>
+    );
+  }
+    
   return (
     <div style={containerStyle}>
       <DarkModeButton />

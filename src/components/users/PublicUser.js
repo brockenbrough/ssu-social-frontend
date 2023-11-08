@@ -28,8 +28,17 @@ export default function PublicUserList() {
     setUser(userInfo);
   }, []);
 
-  if (!user) return null; // Or a loading spinner, or some other placeholder
-
+ 
+  if (!user) {
+    return (
+      <div style={{ textAlign: "center" }}>
+        <h4>
+          You must <a href="/login">log in</a> or <a href="/signup">register</a> to view this page
+        </h4>
+      </div>
+    );
+  }
+    
   return (
     <Container className="mt-5">
       <Row className="mb-3">
