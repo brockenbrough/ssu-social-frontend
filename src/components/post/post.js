@@ -8,6 +8,10 @@ import axios from "axios";
 import { useDarkMode } from '../DarkModeContext';
 import Modal from "react-bootstrap/Modal";
 
+//import create comment 
+import CreateComment from "/Users/xio/Desktop/ssu-social/ssu-social-frontend/src/components/comments/createComment.js";
+
+
 const Post = ({ posts }) => {
   const [likeCount, setLikeCount] = useState(null);
   const [commentCount, setCommentCount] = useState(null);
@@ -121,8 +125,8 @@ const Post = ({ posts }) => {
           <Modal.Title>Post</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <p>Username: {posts.username}</p>
           <p>{posts.content}</p>
+          <CreateComment postId={posts._id} />
           <p>{formattedDate}</p>
         </Modal.Body>
         <Modal.Footer>
