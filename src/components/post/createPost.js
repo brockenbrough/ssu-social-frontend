@@ -94,8 +94,7 @@ const CreatePost = () => {
   
         if (response.ok) {
           const data = await response.json();
-          alert(`Image created successfully.`);
-          // Image ID: ${data.imageId}
+          alert(`Image created successfully. Image ID: ${data.imageId}`);
   
           // Construct the post object with the imageId
           const { content } = state;
