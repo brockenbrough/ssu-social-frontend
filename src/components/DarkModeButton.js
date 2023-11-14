@@ -9,8 +9,8 @@ function DarkModeButton() {
   };
 
   return (
-    <button onClick={handleClick} id="darkModeButton">
-      {darkMode ? 'Light Mode' : 'Dark Mode'}
+    <button onClick={handleClick} id="darkModeButton" style={{ background: 'transparent', border: 'none' }}>
+       {darkMode ? <img src="/lightbutton.png" alt="Light Mode" style={{ width: '60px', height: '60px' }} /> : <img src="/darkbutton.png" alt="Dark Mode" style={{ width: '60px', height: '60px' }} />}
     </button>
   );
 }
