@@ -120,22 +120,25 @@ const Post = ({ posts }) => {
   return (
     <div className="d-inline-flex p-2">
       <Card id="postCard" style={{
-        maxWidth: '325px',
-        minWidth: '325px',
-        minHeight: '150px',
+        maxWidth: '400px',
+        minWidth: '400px',
         backgroundColor: darkMode ? "#181818" : "#f6f8fa"
       }} onClick={handleShowPostModal}>
-        {imageSrc && <img src={imageSrc} alt="Post" style={{ width: '50px', height: '50px', position: 'absolute', top: '5px', right: '5px', borderRadius: '50%' }} />}
-        <Card.Body>
-          <Link id="username" style={{ color: darkMode ? "white" : "" }} to={`/publicprofilepage/${posts.username}`}>{posts.username}</Link>
-          <Card.Text style={{ color: darkMode ? "white" : "", wordBreak: 'break-all' }}>{posts.content}</Card.Text>
+        {imageSrc && <img src={imageSrc} alt="Post" style={{ width: '100%', height: 'auto' }} />}
+        <Card.Body style={{ color: darkMode ? "white" : "black" }}>
+          <div style={{ marginBottom: '10px' }}>
+            <Link id="username" to={`/publicprofilepage/${posts.username}`}>{posts.username}</Link>
+          </div>
+          <div style={{ wordBreak: 'break-all' }}>
+            {posts.content}
+          </div>
           <div className="text-center">
             <Button variant={isLiked ? "danger" : "outline-danger"} onClick={handleLikeClick}>
               {isLiked ? "Unlike" : "Like"}
             </Button>
           </div>
-          <p style={{ color: darkMode ? "white" : "" }}>{formattedDate}</p>
-          {likeCount !== null && <p style={{ color: darkMode ? "white" : "" }}>{`Likes: ${likeCount}`}</p>}
+          <p>{formattedDate}</p>
+          {likeCount !== null && <p>{`Likes: ${likeCount}`}</p>}
           <Link style={{ marginRight: "1cm" }} to={`/updatePost/${posts._id}`} className="btn btn-warning">Update</Link>
           <Link to={`/createComment/${posts._id}`} className="btn btn-warning">Comment ({commentCount > 0 ? commentCount : "0"})</Link>
         </Card.Body>
@@ -158,6 +161,9 @@ const Post = ({ posts }) => {
 };
 
 export default Post;
+
+
+ 
 
 
 
