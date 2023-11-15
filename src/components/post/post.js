@@ -109,7 +109,7 @@ const Post = ({ posts }) => {
         backgroundColor: darkMode ? "#181818" : "#f6f8fa"
       }} onClick={handleShowPostModal}>
         <Card.Body>
-          <Link id="username" style={{ color: darkMode ? "white" : "" }} to={`/privateprofilepage/${posts.username}`}>{posts.username}</Link>
+          <Link id="username" style={{ color: darkMode ? "white" : "" }} to={`/publicprofilepage/${posts.username}`}>{posts.username}</Link>
           <Card.Text style={{ color: darkMode ? "white" : "", wordBreak: 'break-all' }}>{posts.content}</Card.Text>
           <div className="text-center">
             <Button variant={isLiked ? "danger" : "outline-danger"} onClick={handleLikeClick}>
