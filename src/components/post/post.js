@@ -24,9 +24,12 @@ const Post = ({ posts }) => {
 
   const handleShowPostModal = () => setShowPostModal(true);
   const handleClosePostModal = () => setShowPostModal(false);
+  var isCurrentUserPost = false;
+
 
   useEffect(() => {
     const currentUser = getUserInfoAsync();
+    isCurrentUserPost = user && user.username === posts.username;
     setUser(currentUser);
     fetchLikeCount();
     fetchCommentCount();
@@ -116,6 +119,7 @@ const Post = ({ posts }) => {
       console.error("Error checking user likes:", error);
     }
   };
+  
 
   return (
     <div className="d-inline-flex p-2">
@@ -127,7 +131,11 @@ const Post = ({ posts }) => {
         {imageSrc && <img src={imageSrc} alt="Post" style={{ width: '100%', height: 'auto' }} />}
         <Card.Body style={{ color: darkMode ? "white" : "black" }}>
           <div style={{ marginBottom: '10px' }}>
-            <Link id="username" to={`/privateprofilepage/${posts.username}`}>{posts.username}</Link>
+            <Link id="username" to={`/publicProfilePage/${posts.username}`}>{posts.username}</Link>
+            <Link
+              id="username"
+              to={isCurrentUserPost ? '/privateUserProfile' : `/publicProfilePage/${posts.username}`}
+            >{posts.username}</Link>
           </div>
           <div style={{ wordBreak: 'break-all' }}>
             {posts.content}
