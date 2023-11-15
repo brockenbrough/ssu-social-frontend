@@ -10,10 +10,6 @@ import Modal from "react-bootstrap/Modal";
 
 import CreateComment from "../comments/createComment";
 
-
-
-
-
 const Post = ({ posts }) => {
   const [likeCount, setLikeCount] = useState(null);
   const [commentCount, setCommentCount] = useState(null);
@@ -24,6 +20,7 @@ const Post = ({ posts }) => {
   const [user, setUser] = useState(null);
   const { darkMode } = useDarkMode();
   const [showPostModal, setShowPostModal] = useState(false);
+  const [imageSrc, setImageSrc] = useState(null);
 
   const handleShowPostModal = () => setShowPostModal(true);
   const handleClosePostModal = () => setShowPostModal(false);
@@ -34,6 +31,26 @@ const Post = ({ posts }) => {
     fetchLikeCount();
     fetchCommentCount();
   }, [posts._id]);
+
+  useEffect(() => {
+    if (posts.imageId) {
+      fetchImage(posts.imageId);
+    }
+  }, [posts.imageId]);
+
+  const fetchImage = (imageId) => {
+    axios.get(`${process.env.REACT_APP_BACKEND_SERVER_URI}/images/${imageId}`, { responseType: 'arraybuffer' })
+      .then(response => {
+        const base64 = btoa(
+          new Uint8Array(response.data).reduce(
+            (data, byte) => data + String.fromCharCode(byte),
+            ''
+          )
+        );
+        setImageSrc(`data:${response.headers['content-type']};base64,${base64}`);
+      })
+      .catch(error => console.error("Error fetching image:", error));
+  };
 
   const fetchLikeCount = () => {
     fetch(`${process.env.REACT_APP_BACKEND_SERVER_URI}/count/likes-for-post/${posts._id}`)
@@ -103,27 +120,31 @@ const Post = ({ posts }) => {
   return (
     <div className="d-inline-flex p-2">
       <Card id="postCard" style={{
-        maxWidth: '325px', 
-        minWidth: '325px',
-        minHeight: '150px',
+        maxWidth: '400px',
+        minWidth: '400px',
         backgroundColor: darkMode ? "#181818" : "#f6f8fa"
       }} onClick={handleShowPostModal}>
-        <Card.Body>
-          <Link id="username" style={{ color: darkMode ? "white" : "" }} to={`/privateprofilepage/${posts.username}`}>{posts.username}</Link>
-          <Card.Text style={{ color: darkMode ? "white" : "", wordBreak: 'break-all' }}>{posts.content}</Card.Text>
+        {imageSrc && <img src={imageSrc} alt="Post" style={{ width: '100%', height: 'auto' }} />}
+        <Card.Body style={{ color: darkMode ? "white" : "black" }}>
+          <div style={{ marginBottom: '10px' }}>
+            <Link id="username" to={`/publicprofilepage/${posts.username}`}>{posts.username}</Link>
+          </div>
+          <div style={{ wordBreak: 'break-all' }}>
+            {posts.content}
+          </div>
           <div className="text-center">
             <Button variant={isLiked ? "danger" : "outline-danger"} onClick={handleLikeClick}>
               {isLiked ? "Unlike" : "Like"}
             </Button>
           </div>
-          <p style={{ color: darkMode ? "white" : "" }}>{formattedDate}</p>
-          {likeCount !== null && <p style={{ color: darkMode ? "white" : "" }}>{`Likes: ${likeCount}`}</p>}
+          <p>{formattedDate}</p>
+          {likeCount !== null && <p>{`Likes: ${likeCount}`}</p>}
           <Link style={{ marginRight: "1cm" }} to={`/updatePost/${posts._id}`} className="btn btn-warning">Update</Link>
           <Link to={`/createComment/${posts._id}`} className="btn btn-warning">Comment ({commentCount > 0 ? commentCount : "0"})</Link>
         </Card.Body>
       </Card>
       <Modal show={showPostModal} onHide={handleClosePostModal}>
-        <Modal.Header closeButton>
+      <Modal.Header closeButton>
           <Modal.Title>Post</Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -140,3 +161,9 @@ const Post = ({ posts }) => {
 };
 
 export default Post;
+
+
+ 
+
+
+
