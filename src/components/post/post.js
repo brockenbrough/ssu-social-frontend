@@ -127,7 +127,7 @@ const Post = ({ posts }) => {
         {imageSrc && <img src={imageSrc} alt="Post" style={{ width: '100%', height: 'auto' }} />}
         <Card.Body style={{ color: darkMode ? "white" : "black" }}>
           <div style={{ marginBottom: '10px' }}>
-            <Link id="username" to={`/publicprofilepage/${posts.username}`}>{posts.username}</Link>
+            <Link id="username" to={`/privateprofilepage/${posts.username}`}>{posts.username}</Link>
           </div>
           <div style={{ wordBreak: 'break-all' }}>
             {posts.content}
