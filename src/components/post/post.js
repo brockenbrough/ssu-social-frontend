@@ -7,10 +7,10 @@ import moment from "moment";
 import axios from "axios";
 import { useDarkMode } from '../DarkModeContext';
 import Modal from "react-bootstrap/Modal";
+
 import CreateComment from "../comments/createComment";
 
 const Post = ({ posts }) => {
-  const [showFullText, setShowFullText] = useState(false);
   const [likeCount, setLikeCount] = useState(null);
   const [commentCount, setCommentCount] = useState(null);
   const [isLiked, setIsLiked] = useState(false);
@@ -21,37 +21,10 @@ const Post = ({ posts }) => {
   const { darkMode } = useDarkMode();
   const [showPostModal, setShowPostModal] = useState(false);
   const [imageSrc, setImageSrc] = useState(null);
-  const isCurrentUserPost = user && user.username === posts.username;
 
   const handleShowPostModal = () => setShowPostModal(true);
   const handleClosePostModal = () => setShowPostModal(false);
 
-  const toggleShowFullText = () => {
-    setShowFullText(!showFullText);
-  };
-
-  const contentCutoff = 96; // Adjust this as needed
-  const showExpandCollapseIcon = posts.content.length > contentCutoff;
-
-  // Define a function to return the expand/collapse icon with styles
-  const getExpandCollapseIcon = () => {
-    const iconStyle = { color: 'gray', fontSize: 'larger' };
-    const iconClick = (e) => {
-      e.stopPropagation(); // Prevents triggering the Card's onClick
-      toggleShowFullText();
-    };
-    return showFullText ? 
-    <span style={iconStyle} onClick={iconClick}> [^]</span> : 
-      <span style={iconStyle} onClick={iconClick}> [...]</span>;
-  };
-
-  // Determine which content to display based on the 'showFullText' state
-  const displayContent = (
-    <>
-      {showFullText ? posts.content : `${posts.content.slice(0, contentCutoff)}`}
-      {showExpandCollapseIcon && getExpandCollapseIcon()}
-    </>
-  );
   useEffect(() => {
     const currentUser = getUserInfoAsync();
     setUser(currentUser);
@@ -144,6 +117,21 @@ const Post = ({ posts }) => {
     }
   };
 
+  const rendercontent = (content) => {
+    //Find links withing posts.content
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    return content.split(urlRegex).map((part, index) => {
+      if (index % 2===1) {
+        return (
+          <a key={index} href={part} target="_blank" rel="noopener nonreferrer">
+            {part}
+          </a>
+        );
+      }
+      return part;
+    });
+  };
+
   return (
     <div className="d-inline-flex p-2">
       <Card id="postCard" style={{
@@ -151,38 +139,41 @@ const Post = ({ posts }) => {
         minWidth: '400px',
         backgroundColor: darkMode ? "#181818" : "#f6f8fa"
       }} onClick={handleShowPostModal}>
+
         {imageSrc && <img src={imageSrc} alt="Post" style={{ width: '100%', height: 'auto' }} />}
         <Card.Body style={{ color: darkMode ? "white" : "black" }}>
+
           <div style={{ marginBottom: '10px' }}>
-            <Link
-              id="username"
-              to={isCurrentUserPost ? '/privateUserProfile' : `/publicProfilePage/${posts.username}`}
-            >
-              {posts.username}
-            </Link>
+            <Link id="username" to={`/publicprofilepage/${posts.username}`}>{posts.username}</Link>
           </div>
-          <div style={{ wordBreak: 'break-all' }} onClick={toggleShowFullText}>
-            {displayContent}
+
+          <div style={{ wordBreak: 'break-all' }}>
+            {rendercontent(posts.content)}
           </div>
+
           <div className="text-center">
             <Button variant={isLiked ? "danger" : "outline-danger"} onClick={handleLikeClick}>
               {isLiked ? "Unlike" : "Like"}
             </Button>
           </div>
+
           <p>{formattedDate}</p>
+
           {likeCount !== null && <p>{`Likes: ${likeCount}`}</p>}
+
           <Link style={{ marginRight: "1cm" }} to={`/updatePost/${posts._id}`} className="btn btn-warning">Update</Link>
           <Link to={`/createComment/${posts._id}`} className="btn btn-warning">Comment ({commentCount > 0 ? commentCount : "0"})</Link>
         </Card.Body>
       </Card>
+
       <Modal show={showPostModal} onHide={handleClosePostModal}>
-        <Modal.Header closeButton>
+      <Modal.Header closeButton>
           <Modal.Title>Post</Modal.Title>
         </Modal.Header>
-        <Modal.Body style={{ wordWrap: 'break-word', overflowWrap: 'break-word' }}>
-        <p>{posts.content}</p>
+        <Modal.Body>
+          <p>{posts.content}</p>
           <CreateComment postId={posts._id} />
-          <p>{formattedDate}</p>       
+          <p>{formattedDate}</p>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClosePostModal}>Close</Button>
@@ -193,3 +184,9 @@ const Post = ({ posts }) => {
 };
 
 export default Post;
+
+
+ 
+
+
+
