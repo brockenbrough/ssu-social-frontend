@@ -90,15 +90,20 @@ export default function EditComment() {
       >
         <Card.Body>
           <Form>
-            <Form.Group className="mb-3" controlId="formName">
+          <Form.Group className="mb-3" controlId="formName">
               <Form.Label>Comment</Form.Label>
               <Form.Control
-                type="text"
-                placeholder="Enter comment"
-                id="comment"
-                value={form.comment}
-                onChange={(e) => updateForm({ commentContent: e.target.value })}
-              />
+                  style={{
+                  wordWrap: 'break-word',
+                  minHeight: '100px',
+                  resize: 'vertical',
+                  }}
+                  as="textarea"
+                  placeholder="Enter comment"
+                  id="comment"
+                  value={form.comment}
+                  onChange={(e) => updateForm({ commentContent: e.target.value })}
+                  />
             </Form.Group>
 
 
