@@ -45,27 +45,38 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      alert(`Do not leave this page until registration is confirmed. ${url}`);
       const { data: res } = await axios.post(url, data);
-      alert("Your account has been created.");
-
+  
       // const {accessToken} = res
-      //store token in localStorage
+      // store token in localStorage
       navigate("/login");
     } catch (error) {
       if (error.response) {
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
-        alert(`Error: ${JSON.stringify(error.response.data)}  ${error.response.status} ${url}`);
-        console.log(error.response.data);
+        const responseError = error.response.data;
+  
+        // Clear previous error messages
+        setError("");
+  
+        if (responseError.errorType === "InvalidUsername") {
+          setError("Invalid Username. The Username must be 6 characters or more.");
+        } else if (responseError.errorType === "InvalidEmail") {
+          setError("Invalid Email. Please input a valid email.");
+        } else if (responseError.errorType === "InvalidPassword") {
+          setError("Invalid Password. The password has to contain at least 8 characters, including one Uppercase, one Lowercase, and a Special character.");
+        } else {
+          // For any other error types, set a generic error message
+          setError("The Username, Email or Password you've entered is invalid, Please tey again");
+        }
+  
+        console.log(responseError);
       } else {
         // Something happened in setting up the request that triggered an Error
-        alert(`${error.message}.  An error occured contacting ${url}`);
         console.log('Error', error.message);
+        setError("The Username, Email or Password you've entered is invalid, Please tey again");
       }
-      setError("Something went wrong. Please try again.");
     }
   };
+
 
   return (
     <>
@@ -87,7 +98,7 @@ const Register = () => {
                     placeholder="Enter username"
                   />
                   <Form.Text className="text-muted">
-                    We just might sell your data
+                    The Username must be 6 characters or more
                   </Form.Text>
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -99,7 +110,7 @@ const Register = () => {
                     placeholder="Enter email"
                   />
                   <Form.Text className="text-muted">
-                    We just might sell your data
+                    Please input a valid email
                   </Form.Text>
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formBasicPassword">
@@ -110,6 +121,9 @@ const Register = () => {
                     placeholder="Enter password"
                     onChange={handleChange}
                   />
+                  <Form.Text className="text-muted">
+                    The password has to contain at least 8 characters, including one Uppercase, one Lowercase and a Special character
+                  </Form.Text>
                 </Form.Group>
                 <div class="form-check form-switch">
                   <input

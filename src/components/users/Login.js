@@ -60,14 +60,7 @@ const Login = () => {
       localStorage.setItem("accessToken", accessToken);
       navigate("/feed-algorithm");
     } catch (error) {
-      if (error.response) {
-        alert(`Error: ${error.response.data} ${error.response.status} ${url}`);
-        console.log(error.response.data);
-      } else {
-        alert(`${error.message}. An error occurred contacting ${url}`);
-        console.log("Error", error.message);
-      }
-      setError("Something went wrong. Please try again.");
+      setError("The Password or Username you've entered is incorrect. Please try again.");
     }
   };
 
