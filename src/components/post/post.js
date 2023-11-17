@@ -10,6 +10,7 @@ import Modal from "react-bootstrap/Modal";
 import CreateComment from "../comments/createComment";
 
 const Post = ({ posts }) => {
+  const [showFullText, setShowFullText] = useState(false);
   const [likeCount, setLikeCount] = useState(null);
   const [commentCount, setCommentCount] = useState(null);
   const [isLiked, setIsLiked] = useState(false);
@@ -25,6 +26,26 @@ const Post = ({ posts }) => {
   const handleShowPostModal = () => setShowPostModal(true);
   const handleClosePostModal = () => setShowPostModal(false);
 
+  const toggleShowFullText = () => {
+    setShowFullText(!showFullText);
+  };
+
+  const contentCutoff = 96; // Adjust this as needed
+  const showExpandCollapseIcon = posts.content.length > contentCutoff;
+
+  // Define a function to return the expand/collapse icon with styles
+  const getExpandCollapseIcon = () => {
+    const iconStyle = { color: 'gray', fontSize: 'larger' };
+    return showFullText ? <span style={iconStyle}> [^]</span> : <span style={iconStyle}> [...]</span>;
+  };
+
+  // Determine which content to display based on the 'showFullText' state
+  const displayContent = (
+    <>
+      {showFullText ? posts.content : `${posts.content.slice(0, contentCutoff)}`}
+      {showExpandCollapseIcon && getExpandCollapseIcon()}
+    </>
+  );
   useEffect(() => {
     const currentUser = getUserInfoAsync();
     setUser(currentUser);
@@ -120,23 +141,14 @@ const Post = ({ posts }) => {
   return (
     <div className="d-inline-flex p-2">
       <Card id="postCard" style={{
-        maxWidth: '400px',
-        minWidth: '400px',
+        maxWidth: '325px', 
+        minWidth: '325px',
+        minHeight: '150px',
         backgroundColor: darkMode ? "#181818" : "#f6f8fa"
       }} onClick={handleShowPostModal}>
-        {imageSrc && <img src={imageSrc} alt="Post" style={{ width: '100%', height: 'auto' }} />}
-        <Card.Body style={{ color: darkMode ? "white" : "black" }}>
-          <div style={{ marginBottom: '10px' }}>
-            <Link
-              id="username"
-              to={isCurrentUserPost ? '/privateUserProfile' : `/publicProfilePage/${posts.username}`}
-            >
-              {posts.username}
-            </Link>
-          </div>
-          <div style={{ wordBreak: 'break-all' }}>
-            {posts.content}
-          </div>
+        <Card.Body>
+          <Link id="username" style={{ color: darkMode ? "white" : "" }} to={`/publicprofilepage/${posts.username}`}>{posts.username}</Link>
+          <Card.Text style={{ color: darkMode ? "white" : "", wordBreak: 'break-all' }}>{posts.content}</Card.Text>
           <div className="text-center">
             <Button variant={isLiked ? "danger" : "outline-danger"} onClick={handleLikeClick}>
               {isLiked ? "Unlike" : "Like"}
@@ -147,14 +159,15 @@ const Post = ({ posts }) => {
           <Link style={{ marginRight: "1cm" }} to={`/updatePost/${posts._id}`} className="btn btn-warning">Update</Link>
           <Link to={`/createComment/${posts._id}`} className="btn btn-warning">Comment ({commentCount > 0 ? commentCount : "0"})</Link>
         </Card.Body>
+
       </Card>
       <Modal show={showPostModal} onHide={handleClosePostModal}>
       <Modal.Header closeButton>
           <Modal.Title>Post</Modal.Title>
         </Modal.Header>
         <Modal.Body>
+          <p>Username: {posts.username}</p>
           <p>{posts.content}</p>
-          <CreateComment postId={posts._id} />
           <p>{formattedDate}</p>
         </Modal.Body>
         <Modal.Footer>
