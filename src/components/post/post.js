@@ -36,7 +36,13 @@ const Post = ({ posts }) => {
   // Define a function to return the expand/collapse icon with styles
   const getExpandCollapseIcon = () => {
     const iconStyle = { color: 'gray', fontSize: 'larger' };
-    return showFullText ? <span style={iconStyle}> [^]</span> : <span style={iconStyle}> [...]</span>;
+    const iconClick = (e) => {
+      e.stopPropagation(); // Prevents triggering the Card's onClick
+      toggleShowFullText();
+    };
+    return showFullText ? 
+    <span style={iconStyle} onClick={iconClick}> [^]</span> : 
+      <span style={iconStyle} onClick={iconClick}> [...]</span>;
   };
 
   // Determine which content to display based on the 'showFullText' state
@@ -141,22 +147,23 @@ const Post = ({ posts }) => {
   return (
     <div className="d-inline-flex p-2">
       <Card id="postCard" style={{
-        maxWidth: '325px', 
-        minWidth: '325px',
-        minHeight: '150px',
+        maxWidth: '400px',
+        minWidth: '400px',
         backgroundColor: darkMode ? "#181818" : "#f6f8fa"
       }} onClick={handleShowPostModal}>
-        <Card.Body>
-          <Link id="username" style={{ color: darkMode ? "white" : "" }} to={`/publicprofilepage/${posts.username}`}>{posts.username}</Link>
-          <Card.Text 
-            style={{ color: darkMode ? "white" : "", wordBreak: 'break-all' }}
-            onClick={(e) => {
-              e.stopPropagation(); // Prevent modal from opening when text is clicked
-              toggleShowFullText();
-            }}
-          >
+        {imageSrc && <img src={imageSrc} alt="Post" style={{ width: '100%', height: 'auto' }} />}
+        <Card.Body style={{ color: darkMode ? "white" : "black" }}>
+          <div style={{ marginBottom: '10px' }}>
+            <Link
+              id="username"
+              to={isCurrentUserPost ? '/privateUserProfile' : `/publicProfilePage/${posts.username}`}
+            >
+              {posts.username}
+            </Link>
+          </div>
+          <div style={{ wordBreak: 'break-all' }} onClick={toggleShowFullText}>
             {displayContent}
-          </Card.Text>
+          </div>
           <div className="text-center">
             <Button variant={isLiked ? "danger" : "outline-danger"} onClick={handleLikeClick}>
               {isLiked ? "Unlike" : "Like"}
@@ -167,19 +174,15 @@ const Post = ({ posts }) => {
           <Link style={{ marginRight: "1cm" }} to={`/updatePost/${posts._id}`} className="btn btn-warning">Update</Link>
           <Link to={`/createComment/${posts._id}`} className="btn btn-warning">Comment ({commentCount > 0 ? commentCount : "0"})</Link>
         </Card.Body>
-
       </Card>
       <Modal show={showPostModal} onHide={handleClosePostModal}>
-      <Modal.Header closeButton>
+        <Modal.Header closeButton>
           <Modal.Title>Post</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-          <p>Username: {posts.username}</p>
-          <p>{posts.content}</p>
-          <p>{formattedDate}</p>
-          <p onClick={toggleShowFullText}>
-            {displayContent}
-          </p>
+        <Modal.Body style={{ wordWrap: 'break-word', overflowWrap: 'break-word' }}>
+        <p>{posts.content}</p>
+          <CreateComment postId={posts._id} />
+          <p>{formattedDate}</p>       
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClosePostModal}>Close</Button>
