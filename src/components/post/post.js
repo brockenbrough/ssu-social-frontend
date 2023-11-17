@@ -139,12 +139,17 @@ const Post = ({ posts }) => {
         minWidth: '400px',
         backgroundColor: darkMode ? "#181818" : "#f6f8fa"
       }} onClick={handleShowPostModal}>
-
-        {imageSrc && <img src={imageSrc} alt="Post" style={{ width: '100%', height: 'auto' }} />}
         <Card.Body style={{ color: darkMode ? "white" : "black" }}>
 
           <div style={{ marginBottom: '10px' }}>
-            <Link id="username" to={`/publicprofilepage/${posts.username}`}>{posts.username}</Link>
+            <Link
+              id="username"
+              to={isCurrentUserPost ? '/privateUserProfile' : `/publicProfilePage/${posts.username}`}
+            >
+              {posts.username}
+            </Link>
+        <p></p>
+        {imageSrc && <img src={imageSrc} alt="Post" style={{ width: '100%', height: 'auto' }} />}
           </div>
 
           <div style={{ wordBreak: 'break-all' }}>

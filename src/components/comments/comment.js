@@ -1,4 +1,4 @@
-import React from "react"; 
+import React from "react";
 import { Link } from "react-router-dom";
 import axios from 'axios'
 import Card from "react-bootstrap/Card";
@@ -15,7 +15,6 @@ const Comment = (props) => {
         .catch(error => alert('Error deleting comment'))
   }
 
-
   return (
     <Card
       body
@@ -27,7 +26,17 @@ const Comment = (props) => {
       <Card.Body>
         <Stack>
           <div>
-            <h4>{comment.commentContent}</h4>
+            <textarea
+                className="form-control"
+                rows="4"
+                value={comment.commentContent}
+                readOnly
+                style={{
+                  resize: "none",
+                  whiteSpace: "pre-line",
+                  overflowWrap: "break-word", // Add this line
+                }}
+              />
           </div>
           <div>
             <Button

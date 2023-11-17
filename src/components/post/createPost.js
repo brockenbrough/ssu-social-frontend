@@ -189,7 +189,7 @@ const CreatePost = () => {
           </div>
         )}
         
-          <Button style={{ width: "9cm",height : '5%', marginTop: "1cm", backgroundColor: "#28a745", borderColor: "#28a745", }} variant="primary" type="submit" size="lg">
+          <Button style={{ width: "9cm",height : '7%', marginTop: "1cm", backgroundColor: "#28a745", borderColor: "#28a745", }} variant="primary" type="submit" size="lg">
             Create Post
           </Button>
         </Form>
