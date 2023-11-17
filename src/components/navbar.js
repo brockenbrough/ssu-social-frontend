@@ -25,17 +25,17 @@ export default function Navbar() {
           <ReactNavbar bg="dark" variant="dark">
             <Container>
               <div style={{ display: 'flex', alignItems: 'center' }}>
-                <Nav.Link href="/feed-algorithm" className="navbar-brand">
+                <Nav.Link href="/feed-algorithm" className="navbar-brand text-light">
                   <Image src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXPnHm79GDZXZjpifapjAOWRsJcA_C3FgxWQLlbto&s" rounded className="mr-2" style={{ width: '30px', height: '30px' }} />
                   SSU Social
                 </Nav.Link>
               </div>
               <Container className="ml-auto">
                 <Nav>
-                  <Nav.Link href="/feed-algorithm">Feed</Nav.Link>
-                  <Nav.Link href="/createpost">Create Post</Nav.Link>
-                  <Nav.Link href="/getallpost">Explore</Nav.Link>
-                  <Nav.Link href="/privateUserProfile">Profile</Nav.Link>
+                  <Nav.Link href="/feed-algorithm" className="text-light">Feed</Nav.Link>
+                  <Nav.Link href="/createpost" className="text-light">Create Post</Nav.Link>
+                  <Nav.Link href="/getallpost" className="text-light">Explore</Nav.Link>
+                  <Nav.Link href="/privateUserProfile" className="text-light">Profile</Nav.Link>
                 </Nav>
               </Container>
             </Container>
@@ -46,11 +46,11 @@ export default function Navbar() {
       return (
         <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
           <Image src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXPnHm79GDZXZjpifapjAOWRsJcA_C3FgxWQLlbto&s" rounded className="mr-2" style={{ width: '30px', height: '30px' }} />
-          <Nav.Link href="/" className="navbar-brand">SSU Social</Nav.Link>
+          <Nav.Link href="/" className="navbar-brand text-light">SSU Social</Nav.Link>
           <Container className="ml-auto">
             <Nav>
-              <Nav.Link href="/login">Login</Nav.Link>
-              <Nav.Link href="/signup">Register</Nav.Link>
+              <Nav.Link href="/login" className="text-light">Login</Nav.Link>
+              <Nav.Link href="/signup" className="text-light">Register</Nav.Link>
             </Nav>
           </Container>
         </div>
