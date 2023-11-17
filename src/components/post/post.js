@@ -212,6 +212,7 @@ const Post = ({ posts }) => {
           <Link
               id="username"
               to={isCurrentUserPost ? '/privateUserProfile' : `/publicProfilePage/${posts.username}`}
+              style={{color: darkMode ? "white" : "black", textDecoration: "none", fontWeight: "bold"}}
             >
               {posts.username}
             </Link>
