@@ -34,8 +34,23 @@ const Register = () => {
     color: PRIMARY_COLOR,
     fontWeight: "bold",
     textDecoration: "none",
+    color: PRIMARY_COLOR,
+    fontWeight: "bold",
+    textDecoration: "none",
+    textShadow: `
+      -1px -1px 0 #000,  
+       1px -1px 0 #000,
+       -1px 1px 0 #000,
+        1px 1px 0 #000` 
   };
-  let backgroundStyling = { background: bgColor };
+
+  let backgroundStyling = {
+    background: `url(${'https://ik.imagekit.io/upgrad1/abroad-images//university/234/image/campus_view_4IK5K1C.jpg'}) no-repeat center center fixed`,
+    backgroundSize: 'cover',
+    minHeight: '100vh',
+    color: bgColor 
+  };
+
   let buttonStyling = {
     background: PRIMARY_COLOR,
     borderStyle: "none",
@@ -80,90 +95,89 @@ const Register = () => {
 
   return (
     <>
-      <section style={{paddingTop: '200px', minHeight: '100vh', background: bgColor}}>
-        <div className="container-fluid h-custom">
-          <div
-            className="row d-flex justify-content-center align-items-center"
-            style={backgroundStyling}
-          >
+    <div style={backgroundStyling}>
+        <section style={{paddingTop: '200px'}}>
+          <div className="container-fluid h-custom">
+            <div className="row d-flex justify-content-center align-items-center h-100">
 
-            <div className="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
-              <Form>
-                <Form.Group className="mb-3" controlId="formBasicEmail">
-                  <Form.Label style={labelStyling}>Username</Form.Label>
-                  <Form.Control
-                    type="username"
-                    name="username"
-                    onChange={handleChange}
-                    placeholder="Enter username"
-                  />
-                  <Form.Text className="text-muted">
-                    The Username must be 6 characters or more
-                  </Form.Text>
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="formBasicEmail">
-                  <Form.Label style={labelStyling}>Email</Form.Label>
-                  <Form.Control
-                    type="email"
-                    name="email"
-                    onChange={handleChange}
-                    placeholder="Enter email"
-                  />
-                  <Form.Text className="text-muted">
-                    Please input a valid email
-                  </Form.Text>
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="formBasicPassword">
-                  <Form.Label style={labelStyling}>Password</Form.Label>
-                  <Form.Control
-                    type="password"
-                    name="password"
-                    placeholder="Enter password"
-                    onChange={handleChange}
-                  />
-                  <Form.Text className="text-muted">
-                    The password has to contain at least 8 characters, including one Uppercase, one Lowercase and a Special character
-                  </Form.Text>
-                </Form.Group>
-                <div class="form-check form-switch">
-                  <input
-                    class="form-check-input"
-                    type="checkbox"
-                    role="switch"
-                    id="flexSwitchCheckDefault"
-                    onChange={() => {
-                      setLight(!light);
-                    }}
-                  />
-                  <label
-                    class="form-check-label"
-                    for="flexSwitchCheckDefault"
-                    className="text-muted"
-                  >
-                    {bgText}
-                  </label>
-                </div>
-                {error && (
-                  <div style={labelStyling} className="pt-3">
-                    {error}
+              <div className="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
+                <Form>
+                  <Form.Group className="mb-3" controlId="formBasicEmail" style={labelStyling}>
+                    <Form.Label style={labelStyling}>Username</Form.Label>
+                    <Form.Control
+                      type="username"
+                      name="username"
+                      onChange={handleChange}
+                      placeholder="Enter username"
+                    />
+                    <Form.Text className="text-muted" style={labelStyling}>
+                      The Username must be 6 characters or more
+                    </Form.Text>
+                  </Form.Group>
+                  <Form.Group className="mb-3" controlId="formBasicEmail" style={labelStyling}>
+                    <Form.Label style={labelStyling}>Email</Form.Label>
+                    <Form.Control
+                      type="email"
+                      name="email"
+                      onChange={handleChange}
+                      placeholder="Enter email"
+                    />
+                    <Form.Text className="text-muted" style={labelStyling}>
+                      Please input a valid email
+                    </Form.Text>
+                  </Form.Group>
+                  <Form.Group className="mb-3" controlId="formBasicPassword" style={labelStyling}>
+                    <Form.Label style={labelStyling}>Password</Form.Label>
+                    <Form.Control
+                      type="password"
+                      name="password"
+                      placeholder="Enter password"
+                      onChange={handleChange}
+                    />
+                    <Form.Text className="text-muted" style={labelStyling}>
+                      The password has to contain at least 8 characters, including one Uppercase, one Lowercase and a Special character
+                    </Form.Text>
+                  </Form.Group>
+                  <div class="form-check form-switch">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      role="switch"
+                      id="flexSwitchCheckDefault"
+                      onChange={() => {
+                        setLight(!light);
+                      }}
+                    />
+                    <label
+                      class="form-check-label"
+                      for="flexSwitchCheckDefault"
+                      className="text-muted"
+                    >
+                      {bgText}
+                    </label>
                   </div>
-                )}
-                <Button
-                  variant="primary"
-                  type="submit"
-                  onClick={handleSubmit}
-                  style={buttonStyling}
-                  className="mt-2"
-                >
-                  Submit
-                </Button>
-              </Form>
+                  {error && (
+                    <div style={labelStyling} className="pt-3">
+                      {error}
+                    </div>
+                  )}
+                  <Button
+                    variant="primary"
+                    type="submit"
+                    onClick={handleSubmit}
+                    style={buttonStyling}
+                    className="mt-2"
+                  >
+                    Submit
+                  </Button>
+                </Form>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
-    </>
-  );
-};
+        </section>
+      </div>
+      </>
+    );
+  };
 
 export default Register;
