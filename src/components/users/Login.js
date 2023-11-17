@@ -157,8 +157,7 @@ const Login = () => {
   style={{
     width: "100%",
     height: "100%",
-    objectFit: "cover",
-    
+    objectFit: "cover", 
     boxShadow: "4px 4px 8px rgba(0, 0, 0, 0.1)", // Adjust the shadow properties as needed
     border: "4px solid #ddd", // Adjust the border properties as needed
     borderRadius: "8px" // Adjust the border radius as needed for rounded corners
