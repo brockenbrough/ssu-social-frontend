@@ -5,8 +5,8 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import getUserInfo from "../../utilities/decodeJwt";
 
-const PRIMARY_COLOR = "#cc5c99";
-const SECONDARY_COLOR = "#0c0c1f";
+const PRIMARY_COLOR = "#FFFFFF";
+const SECONDARY_COLOR = "#000000";
 const url = `${process.env.REACT_APP_BACKEND_SERVER_URI}/user/login`;
 
 const Login = () => {
@@ -23,8 +23,22 @@ const Login = () => {
     color: PRIMARY_COLOR,
     fontWeight: "bold",
     textDecoration: "none",
+    color: PRIMARY_COLOR,
+    fontWeight: "bold",
+    textDecoration: "none",
+    textShadow: `
+      -1px -1px 0 #000,  
+       1px -1px 0 #000,
+       -1px 1px 0 #000,
+        1px 1px 0 #000` 
   };
-  let backgroundStyling = { background: bgColor };
+
+  let backgroundStyling = {
+    background: `url(${'https://ik.imagekit.io/upgrad1/abroad-images//university/234/image/campus_view_4IK5K1C.jpg'}) no-repeat center center fixed`,
+    backgroundSize: 'cover',
+    color: bgColor 
+  };
+
   let buttonStyling = {
     background: PRIMARY_COLOR,
     borderStyle: "none",
@@ -58,7 +72,7 @@ const Login = () => {
       const { data: res } = await axios.post(url, data);
       const { accessToken } = res;
       localStorage.setItem("accessToken", accessToken);
-      navigate("/feed-algorithm");
+      window.location.reload();
     } catch (error) {
       setError("The Password or Username you've entered is incorrect. Please try again.");
     }
@@ -79,7 +93,7 @@ const Login = () => {
                 <Form.Group className="mb-3" controlId="formBasicEmail">
                   <Form.Label style={labelStyling}>Username</Form.Label>
                   <Form.Control type="username" name="username" onChange={handleChange} placeholder="Enter username" />
-                  <Form.Text className="text-muted">We just might sell your data</Form.Text>
+                  <Form.Text className="text-muted" style={labelStyling}>We just might sell your data</Form.Text>
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formBasicPassword">
                   <Form.Label style={labelStyling}>Password</Form.Label>
@@ -89,10 +103,10 @@ const Login = () => {
                   </Button>
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formBasicCheckbox">
-                  <Form.Text className="text-muted pt-1">
+                  <Form.Text className="text-muted pt-1" style={labelStyling}>
                     Need an account?
                     <span>
-                      <Link to="/signup" style={labelStyling}>Sign up</Link>
+                      <Link to="/signup" style={labelStyling}> Sign up</Link>
                     </span>
                   </Form.Text>
                 </Form.Group>
