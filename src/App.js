@@ -6,7 +6,6 @@ import Navbar from "./components/navbar";
 import ContributorList from "./components/project-notes/contributorListPage";
 import EditContributor from "./components/project-notes/editContributor";
 import CreateContributor from "./components/project-notes/createContributor";
-import LandingPage from "./components/users/Landingpage";
 import Login from "./components/users/Login";
 import Signup from "./components/register/Register";
 import FeedPage from "./components/post/feedPage";

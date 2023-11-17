@@ -151,7 +151,7 @@ const Post = ({ posts }) => {
   };
 
   const rendercontent = (content) => {
-    //Find links withing posts.content
+    //Find links within posts.content
     const urlRegex = /(https?:\/\/[^\s]+)/g;
     return content.split(urlRegex).map((part, index) => {
       if (index % 2===1) {
@@ -221,7 +221,7 @@ const Post = ({ posts }) => {
           </div>
 
           <div style={{ wordBreak: 'break-all' }} onClick={toggleShowFullText}>
-            {rendercontent(posts.content)}
+            {displayContent}
           </div>
 
           <div className="text-center">
