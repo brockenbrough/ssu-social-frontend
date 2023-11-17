@@ -11,7 +11,7 @@ import moment from "moment";
 import getUserInfoAsync from "../../utilities/decodeJwtAsync";
 import Form from "react-bootstrap/Form";
 import { useDarkMode } from '../DarkModeContext.js';
-import DarkModeButton from "../DarkModeButton";
+
 import PostList from "../post/postlist";
 import EditUser from './editUserPage.js';
 
@@ -292,7 +292,6 @@ const deleteConfirm = async () => {
 
   return (
     <div style={containerStyle}>
-      <DarkModeButton />
       {user ? (
         <>
           <Row>

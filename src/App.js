@@ -44,9 +44,10 @@ const App = () => {
 
   return (
     <>
+    <DarkModeProvider>
       <Navbar />
       <UserContext.Provider value={user}>
-      <DarkModeProvider>
+      
         <Routes>
           <Route exact path="/" element={<Login />} />
           <Route exact path="/signup" element={<Signup />} />
@@ -77,8 +78,8 @@ const App = () => {
           <Route path="/viewImages" element={<ViewImages />} />
 
         </Routes>
-        </DarkModeProvider>
       </UserContext.Provider>
+      </DarkModeProvider>
     </>
   );
 };

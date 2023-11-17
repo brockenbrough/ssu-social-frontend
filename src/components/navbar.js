@@ -4,6 +4,10 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Image from 'react-bootstrap/Image'; 
 import ReactNavbar from 'react-bootstrap/Navbar';
+import { useDarkMode } from '../components/DarkModeContext';
+import DarkModeButton from "../components/DarkModeButton";
+
+
 
 const stickyNavbarStyle = {
   position: "sticky",
@@ -13,6 +17,7 @@ const stickyNavbarStyle = {
 
 export default function Navbar() {
   const [user, setUser] = useState(getUserInfo());
+  const { darkMode } = useDarkMode();
 
   useEffect(() => {
     setUser(getUserInfo());
@@ -39,6 +44,8 @@ export default function Navbar() {
                 </Nav>
               </Container>
             </Container>
+            
+            
           </ReactNavbar>
         </div>
       );
@@ -65,6 +72,7 @@ export default function Navbar() {
           {publicUser()}
         </Nav>
       </Container>
+      < DarkModeButton/>
     </ReactNavbar>
   );
 }
