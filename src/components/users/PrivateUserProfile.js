@@ -385,7 +385,7 @@ const deleteConfirm = async () => {
       ) : (
         <div className="col-md-12 text-center" style={{ fontSize: '24px', fontWeight: 'bold' }}>
           <p>
-            Please <Link to="/login" style={{ textDecoration: 'underline' }}>log in</Link> to view your profile.
+            Please <Link to="/" style={{ textDecoration: 'underline' }}>log in</Link> to view your profile.
           </p>
         </div>
       )}

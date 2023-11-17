@@ -49,7 +49,7 @@ export default function Navbar() {
           <Nav.Link href="/" className="navbar-brand text-light">SSU Social</Nav.Link>
           <Container className="ml-auto">
             <Nav>
-              <Nav.Link href="/login" className="text-light">Login</Nav.Link>
+              <Nav.Link href="/" className="text-light">Login</Nav.Link>
               <Nav.Link href="/signup" className="text-light">Register</Nav.Link>
             </Nav>
           </Container>
