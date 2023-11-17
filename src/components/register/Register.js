@@ -49,7 +49,7 @@ const Register = () => {
   
       // const {accessToken} = res
       // store token in localStorage
-      navigate("/login");
+      navigate("/");
     } catch (error) {
       if (error.response) {
         const responseError = error.response.data;
