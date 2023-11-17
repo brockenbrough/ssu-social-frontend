@@ -72,7 +72,7 @@ const Login = () => {
       const { data: res } = await axios.post(url, data);
       const { accessToken } = res;
       localStorage.setItem("accessToken", accessToken);
-      navigate("/feed-algorithm");
+      window.location.reload();
     } catch (error) {
       if (error.response) {
         alert(`Error: ${error.response.data} ${error.response.status} ${url}`);
