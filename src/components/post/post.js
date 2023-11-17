@@ -248,7 +248,7 @@ const Post = ({ posts }) => {
           <p>{formattedDate}</p>
         </Modal.Body>
         <Modal.Footer style={{ backgroundColor: darkMode ? "#181818" : "#f6f8fa", color: darkMode ? "white": "black",}}>
-          <Button variant="secondary" onClick={handleClosePostModal} style={{ backgroundColor: darkMode ? "white" : "#f6f8fa", color: darkMode ? "black": "black",}} >Close</Button>
+          <Button variant="secondary" onClick={handleClosePostModal}>Close</Button>
         </Modal.Footer>
       </Modal>
 
