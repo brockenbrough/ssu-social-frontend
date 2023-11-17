@@ -11,6 +11,7 @@ import Modal from "react-bootstrap/Modal";
 import CreateComment from "../comments/createComment";
 
 const Post = ({ posts }) => {
+  const [showFullText, setShowFullText] = useState(false);
   const [likeCount, setLikeCount] = useState(null);
   const [commentCount, setCommentCount] = useState(null);
   const [isLiked, setIsLiked] = useState(false);
@@ -20,10 +21,38 @@ const Post = ({ posts }) => {
   const [user, setUser] = useState(null);
   const { darkMode } = useDarkMode();
   const [showPostModal, setShowPostModal] = useState(false);
-  const [imageSrc, setImageSrc] = useState(null);
+  const [imageSrc, setImageSrc] = useState(null);  
+  const isCurrentUserPost = user && user.username === posts.username;
 
   const handleShowPostModal = () => setShowPostModal(true);
   const handleClosePostModal = () => setShowPostModal(false);
+
+  const toggleShowFullText = () => {
+    setShowFullText(!showFullText);
+  };
+
+  const contentCutoff = 96; // Adjust this as needed
+  const showExpandCollapseIcon = posts.content.length > contentCutoff;
+
+  // Define a function to return the expand/collapse icon with styles
+  const getExpandCollapseIcon = () => {
+    const iconStyle = { color: 'gray', fontSize: 'larger' };
+    const iconClick = (e) => {
+      e.stopPropagation(); // Prevents triggering the Card's onClick
+      toggleShowFullText();
+    };
+    return showFullText ? 
+    <span style={iconStyle} onClick={iconClick}> [^]</span> : 
+      <span style={iconStyle} onClick={iconClick}> [...]</span>;
+  };
+
+  // Determine which content to display based on the 'showFullText' state
+  const displayContent = (
+    <>
+      {showFullText ? posts.content : `${posts.content.slice(0, contentCutoff)}`}
+      {showExpandCollapseIcon && getExpandCollapseIcon()}
+    </>
+  );
 
   useEffect(() => {
     const currentUser = getUserInfoAsync();
@@ -142,7 +171,7 @@ const Post = ({ posts }) => {
         <Card.Body style={{ color: darkMode ? "white" : "black" }}>
 
           <div style={{ marginBottom: '10px' }}>
-            <Link
+          <Link
               id="username"
               to={isCurrentUserPost ? '/privateUserProfile' : `/publicProfilePage/${posts.username}`}
             >
@@ -152,7 +181,7 @@ const Post = ({ posts }) => {
         {imageSrc && <img src={imageSrc} alt="Post" style={{ width: '100%', height: 'auto' }} />}
           </div>
 
-          <div style={{ wordBreak: 'break-all' }}>
+          <div style={{ wordBreak: 'break-all' }} onClick={toggleShowFullText}>
             {rendercontent(posts.content)}
           </div>
 
@@ -175,7 +204,7 @@ const Post = ({ posts }) => {
       <Modal.Header closeButton>
           <Modal.Title>Post</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body style={{ wordWrap: 'break-word', overflowWrap: 'break-word' }}>
           <p>{posts.content}</p>
           <CreateComment postId={posts._id} />
           <p>{formattedDate}</p>
