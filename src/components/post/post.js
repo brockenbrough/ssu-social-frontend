@@ -148,7 +148,15 @@ const Post = ({ posts }) => {
       }} onClick={handleShowPostModal}>
         <Card.Body>
           <Link id="username" style={{ color: darkMode ? "white" : "" }} to={`/publicprofilepage/${posts.username}`}>{posts.username}</Link>
-          <Card.Text style={{ color: darkMode ? "white" : "", wordBreak: 'break-all' }}>{posts.content}</Card.Text>
+          <Card.Text 
+            style={{ color: darkMode ? "white" : "", wordBreak: 'break-all' }}
+            onClick={(e) => {
+              e.stopPropagation(); // Prevent modal from opening when text is clicked
+              toggleShowFullText();
+            }}
+          >
+            {displayContent}
+          </Card.Text>
           <div className="text-center">
             <Button variant={isLiked ? "danger" : "outline-danger"} onClick={handleLikeClick}>
               {isLiked ? "Unlike" : "Like"}
@@ -169,6 +177,9 @@ const Post = ({ posts }) => {
           <p>Username: {posts.username}</p>
           <p>{posts.content}</p>
           <p>{formattedDate}</p>
+          <p onClick={toggleShowFullText}>
+            {displayContent}
+          </p>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClosePostModal}>Close</Button>
