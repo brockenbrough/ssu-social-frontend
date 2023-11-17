@@ -1,4 +1,5 @@
 import Card from 'react-bootstrap/Card';
+import React from 'react';
 
 const Landingpage = () => {    
     return (
