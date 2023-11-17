@@ -238,24 +238,25 @@ const Post = ({ posts }) => {
         </Card.Body>
       </Card>
 
-      <Modal show={showPostModal} onHide={handleClosePostModal}>
-      <Modal.Header closeButton>
-          <Modal.Title>Post</Modal.Title>
+      <Modal show={showPostModal} onHide={handleClosePostModal} >
+      <Modal.Header closeButton style={{ backgroundColor: darkMode ? "#181818" : "#f6f8fa", color: darkMode ? "white": "black",}}>
+          <Modal.Title style={{ backgroundColor: darkMode ? "#181818" : "#f6f8fa", color: darkMode ? "white": "black",}}>Post</Modal.Title>
         </Modal.Header>
-        <Modal.Body style={{ wordWrap: 'break-word', overflowWrap: 'break-word' }}>
+        <Modal.Body style={{ wordWrap: 'break-word', overflowWrap: 'break-word', backgroundColor: darkMode ? "#181818" : "#f6f8fa", color: darkMode ? "white": "black", }}>
           <p>{posts.content}</p>
-          <CreateComment postId={posts._id} />
+          <CreateComment postId={posts._id} style={{ backgroundColor: darkMode ? "#181818" : "#f6f8fa", color: darkMode ? "white": "black",}}  />
           <p>{formattedDate}</p>
         </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClosePostModal}>Close</Button>
+        <Modal.Footer style={{ backgroundColor: darkMode ? "#181818" : "#f6f8fa", color: darkMode ? "white": "black",}}>
+          <Button variant="secondary" onClick={handleClosePostModal} style={{ backgroundColor: darkMode ? "white" : "#f6f8fa", color: darkMode ? "black": "black",}} >Close</Button>
         </Modal.Footer>
       </Modal>
-      <Modal show={showEditModal} onHide={handleCloseEditModal}>
-        <Modal.Header closeButton>
-          <Modal.Title>Would you like to update or delete your post?</Modal.Title>
+
+      <Modal show={showEditModal} onHide={handleCloseEditModal} >
+        <Modal.Header closeButton style={{ backgroundColor: darkMode ? "#181818" : "#f6f8fa", color: darkMode ? "white": "black",}}>
+          <Modal.Title style={{ backgroundColor: darkMode ? "#181818" : "#f6f8fa"}}>Would you like to update or delete your post?</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body style={{ backgroundColor: darkMode ? "#181818" : "#f6f8fa"}}>
           <Form>
             <Form.Group controlId="editPostContent">
               <Form.Control
@@ -263,11 +264,12 @@ const Post = ({ posts }) => {
                 rows={3}
                 value={editedPost.content}
                 onChange={(e) => setEditedPost({ content: e.target.value })}
+                style={{backgroundColor: darkMode ? "#181818" : "#f6f8fa", color: darkMode ? "white": "black"}}
               />
             </Form.Group>
           </Form>
         </Modal.Body>
-        <Modal.Footer>
+        <Modal.Footer style={{ backgroundColor: darkMode ? "#181818" : "#f6f8fa"}}>
           <Button variant="danger" onClick={handleDeletePost}>Delete</Button>
           <Button variant="secondary" onClick={handleCloseEditModal}>Cancel</Button>
           <Button variant="primary" onClick={handleEditPost}>Update</Button>

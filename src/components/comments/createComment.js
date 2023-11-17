@@ -1,9 +1,10 @@
 import React, { useState, useEffect,createContext, useContext, } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import getUserInfo from "../../utilities/decodeJwt";
-
+import { useDarkMode } from '../DarkModeContext';
 
 const CommentCountContext = createContext();
+
 
 
 export function CommentCountProvider({ children }) {
@@ -26,6 +27,7 @@ function CreateComment() {
   const { postId } = useParams();
   const navigate = useNavigate();
   const [commentCount, setCommentCount] = useState(0); // Comment count state
+  const { darkMode } = useDarkMode();
 
 
   useEffect(() => {
@@ -134,6 +136,7 @@ function CreateComment() {
             What do you want to say?
           </label>
           <textarea
+         
             rows="4"
             className="form-control"
             id="commentContent"
@@ -143,7 +146,7 @@ function CreateComment() {
               setFormData({ ...formData, commentContent: e.target.value })
             }
             required
-            style={{ resize: "vertical", wordWrap: "break-word" }}
+            style={{ resize: "vertical", wordWrap: "break-word", backgroundColor: darkMode ? "#181818" : "#f6f8fa", color: darkMode ? "white": "black", }}
           />
         </div>
         <div className="d-grid gap-2">
