@@ -31,6 +31,22 @@ const Post = ({ posts }) => {
   const handleShowPostModal = () => setShowPostModal(true);
   const handleClosePostModal = () => setShowPostModal(false);
 
+  const rendercontent = (content) => {
+    //Find links within posts.content
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    return content.split(urlRegex).map((part, index) => {
+      if (index % 2===1) {
+        return (
+          <a key={index} href={part} target="_blank" rel="noopener nonreferrer">
+            {part}
+          </a>
+        );
+      }
+      return part;
+    });
+  };
+
+
   const toggleShowFullText = () => {
     setShowFullText(!showFullText);
   };
@@ -53,7 +69,7 @@ const Post = ({ posts }) => {
   // Determine which content to display based on the 'showFullText' state
   const displayContent = (
     <>
-      {showFullText ? posts.content : `${posts.content.slice(0, contentCutoff)}`}
+      {showFullText ? rendercontent(posts.content) : rendercontent(posts.content.slice(0, contentCutoff))}
       {showExpandCollapseIcon && getExpandCollapseIcon()}
     </>
   );
@@ -148,21 +164,6 @@ const Post = ({ posts }) => {
     } catch (error) {
       console.error("Error checking user likes:", error);
     }
-  };
-
-  const rendercontent = (content) => {
-    //Find links within posts.content
-    const urlRegex = /(https?:\/\/[^\s]+)/g;
-    return content.split(urlRegex).map((part, index) => {
-      if (index % 2===1) {
-        return (
-          <a key={index} href={part} target="_blank" rel="noopener nonreferrer">
-            {part}
-          </a>
-        );
-      }
-      return part;
-    });
   };
 
   const handleShowEditModal = () => {
