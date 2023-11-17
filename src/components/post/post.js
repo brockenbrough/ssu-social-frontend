@@ -7,8 +7,10 @@ import moment from "moment";
 import axios from "axios";
 import { useDarkMode } from '../DarkModeContext';
 import Modal from "react-bootstrap/Modal";
-
+import { Form } from 'react-bootstrap';
 import CreateComment from "../comments/createComment";
+
+
 
 const Post = ({ posts }) => {
   const [likeCount, setLikeCount] = useState(null);
@@ -21,6 +23,9 @@ const Post = ({ posts }) => {
   const { darkMode } = useDarkMode();
   const [showPostModal, setShowPostModal] = useState(false);
   const [imageSrc, setImageSrc] = useState(null);
+  const isCurrentUserPost = user && user.username === posts.username;
+  const [showEditModal, setShowEditModal] = useState(false); 
+  const [editedPost, setEditedPost] = useState({ content: posts.content });
 
   const handleShowPostModal = () => setShowPostModal(true);
   const handleClosePostModal = () => setShowPostModal(false);
@@ -132,6 +137,40 @@ const Post = ({ posts }) => {
     });
   };
 
+  const handleShowEditModal = () => {
+    setEditedPost({ content: posts.content });
+    setShowEditModal(true);
+  };
+
+  const handleCloseEditModal = () => {
+    setShowEditModal(false);
+  };
+
+  const handleEditPost = () => {
+    axios.put(`${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/updatePost/${posts._id}`, {
+      content: editedPost.content,
+    })
+      .then((response) => {
+        console.log(response);
+        handleCloseEditModal();
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  const handleDeletePost = () => {
+    axios.delete(`${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/deletePost/${posts._id}`)
+      .then((response) => {
+        console.log(response);
+        handleCloseEditModal();
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+
   return (
     <div className="d-inline-flex p-2">
       <Card id="postCard" style={{
@@ -165,8 +204,7 @@ const Post = ({ posts }) => {
           <p>{formattedDate}</p>
 
           {likeCount !== null && <p>{`Likes: ${likeCount}`}</p>}
-
-          <Link style={{ marginRight: "1cm" }} to={`/updatePost/${posts._id}`} className="btn btn-warning">Update</Link>
+          <Button style={{ marginRight: "1cm" }} onClick={handleShowEditModal} variant="warning">Update</Button>
           <Link to={`/createComment/${posts._id}`} className="btn btn-warning">Comment ({commentCount > 0 ? commentCount : "0"})</Link>
         </Card.Body>
       </Card>
@@ -182,6 +220,28 @@ const Post = ({ posts }) => {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClosePostModal}>Close</Button>
+        </Modal.Footer>
+      </Modal>
+      <Modal show={showEditModal} onHide={handleCloseEditModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Would you like to update or delete your post?</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group controlId="editPostContent">
+              <Form.Control
+                as="textarea"
+                rows={3}
+                value={editedPost.content}
+                onChange={(e) => setEditedPost({ content: e.target.value })}
+              />
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="danger" onClick={handleDeletePost}>Delete</Button>
+          <Button variant="secondary" onClick={handleCloseEditModal}>Cancel</Button>
+          <Button variant="primary" onClick={handleEditPost}>Update</Button>
         </Modal.Footer>
       </Modal>
     </div>
