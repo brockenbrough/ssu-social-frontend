@@ -245,8 +245,9 @@ const Post = ({ posts }) => {
         </Modal.Header>
         <Modal.Body style={{ wordWrap: 'break-word', overflowWrap: 'break-word', backgroundColor: darkMode ? "#181818" : "#f6f8fa", color: darkMode ? "white": "black", }}>
           <p>{posts.content}</p>
-          <CreateComment postId={posts._id} style={{ backgroundColor: darkMode ? "#181818" : "#f6f8fa", color: darkMode ? "white": "black",}}  />
           <p>{formattedDate}</p>
+          <CreateComment postId={posts._id} style={{ backgroundColor: darkMode ? "#181818" : "#f6f8fa", color: darkMode ? "white": "black",}}  />
+    
         </Modal.Body>
         <Modal.Footer style={{ backgroundColor: darkMode ? "#181818" : "#f6f8fa", color: darkMode ? "white": "black",}}>
           <Button variant="secondary" onClick={handleClosePostModal}>Close</Button>
