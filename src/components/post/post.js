@@ -9,7 +9,7 @@ import { useDarkMode } from '../DarkModeContext';
 import Modal from "react-bootstrap/Modal";
 import { Form } from 'react-bootstrap';
 import CreateComment from "../comments/createComment";
-
+import CommentModal from "../comments/CommentModal";
 
 
 const Post = ({ posts }) => {
@@ -246,8 +246,7 @@ const Post = ({ posts }) => {
         <Modal.Body style={{ wordWrap: 'break-word', overflowWrap: 'break-word', backgroundColor: darkMode ? "#181818" : "#f6f8fa", color: darkMode ? "white": "black", }}>
           <p>{posts.content}</p>
           <p>{formattedDate}</p>
-          <CreateComment postId={posts._id} style={{ backgroundColor: darkMode ? "#181818" : "#f6f8fa", color: darkMode ? "white": "black",}}  />
-    
+          <CommentModal postId={posts._id} />
         </Modal.Body>
         <Modal.Footer style={{ backgroundColor: darkMode ? "#181818" : "#f6f8fa", color: darkMode ? "white": "black",}}>
           <Button variant="secondary" onClick={handleClosePostModal}>Close</Button>
