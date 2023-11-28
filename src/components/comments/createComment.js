@@ -2,9 +2,8 @@ import React, { useState, useEffect,createContext, useContext, } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import getUserInfo from "../../utilities/decodeJwt";
 import { useDarkMode } from '../DarkModeContext';
-
+import Post from "../post/post";
 const CommentCountContext = createContext();
-
 
 
 export function CommentCountProvider({ children }) {
@@ -22,9 +21,10 @@ export function CommentCountProvider({ children }) {
 export function useCommentCount() {
   return useContext(CommentCountContext);
 }
-function CreateComment() {
+
+
+function CreateComment({postId}) {
   const [user, setUser] = useState(null);
-  const { postId } = useParams();
   const navigate = useNavigate();
   const [commentCount, setCommentCount] = useState(0); // Comment count state
   const { darkMode } = useDarkMode();
@@ -34,7 +34,6 @@ function CreateComment() {
     // Use the useEffect hook to run code after the component has rendered.
     const currentUser = getUserInfo(); // Decode the JWT token to get user info.
     setUser(currentUser); // Set the user state with the decoded user info.
-
 
     // Fetch the comment count for the specific post
     fetchCommentCount();
@@ -116,12 +115,6 @@ function CreateComment() {
   };
 
 
-  const handleCancel = () => {
-    // Navigate back to the post page
-    navigate(`/getallpost`);
-  };
-
-
   const viewAllComments = () => {
     navigate("/comments/comment" , {state: postId});
   };
@@ -153,15 +146,10 @@ function CreateComment() {
           <button type="submit" className="btn btn-primary">
             Submit
           </button>
-          <button
-            type="button"
-            className="btn btn-secondary"
-            onClick={handleCancel}
-          >
-            Cancel
-          </button>
+        
+         
           <button className="btn btn-primary" onClick={viewAllComments}>
-            View All Comments ({commentCount}){/* Display the comment count */}
+            View All Comments ({commentCount})
           </button>
         </div>
       </form>
