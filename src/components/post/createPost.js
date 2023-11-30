@@ -62,6 +62,19 @@ const CreatePost = () => {
   };
   const navigate = useNavigate();
 
+  //Using Api get the Youtube thumbnail while sending the link.
+  const [thumbnail, setThumbnail] = useState(null);
+
+  const fetchYouTubeData = async (videoId) => {
+    try {
+      const response = await axios.get(`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${videoId}&key=AIzaSyAV6-k-24JeM4Lmd3Q5V3n-5YK1hxEtmU4`);
+      const thumbnailUrl = response.data.items[0]?.snippet?.thumbnails?.medium?.url;
+      setThumbnail(thumbnailUrl || '');
+    } catch (error) {
+      console.error('Error fetching YouTube video data:', error);
+    }
+  };
+
   //State for TextArea
   const handleTextChange = (e) => {
     setTextAreaCount(e.target.value.length);  //used for char counting
@@ -79,6 +92,14 @@ const CreatePost = () => {
       ...state,
       [name]: value,
     });
+    // Check if the text contains a YouTube link
+    const youtubeRegex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+    const youtubeMatch = value.match(youtubeRegex);
+
+    if (youtubeMatch) {
+      const videoId = youtubeMatch[1];
+      fetchYouTubeData(videoId);
+    }
   };
 
   //Dark Mode components.
@@ -187,6 +208,19 @@ const CreatePost = () => {
               style={{ marginTop: '-16%', height: "3.5cm", width: "100%", backgroundColor: darkMode ? "#181818" : "white", color: darkMode ? "white" : "#000", fontSize: '25px', fontFamily: 'Times New Roman, Times, serif' }} />
 
             <p> <span style={{ color: color }} onChange={handleTextChange}> {" "}{`${textAreaCount}/${maxText}`}{" "} </span> </p>
+
+            {/* Youtube Embeeded thumbnail Using Api */}
+            {thumbnail && (
+              <div>
+                <img
+                  id="youtubeThumbnail"
+                  alt="YouTube Video Thumbnail"
+                  style={{ width: "150px", height: "auto", marginLeft:"340px" }}
+                  src={thumbnail}
+                />
+              </div>
+            )}
+
           </Form.Group>
 
           <div name="img-icon" onClick={handleImageClick} style={{ display: "flex", justifyContent: "space-between", width: "60%", height: '100px' }} >
@@ -213,7 +247,6 @@ const CreatePost = () => {
 
           {selectedImage && ( // Use the 'selectedImage' state to conditionally display the image preview and text message
             <div>
-              {/* <h4>Selected Image is:</h4> */}
               <img id="imagePreview" alt="Selected Image" style={{ width: "180px", height: "auto", }}
                 src={URL.createObjectURL(selectedImage)} />
             </div>
