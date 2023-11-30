@@ -6,8 +6,19 @@ import getUserInfoAsync from "../../utilities/decodeJwtAsync";
 import { Link } from "react-router-dom";
 import { useDarkMode } from '../DarkModeContext';
 
+import image1 from "../users/1.jpg"; // Import your background images
+import image4 from "../users/4.jpg"; 
+import image6 from "../users/6.jpg";
+
 
 const CreatePost = () => {
+
+  // Background image states and functions
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const backgroundImages = [image1, image4, image6];
+
+
+  const getNextImageIndex = () => (currentImageIndex + 1) % backgroundImages.length;
 
   // User UseStates
   const [user, setUser] = useState(null);
@@ -18,18 +29,37 @@ const CreatePost = () => {
 
   const fetchUserInfo = async () => {
     try {
-    const userInfo = await getUserInfoAsync();
-    if (userInfo) {
-    setUser(userInfo);
-    }
+      const userInfo = await getUserInfoAsync();
+      if (userInfo) {
+        setUser(userInfo);
+      }
     } catch (error) {
-  
-    console.error("Error fetching user info:", error);
-  }
+
+      console.error("Error fetching user info:", error);
+    }
   };
+  
   useEffect(() => {
-  fetchUserInfo(); // Fetch user info
-  }, []);
+
+    fetchUserInfo();
+
+    const slideshowInterval = setInterval(() => {
+      setCurrentImageIndex(getNextImageIndex());
+    }, 5000); // 5 seconds interval
+
+    return () => {
+      clearInterval(slideshowInterval);
+    };
+  }, [currentImageIndex]);
+
+  // Background image styling
+  const backgroundStyling = {
+    background: "#FFFFFF",
+    backgroundImage: `url(${backgroundImages[currentImageIndex]}), url(${backgroundImages[getNextImageIndex()]}), url(${backgroundImages[getNextImageIndex()]})`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'left top, center top, right top', // Adjusted positions for side by side
+    backgroundRepeat: 'no-repeat',
+  };
   const navigate = useNavigate();
 
   //State for TextArea
@@ -79,23 +109,21 @@ const CreatePost = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     let post = {}; // Initialize the post object outside the if-else block
-  
+
     if (selectedImage) {
       const formData = new FormData();
       formData.append('image', selectedImage);
-  
+
       try {
         const response = await fetch(`${process.env.REACT_APP_BACKEND_SERVER_URI}/images/create`, {
           method: 'POST',
           body: formData,
         });
-  
+
         if (response.ok) {
           const data = await response.json();
-          alert(`Image created successfully.`);
-  
           // Construct the post object with the imageId
           const { content } = state;
           post = {
@@ -111,7 +139,7 @@ const CreatePost = () => {
         console.error('Error:', error);
       }
     }
-  
+
     try {
       // Send Posts to Post API
       const { content } = state;
@@ -121,14 +149,14 @@ const CreatePost = () => {
         content,
         username: user.username,
       };
-  
+
       const postResponse = await axios.post(`${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/createPost`, post);
       navigate("/getAllPost");
     } catch (error) {
       console.error('Error creating post:', error);
     }
   };
-  
+
 
   if (!user) {
     return (
@@ -149,21 +177,23 @@ const CreatePost = () => {
         <Form
           id="createPostID"
           onSubmit={handleSubmit}
-          style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "100vh", 
-                  backgroundColor: "#f6f8fa", backgroundColor: darkMode ? "#000" : "#f6f8fa", color: darkMode ? "#fff" : "#000",
-                }}
+          style={{
+            display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "100vh",
+            backgroundColor: "#f6f8fa", backgroundColor: darkMode ? "#000" : "#f6f8fa", color: darkMode ? "#fff" : "#000", ...backgroundStyling,
+          }}
         >
           <Form.Group className="mb-3" controlId="formBasicPassword" style={{ width: "60%" }} >
             <Form.Control as="textarea" maxlength="280" placeholder="What's on your mind?" name="content" value={state.content} onChange={handleTextChange}
-              style={{ marginTop: '-16%', height: "3.5cm", width: "100%", backgroundColor: darkMode ? "#181818" : "white", color: darkMode ? "white" : "#000", fontSize : '25px', fontFamily:'Times New Roman, Times, serif'}}/>
+              style={{ marginTop: '-16%', height: "3.5cm", width: "100%", backgroundColor: darkMode ? "#181818" : "white", color: darkMode ? "white" : "#000", fontSize: '25px', fontFamily: 'Times New Roman, Times, serif' }} />
 
             <p> <span style={{ color: color }} onChange={handleTextChange}> {" "}{`${textAreaCount}/${maxText}`}{" "} </span> </p>
           </Form.Group>
 
           <div name="img-icon" onClick={handleImageClick} style={{ display: "flex", justifyContent: "space-between", width: "60%", height: '100px' }} >
-            
+
             <img
-              src={darkMode ? "/addImageLight.png" : "/add-img-icon.png"}
+              src={"/addImageLight.png"}
+              // darkMode ?  : "/add-img-icon.png"
               alt="Add Image Icon"
               style={{ width: "85px", height: "85px", marginTop: ".5cm" }}
             />
@@ -179,17 +209,17 @@ const CreatePost = () => {
               marginLeft: "610px",
               display: 'none',
             }} />
-            
-            
-            {selectedImage && ( // Use the 'selectedImage' state to conditionally display the image preview and text message
-          <div>
-            {/* <h4>Selected Image is:</h4> */}
-            <img id="imagePreview" alt="Selected Image" style={{ width: "300px", height: "auto", }}
-             src={URL.createObjectURL(selectedImage)} />
-          </div>
-        )}
-        
-          <Button style={{ width: "9cm",height : '7%', marginTop: "1cm", backgroundColor: "#28a745", borderColor: "#28a745", }} variant="primary" type="submit" size="lg">
+
+
+          {selectedImage && ( // Use the 'selectedImage' state to conditionally display the image preview and text message
+            <div>
+              {/* <h4>Selected Image is:</h4> */}
+              <img id="imagePreview" alt="Selected Image" style={{ width: "180px", height: "auto", }}
+                src={URL.createObjectURL(selectedImage)} />
+            </div>
+          )}
+
+          <Button style={{ width: "9cm", height: '7%', marginTop: "1cm", backgroundColor: "#28a745", borderColor: "#28a745", }} variant="primary" type="submit" size="lg">
             Create Post
           </Button>
         </Form>
