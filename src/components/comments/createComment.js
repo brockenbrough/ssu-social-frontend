@@ -24,6 +24,7 @@ export function useCommentCount() {
 
 
 function CreateComment({postId}) {
+  const [comments, setComments] = useState([]);
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
   const [commentCount, setCommentCount] = useState(0); // Comment count state
@@ -39,6 +40,29 @@ function CreateComment({postId}) {
     fetchCommentCount();
   }, [postId]);
 
+  // This method fetches the records from the database.
+  // Hook useEffect - this hook is used to invoke something after rendering.
+  useEffect(() => {
+    // Define a function to get records. We are going to call it below.
+    // We use async keyword so we can ．０later say "await" to block on finish.
+     async function getRecords() {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_SERVER_URI}/comments/comment/getCommentById/${postId}`, {
+        method: "GET",
+      })
+
+      if (!response.ok) {
+        const message = `An error occured: ${response.statusText}`;
+        window.alert(message);
+        return;
+      }
+
+      if(response != null){
+        const fetchedRecords = await response.json();
+        setComments(fetchedRecords); // update state.  when state changes, we automatically re-render.
+      }
+    }
+    getRecords(); // Now that we defined it, call the function.
+  }, [postId]);
 
   const fetchCommentCount = () => {
     // Fetch the comment count using a similar fetch request as in your Post component
