@@ -3,6 +3,9 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import getUserInfo from "../../utilities/decodeJwt";
 import { useDarkMode } from '../DarkModeContext';
 import Post from "../post/post";
+import Card from "react-bootstrap/Card";
+import Button from "react-bootstrap/Button";
+import Stack from "react-bootstrap/Stack";
 const CommentCountContext = createContext();
 
 
@@ -137,7 +140,38 @@ function CreateComment({postId}) {
       // Provide user feedback as needed
     }
   };
+  function commentList() {
+    if (comments ==null)
+    {
+      return(
+        <div>
+          <h3>
+            No Comment Found
+          </h3>
+          </div>
+      );
+    }
+    return comments.map((comment) => {
+      return (
+        <Card
+        body
+        outline
+        color="success"
+        className="mx-1 my-2"
+        style={{ width: "30rem" }}
+      >
+        <Card.Body>
+          <Stack>
+            <div>
+              <h4>{comment.commentContent}</h4>
+            </div>
 
+          </Stack>
+        </Card.Body>
+      </Card>
+      );
+    });
+  }
 
   const viewAllComments = () => {
     navigate("/comments/comment" , {state: postId});
@@ -170,6 +204,11 @@ function CreateComment({postId}) {
           <button type="submit" className="btn btn-primary">
             Submit
           </button>
+          <div>
+            <table className="table table-striped" style={{ marginTop: 20 }}>
+                <tbody>{commentList()}</tbody>
+            </table>
+          </div>
         
          
           <button className="btn btn-primary" onClick={viewAllComments}>
