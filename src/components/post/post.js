@@ -127,6 +127,31 @@ const Post = ({ posts }) => {
     }
   }, [dataLoaded]);
 
+  const [youtubeThumbnail, setYoutubeThumbnail] = useState(null);
+
+  const fetchYouTubeThumbnail = async (videoId) => {
+    try {
+      const response = await axios.get(`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${videoId}&key=AIzaSyAV6-k-24JeM4Lmd3Q5V3n-5YK1hxEtmU4`);
+      const thumbnailUrl = response.data.items[0]?.snippet?.thumbnails?.medium?.url;
+      setYoutubeThumbnail(thumbnailUrl || '');
+    } catch (error) {
+      console.error('Error fetching YouTube video data:', error);
+    }
+  };
+
+  useEffect(() => {
+    if (posts.content) {
+      // Check if the post content contains a YouTube link
+      const youtubeRegex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+      const youtubeMatch = posts.content.match(youtubeRegex);
+
+      if (youtubeMatch) {
+        const videoId = youtubeMatch[1];
+        fetchYouTubeThumbnail(videoId);
+      }
+    }
+  }, [posts.content]);
+
   const handleLikeClick = () => {
     if (!user || !user.id) return;
 
@@ -228,7 +253,20 @@ const Post = ({ posts }) => {
 
           <div style={{ wordBreak: 'break-all' }} onClick={toggleShowFullText}>
             {displayContent}
+            <br /> 
           </div>
+
+          {youtubeThumbnail && (
+            <div>
+              <br />
+              <img
+                alt="YouTube Video Thumbnail"
+                style={{ width: "150px", height: "auto", marginLeft: "20px" }}
+                src={youtubeThumbnail}
+              />
+            </div>
+          )}
+
 
           <div className="text-center">
             <Button variant={isLiked ? "danger" : "outline-danger"} onClick={handleLikeClick}>
