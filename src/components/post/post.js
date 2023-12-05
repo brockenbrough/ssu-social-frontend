@@ -168,6 +168,11 @@ const Post = ({ posts }) => {
 
   const handleShowEditModal = () => {
     setEditedPost({ content: posts.content });
+  
+    if (posts.imageId) {
+      fetchImage(posts.imageId);
+    }
+  
     setShowEditModal(true);
   };
 
@@ -254,28 +259,31 @@ const Post = ({ posts }) => {
       </Modal>
 
       <Modal show={showEditModal} onHide={handleCloseEditModal} >
-        <Modal.Header closeButton style={{ backgroundColor: darkMode ? "#181818" : "#f6f8fa", color: darkMode ? "white": "black",}}>
-          <Modal.Title style={{ backgroundColor: darkMode ? "#181818" : "#f6f8fa"}}>Would you like to update or delete your post?</Modal.Title>
-        </Modal.Header>
-        <Modal.Body style={{ backgroundColor: darkMode ? "#181818" : "#f6f8fa"}}>
-          <Form>
-            <Form.Group controlId="editPostContent">
-              <Form.Control
-                as="textarea"
-                rows={3}
-                value={editedPost.content}
-                onChange={(e) => setEditedPost({ content: e.target.value })}
-                style={{backgroundColor: darkMode ? "#181818" : "#f6f8fa", color: darkMode ? "white": "black"}}
-              />
-            </Form.Group>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer style={{ backgroundColor: darkMode ? "#181818" : "#f6f8fa"}}>
-          <Button variant="danger" onClick={handleDeletePost}>Delete</Button>
-          <Button variant="secondary" onClick={handleCloseEditModal}>Cancel</Button>
-          <Button variant="primary" onClick={handleEditPost}>Update</Button>
-        </Modal.Footer>
-      </Modal>
+  <Modal.Header closeButton style={{ backgroundColor: darkMode ? "#181818" : "#f6f8fa", color: darkMode ? "white": "black",}}>
+    <Modal.Title style={{ backgroundColor: darkMode ? "#181818" : "#f6f8fa"}}>Would you like to update or delete your post?</Modal.Title>
+  </Modal.Header>
+  <Modal.Body style={{ backgroundColor: darkMode ? "#181818" : "#f6f8fa"}}>
+    
+    {imageSrc && <img src={imageSrc} alt="Post" style={{ width: '100%', height: 'auto' }} />}
+
+    <Form>
+      <Form.Group controlId="editPostContent">
+        <Form.Control
+          as="textarea"
+          rows={3}
+          value={editedPost.content}
+          onChange={(e) => setEditedPost({ content: e.target.value })}
+          style={{backgroundColor: darkMode ? "#181818" : "#f6f8fa", color: darkMode ? "white": "black"}}
+        />
+      </Form.Group>
+    </Form>
+  </Modal.Body>
+  <Modal.Footer style={{ backgroundColor: darkMode ? "#181818" : "#f6f8fa"}}>
+    <Button variant="danger" onClick={handleDeletePost}>Delete</Button>
+    <Button variant="secondary" onClick={handleCloseEditModal}>Cancel</Button>
+    <Button variant="primary" onClick={handleEditPost}>Update</Button>
+  </Modal.Footer>
+</Modal>
     </div>
   );
 };
