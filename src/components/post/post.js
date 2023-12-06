@@ -11,7 +11,6 @@ import { Form } from 'react-bootstrap';
 import CreateComment from "../comments/createComment";
 import CommentModal from "../comments/CommentModal";
 
-
 const Post = ({ posts }) => {
   const [showFullText, setShowFullText] = useState(false);
   const [likeCount, setLikeCount] = useState(null);
@@ -25,7 +24,7 @@ const Post = ({ posts }) => {
   const [showPostModal, setShowPostModal] = useState(false);
   const [imageSrc, setImageSrc] = useState(null);
   const isCurrentUserPost = user && user.username === posts.username;
-  const [showEditModal, setShowEditModal] = useState(false); 
+  const [showEditModal, setShowEditModal] = useState(false);
   const [editedPost, setEditedPost] = useState({ content: posts.content });
 
   const handleShowPostModal = () => setShowPostModal(true);
@@ -35,7 +34,7 @@ const Post = ({ posts }) => {
     //Find links within posts.content
     const urlRegex = /(https?:\/\/[^\s]+)/g;
     return content.split(urlRegex).map((part, index) => {
-      if (index % 2===1) {
+      if (index % 2 === 1) {
         return (
           <a key={index} href={part} target="_blank" rel="noopener nonreferrer">
             {part}
@@ -45,7 +44,6 @@ const Post = ({ posts }) => {
       return part;
     });
   };
-
 
   const toggleShowFullText = () => {
     setShowFullText(!showFullText);
@@ -61,8 +59,8 @@ const Post = ({ posts }) => {
       e.stopPropagation(); // Prevents triggering the Card's onClick
       toggleShowFullText();
     };
-    return showFullText ? 
-    <span style={iconStyle} onClick={iconClick}> [^]</span> : 
+    return showFullText ?
+      <span style={iconStyle} onClick={iconClick}> [^]</span> :
       <span style={iconStyle} onClick={iconClick}> [...]</span>;
   };
 
@@ -127,6 +125,31 @@ const Post = ({ posts }) => {
     }
   }, [dataLoaded]);
 
+  const [youtubeThumbnail, setYoutubeThumbnail] = useState(null);
+
+  const fetchYouTubeThumbnail = async (videoId) => {
+    try {
+      const response = await axios.get(`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${videoId}&key=AIzaSyAV6-k-24JeM4Lmd3Q5V3n-5YK1hxEtmU4`);
+      const thumbnailUrl = response.data.items[0]?.snippet?.thumbnails?.medium?.url;
+      setYoutubeThumbnail(thumbnailUrl || '');
+    } catch (error) {
+      console.error('Error fetching YouTube video data:', error);
+    }
+  };
+
+  useEffect(() => {
+    if (posts.content) {
+      // Check if the post content contains a YouTube link
+      const youtubeRegex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+      const youtubeMatch = posts.content.match(youtubeRegex);
+
+      if (youtubeMatch) {
+        const videoId = youtubeMatch[1];
+        fetchYouTubeThumbnail(videoId);
+      }
+    }
+  }, [posts.content]);
+
   const handleLikeClick = () => {
     if (!user || !user.id) return;
 
@@ -167,13 +190,19 @@ const Post = ({ posts }) => {
   };
 
   const handleShowEditModal = () => {
-    setEditedPost({ content: posts.content });
-  
-    if (posts.imageId) {
-      fetchImage(posts.imageId);
+    // Check if the current user is the owner of the post
+    if (isCurrentUserPost) {
+      setEditedPost({ content: posts.content });
+
+      if (posts.imageId) {
+        fetchImage(posts.imageId);
+      }
+
+      setShowEditModal(true);
+    } else {
+      // Display a message or handle the case where the current user is not the owner
+      alert("You don't have permission to edit this post.");
     }
-  
-    setShowEditModal(true);
   };
 
   const handleCloseEditModal = () => {
@@ -204,7 +233,6 @@ const Post = ({ posts }) => {
       });
   };
 
-
   return (
     <div className="d-inline-flex p-2">
       <Card id="postCard" style={{
@@ -215,20 +243,32 @@ const Post = ({ posts }) => {
         <Card.Body style={{ color: darkMode ? "white" : "black" }}>
 
           <div style={{ marginBottom: '10px' }}>
-          <Link
+            <Link
               id="username"
               to={isCurrentUserPost ? '/privateUserProfile' : `/publicProfilePage/${posts.username}`}
-              style={{color: darkMode ? "white" : "black", textDecoration: "none", fontWeight: "bold"}}
+              style={{ color: darkMode ? "white" : "black", textDecoration: "none", fontWeight: "bold" }}
             >
               {posts.username}
             </Link>
-        <p></p>
-        {imageSrc && <img src={imageSrc} alt="Post" style={{ width: '100%', height: 'auto' }} />}
+            <p></p>
+            {imageSrc && <img src={imageSrc} alt="Post" style={{ width: '100%', height: 'auto' }} />}
           </div>
 
           <div style={{ wordBreak: 'break-all' }} onClick={toggleShowFullText}>
             {displayContent}
+            <br />
           </div>
+
+          {youtubeThumbnail && (
+            <div>
+              <br />
+              <img
+                alt="YouTube Video Thumbnail"
+                style={{ width: "150px", height: "auto", marginLeft: "20px" }}
+                src={youtubeThumbnail}
+              />
+            </div>
+          )}
 
           <div className="text-center">
             <Button variant={isLiked ? "danger" : "outline-danger"} onClick={handleLikeClick}>
@@ -239,59 +279,67 @@ const Post = ({ posts }) => {
           <p>{formattedDate}</p>
 
           {likeCount !== null && <p>{`Likes: ${likeCount}`}</p>}
-          <Button style={{ marginRight: "1cm" }} onClick={handleShowEditModal} variant="warning">Update</Button>
-          <Link to={`/createComment/${posts._id}`} className="btn btn-warning">Comment ({commentCount > 0 ? commentCount : "0"})</Link>
+
+          {/* Conditionally render the Update button */}
+          {isCurrentUserPost && (
+            <Button style={{ marginRight: "1cm" }} onClick={handleShowEditModal} variant="warning">
+              Update
+            </Button>
+          )}
+
+          <Link
+            to={`/createComment/${posts._id}`}
+            className="btn btn-warning"
+            disabled={true}
+            style={{ pointerEvents: 'none', opacity: 1.0 }}
+          >
+            Comment ({commentCount > 0 ? commentCount : "0"})
+          </Link>
         </Card.Body>
       </Card>
 
       <Modal show={showPostModal} onHide={handleClosePostModal} >
-      <Modal.Header closeButton style={{ backgroundColor: darkMode ? "#181818" : "#f6f8fa", color: darkMode ? "white": "black",}}>
-          <Modal.Title style={{ backgroundColor: darkMode ? "#181818" : "#f6f8fa", color: darkMode ? "white": "black",}}>Post</Modal.Title>
+        <Modal.Header closeButton style={{ backgroundColor: darkMode ? "#181818" : "#f6f8fa", color: darkMode ? "white" : "black", }}>
+          <Modal.Title style={{ backgroundColor: darkMode ? "#181818" : "#f6f8fa", color: darkMode ? "white" : "black", }}>Post</Modal.Title>
         </Modal.Header>
-        <Modal.Body style={{ wordWrap: 'break-word', overflowWrap: 'break-word', backgroundColor: darkMode ? "#181818" : "#f6f8fa", color: darkMode ? "white": "black", }}>
+        <Modal.Body style={{ wordWrap: 'break-word', overflowWrap: 'break-word', backgroundColor: darkMode ? "#181818" : "#f6f8fa", color: darkMode ? "white" : "black", }}>
           <p>{posts.content}</p>
           <p>{formattedDate}</p>
           <CommentModal postId={posts._id} />
         </Modal.Body>
-        <Modal.Footer style={{ backgroundColor: darkMode ? "#181818" : "#f6f8fa", color: darkMode ? "white": "black",}}>
+        <Modal.Footer style={{ backgroundColor: darkMode ? "#181818" : "#f6f8fa", color: darkMode ? "white" : "black", }}>
           <Button variant="secondary" onClick={handleClosePostModal}>Close</Button>
         </Modal.Footer>
       </Modal>
 
       <Modal show={showEditModal} onHide={handleCloseEditModal} >
-  <Modal.Header closeButton style={{ backgroundColor: darkMode ? "#181818" : "#f6f8fa", color: darkMode ? "white": "black",}}>
-    <Modal.Title style={{ backgroundColor: darkMode ? "#181818" : "#f6f8fa"}}>Would you like to update or delete your post?</Modal.Title>
-  </Modal.Header>
-  <Modal.Body style={{ backgroundColor: darkMode ? "#181818" : "#f6f8fa"}}>
-    
-    {imageSrc && <img src={imageSrc} alt="Post" style={{ width: '100%', height: 'auto' }} />}
+        <Modal.Header closeButton style={{ backgroundColor: darkMode ? "#181818" : "#f6f8fa", color: darkMode ? "white" : "black", }}>
+          <Modal.Title style={{ backgroundColor: darkMode ? "#181818" : "#f6f8fa" }}>Would you like to update or delete your post?</Modal.Title>
+        </Modal.Header>
+        <Modal.Body style={{ backgroundColor: darkMode ? "#181818" : "#f6f8fa" }}>
 
-    <Form>
-      <Form.Group controlId="editPostContent">
-        <Form.Control
-          as="textarea"
-          rows={3}
-          value={editedPost.content}
-          onChange={(e) => setEditedPost({ content: e.target.value })}
-          style={{backgroundColor: darkMode ? "#181818" : "#f6f8fa", color: darkMode ? "white": "black"}}
-        />
-      </Form.Group>
-    </Form>
-  </Modal.Body>
-  <Modal.Footer style={{ backgroundColor: darkMode ? "#181818" : "#f6f8fa"}}>
-    <Button variant="danger" onClick={handleDeletePost}>Delete</Button>
-    <Button variant="secondary" onClick={handleCloseEditModal}>Cancel</Button>
-    <Button variant="primary" onClick={handleEditPost}>Update</Button>
-  </Modal.Footer>
-</Modal>
+          {imageSrc && <img src={imageSrc} alt="Post" style={{ width: '100%', height: 'auto' }} />}
+
+          <Form>
+            <Form.Group controlId="editPostContent">
+              <Form.Control
+                as="textarea"
+                rows={3}
+                value={editedPost.content}
+                onChange={(e) => setEditedPost({ content: e.target.value })}
+                style={{ backgroundColor: darkMode ? "#181818" : "#f6f8fa", color: darkMode ? "white" : "black" }}
+              />
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer style={{ backgroundColor: darkMode ? "#181818" : "#f6f8fa" }}>
+          <Button variant="danger" onClick={handleDeletePost}>Delete</Button>
+          <Button variant="secondary" onClick={handleCloseEditModal}>Cancel</Button>
+          <Button variant="primary" onClick={handleEditPost}>Update</Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };
 
 export default Post;
-
-
- 
-
-
-
