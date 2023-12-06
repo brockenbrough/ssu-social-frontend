@@ -1,13 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import "./register.css";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+import image1 from "../users/1.jpg";
+import image2 from "../users/2.jpg";
+import image3 from "../users/3.jpg";
+import image4 from "../users/4.jpg";
+import image5 from "../users/5.jpg";
+import image6 from "../users/6.jpg";
 
 const PRIMARY_COLOR = "#FFFFFF";
 const SECONDARY_COLOR = "#0c0c1f";
 const url = `${process.env.REACT_APP_BACKEND_SERVER_URI}/user/signup`;
+
 const Register = () => {
   const [data, setData] = useState({ username: "", email: "", password: "" });
   const [error, setError] = useState("");
@@ -15,6 +21,12 @@ const Register = () => {
   const [light, setLight] = useState(false);
   const [bgColor, setBgColor] = useState(SECONDARY_COLOR);
   const [bgText, setBgText] = useState("Light Mode");
+
+  // Slideshow related state and logic
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const backgroundImages = [image1, image2, image3];
+  const containerImages = [image4, image5, image6];
+  const getNextImageIndex = () => (currentImageIndex + 1) % backgroundImages.length;
 
   const handleChange = ({ currentTarget: input }) => {
     setData({ ...data, [input.name]: input.value });
@@ -30,32 +42,16 @@ const Register = () => {
     }
   }, [light]);
 
-  let labelStyling = {
-    color: PRIMARY_COLOR,
-    fontWeight: "bold",
-    textDecoration: "none",
-    color: PRIMARY_COLOR,
-    fontWeight: "bold",
-    textDecoration: "none",
-    textShadow: `
-      -1px -1px 0 #000,  
-       1px -1px 0 #000,
-       -1px 1px 0 #000,
-        1px 1px 0 #000` 
-  };
+  useEffect(() => {
+    const slideshowInterval = setInterval(() => {
+      setBgColor(SECONDARY_COLOR); // Reset background color
+      setCurrentImageIndex(getNextImageIndex());
+    }, 5000); // 30 seconds interval
 
-  let backgroundStyling = {
-    background: `url(${'https://ik.imagekit.io/upgrad1/abroad-images//university/234/image/campus_view_4IK5K1C.jpg'}) no-repeat center center fixed`,
-    backgroundSize: 'cover',
-    minHeight: '100vh',
-    color: bgColor 
-  };
-
-  let buttonStyling = {
-    background: PRIMARY_COLOR,
-    borderStyle: "none",
-    color: bgColor,
-  };
+    return () => {
+      clearInterval(slideshowInterval);
+    };
+  }, [currentImageIndex]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -91,30 +87,55 @@ const Register = () => {
       }
     }
   };
+ 
 
+  let labelStyling = {
+    color: PRIMARY_COLOR,
+    fontWeight: "bold",
+    textDecoration: "none",
+    textShadow: `
+      -1px -1px 0 #000,  
+       1px -1px 0 #000,
+       -1px 1px 0 #000,
+        1px 1px 0 #000`
+  };
 
+  let backgroundStyling = {
+    background: `url(${backgroundImages[currentImageIndex]}), url(${backgroundImages[getNextImageIndex()]}), url(${backgroundImages[getNextImageIndex()]})`,
+    backgroundSize: 'cover',
+    minHeight: '100vh',
+    color: bgColor
+  };
+
+  let buttonStyling = {
+    background: PRIMARY_COLOR,
+    borderStyle: "none",
+    color: bgColor,
+  };
+
+ 
   return (
     <>
-    <div style={backgroundStyling}>
-        <section style={{paddingTop: '200px'}}>
+      <div style={backgroundStyling}>
+        <section style={{ paddingTop: '200px' }}>
           <div className="container-fluid h-custom">
             <div className="row d-flex justify-content-center align-items-center h-100">
 
               <div className="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
                 <Form>
-                  <Form.Group className="mb-3" controlId="formBasicEmail" style={labelStyling}>
-                    <Form.Label style={labelStyling}>Username</Form.Label>
-                    <Form.Control
-                      type="username"
-                      name="username"
-                      onChange={handleChange}
-                      placeholder="Enter username"
-                    />
-                    <Form.Text className="text-muted" style={labelStyling}>
+                <Form.Group className="mb-3" controlId="formBasicEmail">
+                  <Form.Label style={labelStyling}>Username</Form.Label>
+                  <Form.Control 
+                  type="username" 
+                  name="username" 
+                  onChange={handleChange} 
+                  placeholder="Enter username" 
+                  />
+                  <Form.Text className="text-muted" style={labelStyling}>
                       The Username must be 6 characters or more
                     </Form.Text>
-                  </Form.Group>
-                  <Form.Group className="mb-3" controlId="formBasicEmail" style={labelStyling}>
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="formBasicEmail" style={labelStyling}>
                     <Form.Label style={labelStyling}>Email</Form.Label>
                     <Form.Control
                       type="email"
@@ -124,9 +145,9 @@ const Register = () => {
                     />
                     <Form.Text className="text-muted" style={labelStyling}>
                       Please input a valid email
-                    </Form.Text>
-                  </Form.Group>
-                  <Form.Group className="mb-3" controlId="formBasicPassword" style={labelStyling}>
+                  </Form.Text>
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="formBasicPassword" style={labelStyling}>
                     <Form.Label style={labelStyling}>Password</Form.Label>
                     <Form.Control
                       type="password"
@@ -137,8 +158,8 @@ const Register = () => {
                     <Form.Text className="text-muted" style={labelStyling}>
                       The password has to contain at least 8 characters, including one Uppercase, one Lowercase and a Special character
                     </Form.Text>
-                  </Form.Group>
-                  <div class="form-check form-switch">
+                    </Form.Group>
+                <div class="form-check form-switch">
                     <input
                       class="form-check-input"
                       type="checkbox"
@@ -172,12 +193,32 @@ const Register = () => {
                   </Button>
                 </Form>
               </div>
+
+              {/* Slideshow Container on the Side */}
+              <div className="col-md-4 d-none d-md-block">
+                <div style={{ height: "100%", overflow: "hidden" }}>
+                  <img
+                    src={containerImages[currentImageIndex]}
+                    alt="Slideshow"
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                      boxShadow: "4px 4px 8px rgba(0, 0, 0, 0.1)",
+                      border: "4px solid #ddd",
+                      borderRadius: "8px"
+                    }}
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </section>
       </div>
-      </>
-    );
-  };
+    </>
+  );
+};
 
-export default Register;
+
+export default Register;  
+
