@@ -216,6 +216,7 @@ const Post = ({ posts }) => {
       .then((response) => {
         console.log(response);
         handleCloseEditModal();
+        window.location.reload();
       })
       .catch((error) => {
         console.error(error);
@@ -280,11 +281,19 @@ const Post = ({ posts }) => {
 
           {likeCount !== null && <p>{`Likes: ${likeCount}`}</p>}
 
-          {/* Conditionally render the Update button */}
           {isCurrentUserPost && (
-            <Button style={{ marginRight: "1cm" }} onClick={handleShowEditModal} variant="warning">
-              Update
-            </Button>
+            <>
+            <Button
+          style={{ marginRight: "1cm" }}
+          onClick={(e) => {
+            e.stopPropagation(); // Stop the click event from reaching the parent Card
+            handleShowEditModal();
+          }}
+          variant="warning"
+          >
+           Update
+          </Button>
+            </>
           )}
 
           <Link
