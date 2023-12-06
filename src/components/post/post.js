@@ -256,7 +256,19 @@ const Post = ({ posts }) => {
 
           <div style={{ wordBreak: 'break-all' }} onClick={toggleShowFullText}>
             {displayContent}
+            <br />
           </div>
+
+          {youtubeThumbnail && (
+            <div>
+              <br />
+              <img
+                alt="YouTube Video Thumbnail"
+                style={{ width: "150px", height: "auto", marginLeft: "20px" }}
+                src={youtubeThumbnail}
+              />
+            </div>
+          )}
 
           <div className="text-center">
             <Button variant={isLiked ? "danger" : "outline-danger"} onClick={handleLikeClick}>
