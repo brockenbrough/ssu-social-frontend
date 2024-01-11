@@ -140,7 +140,9 @@ function CreateComment({postId}) {
       // Provide user feedback as needed
     }
   };
+
   function commentList() {
+    
     if (comments ==null)
     {
       return(
@@ -152,18 +154,19 @@ function CreateComment({postId}) {
       );
     }
     return comments.map((comment) => {
+      
       return (
         <Card
         body
         outline
         color="success"
-        className="mx-1 my-2"
-        style={{ width: "30rem" }}
+        className="mx-0 my-0"
+        style={{ width: "20rem" }}
       >
         <Card.Body>
           <Stack>
             <div>
-              <h4>{comment.commentContent}</h4>
+              <p>{comment.commentContent}</p>
             </div>
 
           </Stack>
@@ -180,11 +183,17 @@ function CreateComment({postId}) {
 
   return (
     <div className="container mt-4">
-      <h1 className="mb-4">Create Comment</h1>
+    <div>
+      <h5 className="mb-4">Comments</h5>
+      <table className="table table-striped" style={{ marginTop: 20 }}>
+          <tbody>{commentList()}</tbody>
+      </table>
+    </div>
+
       <form onSubmit={handleSubmit}>
-        <div className="mb-3">
+        <div className="mb-2">
           <label htmlFor="commentContent" className="form-label">
-            What do you want to say?
+            Comment?
           </label>
           <textarea
          
@@ -204,16 +213,8 @@ function CreateComment({postId}) {
           <button type="submit" className="btn btn-primary">
             Submit
           </button>
-          <div>
-            <table className="table table-striped" style={{ marginTop: 20 }}>
-                <tbody>{commentList()}</tbody>
-            </table>
-          </div>
         
-         
-          <button className="btn btn-primary" onClick={viewAllComments}>
-            View All Comments ({commentCount})
-          </button>
+
         </div>
       </form>
     </div>
