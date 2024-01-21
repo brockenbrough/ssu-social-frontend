@@ -156,8 +156,13 @@ const Register = () => {
                       onChange={handleChange}
                     />
                     <Form.Text className="text-muted" style={labelStyling}>
-                      The password has to contain at least 8 characters, including one Uppercase, one Lowercase and a Special character
+                      The password has to contain at least 8 characters.
                     </Form.Text>
+                    
+                  <div>
+                    This site is hosted on free services.  There may be a 2 minute delay
+                    in the response if the site has not been used recently.
+                  </div>
                     </Form.Group>
                 <div class="form-check form-switch">
                     <input

@@ -138,6 +138,9 @@ const Login = () => {
                     <span>
                       <Link to="/signup" style={labelStyling}>Sign up</Link>
                     </span>
+                    <br></br>
+                    This site is hosted on free services.  There may be a 2 minute delay
+                    in the response if the site has not been used recently.
                   </Form.Text>
                 </Form.Group>
            
