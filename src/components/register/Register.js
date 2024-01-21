@@ -17,6 +17,7 @@ const url = `${process.env.REACT_APP_BACKEND_SERVER_URI}/user/signup`;
 const Register = () => {
   const [data, setData] = useState({ username: "", email: "", password: "" });
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false); // New state for loading indicator
   const navigate = useNavigate();
   const [light, setLight] = useState(false);
   const [bgColor, setBgColor] = useState(SECONDARY_COLOR);
@@ -56,15 +57,21 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      setLoading(true); // Set loading to true before making the request
+
       const { data: res } = await axios.post(url, data);
-  
+
+      setLoading(false); // Set loading to false after receiving the response
+
       // const {accessToken} = res
       // store token in localStorage
       navigate("/");
     } catch (error) {
+      setLoading(false); // Set loading to false in case of an error
+
       if (error.response) {
         const responseError = error.response.data;
-  
+
         // Clear previous error messages
         setError("");
   
@@ -78,16 +85,15 @@ const Register = () => {
           // For any other error types, set a generic error message
           setError("The Username, Email or Password you've entered is invalid, Please tey again");
         }
-  
+
         console.log(responseError);
       } else {
         // Something happened in setting up the request that triggered an Error
         console.log('Error', error.message);
-        setError("The Username, Email or Password you've entered is invalid, Please tey again");
+        setError("The Username, Email, or Password you've entered is invalid. Please try again");
       }
     }
   };
- 
 
   let labelStyling = {
     color: PRIMARY_COLOR,
@@ -104,7 +110,8 @@ const Register = () => {
     background: `url(${backgroundImages[currentImageIndex]}), url(${backgroundImages[getNextImageIndex()]}), url(${backgroundImages[getNextImageIndex()]})`,
     backgroundSize: 'cover',
     minHeight: '100vh',
-    color: bgColor
+    color: bgColor,
+    cursor: loading ? 'wait' : 'auto' // Change cursor based on loading state
   };
 
   let buttonStyling = {
@@ -113,7 +120,6 @@ const Register = () => {
     color: bgColor,
   };
 
- 
   return (
     <>
       <div style={backgroundStyling}>
@@ -224,6 +230,4 @@ const Register = () => {
   );
 };
 
-
-export default Register;  
-
+export default Register;

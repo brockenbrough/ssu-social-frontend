@@ -19,6 +19,7 @@ const Login = () => {
   const [user, setUser] = useState(null);
   const [data, setData] = useState({ username: "", password: "" });
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false); // New state for loading indicator
   const [light, setLight] = useState(false);
   const [bgColor, setBgColor] = useState(SECONDARY_COLOR);
   const [bgText, setBgText] = useState("Light Mode");
@@ -76,11 +77,17 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      setLoading(true); // Set loading to true before making the request
+
       const { data: res } = await axios.post(url, data);
       const { accessToken } = res;
       localStorage.setItem("accessToken", accessToken);
       window.location.reload();
+
+      setLoading(false); // Set loading to false after receiving the response
     } catch (error) {
+      setLoading(false); // Set loading to false in case of an error
+
       if (error.response) {
         alert(`Error: ${error.response.data} ${error.response.status} ${url}`);
         console.log(error.response.data);
@@ -103,6 +110,7 @@ const Login = () => {
     backgroundSize: 'cover',
     backgroundPosition: 'left top, center top, right top', // Adjusted positions for side by side
     backgroundRepeat: 'no-repeat',
+    cursor: loading ? 'wait' : 'auto' // Change cursor based on loading state
   };
 
   let containerStyle = {
@@ -117,10 +125,10 @@ const Login = () => {
         <div className="container-fluid h-custom vh-100">
           <div className="row d-flex justify-content-center align-items-center h-100" style={backgroundStyling}>
             <div className="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
-            <div style={containerStyle}>
+              <div style={containerStyle}>
 
-              <Form>
-              <Form.Group className="mb-3" controlId="formBasicEmail">
+                <Form>
+                  <Form.Group className="mb-3" controlId="formBasicEmail">
                   <Form.Label style={labelStyling}>Username</Form.Label>
                   <Form.Control type="username" name="username" onChange={handleChange} placeholder="Enter username" />
                   <Form.Text className="text-muted">We just might sell your data</Form.Text>
@@ -143,29 +151,29 @@ const Login = () => {
                     in the response if the site has not been used recently.
                   </Form.Text>
                 </Form.Group>
-           
-                {error && <div style={labelStyling} className="pt-3">{error}</div>}
-                <Button variant="primary" type="submit" onClick={handleSubmit} style={buttonStyling} className="mt-2">
-                  Submit
-                </Button>
-              </Form>
+                  
+                  {error && <div style={labelStyling} className="pt-3">{error}</div>}
+                  <Button variant="primary" type="submit" onClick={handleSubmit} style={buttonStyling} className="mt-2">
+                    {loading ? "Submitting..." : "Submit"}
+                  </Button>
+                </Form>
               </div>
             </div>
             {/* Slideshow Container on the Side */}
             <div className="col-md-4 d-none d-md-block">
               <div style={{ height: "100%", overflow: "hidden" }}>
-              <img
-  src={containerImages[currentImageIndex]}
-  alt="Slideshow"
-  style={{
-    width: "100%",
-    height: "100%",
-    objectFit: "cover", 
-    boxShadow: "4px 4px 8px rgba(0, 0, 0, 0.1)", // Adjust the shadow properties as needed
-    border: "4px solid #ddd", // Adjust the border properties as needed
-    borderRadius: "8px" // Adjust the border radius as needed for rounded corners
-  }}
-/>
+                <img
+                  src={containerImages[currentImageIndex]}
+                  alt="Slideshow"
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    boxShadow: "4px 4px 8px rgba(0, 0, 0, 0.1)", // Adjust the shadow properties as needed
+                    border: "4px solid #ddd", // Adjust the border properties as needed
+                    borderRadius: "8px" // Adjust the border radius as needed for rounded corners
+                  }}
+                />
               </div>
             </div>
           </div>
@@ -174,6 +182,5 @@ const Login = () => {
     </>
   );
 };
-
 
 export default Login;
