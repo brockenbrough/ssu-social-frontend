@@ -299,29 +299,39 @@ const deleteConfirm = async () => {
               <Image
                 roundedCircle
                 src={"https://robohash.org/" + Math.random() + "?set=set5"}
+                style={{ marginLeft: '26px' }}
               />
               <ul>
                 <Button onClick={followerRouteChange} variant="light" style={{
                   background: darkMode ? '#181818' : 'white',
                   color: darkMode ? 'white' : 'black',
+                  border: darkMode ? '1px solid white' : '1px solid black',
+                  marginTop: '10px'
                 }}>
                   Follower Count: {followerCount}
                 </Button>{" "}
                 <Button onClick={followingRouteChange} variant="light" style={{
                   background: darkMode ? '#181818' : 'white',
                   color: darkMode ? 'white' : 'black',
+                  border: darkMode ? '1px solid white' : '1px solid black',
+                  marginTop: '10px'
                 }}>
                   Following Count: {followingCount}
                 </Button>{" "}
                 <Button variant="light" style={{
                   background: darkMode ? '#181818' : 'white',
                   color: darkMode ? 'white' : 'black',
+                  border: darkMode ? '1px solid white' : '1px solid black',
+                  marginTop: '10px',
                 }}>
                   {totalLikes} Likes
                 </Button>{" "}
               </ul>
-              <Button className="me-2" onClick={handleShowLogoutConfirmation} >
-                Log Out
+              <Button className="me-2" onClick={handleShowLogoutConfirmation} style={{ 
+                backgroundColor: '#ff0000', 
+                border: darkMode ? '1px solid white' : '1px solid black', 
+                marginLeft: '25px' 
+              }}> Log Out
               </Button>
               <Modal
                 show={showLogoutConfirmation}
@@ -351,7 +361,10 @@ const deleteConfirm = async () => {
                   </Button>
                 </Modal.Footer>
               </Modal>
-              <Button onClick={showUserModal}>Edit User Information</Button>
+              <Button onClick={showUserModal} style={{ 
+                border: darkMode ? '1px solid white' : '1px solid black' 
+                }}> Edit User Information
+              </Button>
             </Col>
             <Col md={9}>
               <h3 className="txt">Create A Post</h3>
