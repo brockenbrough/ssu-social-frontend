@@ -144,7 +144,7 @@ const Login = () => {
                   <Form.Text className="text-muted pt-1">
                     Need an account?
                     <span>
-                      <Link to="/signup" style={labelStyling}>Sign up</Link>
+                      <Link to="/signup" style={labelStyling}> Sign up</Link>
                     </span>
                     <br></br>
                     This site is hosted on free services.  There may be a 2-3 minute delay
