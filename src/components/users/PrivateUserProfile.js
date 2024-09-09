@@ -384,7 +384,7 @@ const deleteConfirm = async () => {
                   onChange={handleChange}
                 />
                 <Button variant="primary" type="submit" onClick={handleSubmit} className="mt-2">
-                  Submit
+                  Post
                 </Button>
               </Form.Group>
               <h3>Your Posts</h3>
