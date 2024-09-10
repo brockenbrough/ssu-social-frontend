@@ -6,8 +6,7 @@ import Image from 'react-bootstrap/Image';
 import ReactNavbar from 'react-bootstrap/Navbar';
 import { useDarkMode } from '../components/DarkModeContext';
 import DarkModeButton from "../components/DarkModeButton";
-
-
+import Dropdown from 'react-bootstrap/Dropdown';
 
 const stickyNavbarStyle = {
   position: "sticky",
@@ -36,16 +35,19 @@ export default function Navbar() {
                 </Nav.Link>
               </div>
               <Container className="ml-auto">
-                <Nav>
-                  <Nav.Link href="/feed-algorithm" className="text-light">Feed</Nav.Link>
-                  <Nav.Link href="/createpost" className="text-light">Create Post</Nav.Link>
-                  <Nav.Link href="/getallpost" className="text-light">Explore</Nav.Link>
-                  <Nav.Link href="/privateUserProfile" className="text-light">Profile</Nav.Link>
-                </Nav>
+                <Dropdown>
+                  <Dropdown.Toggle variant="dark" id="dropdown-basic">
+                    Menu
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu>
+                    <Dropdown.Item href="/feed-algorithm">Feed</Dropdown.Item>
+                    <Dropdown.Item href="/createpost">Create Post</Dropdown.Item>
+                    <Dropdown.Item href="/getallpost">Explore</Dropdown.Item>
+                    <Dropdown.Item href="/privateUserProfile">Profile</Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
               </Container>
             </Container>
-            
-            
           </ReactNavbar>
         </div>
       );
@@ -55,10 +57,15 @@ export default function Navbar() {
           <Image src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXPnHm79GDZXZjpifapjAOWRsJcA_C3FgxWQLlbto&s" rounded className="mr-2" style={{ width: '30px', height: '30px' }} />
           <Nav.Link href="/" className="navbar-brand text-light">SSU Social</Nav.Link>
           <Container className="ml-auto">
-            <Nav>
-              <Nav.Link href="/" className="text-light">Login</Nav.Link>
-              <Nav.Link href="/signup" className="text-light">Register</Nav.Link>
-            </Nav>
+            <Dropdown>
+              <Dropdown.Toggle variant="dark" id="dropdown-basic">
+                Menu
+              </Dropdown.Toggle>
+              <Dropdown.Menu>
+                <Dropdown.Item href="/">Login</Dropdown.Item>
+                <Dropdown.Item href="/signup">Register</Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
           </Container>
         </div>
       );
@@ -72,7 +79,8 @@ export default function Navbar() {
           {publicUser()}
         </Nav>
       </Container>
-      < DarkModeButton/>
+      <DarkModeButton/>
     </ReactNavbar>
   );
 }
+
