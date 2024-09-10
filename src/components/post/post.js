@@ -287,9 +287,9 @@ const Post = ({ posts }) => {
             e.stopPropagation(); // Stop the click event from reaching the parent Card
             handleShowEditModal();
           }}
-          variant="warning"
+          variant="primary"
           >
-           Update
+           Edit
           </Button>
             </>
           )}
@@ -344,7 +344,7 @@ const Post = ({ posts }) => {
         <Modal.Footer style={{ backgroundColor: darkMode ? "#181818" : "#f6f8fa" }}>
           <Button variant="danger" onClick={handleDeletePost}>Delete</Button>
           <Button variant="secondary" onClick={handleCloseEditModal}>Cancel</Button>
-          <Button variant="primary" onClick={handleEditPost}>Update</Button>
+          <Button variant="primary" onClick={handleEditPost}>Edit</Button>
         </Modal.Footer>
       </Modal>
     </div>

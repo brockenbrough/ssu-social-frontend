@@ -42,8 +42,7 @@ const Comment = (props) => {
             <Button
               variant="primary"
               className="mx-1 my-1"
-              href={`/comments/editComment/${comment._id}`}
-            >
+              href={`/comments/editComment/${comment._id}`}>
               Edit
             </Button>
             

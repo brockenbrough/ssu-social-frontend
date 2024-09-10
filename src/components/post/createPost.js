@@ -205,7 +205,7 @@ const CreatePost = () => {
         >
           <Form.Group className="mb-3" controlId="formBasicPassword" style={{ width: "60%" }} >
             <Form.Control as="textarea" maxlength="280" placeholder="What's on your mind?" name="content" value={state.content} onChange={handleTextChange}
-              style={{ marginTop: '-16%', height: "3.5cm", width: "100%", backgroundColor: darkMode ? "#181818" : "white", color: darkMode ? "white" : "#000", fontSize: '25px', fontFamily: 'Times New Roman, Times, serif' }} />
+              style={{ marginTop: '-18%', height: "4.5cm", width: "100%", backgroundColor: darkMode ? "#181818" : "white", color: darkMode ? "white" : "#000", fontSize: '25px', fontFamily: 'Times New Roman, Times, serif'}} />
 
             <p> <span style={{ color: color }} onChange={handleTextChange}> {" "}{`${textAreaCount}/${maxText}`}{" "} </span> </p>
 
@@ -227,9 +227,9 @@ const CreatePost = () => {
 
             <img
               src={"/addImageLight.png"}
-              // darkMode ?  : "/add-img-icon.png"
+              src={darkMode ? "/add-img-icon.png" : "/addImageLight.png"} // Conditional image source
               alt="Add Image Icon"
-              style={{ width: "85px", height: "85px", marginTop: ".5cm" }}
+              style={{ width: "85px", height: "85px", marginTop: "-60px"}}
             />
           </div>
 
@@ -252,7 +252,7 @@ const CreatePost = () => {
             </div>
           )}
 
-          <Button style={{ width: "9cm", height: '7%', marginTop: "1cm", backgroundColor: "#28a745", borderColor: "#28a745", }} variant="primary" type="submit" size="lg">
+          <Button style={{ width: "9cm", height: '7%', marginTop: "-160px", backgroundColor: "#32CD32", borderColor: "black", marginRight:'800px' }} variant="primary" type="submit" size="lg">
             Create Post
           </Button>
         </Form>
