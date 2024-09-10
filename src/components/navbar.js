@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useLocation } from 'react-router-dom';
 import getUserInfo from '../utilities/decodeJwt';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
@@ -17,6 +18,7 @@ const stickyNavbarStyle = {
 export default function Navbar() {
   const [user, setUser] = useState(getUserInfo());
   const { darkMode } = useDarkMode();
+  const location = useLocation(); // Get current path
 
   useEffect(() => {
     setUser(getUserInfo());
@@ -26,17 +28,17 @@ export default function Navbar() {
     if (user) {
       return (
         <div style={stickyNavbarStyle}>
-          <ReactNavbar bg="dark" variant="dark">
+          <ReactNavbar bg={darkMode ? "dark" : "light"} variant={darkMode ? "dark" : "light"}>
             <Container>
               <div style={{ display: 'flex', alignItems: 'center' }}>
-                <Nav.Link href="/feed-algorithm" className="navbar-brand text-light">
+                <Nav.Link href="/feed-algorithm" className={`navbar-brand ${darkMode ? 'text-light' : 'text-dark'}`}>
                   <Image src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXPnHm79GDZXZjpifapjAOWRsJcA_C3FgxWQLlbto&s" rounded className="mr-2" style={{ width: '30px', height: '30px' }} />
                   SSU Social
                 </Nav.Link>
               </div>
               <Container className="ml-auto">
                 <Dropdown>
-                  <Dropdown.Toggle variant="dark" id="dropdown-basic">
+                  <Dropdown.Toggle variant={darkMode ? "dark" : "light"} id="dropdown-basic">
                     Menu
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
@@ -55,10 +57,10 @@ export default function Navbar() {
       return (
         <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
           <Image src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXPnHm79GDZXZjpifapjAOWRsJcA_C3FgxWQLlbto&s" rounded className="mr-2" style={{ width: '30px', height: '30px' }} />
-          <Nav.Link href="/" className="navbar-brand text-light">SSU Social</Nav.Link>
+          <Nav.Link href="/" className={`navbar-brand ${darkMode ? 'text-light' : 'text-dark'}`}>SSU Social</Nav.Link>
           <Container className="ml-auto">
             <Dropdown>
-              <Dropdown.Toggle variant="dark" id="dropdown-basic">
+              <Dropdown.Toggle variant={darkMode ? "dark" : "light"} id="dropdown-basic">
                 Menu
               </Dropdown.Toggle>
               <Dropdown.Menu>
@@ -70,17 +72,17 @@ export default function Navbar() {
         </div>
       );
     }
-  };  
+  };
 
   return (
-    <ReactNavbar bg="dark" variant="dark" style={{ position: 'sticky', top: 0, zIndex: 100 }}>
+    <ReactNavbar bg={darkMode ? "dark" : "light"} variant={darkMode ? "dark" : "light"} style={{ position: 'sticky', top: 0, zIndex: 100 }}>
       <Container>
         <Nav>
           {publicUser()}
         </Nav>
       </Container>
-      <DarkModeButton/>
+      {/* Conditionally render the DarkModeButton based on the current pathname */}
+      {location.pathname !== '/' && location.pathname !== '/signup' && <DarkModeButton />}
     </ReactNavbar>
   );
 }
-

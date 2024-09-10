@@ -19,9 +19,7 @@ const Register = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false); // New state for loading indicator
   const navigate = useNavigate();
-  const [light, setLight] = useState(false);
   const [bgColor, setBgColor] = useState(SECONDARY_COLOR);
-  const [bgText, setBgText] = useState("Light Mode");
 
   // Slideshow related state and logic
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -34,20 +32,14 @@ const Register = () => {
   };
 
   useEffect(() => {
-    if (light) {
-      setBgColor("white");
-      setBgText("Dark mode");
-    } else {
-      setBgColor(SECONDARY_COLOR);
-      setBgText("Light mode");
-    }
-  }, [light]);
+    setBgColor(SECONDARY_COLOR);
+  }, []);
 
   useEffect(() => {
     const slideshowInterval = setInterval(() => {
       setBgColor(SECONDARY_COLOR); // Reset background color
       setCurrentImageIndex(getNextImageIndex());
-    }, 5000); // 30 seconds interval
+    }, 5000); // 5 seconds interval
 
     return () => {
       clearInterval(slideshowInterval);
@@ -63,8 +55,6 @@ const Register = () => {
 
       setLoading(false); // Set loading to false after receiving the response
 
-      // const {accessToken} = res
-      // store token in localStorage
       navigate("/");
     } catch (error) {
       setLoading(false); // Set loading to false in case of an error
@@ -83,7 +73,7 @@ const Register = () => {
           setError("Invalid Password. The password has to contain at least 8 characters, including one Uppercase, one Lowercase, and a Special character.");
         } else {
           // For any other error types, set a generic error message
-          setError("The Username, Email or Password you've entered is invalid, Please tey again");
+          setError("The Username, Email or Password you've entered is invalid, Please try again");
         }
 
         console.log(responseError);
@@ -107,7 +97,7 @@ const Register = () => {
   };
 
   let backgroundStyling = {
-    background: `url(${backgroundImages[currentImageIndex]}), url(${backgroundImages[getNextImageIndex()]}), url(${backgroundImages[getNextImageIndex()]})`,
+    background: `url(${backgroundImages[currentImageIndex]})`,
     backgroundSize: 'cover',
     minHeight: '100vh',
     color: bgColor,
@@ -129,19 +119,19 @@ const Register = () => {
 
               <div className="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
                 <Form>
-                <Form.Group className="mb-3" controlId="formBasicEmail">
-                  <Form.Label style={labelStyling}>Username</Form.Label>
-                  <Form.Control 
-                  type="username" 
-                  name="username" 
-                  onChange={handleChange} 
-                  placeholder="Enter username" 
-                  />
-                  <Form.Text className="text-muted" style={labelStyling}>
+                  <Form.Group className="mb-3" controlId="formBasicEmail">
+                    <Form.Label style={labelStyling}>Username</Form.Label>
+                    <Form.Control 
+                      type="text" 
+                      name="username" 
+                      onChange={handleChange} 
+                      placeholder="Enter username" 
+                    />
+                    <Form.Text className="text-muted" style={labelStyling}>
                       The Username must be 6 characters or more
                     </Form.Text>
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="formBasicEmail" style={labelStyling}>
+                  </Form.Group>
+                  <Form.Group className="mb-3" controlId="formBasicEmail" style={labelStyling}>
                     <Form.Label style={labelStyling}>Email</Form.Label>
                     <Form.Control
                       type="email"
@@ -151,9 +141,9 @@ const Register = () => {
                     />
                     <Form.Text className="text-muted" style={labelStyling}>
                       Please input a valid email
-                  </Form.Text>
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="formBasicPassword" style={labelStyling}>
+                    </Form.Text>
+                  </Form.Group>
+                  <Form.Group className="mb-3" controlId="formBasicPassword" style={labelStyling}>
                     <Form.Label style={labelStyling}>Password</Form.Label>
                     <Form.Control
                       type="password"
@@ -164,30 +154,11 @@ const Register = () => {
                     <Form.Text className="text-muted" style={labelStyling}>
                       The password has to contain at least 8 characters.
                     </Form.Text>
-                    
-                  <div>
-                    This site is hosted on free services.  There may be a 2 minute delay
-                    in the response if the site has not been used recently.
-                  </div>
-                    </Form.Group>
-                <div class="form-check form-switch">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      role="switch"
-                      id="flexSwitchCheckDefault"
-                      onChange={() => {
-                        setLight(!light);
-                      }}
-                    />
-                    <label
-                      class="form-check-label"
-                      for="flexSwitchCheckDefault"
-                      className="text-muted"
-                    >
-                      {bgText}
-                    </label>
-                  </div>
+                    <div>
+                      This site is hosted on free services. There may be a 2-minute delay
+                      in the response if the site has not been used recently.
+                    </div>
+                  </Form.Group>
                   {error && (
                     <div style={labelStyling} className="pt-3">
                       {error}
