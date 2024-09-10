@@ -287,7 +287,7 @@ const Post = ({ posts }) => {
             e.stopPropagation(); // Stop the click event from reaching the parent Card
             handleShowEditModal();
           }}
-          variant="warning"
+          variant="primary"
           >
            Update
           </Button>
