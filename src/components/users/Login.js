@@ -154,7 +154,7 @@ const Login = () => {
                   
                   {error && <div style={labelStyling} className="pt-3">{error}</div>}
                   <Button variant="primary" type="submit" onClick={handleSubmit} style={buttonStyling} className="mt-2">
-                    {loading ? "Submitting..." : "Submit"}
+                    {loading ? "Logging in..." : "Log in"}
                   </Button>
                 </Form>
               </div>
