@@ -255,7 +255,7 @@ const Post = ({ posts }) => {
             {imageSrc && <img src={imageSrc} alt="Post" style={{ width: '100%', height: 'auto' }} />}
           </div>
 
-          <div style={{ wordBreak: 'break-all' }} onClick={toggleShowFullText}>
+          <div style={{ wordBreak: 'break-all',marginBottom:".5cm" }} onClick={toggleShowFullText}>
             {displayContent}
             <br />
           </div>
@@ -271,20 +271,18 @@ const Post = ({ posts }) => {
             </div>
           )}
 
-          <div className="text-center">
-            <Button variant={isLiked ? "danger" : "outline-danger"} onClick={handleLikeClick}>
-              {isLiked ? "Unlike" : "Like"}
+          <div className="text-left">
+            <Button variant={isLiked ? "outline-danger" : "outline-danger"} onClick={handleLikeClick}>
+              {isLiked ? "♥" : "♡"} <span>{` ${likeCount}`}</span>
             </Button>
           </div>
 
-          <p>{formattedDate}</p>
-
-          {likeCount !== null && <p>{`Likes: ${likeCount}`}</p>}
+         
 
           {isCurrentUserPost && (
             <>
             <Button
-          style={{ marginRight: "1cm" }}
+          style={{ marginRight: "1cm", marginTop: ".5cm", marginBottom:".5cm" }}
           onClick={(e) => {
             e.stopPropagation(); // Stop the click event from reaching the parent Card
             handleShowEditModal();
@@ -300,11 +298,13 @@ const Post = ({ posts }) => {
             to={`/createComment/${posts._id}`}
             className="btn btn-warning"
             disabled={true}
-            style={{ pointerEvents: 'none', opacity: 1.0 }}
+            style={{ pointerEvents: 'none', opacity: 1.0, marginTop: ".5cm", marginBottom:".5cm" }}
           >
             Comment ({commentCount > 0 ? commentCount : "0"})
           </Link>
+          <p>{formattedDate}</p>
         </Card.Body>
+       
       </Card>
 
       <Modal show={showPostModal} onHide={handleClosePostModal} >

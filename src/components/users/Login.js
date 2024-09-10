@@ -129,7 +129,7 @@ const Login = () => {
 
                 <Form>
                   <Form.Group className="mb-3" controlId="formBasicEmail">
-                  <Form.Label style={labelStyling}>Username</Form.Label>
+                  <Form.Label style={labelStyling}>User Name</Form.Label>
                   <Form.Control type="username" name="username" onChange={handleChange} placeholder="Enter username" />
                   <Form.Text className="text-muted">We just might sell your data</Form.Text>
                 </Form.Group>
