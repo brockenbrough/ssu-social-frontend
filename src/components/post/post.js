@@ -289,7 +289,7 @@ const Post = ({ posts }) => {
           }}
           variant="warning"
           >
-           Update
+           Edit
           </Button>
             </>
           )}
@@ -344,7 +344,7 @@ const Post = ({ posts }) => {
         <Modal.Footer style={{ backgroundColor: darkMode ? "#181818" : "#f6f8fa" }}>
           <Button variant="danger" onClick={handleDeletePost}>Delete</Button>
           <Button variant="secondary" onClick={handleCloseEditModal}>Cancel</Button>
-          <Button variant="primary" onClick={handleEditPost}>Update</Button>
+          <Button variant="primary" onClick={handleEditPost}>Edit</Button>
         </Modal.Footer>
       </Modal>
     </div>
