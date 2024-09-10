@@ -83,7 +83,7 @@ const Register = () => {
           setError("Invalid Password. The password has to contain at least 8 characters, including one Uppercase, one Lowercase, and a Special character.");
         } else {
           // For any other error types, set a generic error message
-          setError("The Username, Email or Password you've entered is invalid, Please tey again");
+          setError("The Username, Email or Password you've entered is invalid, Please try again");
         }
 
         console.log(responseError);
