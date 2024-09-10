@@ -354,7 +354,7 @@ const deleteConfirm = async () => {
                     color: darkMode ? 'white' : 'black',
                   }}>
                   <Button variant="secondary" onClick={handleCloseLogoutConfirmation}>
-                    Close
+                    No
                   </Button>
                   <Button variant="primary" onClick={handleLogout}>
                     Yes
