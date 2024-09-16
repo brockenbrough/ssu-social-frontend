@@ -17,7 +17,7 @@ const url = `${process.env.REACT_APP_BACKEND_SERVER_URI}/user/signup`;
 const Register = () => {
   const [data, setData] = useState({ username: "", email: "", password: "" });
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false); // New state for loading indicator
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const [bgColor, setBgColor] = useState(SECONDARY_COLOR);
 
@@ -37,9 +37,8 @@ const Register = () => {
 
   useEffect(() => {
     const slideshowInterval = setInterval(() => {
-      setBgColor(SECONDARY_COLOR); // Reset background color
       setCurrentImageIndex(getNextImageIndex());
-    }, 5000); // 5 seconds interval
+    }, 5000);// 5000 milliseconds = 5 second interval
 
     return () => {
       clearInterval(slideshowInterval);
@@ -49,155 +48,129 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      setLoading(true); // Set loading to true before making the request
-
+      setLoading(true);
       const { data: res } = await axios.post(url, data);
-
-      setLoading(false); // Set loading to false after receiving the response
-
+      setLoading(false);
       navigate("/");
     } catch (error) {
-      setLoading(false); // Set loading to false in case of an error
-
+      setLoading(false);
       if (error.response) {
         const responseError = error.response.data;
-
-        // Clear previous error messages
-        setError("");
-  
-        if (responseError.errorType === "InvalidUsername") {
-          setError("Invalid Username. The Username must be 6 characters or more.");
-        } else if (responseError.errorType === "InvalidEmail") {
-          setError("Invalid Email. Please input a valid email.");
-        } else if (responseError.errorType === "InvalidPassword") {
-          setError("Invalid Password. The password has to contain at least 8 characters, including one Uppercase, one Lowercase, and a Special character.");
-        } else {
-          // For any other error types, set a generic error message
-          setError("The Username, Email or Password you've entered is invalid, Please try again");
-        }
-
-        console.log(responseError);
+        setError(responseError.errorType === "InvalidUsername" ? "Invalid Username. The Username must be 6 characters or more." :
+                responseError.errorType === "InvalidEmail" ? "Invalid Email. Please input a valid email." :
+                responseError.errorType === "InvalidPassword" ? "Invalid Password. The password has to contain at least 8 characters, including one Uppercase, one Lowercase, and a Special character." :
+                "The Username, Email or Password you've entered is invalid, Please try again");
       } else {
-        // Something happened in setting up the request that triggered an Error
-        console.log('Error', error.message);
         setError("The Username, Email, or Password you've entered is invalid. Please try again");
       }
     }
   };
 
-  let labelStyling = {
+  const labelStyling = {
     color: PRIMARY_COLOR,
     fontWeight: "bold",
-    textDecoration: "none",
-    textShadow: `
-      -1px -1px 0 #000,  
-       1px -1px 0 #000,
-       -1px 1px 0 #000,
-        1px 1px 0 #000`
+    textShadow: "-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000"
   };
 
-  let backgroundStyling = {
+  const backgroundStyling = {
     background: `url(${backgroundImages[currentImageIndex]})`,
     backgroundSize: 'cover',
     minHeight: '100vh',
-    color: bgColor,
-    cursor: loading ? 'wait' : 'auto' // Change cursor based on loading state
+    color: PRIMARY_COLOR,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'relative'
   };
 
-  let buttonStyling = {
+  const formStyling = {
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    padding: '2rem',
+    borderRadius: '8px',
+    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+    maxWidth: '500px',
+    width: '100%',
+    margin: '1rem'
+  };
+
+  const buttonStyling = {
     background: PRIMARY_COLOR,
     borderStyle: "none",
-    color: bgColor,
+    color: SECONDARY_COLOR
   };
 
   return (
-    <>
-      <div style={backgroundStyling}>
-        <section style={{ paddingTop: '200px' }}>
-          <div className="container-fluid h-custom">
-            <div className="row d-flex justify-content-center align-items-center h-100">
-
-              <div className="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
-                <Form>
-                  <Form.Group className="mb-3" controlId="formBasicEmail">
-                    <Form.Label style={labelStyling}>Username</Form.Label>
-                    <Form.Control 
-                      type="text" 
-                      name="username" 
-                      onChange={handleChange} 
-                      placeholder="Enter username" 
-                    />
-                    <Form.Text className="text-muted" style={labelStyling}>
-                      The Username must be 6 characters or more
-                    </Form.Text>
-                  </Form.Group>
-                  <Form.Group className="mb-3" controlId="formBasicEmail" style={labelStyling}>
-                    <Form.Label style={labelStyling}>Email</Form.Label>
-                    <Form.Control
-                      type="email"
-                      name="email"
-                      onChange={handleChange}
-                      placeholder="Enter email"
-                    />
-                    <Form.Text className="text-muted" style={labelStyling}>
-                      Please input a valid email
-                    </Form.Text>
-                  </Form.Group>
-                  <Form.Group className="mb-3" controlId="formBasicPassword" style={labelStyling}>
-                    <Form.Label style={labelStyling}>Password</Form.Label>
-                    <Form.Control
-                      type="password"
-                      name="password"
-                      placeholder="Enter password"
-                      onChange={handleChange}
-                    />
-                    <Form.Text className="text-muted" style={labelStyling}>
-                      The password has to contain at least 8 characters.
-                    </Form.Text>
-                    <div>
-                      This site is hosted on free services. There may be a 2-minute delay
-                      in the response if the site has not been used recently.
-                    </div>
-                  </Form.Group>
-                  {error && (
-                    <div style={labelStyling} className="pt-3">
-                      {error}
-                    </div>
-                  )}
-                  <Button
-                    variant="primary"
-                    type="submit"
-                    onClick={handleSubmit}
-                    style={buttonStyling}
-                    className="mt-2"
-                  >
-                    Submit
-                  </Button>
-                </Form>
-              </div>
-
-              {/* Slideshow Container on the Side */}
-              <div className="col-md-4 d-none d-md-block">
-                <div style={{ height: "100%", overflow: "hidden" }}>
-                  <img
-                    src={containerImages[currentImageIndex]}
-                    alt="Slideshow"
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "cover",
-                      boxShadow: "4px 4px 8px rgba(0, 0, 0, 0.1)",
-                      border: "4px solid #ddd",
-                      borderRadius: "8px"
-                    }}
-                  />
-                </div>
-              </div>
+    <div style={backgroundStyling}>
+      <div style={formStyling}>
+        <h2 className="text-center" style={{ color: PRIMARY_COLOR }}>Register</h2>
+        <Form onSubmit={handleSubmit}>
+          <Form.Group className="mb-3" controlId="formBasicUsername">
+            <Form.Label style={labelStyling}>Username</Form.Label>
+            <Form.Control 
+              type="text" 
+              name="username" 
+              onChange={handleChange} 
+              placeholder="Enter username" 
+            />
+            <Form.Text className="text-muted" style={labelStyling}>
+              The Username must be 6 characters or more
+            </Form.Text>
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="formBasicEmail">
+            <Form.Label style={labelStyling}>Email</Form.Label>
+            <Form.Control
+              type="email"
+              name="email"
+              onChange={handleChange}
+              placeholder="Enter email"
+            />
+            <Form.Text className="text-muted" style={labelStyling}>
+              Please input a valid email
+            </Form.Text>
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="formBasicPassword">
+            <Form.Label style={labelStyling}>Password</Form.Label>
+            <Form.Control
+              type="password"
+              name="password"
+              placeholder="Enter password"
+              onChange={handleChange}
+            />
+            <Form.Text className="text-muted" style={labelStyling}>
+              The password has to contain at least 8 characters.
+            </Form.Text>
+          </Form.Group>
+          {error && (
+            <div className="text-danger mb-3">
+              {error}
             </div>
-          </div>
-        </section>
+          )}
+          <Button
+            variant="primary"
+            type="submit"
+            style={buttonStyling}
+            className="w-100 mt-3"
+            disabled={loading}
+          >
+            {loading ? "Submitting..." : "Submit"}
+          </Button>
+        </Form>
       </div>
-    </>
+      {/* Slideshow Container on the Side */}
+      <div className="position-absolute" style={{ top: 0, right: 0, width: '30%', height: '100%' }}>
+        <img
+          src={containerImages[currentImageIndex]}
+          alt="Slideshow"
+          style={{
+            width: '100%',
+            height: '100%',
+            objectFit: "cover",
+            boxShadow: "4px 4px 8px rgba(0, 0, 0, 0.2)",
+            borderRadius: "8px"
+          }}
+        />
+      </div>
+    </div>
   );
 };
 
