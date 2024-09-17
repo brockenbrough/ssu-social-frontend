@@ -308,7 +308,7 @@ const deleteConfirm = async () => {
                   border: darkMode ? '1px solid white' : '1px solid black',
                   marginTop: '10px'
                 }}>
-                  Follower Count: {followerCount}
+                  Followers: {followerCount}
                 </Button>{" "}
                 <Button onClick={followingRouteChange} variant="light" style={{
                   background: darkMode ? '#181818' : 'white',
@@ -316,7 +316,7 @@ const deleteConfirm = async () => {
                   border: darkMode ? '1px solid white' : '1px solid black',
                   marginTop: '10px'
                 }}>
-                  Following Count: {followingCount}
+                  Following: {followingCount}
                 </Button>{" "}
                 <Button variant="light" style={{
                   background: darkMode ? '#181818' : 'white',
@@ -367,26 +367,7 @@ const deleteConfirm = async () => {
               </Button>
             </Col>
             <Col md={9}>
-              <h3 className="txt">Create A Post</h3>
-              <Form.Group
-                className="mb-3"
-                controlId="content"
-                style={{ width: "50rem" }}
-              >
-                <Form.Control
-                  type="text"
-                  style={{
-                    background: darkMode ? '#181818' : 'white',
-                    color: darkMode ? 'white' : 'black',
-                  }}
-                  placeholder="Enter post here"
-                  value={form.content}
-                  onChange={handleChange}
-                />
-                <Button variant="primary" type="submit" onClick={handleSubmit} className="mt-2">
-                  Post
-                </Button>
-              </Form.Group>
+
               <h3>Your Posts</h3>
               <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-start', gap: '1rem' }}>
                 <PostList type="privateuserprofile" />
