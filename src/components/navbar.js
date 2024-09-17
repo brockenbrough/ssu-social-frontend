@@ -7,6 +7,7 @@ import ReactNavbar from 'react-bootstrap/Navbar';
 import { useDarkMode } from '../components/DarkModeContext';
 import DarkModeButton from "../components/DarkModeButton";
 import Dropdown from 'react-bootstrap/Dropdown';
+import { NavLink } from "react-bootstrap";
 
 const stickyNavbarStyle = {
   position: "sticky",
@@ -41,11 +42,17 @@ export default function Navbar() {
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
                     <Dropdown.Item href="/feed-algorithm">Feed</Dropdown.Item>
-                    <Dropdown.Item href="/createpost">Create Post</Dropdown.Item>
                     <Dropdown.Item href="/getallpost">Explore</Dropdown.Item>
                     <Dropdown.Item href="/privateUserProfile">Profile</Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown>
+
+                <Nav className="ml-auto">
+              <Nav.Link href="/createpost">
+                Create Post
+                <span style={{ fontSize: '1.2rem', marginLeft: '5px' }}>+</span>
+              </Nav.Link>
+            </Nav>
               </Container>
             </Container>
           </ReactNavbar>
