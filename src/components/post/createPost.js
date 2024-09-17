@@ -210,7 +210,7 @@ const CreatePost = () => {
 
         <div name="img-icon" onClick={handleImageClick} style={{ marginBottom: "15px" }}>
           <img
-            src={darkMode ? "/add-img-icon.png" : "/addImageLight.png"}
+            src={darkMode ? "/addImageLight.png" : "/add-img-icon.png"}
             alt="Add Image Icon"
             style={{
               width: "50px",
