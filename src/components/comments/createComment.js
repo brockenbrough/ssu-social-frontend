@@ -217,7 +217,10 @@ function CreateComment({postId}) {
   return (
     <div className="container mt-4">
     <div>
-      <h5 className="mb-4">Comments</h5>
+      <span className="mb-4">
+        <span style={{fontSize: "1.5rem", fontWeight: "bold", marginRight: "12px"}}>Comments</span>
+        <span style={{fontSize: "1.2rem"}}>{comments.length}</span>
+      </span>
       <table className="table table-striped" style={{ marginTop: 20 }}>
           <tbody>{commentList()}</tbody>
       </table>
