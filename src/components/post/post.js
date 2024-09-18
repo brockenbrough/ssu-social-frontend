@@ -18,7 +18,7 @@ const Post = ({ posts }) => {
   const [isLiked, setIsLiked] = useState(false);
   const [dataLoaded, setDataLoaded] = useState(false);
   const formattedDate = moment(posts.date).format("MMMM Do YYYY, h:mm A");
-  const commentFormattedDate = moment(posts.date).format("MM/DD/YYYY");
+  const commentFormattedDate = moment(posts.date).format("h:mm A - M/D/YYYY");
   const { _id: postId } = posts;
   const [user, setUser] = useState(null);
   const { darkMode } = useDarkMode();
