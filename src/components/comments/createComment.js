@@ -161,14 +161,14 @@ function CreateComment({postId}) {
         outline
         color="success"
         className="mx-0 my-0"
-        style={{ width: "20rem" }}
+        style={{ width: "100%"}}
       >
-        <Card.Body>
+        <Card.Body style={{margin: "0", padding: "0"}}>
           <Stack>
-            <div>
-              <p>{comment.commentContent}</p>
-            </div>
-
+              <span style={{fontSize: "0.7 rem"}}>
+                <span style={{fontWeight: "bold"}}>@{comment.username}: </span>
+                {comment.commentContent}
+              </span>
           </Stack>
         </Card.Body>
       </Card>
