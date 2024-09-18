@@ -313,8 +313,8 @@ const Post = ({ posts }) => {
           <Modal.Title style={{ backgroundColor: darkMode ? "#181818" : "#f6f8fa", color: darkMode ? "white" : "black", }}>Post</Modal.Title>
         </Modal.Header>
         <Modal.Body style={{ wordWrap: 'break-word', overflowWrap: 'break-word', backgroundColor: darkMode ? "#181818" : "#f6f8fa", color: darkMode ? "white" : "black", }}>
-          <p>{posts.content}</p>
-          <p>{commentFormattedDate}</p>
+          <p style={{fontSize: "1.2rem"}}>{posts.content}</p>
+          <p style={{fontSize: "0.8rem"}}>{commentFormattedDate}</p>
           <CommentModal postId={posts._id} />
         </Modal.Body>
         <Modal.Footer style={{ backgroundColor: darkMode ? "#181818" : "#f6f8fa", color: darkMode ? "white" : "black", }}>
