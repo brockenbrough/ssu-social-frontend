@@ -191,31 +191,33 @@ function CreateComment({postId}) {
     </div>
 
       <form onSubmit={handleSubmit}>
-        <div className="mb-2">
-          <label htmlFor="commentContent" className="form-label">
-            Comment?
-          </label>
-          <textarea
-         
-            rows="4"
-            className="form-control"
-            id="commentContent"
-            name="commentContent"
-            value={formData.commentContent}
-            onChange={(e) =>
-              setFormData({ ...formData, commentContent: e.target.value })
-            }
-            required
-            style={{ resize: "vertical", wordWrap: "break-word", backgroundColor: darkMode ? "#181818" : "#f6f8fa", color: darkMode ? "white": "black", }}
-          />
-        </div>
-        <div className="d-grid gap-2">
-          <button type="submit" className="btn btn-primary">
+        <div className="d-flex align-items-center">
+            <input
+              type="text"
+              className="form-control"
+              id="commentContent"
+              name="commentContent"
+              value={formData.commentContent}
+              onChange={(e) =>
+                setFormData({ ...formData, commentContent: e.target.value })
+              }
+              required
+              placeholder="Write a comment..."
+              style={{
+                width: "88%",
+                marginRight: "2%",
+                backgroundColor: darkMode ? "#181818" : "#f6f8fa",
+                color: darkMode ? "white" : "black",
+              }}
+            />
+            <button
+              type="submit"
+              className="btn btn-primary d-flex justify-content-center align-items-center"
+              style={{ width: "10%" }}
+            >
             Post
-          </button>
-        
-
-        </div>
+            </button>
+          </div>
       </form>
     </div>
   );
