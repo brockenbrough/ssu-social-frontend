@@ -18,6 +18,7 @@ const Post = ({ posts }) => {
   const [isLiked, setIsLiked] = useState(false);
   const [dataLoaded, setDataLoaded] = useState(false);
   const formattedDate = moment(posts.date).format("MMMM Do YYYY, h:mm A");
+  const commentFormattedDate = moment(posts.date).format("MM/DD/YYYY");
   const { _id: postId } = posts;
   const [user, setUser] = useState(null);
   const { darkMode } = useDarkMode();
@@ -313,7 +314,7 @@ const Post = ({ posts }) => {
         </Modal.Header>
         <Modal.Body style={{ wordWrap: 'break-word', overflowWrap: 'break-word', backgroundColor: darkMode ? "#181818" : "#f6f8fa", color: darkMode ? "white" : "black", }}>
           <p>{posts.content}</p>
-          <p>{formattedDate}</p>
+          <p>{commentFormattedDate}</p>
           <CommentModal postId={posts._id} />
         </Modal.Body>
         <Modal.Footer style={{ backgroundColor: darkMode ? "#181818" : "#f6f8fa", color: darkMode ? "white" : "black", }}>
