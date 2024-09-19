@@ -103,6 +103,13 @@ const CreatePost = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Check if content is empty
+    if (!state.content.trim()) {
+      alert("You need a description in order to create this post.");
+      return;
+  }
+    
     let post = {};
 
     if (selectedImage) {
