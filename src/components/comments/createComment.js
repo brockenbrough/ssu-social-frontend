@@ -22,7 +22,7 @@ export function useCommentCount() {
   return useContext(CommentCountContext);
 }
 
-function CreateComment({ postId }) {
+function CreateComment({ postId, setParentCommentCount }) {
   const [comments, setComments] = useState([]);
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
@@ -138,6 +138,7 @@ function CreateComment({ postId }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setCommentCount(commentCount + 1);
+    setParentCommentCount(commentCount + 1);
 
     const userId = user.id;
     const username = user.username;
