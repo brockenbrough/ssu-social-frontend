@@ -82,6 +82,17 @@ function CreateComment({postId}) {
       });
   };
 
+  const fetchComments = async () => {
+    const response = await fetch(`${process.env.REACT_APP_BACKEND_SERVER_URI}/comments/comment/getCommentById/${postId}`, { method: "GET" });
+
+    if (response.ok) {
+      const fetchedRecords = await response.json();
+      setComments(fetchedRecords); 
+    } else {
+      console.error("Error fetching comments:", response.statusText);
+    }
+  };
+
 
   const [formData, setFormData] = useState({
     commentContent: "",
@@ -149,11 +160,16 @@ function CreateComment({postId}) {
 
 
       if (response.ok) {
-        // Comment created successfully, navigate back to the post page
-        navigate("/comments/comment" , {state: postId});
+        // Reset Form
+        setFormData({ commentContent: "" });
+
+        // Update comments
+        setComments([...comments, newComment]);
        
-        // After successfully creating a comment, update the comment count
+        // Fetch comment count and comments
         fetchCommentCount();
+        fetchComments();
+      
       } else {
         // Handle errors if needed
         console.error("Error:", response.status);
