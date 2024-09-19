@@ -13,7 +13,7 @@ import CommentModal from "../comments/CommentModal";
 
 const Post = ({ posts }) => {
   const [showFullText, setShowFullText] = useState(false);
-  const [likeCount, setLikeCount] = useState(null);
+  const [likeCount, setLikeCount] = useState(0);
   const [commentCount, setCommentCount] = useState(null);
   const [isLiked, setIsLiked] = useState(false);
   const [dataLoaded, setDataLoaded] = useState(false);
@@ -151,9 +151,11 @@ const Post = ({ posts }) => {
     }
   }, [posts.content]);
 
-  const handleLikeClick = () => {
+  const handleLikeClick = (e) => {
+    e.stopPropagation();  
+  
     if (!user || !user.id) return;
-
+    
     const userId = user.id;
     if (!isLiked) {
       axios.post(`${process.env.REACT_APP_BACKEND_SERVER_URI}/likes/like`, { postId, userId })
@@ -174,7 +176,7 @@ const Post = ({ posts }) => {
         })
         .catch(error => console.error("Error unliking:", error));
     }
-  };
+  };  
 
   const handleIsLiked = async () => {
     if (!user || !user.id) return;
@@ -241,7 +243,7 @@ const Post = ({ posts }) => {
         maxWidth: '400px',
         minWidth: '400px',
         backgroundColor: darkMode ? "#181818" : "#f6f8fa"
-      }} onClick={handleShowPostModal}>
+      }} >
         <Card.Body style={{ color: darkMode ? "white" : "black" }}>
 
           <div style={{ marginBottom: '10px' }}>
@@ -295,14 +297,14 @@ const Post = ({ posts }) => {
             </>
           )}
 
-          <Link
-            to={`/createComment/${posts._id}`}
-            className="btn btn-warning"
-            disabled={true}
-            style={{ pointerEvents: 'none', opacity: 1.0, marginTop: ".5cm", marginBottom:".5cm" }}
-          >
-            Comment ({commentCount > 0 ? commentCount : "0"})
-          </Link>
+      <Button
+        onClick={handleShowPostModal}  
+        className="btn btn-warning"
+        style={{ marginTop: ".5cm", marginBottom: ".5cm" }}
+      >
+        Comment ({commentCount > 0 ? commentCount : "0"})
+      </Button>
+          
           <p>{formattedDate}</p>
         </Card.Body>
        
