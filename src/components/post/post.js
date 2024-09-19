@@ -8,7 +8,6 @@ import axios from "axios";
 import { useDarkMode } from '../DarkModeContext';
 import Modal from "react-bootstrap/Modal";
 import { Form } from 'react-bootstrap';
-import CreateComment from "../comments/createComment";
 import CommentModal from "../comments/CommentModal";
 
 const Post = ({ posts }) => {

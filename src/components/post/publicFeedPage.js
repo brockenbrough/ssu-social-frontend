@@ -1,10 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import Post from "./post";
-import Card from 'react-bootstrap/Card';
-import Button from "react-bootstrap/Button";
-import ToggleButton from 'react-bootstrap/ToggleButton';
 
 export default function PostList() {
   const [posts, setPosts] = useState([]);
@@ -16,13 +12,13 @@ export default function PostList() {
       .then(res => {
         feed = res.data.feed
       })
-      .catch(error => alert("An error has occure while fetching feed data"))
+      .catch(error => alert("An error has occurred while fetching feed data"))
     for (let i = 0; i < feed.length; i++) {
       const res = await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getPostById/${feed[i]}`)
         .then(res => {
           postData.push(res.data)
         })
-        .catch(error => alert("An error has occured while fetching post data"))
+        .catch(error => alert("An error has occurred while fetching post data"))
     }
     setPosts(postData)
   }
@@ -36,22 +32,7 @@ export default function PostList() {
       <h1>
         Welcome to the public feed page
       </h1>
-      {/* <div>
-        {posts.map((posts, index) => (
-          <div key={index}>
-            <Card style={{ width: '18rem' , marginTop:'1cm', marginLeft:'.5cm',background:'aliceblue'}}>       
-              <Card.Body>
-                <Card.Title><Link to={'/publicprofilepage'}>{posts.username}</Link>{}</Card.Title>
-                {posts.content}
-                <div>
-                  <ToggleButton href='#'>👍</ToggleButton>
-                </div>
-              </Card.Body>
-              <Card.Footer>{posts.date}</Card.Footer>
-            </Card>
-          </div>
-        ))}
-      </div> */}
+
       <div>
         {posts.map(e => {
           return <Post posts = {e} isLiked={"true"}/>

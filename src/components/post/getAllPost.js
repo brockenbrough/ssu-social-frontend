@@ -1,6 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import getUserInfo from "../../utilities/decodeJwt";
 import PostList from "./postlist";
 import { useDarkMode } from '../DarkModeContext';
 

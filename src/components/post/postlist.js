@@ -3,12 +3,9 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import getUserInfoAsync from "../../utilities/decodeJwtAsync";
 import Post from "./post";
-import "./feedPageStyle.css"; 
+import "./postlistStyle.css"; 
 import ScrollToTop from "./ScrollToTop";
 import { useDarkMode } from '../DarkModeContext';
-import Card from 'react-bootstrap/Card';
-import Button from "react-bootstrap/Button";
-import ToggleButton from 'react-bootstrap/ToggleButton';
 
 function PostList({type, profileUsername}) {
     const { darkMode } = useDarkMode();
