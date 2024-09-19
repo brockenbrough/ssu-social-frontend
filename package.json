@@ -31,7 +31,6 @@
     "eject": "react-scripts eject",
     "testJest": "react-scripts test --env=jsdom"
   },
-
   "eslintConfig": {
     "extends": [
       "react-app",
@@ -49,5 +48,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.12"
   }
 }
