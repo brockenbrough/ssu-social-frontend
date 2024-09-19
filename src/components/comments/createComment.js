@@ -1,17 +1,15 @@
-import React, { useState, useEffect,createContext, useContext, } from "react";
+import React, { useState, useEffect, createContext, useContext } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import getUserInfo from "../../utilities/decodeJwt";
-import { useDarkMode } from '../DarkModeContext';
+import { useDarkMode } from "../DarkModeContext";
 import Post from "../post/post";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import Stack from "react-bootstrap/Stack";
 const CommentCountContext = createContext();
 
-
 export function CommentCountProvider({ children }) {
   const [commentCount, setCommentCount] = useState(0);
-
 
   return (
     <CommentCountContext.Provider value={{ commentCount, setCommentCount }}>
@@ -20,19 +18,16 @@ export function CommentCountProvider({ children }) {
   );
 }
 
-
 export function useCommentCount() {
   return useContext(CommentCountContext);
 }
 
-
-function CreateComment({postId}) {
+function CreateComment({ postId }) {
   const [comments, setComments] = useState([]);
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
   const [commentCount, setCommentCount] = useState(0); // Comment count state
   const { darkMode } = useDarkMode();
-
 
   useEffect(() => {
     // Use the useEffect hook to run code after the component has rendered.
@@ -48,10 +43,13 @@ function CreateComment({postId}) {
   useEffect(() => {
     // Define a function to get records. We are going to call it below.
     // We use async keyword so we can ．０later say "await" to block on finish.
-     async function getRecords() {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_SERVER_URI}/comments/comment/getCommentById/${postId}`, {
-        method: "GET",
-      })
+    async function getRecords() {
+      const response = await fetch(
+        `${process.env.REACT_APP_BACKEND_SERVER_URI}/comments/comment/getCommentById/${postId}`,
+        {
+          method: "GET",
+        }
+      );
 
       if (!response.ok) {
         const message = `An error occured: ${response.statusText}`;
@@ -59,7 +57,7 @@ function CreateComment({postId}) {
         return;
       }
 
-      if(response != null){
+      if (response != null) {
         const fetchedRecords = await response.json();
         setComments(fetchedRecords); // update state.  when state changes, we automatically re-render.
       }
@@ -75,7 +73,6 @@ function CreateComment({postId}) {
       .then((response) => response.json())
       .then((data) => {
         setCommentCount(data); // Update the comment count
-       
       })
       .catch((error) => {
         console.error("Error fetching comment count:", error);
@@ -83,16 +80,18 @@ function CreateComment({postId}) {
   };
 
   const fetchComments = async () => {
-    const response = await fetch(`${process.env.REACT_APP_BACKEND_SERVER_URI}/comments/comment/getCommentById/${postId}`, { method: "GET" });
+    const response = await fetch(
+      `${process.env.REACT_APP_BACKEND_SERVER_URI}/comments/comment/getCommentById/${postId}`,
+      { method: "GET" }
+    );
 
     if (response.ok) {
       const fetchedRecords = await response.json();
-      setComments(fetchedRecords); 
+      setComments(fetchedRecords);
     } else {
       console.error("Error fetching comments:", response.statusText);
     }
   };
-
 
   const [formData, setFormData] = useState({
     commentContent: "",
@@ -101,7 +100,7 @@ function CreateComment({postId}) {
   const timeAgo = (date) => {
     const now = new Date();
     const commentDate = new Date(date);
-    const diffInSeconds = (now - commentDate) / 1000;
+    const diffInSeconds = Math.max(0, (now - commentDate) / 1000);
 
     const secondsInMinute = 60;
     const secondsInHour = 60 * 60;
@@ -110,17 +109,29 @@ function CreateComment({postId}) {
     const secondsInYear = 60 * 60 * 24 * 365;
 
     if (diffInSeconds < secondsInMinute) {
-      return `${Math.floor(diffInSeconds)} second${Math.floor(diffInSeconds) !== 1 ? 's' : ''} ago`;
+      return `${Math.floor(diffInSeconds)} second${
+        Math.floor(diffInSeconds) !== 1 ? "s" : ""
+      } ago`;
     } else if (diffInSeconds < secondsInHour) {
-      return `${Math.floor(diffInSeconds / secondsInMinute)} minute${Math.floor(diffInSeconds / secondsInMinute) !== 1 ? 's' : ''} ago`;
+      return `${Math.floor(diffInSeconds / secondsInMinute)} minute${
+        Math.floor(diffInSeconds / secondsInMinute) !== 1 ? "s" : ""
+      } ago`;
     } else if (diffInSeconds < secondsInDay) {
-      return `${Math.floor(diffInSeconds / secondsInHour)} hour${Math.floor(diffInSeconds / secondsInHour) !== 1 ? 's' : ''} ago`;
+      return `${Math.floor(diffInSeconds / secondsInHour)} hour${
+        Math.floor(diffInSeconds / secondsInHour) !== 1 ? "s" : ""
+      } ago`;
     } else if (diffInSeconds < secondsInMonth) {
-      return `${Math.floor(diffInSeconds / secondsInDay)} day${Math.floor(diffInSeconds / secondsInDay) !== 1 ? 's' : ''} ago`;
+      return `${Math.floor(diffInSeconds / secondsInDay)} day${
+        Math.floor(diffInSeconds / secondsInDay) !== 1 ? "s" : ""
+      } ago`;
     } else if (diffInSeconds < secondsInYear) {
-      return `${Math.floor(diffInSeconds / secondsInMonth)} month${Math.floor(diffInSeconds / secondsInMonth) !== 1 ? 's' : ''} ago`;
+      return `${Math.floor(diffInSeconds / secondsInMonth)} month${
+        Math.floor(diffInSeconds / secondsInMonth) !== 1 ? "s" : ""
+      } ago`;
     } else {
-      return `${Math.floor(diffInSeconds / secondsInYear)} year${Math.floor(diffInSeconds / secondsInYear) !== 1 ? 's' : ''} ago`;
+      return `${Math.floor(diffInSeconds / secondsInYear)} year${
+        Math.floor(diffInSeconds / secondsInYear) !== 1 ? "s" : ""
+      } ago`;
     }
   };
 
@@ -128,12 +139,10 @@ function CreateComment({postId}) {
     e.preventDefault();
     setCommentCount(commentCount + 1);
 
-
     const userId = user.id;
     const username = user.username;
     const { commentContent } = formData;
     const submissionDate = new Date();
-
 
     // Create a new comment object
     const newComment = {
@@ -143,7 +152,6 @@ function CreateComment({postId}) {
       commentContent,
       submissionDate,
     };
-
 
     try {
       // Send a POST request to create the comment in MongoDB
@@ -158,18 +166,16 @@ function CreateComment({postId}) {
         }
       );
 
-
       if (response.ok) {
         // Reset Form
         setFormData({ commentContent: "" });
 
         // Update comments
         setComments([...comments, newComment]);
-       
+
         // Fetch comment count and comments
         fetchCommentCount();
         fetchComments();
-      
       } else {
         // Handle errors if needed
         console.error("Error:", response.status);
@@ -183,97 +189,96 @@ function CreateComment({postId}) {
   };
 
   function commentList() {
-    
-    if (comments ==null)
-    {
-      return(
+    if (comments == null) {
+      return (
         <div>
-          <h3>
-            No Comment Found
-          </h3>
-          </div>
+          <h3>No Comment Found</h3>
+        </div>
       );
     }
     return comments.map((comment) => {
-      
       return (
         <Card
-        body
-        outline
-        color="success"
-        className="mx-0 my-0"
-        style={{ width: "100%"}}
-      >
-        <Card.Body style={{margin: "0", padding: "0"}}>
-          <Stack>
+          body
+          outline
+          color="success"
+          className="mx-0 my-0"
+          style={{ width: "100%" }}
+        >
+          <Card.Body style={{ margin: "0", padding: "0" }}>
+            <Stack>
               <span>
-                <span style={{fontWeight: "bold", fontSize: "1rem"}}>
-                  @{comment.username} 
+                <span style={{ fontWeight: "bold", fontSize: "1rem" }}>
+                  @{comment.username}
                 </span>
-                <span style={{marginLeft: "5px", fontSize: "0.8rem"}}>
-                  {timeAgo(comment.date)} 
+                <span style={{ marginLeft: "5px", fontSize: "0.8rem" }}>
+                  {timeAgo(comment.date)}
                 </span>
-                <br/>
-                <span>
-                {comment.commentContent}
-                </span>
+                <br />
+                <span>{comment.commentContent}</span>
               </span>
-          </Stack>
-        </Card.Body>
-      </Card>
+            </Stack>
+          </Card.Body>
+        </Card>
       );
     });
   }
 
   const viewAllComments = () => {
-    navigate("/comments/comment" , {state: postId});
+    navigate("/comments/comment", { state: postId });
   };
-
 
   return (
     <div className="container mt-4">
-    <div>
-      <span className="mb-4">
-        <span style={{fontSize: "1.5rem", fontWeight: "bold", marginRight: "12px"}}>Comments</span>
-        <span style={{fontSize: "1.2rem"}}>{comments.length}</span>
-      </span>
-      <table className="table table-striped" style={{ marginTop: 20 }}>
+      <div>
+        <span className="mb-4">
+          <span
+            style={{
+              fontSize: "1.5rem",
+              fontWeight: "bold",
+              marginRight: "12px",
+            }}
+          >
+            Comments
+          </span>
+          <span style={{ fontSize: "1.2rem" }}>{comments.length}</span>
+        </span>
+        <table className="table table-striped" style={{ marginTop: 20 }}>
           <tbody>{commentList()}</tbody>
-      </table>
-    </div>
+        </table>
+      </div>
 
       <form onSubmit={handleSubmit}>
         <div className="d-flex align-items-center">
-            <input
-              type="text"
-              className="form-control"
-              id="commentContent"
-              name="commentContent"
-              value={formData.commentContent}
-              onChange={(e) =>
-                setFormData({ ...formData, commentContent: e.target.value })
-              }
-              required
-              placeholder="Write a comment..."
-              style={{
-                width: "88%",
-                marginRight: "2%",
-                backgroundColor: darkMode ? "#181818" : "#f6f8fa",
-                color: darkMode ? "white" : "black",
-              }}
-            />
-            <button
-              type="submit"
-              className="btn btn-primary d-flex justify-content-center align-items-center"
-              style={{ width: "10%" }}
-            >
+          <input
+            type="text"
+            className="form-control"
+            id="commentContent"
+            name="commentContent"
+            value={formData.commentContent}
+            onChange={(e) =>
+              setFormData({ ...formData, commentContent: e.target.value })
+            }
+            required
+            placeholder="Write a comment..."
+            style={{
+              width: "88%",
+              marginRight: "2%",
+              backgroundColor: darkMode ? "#181818" : "#f6f8fa",
+              color: darkMode ? "white" : "black",
+            }}
+          />
+          <button
+            type="submit"
+            className="btn btn-primary d-flex justify-content-center align-items-center"
+            style={{ width: "10%" }}
+          >
             Post
-            </button>
-          </div>
+          </button>
+        </div>
       </form>
     </div>
   );
 }
-
 
 export default CreateComment;
