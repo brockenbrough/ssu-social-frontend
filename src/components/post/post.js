@@ -9,6 +9,7 @@ import { useDarkMode } from "../DarkModeContext";
 import Modal from "react-bootstrap/Modal";
 import { Form } from "react-bootstrap";
 import CommentModal from "../comments/CommentModal";
+import timeAgo from "../../utilities/timeAgo";
 
 const Post = ({ posts }) => {
   const [showFullText, setShowFullText] = useState(false);
@@ -16,8 +17,7 @@ const Post = ({ posts }) => {
   const [commentCount, setCommentCount] = useState(0);
   const [isLiked, setIsLiked] = useState(false);
   const [dataLoaded, setDataLoaded] = useState(false);
-  const formattedDate = moment(posts.date).format("MMMM Do YYYY, h:mm A");
-  const commentFormattedDate = moment(posts.date).format("h:mm A - M/D/YYYY");
+  const formattedDate = moment(posts.date).format("h:mm A - M/D/YYYY");
   const { _id: postId } = posts;
   const [user, setUser] = useState(null);
   const { darkMode } = useDarkMode();
@@ -411,7 +411,10 @@ const Post = ({ posts }) => {
             >
               @{posts.username}
             </span>
-            <span style={{ fontSize: "0.8rem" }}>{commentFormattedDate}</span>
+            <span style={{ fontSize: "0.8rem", marginRight: "15px" }}>
+              {formattedDate}
+            </span>
+            <span style={{ fontSize: "0.8rem" }}>{}</span>
           </p>
           <CommentModal postId={posts._id} setCommentCount={setCommentCount} />
         </Modal.Body>
