@@ -371,7 +371,12 @@ const Post = ({ posts }) => {
             Comment ({commentCount > 0 ? commentCount : "0"})
           </Button>
 
-          <p>{formattedDate}</p>
+          <p>
+            <span style={{ marginRight: "15px", fontSize: "0.8rem" }}>
+              {formattedDate}
+            </span>
+            <span style={{ fontSize: "0.8rem" }}>{timeAgo(posts.date)}</span>
+          </p>
         </Card.Body>
       </Card>
 
@@ -414,7 +419,7 @@ const Post = ({ posts }) => {
             <span style={{ fontSize: "0.8rem", marginRight: "15px" }}>
               {formattedDate}
             </span>
-            <span style={{ fontSize: "0.8rem" }}>{}</span>
+            <span style={{ fontSize: "0.8rem" }}>{timeAgo(posts.date)}</span>
           </p>
           <CommentModal postId={posts._id} setCommentCount={setCommentCount} />
         </Modal.Body>
