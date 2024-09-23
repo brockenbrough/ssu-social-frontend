@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import getUserInfo from '../../utilities/decodeJwt'
@@ -6,15 +5,15 @@ import axios from 'axios'
 import Button from 'react-bootstrap/Button';
 import FollowButton from './followButton.js';
 import { Link } from 'react-router-dom';
+import { useDarkMode } from '../DarkModeContext';  // Import dark mode hook
 
 // The FollowingList component.  This is the main component in this file.
 export default function FollowingList() {
-
-
   const [user, setUser] = useState()
   const [followings, setFollowing] = useState([]);
   const params = useParams();
   const [error, setError] = useState({});
+  const { darkMode } = useDarkMode();  // Get dark mode state
 
   useEffect(() => {
     // Define a function to get the user's following. People that they follow.
@@ -28,15 +27,12 @@ export default function FollowingList() {
         return;
       }
 
-      try{
-
-      const fetchedFollowing = await response.json();
-
-      setFollowing(fetchedFollowing[0].following);  // update state.  when state changes, we automatically re-render.
+      try {
+        const fetchedFollowing = await response.json();
+        setFollowing(fetchedFollowing[0].following);  // update state.  when state changes, we automatically re-render.
       }catch(error){
         setError(error)
       }
-
     }
 
     getFollowing();   
@@ -62,11 +58,15 @@ export default function FollowingList() {
   //   setFollowing(newFollowing);  // This causes a re-render because we change state.
   // }
 
-
-  const Following = ({ record, user}) => (
+  const Following = ({ record, user }) => (
     <tr>
-      <td className="fs-4"><Link to={`/publicProfilePage/${record}`} style={{ textDecoration: 'none', color: 'black'}}>{record}</Link></td>
-      <td>{user.username != record ? <FollowButton username={user.username} targetUserId={record}/>: <p></p> }</td>
+      <td className="fs-4">
+        <Link to={`/publicProfilePage/${record}`} 
+              style={{ textDecoration: 'none', color: darkMode ? '#fff' : '#000' }}>
+          {record}
+        </Link>
+      </td>
+      <td>{user.username !== record ? <FollowButton username={user.username} targetUserId={record}/> : <p></p> }</td>
     </tr>
   );
 
@@ -74,30 +74,36 @@ export default function FollowingList() {
   function followingList() {
     console.log(user)
     console.log(params.id.toString())
-      return followings.map((record) => {
-        return (
-          <Following record={record} key={record} user={user} />);
-      });
-    }
-
-    function errorMessage() {
-   
+    return followings.map((record) => {
       return (
-        <h6 style = {{color: 'red'}}>Error Occurred! User could exist, but not in the Following's Collection yet. GO FOLLOW SOME PEOPLE!</h6>);
-      }
+        <Following record={record} key={record} user={user} />);
+    });
+  }
+
+  function errorMessage() {
+    return (
+      <h6 style={{ color: 'red' }}>
+        Error Occurred! User could exist, but not in the Following's Collection yet. GO FOLLOW SOME PEOPLE!
+      </h6>
+    );
+  }
 
   //if (!user) return (<div><h3>You are not authorized to view this page, Please Login in <Link to={'/login'}><a href='#'>here</a></Link></h3></div>)
 
   // This following section will display the table with the user's following. People that they are following.
-
   return (
-    <div>
-      {error.message ? errorMessage() : <p></p>}
+    <div style={{ backgroundColor: darkMode ? '#000' : '#f6f8fa', color: darkMode ? '#fff' : '#000', minHeight: '100vh' }}>
+      {/* Error message or placeholder area */}
+      <div style={{ color: darkMode ? '#fff' : '#000', padding: '10px', backgroundColor: darkMode ? '#000' : '#f6f8fa', minHeight: '50px' }}>
+        {error.message ? errorMessage() : <p>&nbsp;</p>} {/* Non-breaking space to ensure visibility */}
+      </div>
+  
+      {/* Following section */}
       <h2 style={{ marginLeft: 30 }}>Following</h2>
       <table className="table table-striped" style={{ marginTop: 20 }}>
         <thead>
           <tr>
-            <th>Name</th>
+            <th style={{ color: darkMode ? '#fff' : '#000' }}>Name</th>  {/* Conditional styling for 'Name' */}
           </tr>
         </thead>
         <tbody>{followingList()}</tbody>
