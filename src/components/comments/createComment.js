@@ -1,10 +1,8 @@
 import React, { useState, useEffect, createContext, useContext } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import getUserInfo from "../../utilities/decodeJwt";
 import { useDarkMode } from "../DarkModeContext";
-import Post from "../post/post";
 import Card from "react-bootstrap/Card";
-import Button from "react-bootstrap/Button";
 import Stack from "react-bootstrap/Stack";
 import timeAgo from "../../utilities/timeAgo";
 const CommentCountContext = createContext();

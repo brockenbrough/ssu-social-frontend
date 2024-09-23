@@ -1,6 +1,5 @@
 import React from "react";
 import CreateComment from "./createComment";
-import DarkModeButton from "../DarkModeButton";
 import { useDarkMode } from "../DarkModeContext";
 
 export default function CommentModal({ postId, setCommentCount }) {
