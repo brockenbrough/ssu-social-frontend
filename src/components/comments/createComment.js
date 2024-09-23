@@ -204,9 +204,21 @@ function CreateComment({ postId, setParentCommentCount }) {
           outline
           color="success"
           className="mx-0 my-0"
-          style={{ width: "100%" }}
+          style={{
+            width: "100%",
+            color: darkMode ? "white" : "black",
+            backgroundColor: darkMode ? "#181818" : "#f6f8fa",
+            borderColor: darkMode ? "#f6f8fa" : "#181818",
+          }}
         >
-          <Card.Body style={{ margin: "0", padding: "0" }}>
+          <Card.Body
+            style={{
+              margin: "0",
+              padding: "0",
+              color: darkMode ? "white" : "black",
+              backgroundColor: darkMode ? "#181818" : "#f6f8fa",
+            }}
+          >
             <Stack>
               <span>
                 <span style={{ fontWeight: "bold", fontSize: "1rem" }}>
