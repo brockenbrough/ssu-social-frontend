@@ -10,9 +10,7 @@ const timeAgo = (date) => {
   const secondsInYear = 60 * 60 * 24 * 365;
 
   if (diffInSeconds < secondsInMinute) {
-    return `${Math.floor(diffInSeconds)} second${
-      Math.floor(diffInSeconds) !== 1 ? "s" : ""
-    } ago`;
+    return "Just now";
   } else if (diffInSeconds < secondsInHour) {
     return `${Math.floor(diffInSeconds / secondsInMinute)} minute${
       Math.floor(diffInSeconds / secondsInMinute) !== 1 ? "s" : ""
