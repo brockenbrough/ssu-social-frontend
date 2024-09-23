@@ -9,14 +9,11 @@ import './followingSheet.css'
 // The FollowButton component.  This is the main component in this file. We will talk to the user team to implement this component.
 export default function FollowButton(props) {
 
-  //Hopefully this got added.
-
-
   const routeChange = () =>{ 
     navigate("/editUserPage");
   } 
 
-
+  const { onUpdateFollowerCount } = props;
   const [user, setUser] = useState([])
   const [isFollowingBool, setIsFollowing] = useState()
   const params = useParams();
@@ -24,45 +21,37 @@ export default function FollowButton(props) {
   let navigate = useNavigate()
 
 
-useEffect(() => {setUser(getUserInfo())}, []) // Get user's info
+  useEffect(() => {setUser(getUserInfo())}, []) // Get user's info
 
   // A method to follow a user. Take the id from the params in the link.
 
   async function followUser() {
-
-    console.log(props.username+ " followed " +props.targetUserId)
-
     const addFollowing = {
       userId: props.username,
       targetUserId: props.targetUserId,
-    }
+    };
     const url = `${process.env.REACT_APP_BACKEND_SERVER_URI}/followers/follow`;
+    const res = await axios.post(url, addFollowing);
+    setIsFollowing(true);
 
-    const res = await axios.post(url, addFollowing)
-    setIsFollowing(true); // Follow state, to true. Sets the button UI view.
-
+    // Update follower count
+    const updatedFollowerCount = await fetchFollowerCount(props.targetUserId);
+    onUpdateFollowerCount(updatedFollowerCount);
   }
 
-  // A method to follow a user. Take the id from the params in the link.
-
   async function unfollowUser() {
-
-   console.log(props.username+ " unfollowed " +props.targetUserId)
-
     const unFollow = {
       userId: props.username,
       targetUserId: props.targetUserId,
-    }
+    };
     const url = `${process.env.REACT_APP_BACKEND_SERVER_URI}/followers/unfollow`;
+    const res = await axios.delete(url, { data: unFollow });
+    setIsFollowing(false);
 
-    const res = await axios.delete(url, {
-      data: unFollow,
-    })
-
-    setIsFollowing(false); // Follow state, to false Sets the button UI view.
-
+    // Update follower count
+    const updatedFollowerCount = await fetchFollowerCount(props.targetUserId);
+    onUpdateFollowerCount(updatedFollowerCount);
   }
-
 
 
   // This function is very important, it helps figure out which state the button should be in.
@@ -102,7 +91,15 @@ useEffect(() => {setUser(getUserInfo())}, []) // Get user's info
     return;
   }, [followersState.length]);
 
-
+  const fetchFollowerCount = async (targetUserId) => {
+    try {
+      const response = await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_URI}/followers/${targetUserId}`);
+      return response.data[0]?.followers.length || 0;
+    } catch (error) {
+      console.error(`Error fetching follower count: ${error.message}`);
+      return 0;
+    }
+  };
 
   function MainFollowButton(){ // Main follow button to follow a user or unfollow a user.
     if (isFollowingBool){            

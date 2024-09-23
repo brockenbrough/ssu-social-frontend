@@ -31,20 +31,44 @@ export default function PublicUserList() {
       const sortedPosts = postsResponse.data.sort((a, b) => new Date(b.date) - new Date(a.date));
       setPosts(sortedPosts);
 
-      const followerResponse = await axios.get(
-        `${process.env.REACT_APP_BACKEND_SERVER_URI}/followers/count/${username}`
-      );
-      setFollowerCount(followerResponse.data.count);
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_BACKEND_SERVER_URI}/followers/${username}`
+        );
+        if (response.data.length > 0) {
+          setFollowerCount(response.data[0].followers.length);
+        } else {
+          setFollowerCount(0);
+        }
+        } catch (error) {
+          console.error(`Error fetching follower count: ${error.message}`);
+      };
 
-      const followingResponse = await axios.get(
-        `${process.env.REACT_APP_BACKEND_SERVER_URI}/following/count/${username}`
+      var followCount;
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_BACKEND_SERVER_URI}/following/${username}`
       );
-      setFollowingCount(followingResponse.data.count);
+      if (response.data.length > 0) {
+        setFollowingCount(response.data[0].following.length);
+        followCount = response.data[0].following.length;
+      
+      }
+    } catch (error) {
+      console.error(`Error fetching following count: ${error.message}`);
+    }
+    console.log("Post call Following Count:", followingCount);
     } catch (error) {
       console.error(`Error fetching data: ${error.message}`);
     }
+    
   }, [username]);
 
+  // Function to update the follower count after follow/unfollow
+  const updateFollowerCount = (newFollowerCount) => {
+    setFollowerCount(newFollowerCount);
+  };
+  
   // Ensures the page starts at the top when the component is first rendered
   useLayoutEffect(() => {
     window.scrollTo(0, 0);
@@ -84,6 +108,7 @@ export default function PublicUserList() {
               className="mt-2 btn-sm"
               username={user.username}
               targetUserId={username}
+              onUpdateFollowerCount={updateFollowerCount}
             />
             <div className="mt-2">
               <div>Followers: {followerCount}</div>
