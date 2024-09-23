@@ -14,6 +14,7 @@ import { useDarkMode } from '../DarkModeContext.js';
 
 import PostList from "../post/postlist";
 import EditUser from './editUserPage.js';
+import UploadImages from "../images/uploadImages.js";
 
 const PrivateUserProfile = () => {
   const { darkMode } = useDarkMode();
@@ -296,11 +297,14 @@ const deleteConfirm = async () => {
         <>
           <Row>
             <Col md={3} className="text-center">
-              <Image
-                roundedCircle
-                src={"https://robohash.org/" + Math.random() + "?set=set5"}
-                style={{ marginLeft: '26px' }}
-              />
+
+              <Button onClick={UploadImages} variant="light" style={{ 
+                background: darkMode ? '#181818' : 'white',
+                color: darkMode ? 'white' : 'black',
+                border: darkMode ? '1px solid white' : '1px solid black',
+                marginTop: '10px'}}>
+                  Profile {UploadImages}
+                </Button>{" "}
               <ul>
                 <Button onClick={followerRouteChange} variant="light" style={{
                   background: darkMode ? '#181818' : 'white',
