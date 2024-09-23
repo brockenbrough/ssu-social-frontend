@@ -297,14 +297,12 @@ const deleteConfirm = async () => {
         <>
           <Row>
             <Col md={3} className="text-center">
-
-              <Button onClick={UploadImages} variant="light" style={{ 
+              <Button variant="light" style={{
                 background: darkMode ? '#181818' : 'white',
                 color: darkMode ? 'white' : 'black',
                 border: darkMode ? '1px solid white' : '1px solid black',
-                marginTop: '10px'}}>
-                  Profile {UploadImages}
-                </Button>{" "}
+                marginTop: '10px'
+              }}>Profile</Button>
               <ul>
                 <Button onClick={followerRouteChange} variant="light" style={{
                   background: darkMode ? '#181818' : 'white',
