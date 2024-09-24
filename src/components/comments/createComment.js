@@ -1,4 +1,12 @@
-import React, { useState, useEffect, useLayoutEffect, createContext, useContext, useRef } from "react";
+import React, {
+  useState,
+  useEffect,
+  useLayoutEffect,
+  createContext,
+  useContext,
+  useRef,
+} from "react";
+import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import getUserInfo from "../../utilities/decodeJwt";
 import { useDarkMode } from "../DarkModeContext";
@@ -34,7 +42,7 @@ function CreateComment({ postId, setParentCommentCount }) {
     if (commentsEndRef.current) {
       commentsEndRef.current.scrollIntoView({ behavior: "auto" });
     }
-  }, [comments]); 
+  }, [comments]);
 
   useEffect(() => {
     // Use the useEffect hook to run code after the component has rendered.
@@ -191,19 +199,35 @@ function CreateComment({ postId, setParentCommentCount }) {
             <Stack>
               <span>
                 <span style={{ fontWeight: "bold", fontSize: "1rem" }}>
-                  @{comment.username}
+                  <Link
+                    id="username"
+                    to={
+                      user.username === comment.username
+                        ? "/privateUserProfile"
+                        : `/publicProfilePage/${comment.username}`
+                    }
+                    style={{
+                      color: darkMode ? "white" : "black",
+                      textDecoration: "none",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    @{comment.username}
+                  </Link>
                 </span>
                 <span style={{ marginLeft: "5px", fontSize: "0.8rem" }}>
                   {timeAgo(comment.date)}
                 </span>
                 <br />
                 <span
-                  style ={{
-                    overflowWrap: "break-word", 
+                  style={{
+                    overflowWrap: "break-word",
                     wordBreak: "break-word",
-                    whiteSpace: "normal", 
+                    whiteSpace: "normal",
                   }}
-                >{comment.commentContent}</span>
+                >
+                  {comment.commentContent}
+                </span>
               </span>
             </Stack>
           </Card.Body>
@@ -232,20 +256,21 @@ function CreateComment({ postId, setParentCommentCount }) {
           <span style={{ fontSize: "1.2rem" }}>{comments.length}</span>
         </span>
       </div>
-      
+
       <div //Scrollable Comment section Div
         style={{
-          maxHeight: "350px", 
-          overflowY: "auto", 
+          maxHeight: "350px",
+          overflowY: "auto",
           marginTop: "20px",
-          border: "1px solid #ccc", 
+          border: "1px solid #ccc",
           padding: "15px",
           borderRadius: "5px",
         }}
       >
         <table className="table table-striped" style={{ marginTop: 0 }}>
-          <tbody>{commentList()}
-          <tr ref={commentsEndRef}></tr>
+          <tbody>
+            {commentList()}
+            <tr ref={commentsEndRef}></tr>
           </tbody>
         </table>
       </div>
