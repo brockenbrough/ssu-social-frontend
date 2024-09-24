@@ -1,4 +1,4 @@
-import React, { useState, useEffect, createContext, useContext } from "react";
+import React, { useState, useEffect, useLayoutEffect, createContext, useContext, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import getUserInfo from "../../utilities/decodeJwt";
 import { useDarkMode } from "../DarkModeContext";
@@ -27,6 +27,14 @@ function CreateComment({ postId, setParentCommentCount }) {
   const navigate = useNavigate();
   const [commentCount, setCommentCount] = useState(0); // Comment count state
   const { darkMode } = useDarkMode();
+  const commentsEndRef = useRef(null);
+
+  // Scrolls to the bottom automatically when the comment section is opened or when a new comment is posted
+  useLayoutEffect(() => {
+    if (commentsEndRef.current) {
+      commentsEndRef.current.scrollIntoView({ behavior: "auto" });
+    }
+  }, [comments]); 
 
   useEffect(() => {
     // Use the useEffect hook to run code after the component has rendered.
@@ -189,7 +197,13 @@ function CreateComment({ postId, setParentCommentCount }) {
                   {timeAgo(comment.date)}
                 </span>
                 <br />
-                <span>{comment.commentContent}</span>
+                <span
+                  style ={{
+                    overflowWrap: "break-word", 
+                    wordBreak: "break-word",
+                    whiteSpace: "normal", 
+                  }}
+                >{comment.commentContent}</span>
               </span>
             </Stack>
           </Card.Body>
@@ -217,13 +231,27 @@ function CreateComment({ postId, setParentCommentCount }) {
           </span>
           <span style={{ fontSize: "1.2rem" }}>{comments.length}</span>
         </span>
-        <table className="table table-striped" style={{ marginTop: 20 }}>
-          <tbody>{commentList()}</tbody>
+      </div>
+      
+      <div //Scrollable Comment section Div
+        style={{
+          maxHeight: "350px", 
+          overflowY: "auto", 
+          marginTop: "20px",
+          border: "1px solid #ccc", 
+          padding: "15px",
+          borderRadius: "5px",
+        }}
+      >
+        <table className="table table-striped" style={{ marginTop: 0 }}>
+          <tbody>{commentList()}
+          <tr ref={commentsEndRef}></tr>
+          </tbody>
         </table>
       </div>
 
       <form onSubmit={handleSubmit}>
-        <div className="d-flex align-items-center">
+        <div className="d-flex align-items-center mt-3">
           <input
             type="text"
             className="form-control"
