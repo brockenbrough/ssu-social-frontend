@@ -6,7 +6,7 @@ const GetToken = () => {
       // Use an existing access token for authorization
       const accessToken = localStorage.getItem('accessToken');  // Retrieve token from storage or state
 
-      const response = await fetch('http://localhost:8095/generate-token', {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_SERVER_URI}/generate-token`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${accessToken}`,  // Pass the existing token
