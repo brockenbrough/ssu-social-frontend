@@ -485,7 +485,7 @@ const Post = ({ posts }) => {
             Cancel
           </Button>
           <Button variant="primary" onClick={handleEditPost}>
-            Edit
+            Save
           </Button>
         </Modal.Footer>
       </Modal>
