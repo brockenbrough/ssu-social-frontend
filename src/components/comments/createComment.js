@@ -180,7 +180,7 @@ function CreateComment({ postId, setParentCommentCount }) {
           body
           outline
           color="success"
-          className="mx-0 my-0"
+          className="mx-0 my-2"
           style={{
             width: "100%",
             color: darkMode ? "white" : "black",
