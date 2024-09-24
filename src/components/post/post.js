@@ -414,6 +414,15 @@ const Post = ({ posts }) => {
                 marginRight: "10px",
               }}
             >
+              <p>
+                {imageSrc && (
+                  <img
+                    src={imageSrc}
+                    alt="Post"
+                    style={{ width: "60%", height: "auto" }}
+                  />
+                )}
+              </p>
               <Link
                 id="username"
                 to={
