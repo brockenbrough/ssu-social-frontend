@@ -304,7 +304,7 @@ const Post = ({ posts }) => {
                 fontWeight: "bold",
               }}
             >
-              {posts.username}
+              @{posts.username}
             </Link>
             <p></p>
             {imageSrc && (
