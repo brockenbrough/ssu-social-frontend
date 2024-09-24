@@ -28,6 +28,7 @@ import UpdatePost from "./components/post/updatePost";
 import createComment from "./components/comments/createComment";
 import UploadImages from "./components/images/uploadImages";
 import ViewImages from "./components/images/viewImages";
+import GetToken from './components/getToken'
 
 import Test from "./Test";
 import { createContext, useState, useEffect } from "react";
@@ -76,6 +77,8 @@ const App = () => {
           <Route path="/createComment/:postId" element={<CreateComments />} />
           <Route path="/uploadImages" element={<UploadImages />} />
           <Route path="/viewImages" element={<ViewImages />} />
+
+          <Route path="/get-token" element={<GetToken />} />
 
         </Routes>
       </UserContext.Provider>
