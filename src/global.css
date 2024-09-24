@@ -1,0 +1,90 @@
+/* Global CSS */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-gray-100 text-gray-900;
+}
+
+a {
+  @apply text-blue-500 hover:underline;
+}
+
+/* Navbar */
+.nav {
+  @apply bg-white fixed top-0 w-full shadow-sm py-3 px-6 flex justify-between items-center z-50;
+}
+
+.nav a {
+  @apply text-gray-800 font-semibold;
+}
+
+.nav-logo {
+  @apply text-xl font-bold text-blue-500;
+}
+
+/* Sidebar */
+.sidebar {
+  @apply w-64 h-screen fixed top-0 bg-white shadow-lg py-6 px-4;
+}
+
+.sidebar-item {
+  @apply flex items-center text-gray-700 hover:bg-gray-100 rounded-lg py-3 px-4 transition duration-200;
+}
+
+.sidebar-item svg {
+  @apply w-6 h-6 mr-2;
+}
+
+/* Feed Section */
+.feed {
+  @apply w-full max-w-2xl mx-auto pt-20 mb-20;
+}
+
+.post {
+  @apply bg-white shadow-md rounded-lg mb-6 p-4;
+}
+
+.post-header {
+  @apply flex items-center mb-2;
+}
+
+.post-header img {
+  @apply w-10 h-10 rounded-full mr-3;
+}
+
+.post-header .name {
+  @apply font-semibold text-gray-800;
+}
+
+.post-header .username {
+  @apply text-gray-500;
+}
+
+.post-body {
+  @apply text-gray-700;
+}
+
+.post-actions {
+  @apply flex justify-between items-center mt-4 text-gray-500;
+}
+
+.post-actions button {
+  @apply flex items-center space-x-1 text-sm hover:text-blue-500;
+}
+
+/* Buttons */
+.button-primary {
+  @apply bg-blue-500 text-white font-semibold py-2 px-4 rounded-full hover:bg-blue-600 transition duration-200;
+}
+
+/* Input Fields */
+.input-field {
+  @apply w-full bg-gray-100 border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:ring-2 focus:ring-blue-400 focus:outline-none;
+}
+
+/* Footer */
+.footer {
+  @apply text-center text-gray-500 text-sm mt-12 mb-6;
+}
