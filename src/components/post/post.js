@@ -414,7 +414,21 @@ const Post = ({ posts }) => {
                 marginRight: "10px",
               }}
             >
-              @{posts.username}
+              <Link
+                id="username"
+                to={
+                  isCurrentUserPost
+                    ? "/privateUserProfile"
+                    : `/publicProfilePage/${posts.username}`
+                }
+                style={{
+                  color: darkMode ? "white" : "black",
+                  textDecoration: "none",
+                  fontWeight: "bold",
+                }}
+              >
+                @{posts.username}
+              </Link>
             </span>
             <span style={{ fontSize: "0.8rem", marginRight: "15px" }}>
               {formattedDate}
