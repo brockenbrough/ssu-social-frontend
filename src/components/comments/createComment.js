@@ -263,7 +263,10 @@ function CreateComment({ postId, setParentCommentCount }) {
           overflowY: "auto",
           marginTop: "20px",
           border: "1px solid #ccc",
-          padding: "15px",
+          paddingTop: "14px",  
+          paddingBottom: "0px",    
+          paddingRight: "13px",  
+          paddingLeft: "13px",
           borderRadius: "5px",
         }}
       >
