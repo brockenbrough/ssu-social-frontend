@@ -22,8 +22,9 @@ export default function Navbar() {
   const location = useLocation(); // Get current path
 
   useEffect(() => {
-    setUser(getUserInfo());
-  }, [user]);
+    const userInfo = getUserInfo(); // Store user info in a variable
+    setUser(userInfo); // Update state
+  }, []); // Empty dependency array to make sure this only runs once when the component mounts and not loop infinitely
 
   const publicUser = () => {
     if (user) {
