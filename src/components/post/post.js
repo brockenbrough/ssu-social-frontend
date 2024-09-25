@@ -297,15 +297,15 @@ const Post = ({ posts }) => {
             style={{
               position: "absolute",
               bottom: "100px",
-              width: "calc(100% - 20px)", 
-              left: "10px",    
+              width: "calc(100% - 20px)",
+              left: "10px",
               backgroundColor: darkMode ? "#222" : "#f0f0f0",
               padding: "10px",
               borderRadius: "8px",
               wordBreak: "break-all",
               marginBottom: "10px",
-              maxHeight: "70px", 
-              overflowY: "auto", 
+              maxHeight: "70px",
+              overflowY: "auto",
             }}
           >
             {displayContent}
@@ -316,8 +316,16 @@ const Post = ({ posts }) => {
               <br />
               <img
                 alt="YouTube Video Thumbnail"
-                style={{ width: "150px", height: "auto", marginLeft: "20px" }}
                 src={youtubeThumbnail}
+                style={{
+                  width: "100%",
+                  maxWidth: "500px",
+                  height: "100%",
+                  maxHeight: "350px",
+                  objectFit: "contain",
+                  display: "block",
+                  margin: "0 auto",
+                }}
               />
             </div>
           )}
