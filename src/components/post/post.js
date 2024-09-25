@@ -12,7 +12,6 @@ import CommentModal from "../comments/CommentModal";
 import timeAgo from "../../utilities/timeAgo";
 
 const Post = ({ posts }) => {
-  const [showFullText, setShowFullText] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
   const [commentCount, setCommentCount] = useState(0);
   const [isLiked, setIsLiked] = useState(false);
@@ -45,42 +44,7 @@ const Post = ({ posts }) => {
     });
   };
 
-  const toggleShowFullText = () => {
-    setShowFullText(!showFullText);
-  };
-
-  const contentCutoff = 96; // Adjust this as needed
-  const showExpandCollapseIcon = posts.content.length > contentCutoff;
-
-  // Define a function to return the expand/collapse icon with styles
-  const getExpandCollapseIcon = () => {
-    const iconStyle = { color: "gray", fontSize: "larger" };
-    const iconClick = (e) => {
-      e.stopPropagation(); // Prevents triggering the Card's onClick
-      toggleShowFullText();
-    };
-    return showFullText ? (
-      <span style={iconStyle} onClick={iconClick}>
-        {" "}
-        [^]
-      </span>
-    ) : (
-      <span style={iconStyle} onClick={iconClick}>
-        {" "}
-        [...]
-      </span>
-    );
-  };
-
-  // Determine which content to display based on the 'showFullText' state
-  const displayContent = (
-    <>
-      {showFullText
-        ? rendercontent(posts.content)
-        : rendercontent(posts.content.slice(0, contentCutoff))}
-      {showExpandCollapseIcon && getExpandCollapseIcon()}
-    </>
-  );
+  const displayContent = rendercontent(posts.content);
 
   useEffect(() => {
     const currentUser = getUserInfoAsync();
@@ -284,9 +248,10 @@ const Post = ({ posts }) => {
       <Card
         id="postCard"
         style={{
-          maxWidth: "400px",
-          minWidth: "400px",
+          width: "520px",
+          height: "600px",
           backgroundColor: darkMode ? "#181818" : "#f6f8fa",
+          position: "relative",
         }}
       >
         <Card.Body style={{ color: darkMode ? "white" : "black" }}>
@@ -307,21 +272,43 @@ const Post = ({ posts }) => {
               @{posts.username}
             </Link>
             <p></p>
+
+            {/*  Main Image Styling*/}
             {imageSrc && (
               <img
                 src={imageSrc}
                 alt="Post"
-                style={{ width: "100%", height: "auto" }}
+                style={{
+                  width: "100%",
+                  maxWidth: "500px",
+                  height: "100%",
+                  maxHeight: "350px",
+                  objectFit: "contain",
+                  display: "block",
+                  margin: "0 auto",
+                }}
               />
             )}
           </div>
 
+          {/* Wrapping post content in div */}
           <div
-            style={{ wordBreak: "break-all", marginBottom: ".5cm" }}
-            onClick={toggleShowFullText}
+            className="original-post-content"
+            style={{
+              position: "absolute",
+              bottom: "100px",
+              width: "calc(100% - 20px)", 
+              left: "10px",    
+              backgroundColor: darkMode ? "#222" : "#f0f0f0",
+              padding: "10px",
+              borderRadius: "8px",
+              wordBreak: "break-all",
+              marginBottom: "10px",
+              maxHeight: "70px", 
+              overflowY: "auto", 
+            }}
           >
             {displayContent}
-            <br />
           </div>
 
           {youtubeThumbnail && (
@@ -335,48 +322,44 @@ const Post = ({ posts }) => {
             </div>
           )}
 
-          <div className="text-left">
-            <Button
-              variant={isLiked ? "outline-danger" : "outline-danger"}
-              onClick={handleLikeClick}
-            >
-              {isLiked ? "♥" : "♡"} <span>{` ${likeCount}`}</span>
-            </Button>
-          </div>
-
-          {isCurrentUserPost && (
-            <>
+          <div style={{ position: "absolute", bottom: "10px", width: "100%" }}>
+            <div className="d-flex" style={{ justifyContent: "flex-start", gap: "10px" }}>
               <Button
-                style={{
-                  marginRight: "1cm",
-                  marginTop: ".5cm",
-                  marginBottom: ".5cm",
-                }}
-                onClick={(e) => {
-                  e.stopPropagation(); // Stop the click event from reaching the parent Card
-                  handleShowEditModal();
-                }}
-                variant="primary"
+                variant={isLiked ? "outline-danger" : "outline-danger"}
+                onClick={handleLikeClick}
+                style={{ marginRight: "3px" }}
               >
-                Edit
+                {isLiked ? "♥" : "♡"} <span>{` ${likeCount}`}</span>
               </Button>
-            </>
-          )}
 
-          <Button
-            onClick={handleShowPostModal}
-            className="btn btn-warning"
-            style={{ marginTop: ".5cm", marginBottom: ".5cm" }}
-          >
-            Comment ({commentCount > 0 ? commentCount : "0"})
-          </Button>
+              {isCurrentUserPost && (
+                <Button
+                  onClick={(e) => {
+                    e.stopPropagation(); // Stop the click event from reaching the parent Card
+                    handleShowEditModal();
+                  }}
+                  variant="primary"
+                  style={{ marginRight: "3px" }}
+                >
+                  Edit
+                </Button>
+              )}
+              <Button
+                onClick={handleShowPostModal}
+                className="btn btn-warning"
+                style={{ marginRight: "3px" }}
+              >
+                Comment ({commentCount > 0 ? commentCount : "0"})
+              </Button>
+            </div>
 
-          <p>
-            <span style={{ marginRight: "15px", fontSize: "0.8rem" }}>
-              {formattedDate}
-            </span>
-            <span style={{ fontSize: "0.8rem" }}>{timeAgo(posts.date)}</span>
-          </p>
+            <p style={{ marginTop: "8px" }}>
+              <span style={{ marginRight: "15px", fontSize: "0.8rem" }}>
+                {formattedDate}
+              </span>
+              <span style={{ fontSize: "0.8rem" }}>{timeAgo(posts.date)}</span>
+            </p>
+          </div>
         </Card.Body>
       </Card>
 
@@ -415,13 +398,23 @@ const Post = ({ posts }) => {
               }}
             >
               <p>
+                {/*  Comment Image Styling*/}
                 {imageSrc && (
                   <img
                     src={imageSrc}
                     alt="Post"
-                    style={{ width: "60%", height: "auto" }}
+                    style={{
+                      width: "auto",
+                      maxWidth: "400px",
+                      height: "auto",
+                      maxHeight: "280px",
+                      objectFit: "contain",
+                      display: "block",
+                      margin: "0 auto 14px auto",
+                    }}
                   />
                 )}
+
               </p>
               <Link
                 id="username"
@@ -475,11 +468,20 @@ const Post = ({ posts }) => {
         <Modal.Body
           style={{ backgroundColor: darkMode ? "#181818" : "#f6f8fa" }}
         >
+          {/*  'Edit' Image Styling*/}
           {imageSrc && (
             <img
               src={imageSrc}
               alt="Post"
-              style={{ width: "100%", height: "auto" }}
+              style={{
+                width: "auto",
+                maxWidth: "400px",
+                height: "auto",
+                maxHeight: "280px",
+                objectFit: "contain",
+                display: "block",
+                margin: "0 auto 14px auto",
+              }}
             />
           )}
 

@@ -146,7 +146,7 @@ function PostList({type, profileUsername}) {
                             </div>
                             <hr />
                             {chunkArray(category.posts, 3).map((chunk, index) => (
-                            <div className="d-flex flex-wrap justify-content-center">
+                            <div className="d-flex flex-column align-items-center">
                                 {chunk.map((post) => (
                                 <Post posts={post} className="cards m-2" />
                                 ))}

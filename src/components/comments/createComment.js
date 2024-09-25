@@ -259,7 +259,7 @@ function CreateComment({ postId, setParentCommentCount }) {
 
       <div //Scrollable Comment section Div
         style={{
-          maxHeight: "350px",
+          maxHeight: "280px",
           overflowY: "auto",
           marginTop: "20px",
           border: "1px solid #ccc",
