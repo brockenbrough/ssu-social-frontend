@@ -9,7 +9,7 @@ import CreatePostModal from "./createPostModal";
 
 const CreatePost = () => {
   const [user, setUser] = useState(null);
-  const [state, setState] = useState({ content: "" });
+  const [text, setText] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
   const [textAreaCount, setTextAreaCount] = useState(0);
   const [color, setColor] = useState("gainsboro");
@@ -45,8 +45,7 @@ const CreatePost = () => {
     } else {
       setColor("gainsboro");
     }
-    const { name, value } = e.target;
-    setState({ ...state, [name]: value });
+    setText(e.target.value);
   };
 
   const { darkMode } = useDarkMode();
@@ -72,7 +71,7 @@ const CreatePost = () => {
     e.preventDefault();
 
     // Check if content is empty
-    if (!state.content.trim()) {
+    if (!text.trim()) {
       alert("You need a description in order to create this post.");
       return;
     }
@@ -92,10 +91,9 @@ const CreatePost = () => {
         );
         if (response.ok) {
           const data = await response.json();
-          const { content } = state;
           post = {
             id: user.id,
-            content,
+            content: text,
             username: user.username,
             imageId: data.imageId,
           };
@@ -108,11 +106,10 @@ const CreatePost = () => {
     }
 
     try {
-      const { content } = state;
       post = {
         ...post,
         id: user.id,
-        content,
+        content: text,
         username: user.username,
       };
       await axios.post(
@@ -171,7 +168,7 @@ const CreatePost = () => {
             maxLength={maxText}
             placeholder="What's on your mind?"
             name="content"
-            value={state.content}
+            value={text}
             onChange={handleTextChange}
             style={{
               height: "150px",
