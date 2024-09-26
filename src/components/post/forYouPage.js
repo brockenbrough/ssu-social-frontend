@@ -10,19 +10,19 @@ function ForYouPage() {
 
     if (!user) {
         return (
-            <div>
+            <div style={{backgroundColor: darkMode ? "#000" : "#f6f8fa", color: darkMode ? "#fff" : "#000", minHeight: '100vh'}}>
                 <h3>
                     You are not authorized to view this page. Please Login in{" "}
-                    <Link to="/login">here</Link>
+                    <Link to="/login" style={{ color: darkMode ? '#00f' : '#007bff' }}>here</Link>
                 </h3>
             </div>
         );
     }
 
     return (
-        <div style={{backgroundColor: darkMode ? "#000" : "#f6f8fa", color: darkMode ? "#fff" : "#000"}}>
+        <div style={{ backgroundColor: darkMode ? "#000" : "#f6f8fa", color: darkMode ? "#fff" : "#000", minHeight: '100vh' }}>
             <h2 style={{textAlign: 'center'}}>For you</h2>
-            <PostList type="feed" username={user.username} />
+            <PostList type="feed" username={user.username}  darkMode={darkMode}  />
         </div>
     );
 }
