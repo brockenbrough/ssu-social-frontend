@@ -150,8 +150,7 @@ const CreatePost = () => {
     return (
       <div>
         <h3>
-          You are not authorized to view this page. Please log in{" "}
-          <Link to="/">here</Link>.
+          You are not logged in. Please log in <Link to="/">here</Link>.
         </h3>
       </div>
     );
