@@ -1,22 +1,35 @@
+import axios from "axios";
 import { useState } from "react";
 import { Button, Modal, Form } from "react-bootstrap";
 
 function CreatePostModal({ show, setShow }) {
-  const [state, setState] = useState({ content: "" });
+  const [text, setText] = useState("");
   const [thumbnail, setThumbnail] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
   const [textAreaCount, setTextAreaCount] = useState(0);
-  const maxText = 300;
-  const darkMode = false; // Set to true for dark mode
-  const color = darkMode ? "#fff" : "#000";
+  const maxChar = 280;
+  const darkMode = false;
+  const [charCountColor, setCharCountColor] = useState("gainsboro");
 
   const handleClose = () => setShow(false);
   const handleSubmit = (e) => {
     e.preventDefault();
     handleClose();
   };
+
+  const getWordCountColor = () => {
+    if (textAreaCount >= maxChar - 1) {
+      return "red";
+    } else if (textAreaCount / maxChar >= 0.75) {
+      return "gold";
+    } else {
+      return "gainsboro";
+    }
+  };
+
   const handleTextChange = (e) => {
-    setState({ ...state, content: e.target.value });
+    setText(e.target.value);
+    setCharCountColor(getWordCountColor());
     setTextAreaCount(e.target.value.length);
   };
   const handleImageChange = (e) => setSelectedImage(e.target.files[0]);
@@ -32,10 +45,10 @@ function CreatePostModal({ show, setShow }) {
             <Form.Group controlId="formBasicPassword">
               <Form.Control
                 as="textarea"
-                maxLength={maxText}
+                maxLength={maxChar}
                 placeholder="What's on your mind?"
                 name="content"
-                value={state.content}
+                value={text.content}
                 onChange={handleTextChange}
                 style={{
                   height: "150px",
@@ -46,8 +59,14 @@ function CreatePostModal({ show, setShow }) {
                   color: darkMode ? "#fff" : "#000",
                 }}
               />
-              <p style={{ color: color, fontSize: "14px", marginTop: "5px" }}>
-                {textAreaCount}/{maxText}
+              <p
+                style={{
+                  color: charCountColor,
+                  fontSize: "14px",
+                  marginTop: "5px",
+                }}
+              >
+                {textAreaCount}/{maxChar}
               </p>
               {thumbnail && (
                 <div style={{ marginTop: "10px" }}>

@@ -4,19 +4,23 @@ import { Form, Button } from "react-bootstrap";
 import { useNavigate, Link } from "react-router-dom";
 import getUserInfoAsync from "../../utilities/decodeJwtAsync";
 import { useDarkMode } from "../DarkModeContext";
-
 import CreatePostModal from "./createPostModal";
 
 const CreatePost = () => {
+  const MAX_DESCRIPTION_CHAR = 280;
+  const GREY_COLOR = "gainsboro";
+  const GOLD_COLOR = "gold";
+  const RED_COLOR = "red";
+
   const [user, setUser] = useState(null);
-  const [text, setText] = useState("");
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [charCountColor, setCharCountColor] = useState("gainsboro");
-  const [show, setShow] = useState(false);
+  const [description, setDescription] = useState("");
+  const [image, setImage] = useState(null);
+  const [charCountColor, setCharCountColor] = useState(GREY_COLOR);
+  const [popupShow, setPopupShow] = useState(false);
   const navigate = useNavigate();
 
   const handlePopupBtn = () => {
-    setShow(true);
+    setPopupShow(true);
   };
 
   const fetchUserInfo = async () => {
@@ -35,30 +39,29 @@ const CreatePost = () => {
   }, []);
 
   const updateCharCountColor = (textLength) => {
-    if (textLength == maxText) {
-      setCharCountColor("red");
-    } else if (textLength / maxText >= 0.75) {
-      setCharCountColor("gold");
+    if (textLength == MAX_DESCRIPTION_CHAR) {
+      setCharCountColor(RED_COLOR);
+    } else if (textLength / MAX_DESCRIPTION_CHAR >= 0.75) {
+      setCharCountColor(GOLD_COLOR);
     } else {
-      setCharCountColor("gainsboro");
+      setCharCountColor(GREY_COLOR);
     }
   };
 
   const handleTextChange = (e) => {
     const inputText = e.target.value;
-    setText(inputText);
+    setDescription(inputText);
     updateCharCountColor(inputText.length);
   };
 
   const { darkMode } = useDarkMode();
-  const maxText = 280;
 
   const handleImageClick = () => {
     document.getElementById("image").click();
   };
 
   const handleImageChange = (e) => {
-    setSelectedImage(e.target.files[0]);
+    setImage(e.target.files[0]);
     if (e.target.files && e.target.files[0]) {
       let reader = new FileReader();
       reader.onload = (event) => {
@@ -73,16 +76,16 @@ const CreatePost = () => {
     e.preventDefault();
 
     // Check if content is empty
-    if (!text.trim()) {
+    if (!description.trim()) {
       alert("You need a description in order to create this post.");
       return;
     }
 
     let post = {};
 
-    if (selectedImage) {
+    if (image) {
       const formData = new FormData();
-      formData.append("image", selectedImage);
+      formData.append("image", image);
       try {
         const response = await fetch(
           `${process.env.REACT_APP_BACKEND_SERVER_URI}/images/create`,
@@ -95,7 +98,7 @@ const CreatePost = () => {
           const data = await response.json();
           post = {
             id: user.id,
-            content: text,
+            content: description,
             username: user.username,
             imageId: data.imageId,
           };
@@ -111,7 +114,7 @@ const CreatePost = () => {
       post = {
         ...post,
         id: user.id,
-        content: text,
+        content: description,
         username: user.username,
       };
       await axios.post(
@@ -162,15 +165,15 @@ const CreatePost = () => {
         >
           <div>
             <Button onClick={handlePopupBtn}>Popup Create Post</Button>
-            <CreatePostModal show={show} setShow={setShow} />
+            <CreatePostModal show={popupShow} setShow={setPopupShow} />
           </div>
 
           <Form.Control
             as="textarea"
-            maxLength={maxText}
+            maxLength={MAX_DESCRIPTION_CHAR}
             placeholder="What's on your mind?"
             name="content"
-            value={text}
+            value={description}
             onChange={handleTextChange}
             style={{
               height: "150px",
@@ -192,7 +195,7 @@ const CreatePost = () => {
               marginTop: "5px",
             }}
           >
-            {text.length}/{maxText}
+            {description.length}/{MAX_DESCRIPTION_CHAR}
           </p>
         </Form.Group>
 
@@ -221,13 +224,13 @@ const CreatePost = () => {
           style={{ display: "none" }}
         />
 
-        {selectedImage && (
+        {image && (
           <div style={{ marginBottom: "15px" }}>
             <img
               id="imagePreview"
               alt="Selected Image"
               style={{ width: "180px", height: "auto" }}
-              src={URL.createObjectURL(selectedImage)}
+              src={URL.createObjectURL(image)}
             />
           </div>
         )}
