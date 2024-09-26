@@ -4,7 +4,7 @@ import getUserInfoAsync from "../../utilities/decodeJwt";
 import PostList from "./postlist";
 import { useDarkMode } from '../DarkModeContext';   
 
-function FeedPage() {
+function ForYouPage() {
     const { darkMode } = useDarkMode();
     const user = getUserInfoAsync();
 
@@ -21,10 +21,10 @@ function FeedPage() {
 
     return (
         <div style={{backgroundColor: darkMode ? "#000" : "#f6f8fa", color: darkMode ? "#fff" : "#000"}}>
-            <h2 style={{textAlign: 'center'}}>Welcome to your feed, {user.username}</h2>
+            <h2 style={{textAlign: 'center'}}>For you page</h2>
             <PostList type="feed" username={user.username} />
         </div>
     );
 }
 
-export default FeedPage;
+export default ForYouPage;

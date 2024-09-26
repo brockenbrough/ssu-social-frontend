@@ -62,8 +62,10 @@ export default function Navbar() {
                     Menu
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
-                    <Dropdown.Item href="/feed-algorithm">Feed</Dropdown.Item>
-                    <Dropdown.Item href="/getallpost">Explore</Dropdown.Item>
+                    <Dropdown.Item href="/feed-algorithm">
+                      For you
+                    </Dropdown.Item>
+                    <Dropdown.Item href="/getallpost">Discover</Dropdown.Item>
                     <Dropdown.Item href="/privateUserProfile">
                       Profile
                     </Dropdown.Item>

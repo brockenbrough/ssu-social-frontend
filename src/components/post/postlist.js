@@ -90,9 +90,9 @@ function PostList({type, profileUsername}) {
       .sort((a, b) => new Date(b.date) - new Date(a.date));
 
       const timeCategories = [
-        { title: "Today", posts: todayPosts },
-        { title: "This Week", posts: thisWeekPosts },
-        { title: "A while ago", posts: aWhileAgoPosts },
+        { title: "Happening now", posts: todayPosts },
+        { title: "This past week", posts: thisWeekPosts },
+        { title: "Throwback posts", posts: aWhileAgoPosts },
     ];
     
       const chunkArray = (array, size) => {
@@ -121,9 +121,9 @@ function PostList({type, profileUsername}) {
                 <div className="text-center" style={{fontSize: "1.5em"}}>
                     {type === "feed" ? (
                         <p>
-                            <strong>{user.username}</strong>, your feed is empty. Visit the{" "}
+                            <strong>{user.username}</strong>, your <strong>for you page </strong>is empty.<br></br> Visit the{" "}
                             <Link to={"/getallpost"}>
-                                <a href="#">public feed</a>
+                                <a href="#">Discover</a>
                             </Link>{" "}
                             to discover posts from other users.
                         </p>
