@@ -15,6 +15,7 @@ const CreatePost = () => {
   const [user, setUser] = useState(null);
   const [description, setDescription] = useState("");
   const [image, setImage] = useState(null);
+  const [thumbnail, setThumbnail] = useState(null);
   const [charCountColor, setCharCountColor] = useState(GREY_COLOR);
   const [popupShow, setPopupShow] = useState(false);
   const navigate = useNavigate();
@@ -49,10 +50,41 @@ const CreatePost = () => {
     }
   };
 
+  const fetchYoutubeThumbnail = async (link) => {
+    const youtubeRegex =
+      /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+    const videoId = link.match(youtubeRegex)[1];
+
+    try {
+      const response = await axios.get(
+        `https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${videoId}&key=AIzaSyAV6-k-24JeM4Lmd3Q5V3n-5YK1hxEtmU4`
+      );
+      const thumbnailUrl =
+        response.data.items[0]?.snippet?.thumbnails?.medium?.url;
+      setThumbnail(thumbnailUrl || "");
+    } catch (error) {
+      console.error("Error fetching YouTube video data:", error);
+    }
+  };
+
+  const isYoutubeLink = (link) => {
+    const youtubeRegex =
+      /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+    const youtubeMatch = link.match(youtubeRegex);
+
+    if (youtubeMatch) return true;
+
+    return false;
+  };
+
   const handleTextChange = (e) => {
     const inputText = e.target.value;
     setDescription(inputText);
     updateCharCountColor(inputText.length);
+
+    if (isYoutubeLink(inputText)) {
+      fetchYoutubeThumbnail(inputText);
+    }
   };
 
   const handleImageClick = () => {
@@ -215,6 +247,16 @@ const CreatePost = () => {
           >
             {description.length}/{MAX_DESCRIPTION_CHAR}
           </p>
+          {thumbnail && (
+            <div style={{ marginTop: "10px" }}>
+              <img
+                id="youtubeThumbnail"
+                alt="YouTube Video Thumbnail"
+                style={{ width: "150px", height: "auto" }}
+                src={thumbnail}
+              />
+            </div>
+          )}
         </Form.Group>
 
         <div
