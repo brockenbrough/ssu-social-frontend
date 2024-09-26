@@ -30,7 +30,7 @@ export default function PostList() {
   return (
     <div>
       <h1>
-        Welcome to the public feed page
+        Discover
       </h1>
 
       <div>

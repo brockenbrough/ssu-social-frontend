@@ -8,7 +8,7 @@ function GetAllPostsPage() {
 
     return (
         <div style={{backgroundColor: darkMode ? "#000" : "#f6f8fa", color: darkMode ? "#fff" : "#000", minHeight: '100vh', }}>
-        <h2 style={{textAlign: 'center'}}>Discover page</h2>
+        <h2 style={{textAlign: 'center'}}>Discover</h2>
             <PostList type="all" />
         </div>
     );

@@ -21,7 +21,7 @@ function ForYouPage() {
 
     return (
         <div style={{backgroundColor: darkMode ? "#000" : "#f6f8fa", color: darkMode ? "#fff" : "#000"}}>
-            <h2 style={{textAlign: 'center'}}>For you page</h2>
+            <h2 style={{textAlign: 'center'}}>For you</h2>
             <PostList type="feed" username={user.username} />
         </div>
     );
