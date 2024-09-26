@@ -334,11 +334,8 @@ const deleteConfirm = async () => {
                   {totalLikes} Likes
                 </Button>{" "}
               </ul>
-              <Button className="me-2" onClick={handleShowLogoutConfirmation} style={{ 
-                backgroundColor: '#ff0000', 
-                border: darkMode ? '1px solid white' : '1px solid black', 
-                marginLeft: '25px' 
-              }}> Log Out
+              <Button class="btn-primary" onClick={handleShowLogoutConfirmation}>
+                  Log Out
               </Button>
               <Modal
                 show={showLogoutConfirmation}
