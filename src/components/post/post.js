@@ -249,7 +249,8 @@ const Post = ({ posts }) => {
         id="postCard"
         style={{
           width: "520px",
-          height: "600px",
+          height: imageSrc || youtubeThumbnail ? "600px" : "auto",
+          paddingBottom: imageSrc || youtubeThumbnail ? "0px" : "120px",
           backgroundColor: darkMode ? "#181818" : "#f6f8fa",
           position: "relative",
         }}
@@ -294,19 +295,23 @@ const Post = ({ posts }) => {
           {/* Wrapping post content in div */}
           <div
             className="original-post-content"
-            style={{
-              position: "absolute",
-              bottom: "100px",
-              width: "calc(100% - 20px)",
-              left: "10px",
-              backgroundColor: darkMode ? "#222" : "#f0f0f0",
-              padding: "10px",
-              borderRadius: "8px",
-              wordBreak: "break-all",
-              marginBottom: "10px",
-              maxHeight: "70px",
-              overflowY: "auto",
-            }}
+            style={Object.assign(
+              {
+                width: "calc(100% - 20px)",
+                left: "10px",
+                display: "inline-block",
+                backgroundColor: darkMode ? "#222" : "#f0f0f0",
+                marginTop: "10px",
+                padding: "10px",
+                borderRadius: "8px",
+                wordBreak: "break-all",
+                marginBottom: "10px",
+                maxHeight: imageSrc || youtubeThumbnail ? "70px" : "auto",
+              },
+              imageSrc || youtubeThumbnail
+                ? { overflowY: "auto", position: "absolute", bottom: "105px" }
+                : { overflowY: "visible", margin: "auto" }
+            )}
           >
             {displayContent}
           </div>
@@ -361,7 +366,7 @@ const Post = ({ posts }) => {
               </Button>
             </div>
 
-            <p style={{ marginTop: "8px" }}>
+            <p style={{ marginTop: "4px" }}>
               <span style={{ marginRight: "15px", fontSize: "0.8rem" }}>
                 {formattedDate}
               </span>
