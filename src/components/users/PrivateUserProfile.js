@@ -297,44 +297,23 @@ const deleteConfirm = async () => {
         <>
           <Row>
             <Col md={3} className="text-center">
-              <Button variant="light" style={{
-                background: darkMode ? '#181818' : 'white',
-                color: darkMode ? 'white' : 'black',
-                border: darkMode ? '1px solid white' : '1px solid black',
-                marginTop: '10px'
-              }}>
+             
                  <h2 class="text-3xl font-semibold text-green-800 mb-4">
                  Profile</h2>
                 
-                </Button>
+            
               <ul>
-                <Button onClick={followerRouteChange} variant="light" style={{
-                  background: darkMode ? '#181818' : 'white',
-                  color: darkMode ? 'white' : 'black',
-                  border: darkMode ? '1px solid white' : '1px solid black',
-                  marginTop: '10px'
-                }}>
+                <Button onClick={followerRouteChange}  class="ssu-button-info">
                   Followers: {followerCount}
-                </Button>{" "}
-                <Button onClick={followingRouteChange} variant="light" style={{
-                  background: darkMode ? '#181818' : 'white',
-                  color: darkMode ? 'white' : 'black',
-                  border: darkMode ? '1px solid white' : '1px solid black',
-                  marginTop: '10px'
-                }}>
-                 
+                </Button>
+                <Button onClick={followingRouteChange} class="ssu-button-info">
                   Following: {followingCount}
-                </Button>{" "}
-                <Button variant="light" style={{
-                  background: darkMode ? '#181818' : 'white',
-                  color: darkMode ? 'white' : 'black',
-                  border: darkMode ? '1px solid white' : '1px solid black',
-                  marginTop: '10px',
-                }}>
+                </Button>
+                <Button  class="ssu-button-info">
                   {totalLikes} Likes
-                </Button>{" "}
+                </Button>
               </ul>
-              <Button class="btn-primary" onClick={handleShowLogoutConfirmation}>
+              <Button class="ssu-button-primary" onClick={handleShowLogoutConfirmation}>
                   Log Out
               </Button>
               <Modal
@@ -365,9 +344,7 @@ const deleteConfirm = async () => {
                   </Button>
                 </Modal.Footer>
               </Modal>
-              <Button onClick={showUserModal} style={{ 
-                border: darkMode ? '1px solid white' : '1px solid black' 
-                }}> Edit User Information
+              <Button onClick={showUserModal} class="ssu-button-primary" > Edit User Information
               </Button>
             </Col>
             <Col md={9}>
