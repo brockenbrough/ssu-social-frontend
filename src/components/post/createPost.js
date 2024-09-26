@@ -1,10 +1,9 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
-import { Form, Button } from "react-bootstrap";
+import { Form, Button, Modal } from "react-bootstrap";
 import { useNavigate, Link } from "react-router-dom";
 import getUserInfoAsync from "../../utilities/decodeJwtAsync";
 import { useDarkMode } from "../DarkModeContext";
-import CreatePostModal from "./createPostModal";
 
 const CreatePost = () => {
   const MAX_DESCRIPTION_CHAR = 280;
@@ -20,10 +19,6 @@ const CreatePost = () => {
   const [popupShow, setPopupShow] = useState(false);
   const navigate = useNavigate();
   const { darkMode } = useDarkMode();
-
-  const handlePopupBtn = () => {
-    setPopupShow(true);
-  };
 
   const fetchUserInfo = async () => {
     try {
@@ -41,7 +36,7 @@ const CreatePost = () => {
   }, []);
 
   const updateCharCountColor = (textLength) => {
-    if (textLength == MAX_DESCRIPTION_CHAR) {
+    if (textLength === MAX_DESCRIPTION_CHAR) {
       setCharCountColor(RED_COLOR);
     } else if (textLength / MAX_DESCRIPTION_CHAR >= 0.75) {
       setCharCountColor(GOLD_COLOR);
@@ -70,11 +65,7 @@ const CreatePost = () => {
   const isYoutubeLink = (link) => {
     const youtubeRegex =
       /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
-    const youtubeMatch = link.match(youtubeRegex);
-
-    if (youtubeMatch) return true;
-
-    return false;
+    return youtubeRegex.test(link);
   };
 
   const handleTextChange = (e) => {
@@ -178,152 +169,111 @@ const CreatePost = () => {
     navigate("/getAllPost");
   };
 
-  if (!user) {
-    return (
-      <div>
-        <h3>
-          You are not logged in. Please log in <Link to="/">here</Link>.
-        </h3>
-      </div>
-    );
-  }
-
   return (
-    <div className="App">
-      <Form
-        id="createPostID"
-        onSubmit={handleSubmit}
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          height: "100vh",
-          backgroundColor: darkMode ? "#181818" : "#f6f8fa",
-          color: darkMode ? "#fff" : "#000",
-          padding: "20px",
-          borderRadius: "8px",
-          boxShadow: darkMode
-            ? "0 0 10px rgba(255,255,255,0.2)"
-            : "0 0 10px rgba(0,0,0,0.1)",
-        }}
-      >
-        <Form.Group
-          className="mb-3"
-          controlId="formBasicPassword"
-          style={{ width: "100%" }}
-        >
-          <div>
-            <Button onClick={handlePopupBtn}>Popup Create Post</Button>
-            <CreatePostModal show={popupShow} setShow={setPopupShow} />
-          </div>
+    <>
+      <Button onClick={() => setPopupShow(true)}>Create Post</Button>
 
-          <Form.Control
-            as="textarea"
-            maxLength={MAX_DESCRIPTION_CHAR}
-            placeholder="What's on your mind?"
-            name="content"
-            value={description}
-            onChange={handleTextChange}
-            style={{
-              height: "150px",
-              padding: "10px",
-              borderRadius: "5px",
-              border: `1px solid ${darkMode ? "#333" : "#ccc"}`,
-              backgroundColor: darkMode ? "#181818" : "#fff",
-              color: darkMode ? "#fff" : "#000",
-              fontSize: "16px",
-              boxShadow: darkMode
-                ? "0 0 5px rgba(255,255,255,0.2)"
-                : "0 0 5px rgba(0,0,0,0.1)",
-            }}
-          />
-          <p
-            style={{
-              color: charCountColor,
-              fontSize: "14px",
-              marginTop: "5px",
-            }}
-          >
-            {description.length}/{MAX_DESCRIPTION_CHAR}
-          </p>
-          {thumbnail && (
-            <div style={{ marginTop: "10px" }}>
-              <img
-                id="youtubeThumbnail"
-                alt="YouTube Video Thumbnail"
-                style={{ width: "150px", height: "auto" }}
-                src={thumbnail}
-              />
-            </div>
-          )}
-        </Form.Group>
-
+      <Modal show={popupShow} onHide={() => setPopupShow(false)} centered>
         <div
-          name="img-icon"
-          onClick={handleImageClick}
-          style={{ marginBottom: "15px" }}
-        >
-          <img
-            src={darkMode ? "/addImageLight.png" : "/add-img-icon.png"}
-            alt="Add Image Icon"
-            style={{
-              width: "50px",
-              height: "50px",
-              cursor: "pointer",
-            }}
-          />
-        </div>
-
-        <input
-          type="file"
-          id="image"
-          name="image"
-          accept="image/*"
-          onChange={handleImageChange}
-          style={{ display: "none" }}
-        />
-
-        {image && (
-          <div style={{ marginBottom: "15px" }}>
-            <img
-              id="imagePreview"
-              alt="Selected Image"
-              style={{ width: "180px", height: "auto" }}
-              src={URL.createObjectURL(image)}
-            />
-          </div>
-        )}
-
-        <Button
-          type="submit"
+          className="popup"
           style={{
-            width: "150px",
-            height: "40px",
-            backgroundColor: darkMode ? "#555" : "#007bff",
-            color: "#fff",
-            border: "none",
-            borderRadius: "5px",
-            fontSize: "16px",
-            fontWeight: "bold",
-            cursor: "pointer",
-            transition: "background-color 0.3s",
+            backgroundColor: darkMode ? "#181818" : "#fff",
+            color: darkMode ? "#fff" : "#000",
           }}
-          onMouseOver={(e) =>
-            (e.currentTarget.style.backgroundColor = darkMode
-              ? "#666"
-              : "#0056b3")
-          }
-          onMouseOut={(e) =>
-            (e.currentTarget.style.backgroundColor = darkMode
-              ? "#555"
-              : "#007bff")
-          }
         >
-          Create Post
-        </Button>
-      </Form>
-    </div>
+          <Modal.Header closeButton closeVariant={darkMode ? "white" : "black"}>
+            <Modal.Title>Create Post</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            {user ? (
+              <Form id="createPostID" onSubmit={handleSubmit}>
+                <Form.Group controlId="formBasicPassword">
+                  <Form.Control
+                    as="textarea"
+                    maxLength={MAX_DESCRIPTION_CHAR}
+                    placeholder="What's on your mind?"
+                    name="content"
+                    value={description}
+                    onChange={handleTextChange}
+                    style={{
+                      height: "150px",
+                      padding: "10px",
+                      borderRadius: "5px",
+                      border: `1px solid ${darkMode ? "#333" : "#ccc"}`,
+                      backgroundColor: darkMode ? "#181818" : "#fff",
+                      color: darkMode ? "#fff" : "#000",
+                      fontSize: "16px",
+                    }}
+                  />
+                  <p
+                    style={{
+                      color: charCountColor,
+                      fontSize: "14px",
+                      marginTop: "5px",
+                    }}
+                  >
+                    {description.length}/{MAX_DESCRIPTION_CHAR}
+                  </p>
+                  {thumbnail && (
+                    <div style={{ marginTop: "10px" }}>
+                      <img
+                        id="youtubeThumbnail"
+                        alt="YouTube Video Thumbnail"
+                        style={{ width: "150px", height: "auto" }}
+                        src={thumbnail}
+                      />
+                    </div>
+                  )}
+                </Form.Group>
+
+                <div
+                  onClick={handleImageClick}
+                  style={{ marginBottom: "15px" }}
+                >
+                  <img
+                    src={darkMode ? "/addImageLight.png" : "/add-img-icon.png"}
+                    alt="Add Image Icon"
+                    style={{
+                      width: "50px",
+                      height: "50px",
+                      cursor: "pointer",
+                    }}
+                  />
+                </div>
+
+                <input
+                  type="file"
+                  id="image"
+                  name="image"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  style={{ display: "none" }}
+                />
+
+                {image && (
+                  <div style={{ marginBottom: "15px" }}>
+                    <img
+                      id="imagePreview"
+                      alt="Selected Image"
+                      style={{ width: "180px", height: "auto" }}
+                      src={URL.createObjectURL(image)}
+                    />
+                  </div>
+                )}
+
+                <Button type="submit" style={{ width: "100%" }}>
+                  Create Post
+                </Button>
+              </Form>
+            ) : (
+              <h3>
+                You are not logged in. Please log in <Link to="/">here</Link>.
+              </h3>
+            )}
+          </Modal.Body>
+        </div>
+      </Modal>
+    </>
   );
 };
 
