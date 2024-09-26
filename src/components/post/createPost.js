@@ -11,9 +11,9 @@ const CreatePost = () => {
   const [user, setUser] = useState(null);
   const [text, setText] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
-  const [textAreaCount, setTextAreaCount] = useState(0);
-  const [color, setColor] = useState("gainsboro");
+  const [charCountColor, setCharCountColor] = useState("gainsboro");
   const [show, setShow] = useState(false);
+  const navigate = useNavigate();
 
   const handlePopupBtn = () => {
     setShow(true);
@@ -34,18 +34,20 @@ const CreatePost = () => {
     fetchUserInfo();
   }, []);
 
-  const navigate = useNavigate();
+  const updateCharCountColor = (textLength) => {
+    if (textLength == maxText) {
+      setCharCountColor("red");
+    } else if (textLength / maxText >= 0.75) {
+      setCharCountColor("gold");
+    } else {
+      setCharCountColor("gainsboro");
+    }
+  };
 
   const handleTextChange = (e) => {
-    setTextAreaCount(e.target.value.length);
-    if (textAreaCount >= maxText - 1) {
-      setColor("red");
-    } else if (textAreaCount / maxText >= 0.75) {
-      setColor("gold");
-    } else {
-      setColor("gainsboro");
-    }
-    setText(e.target.value);
+    const inputText = e.target.value;
+    setText(inputText);
+    updateCharCountColor(inputText.length);
   };
 
   const { darkMode } = useDarkMode();
@@ -183,8 +185,14 @@ const CreatePost = () => {
                 : "0 0 5px rgba(0,0,0,0.1)",
             }}
           />
-          <p style={{ color: color, fontSize: "14px", marginTop: "5px" }}>
-            {textAreaCount}/{maxText}
+          <p
+            style={{
+              color: charCountColor,
+              fontSize: "14px",
+              marginTop: "5px",
+            }}
+          >
+            {text.length}/{maxText}
           </p>
         </Form.Group>
 
