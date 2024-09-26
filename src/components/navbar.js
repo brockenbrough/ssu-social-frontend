@@ -8,7 +8,6 @@ import ReactNavbar from "react-bootstrap/Navbar";
 import { useDarkMode } from "../components/DarkModeContext";
 import DarkModeButton from "../components/DarkModeButton";
 import Dropdown from "react-bootstrap/Dropdown";
-import { NavLink } from "react-bootstrap";
 import CreatePost from "./post/createPost";
 
 const stickyNavbarStyle = {

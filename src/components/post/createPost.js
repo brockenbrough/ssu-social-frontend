@@ -165,7 +165,7 @@ const CreatePost = ({ popupShow, setPopupShow }) => {
     }
 
     savePost(post);
-    navigate("/getAllPost");
+    setPopupShow(false);
   };
 
   return (
