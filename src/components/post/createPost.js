@@ -170,8 +170,6 @@ const CreatePost = ({ popupShow, setPopupShow }) => {
 
   return (
     <>
-      <Button onClick={() => setPopupShow(true)}>Create Post</Button>
-
       <Modal show={popupShow} onHide={() => setPopupShow(false)} centered>
         <div
           className="popup"

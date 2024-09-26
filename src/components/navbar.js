@@ -78,9 +78,11 @@ export default function Navbar() {
                       popupShow={popupShow}
                       setPopupShow={setPopupShow}
                     />
-                    Create Post
-                    <span style={{ fontSize: "1.2rem", marginLeft: "5px" }}>
-                      +
+                    <span onClick={() => setPopupShow(true)}>
+                      Create Post
+                      <span style={{ fontSize: "1.2rem", marginLeft: "5px" }}>
+                        +
+                      </span>
                     </span>
                   </Nav.Link>
                 </Nav>
