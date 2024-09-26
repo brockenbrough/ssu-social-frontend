@@ -18,6 +18,7 @@ const CreatePost = () => {
   const [charCountColor, setCharCountColor] = useState(GREY_COLOR);
   const [popupShow, setPopupShow] = useState(false);
   const navigate = useNavigate();
+  const { darkMode } = useDarkMode();
 
   const handlePopupBtn = () => {
     setPopupShow(true);
@@ -54,62 +55,57 @@ const CreatePost = () => {
     updateCharCountColor(inputText.length);
   };
 
-  const { darkMode } = useDarkMode();
-
   const handleImageClick = () => {
     document.getElementById("image").click();
   };
 
   const handleImageChange = (e) => {
-    setImage(e.target.files[0]);
-    if (e.target.files && e.target.files[0]) {
+    const image = e.target.files[0];
+    setImage(image);
+
+    if (e.target.files && image) {
       let reader = new FileReader();
+
       reader.onload = (event) => {
         const imgPreview = event.target.result;
         document.getElementById("imagePreview").src = imgPreview;
       };
-      reader.readAsDataURL(e.target.files[0]);
+
+      reader.readAsDataURL(image);
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleEmptyDescription = () => {
+    alert("You need a description in order to create this post.");
+  };
 
-    // Check if content is empty
-    if (!description.trim()) {
-      alert("You need a description in order to create this post.");
-      return;
-    }
+  const saveImageAndGetImageId = async () => {
+    const formData = new FormData();
+    formData.append("image", image);
 
-    let post = {};
-
-    if (image) {
-      const formData = new FormData();
-      formData.append("image", image);
-      try {
-        const response = await fetch(
-          `${process.env.REACT_APP_BACKEND_SERVER_URI}/images/create`,
-          {
-            method: "POST",
-            body: formData,
-          }
-        );
-        if (response.ok) {
-          const data = await response.json();
-          post = {
-            id: user.id,
-            content: description,
-            username: user.username,
-            imageId: data.imageId,
-          };
-        } else {
-          alert("Image was not saved. HTTP status code: " + response.status);
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_BACKEND_SERVER_URI}/images/create`,
+        {
+          method: "POST",
+          body: formData,
         }
-      } catch (error) {
-        console.error("Error:", error);
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        return data.imageId;
+      } else {
+        alert("Image was not saved. HTTP status code: " + response.status);
       }
+    } catch (error) {
+      console.error("Error:", error);
     }
 
+    return null;
+  };
+
+  const savePost = async (post) => {
     try {
       post = {
         ...post,
@@ -121,10 +117,33 @@ const CreatePost = () => {
         `${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/createPost`,
         post
       );
-      navigate("/getAllPost");
     } catch (error) {
       console.error("Error creating post:", error);
     }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    let post = {};
+
+    if (!description.trim()) {
+      handleEmptyDescription();
+      return;
+    }
+
+    if (image) {
+      const imageId = await saveImageAndGetImageId();
+      if (imageId) {
+        post = {
+          ...post,
+          imageId: imageId,
+        };
+      }
+    }
+
+    savePost(post);
+    navigate("/getAllPost");
   };
 
   if (!user) {
