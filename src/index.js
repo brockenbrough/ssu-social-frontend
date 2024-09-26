@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import App from "./App";
 import "./components/comments/index.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import './global.css';
 import { BrowserRouter } from "react-router-dom";
 import { DarkModeProvider } from "./components/DarkModeContext";
 // Test Change

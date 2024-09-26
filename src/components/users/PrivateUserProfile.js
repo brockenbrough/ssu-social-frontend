@@ -302,7 +302,11 @@ const deleteConfirm = async () => {
                 color: darkMode ? 'white' : 'black',
                 border: darkMode ? '1px solid white' : '1px solid black',
                 marginTop: '10px'
-              }}>Profile</Button>
+              }}>
+                 <h2 class="text-3xl font-semibold text-green-800 mb-4">
+                 Profile</h2>
+                
+                </Button>
               <ul>
                 <Button onClick={followerRouteChange} variant="light" style={{
                   background: darkMode ? '#181818' : 'white',
@@ -318,6 +322,7 @@ const deleteConfirm = async () => {
                   border: darkMode ? '1px solid white' : '1px solid black',
                   marginTop: '10px'
                 }}>
+                 
                   Following: {followingCount}
                 </Button>{" "}
                 <Button variant="light" style={{
