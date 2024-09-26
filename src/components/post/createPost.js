@@ -5,18 +5,9 @@ import { useNavigate, Link } from "react-router-dom";
 import getUserInfoAsync from "../../utilities/decodeJwtAsync";
 import { useDarkMode } from "../DarkModeContext";
 
-import image1 from "../users/1.jpg";
-import image4 from "../users/4.jpg";
-import image6 from "../users/6.jpg";
 import CreatePostModal from "./createPostModal";
 
 const CreatePost = () => {
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const backgroundImages = [image1, image4, image6];
-
-  const getNextImageIndex = () =>
-    (currentImageIndex + 1) % backgroundImages.length;
-
   const [user, setUser] = useState(null);
   const [state, setState] = useState({ content: "" });
   const [thumbnail, setThumbnail] = useState(null);
@@ -42,35 +33,9 @@ const CreatePost = () => {
 
   useEffect(() => {
     fetchUserInfo();
-    const slideshowInterval = setInterval(() => {
-      setCurrentImageIndex(getNextImageIndex());
-    }, 5000);
-
-    return () => clearInterval(slideshowInterval);
-  }, [currentImageIndex]);
-
-  const backgroundStyling = {
-    background: "#FFFFFF",
-    backgroundImage: `url(${backgroundImages[currentImageIndex]})`,
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-    backgroundRepeat: "no-repeat",
-  };
+  }, []);
 
   const navigate = useNavigate();
-
-  const fetchYouTubeData = async (videoId) => {
-    try {
-      const response = await axios.get(
-        `https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${videoId}&key=AIzaSyAV6-k-24JeM4Lmd3Q5V3n-5YK1hxEtmU4`
-      );
-      const thumbnailUrl =
-        response.data.items[0]?.snippet?.thumbnails?.medium?.url;
-      setThumbnail(thumbnailUrl || "");
-    } catch (error) {
-      console.error("Error fetching YouTube video data:", error);
-    }
-  };
 
   const handleTextChange = (e) => {
     setTextAreaCount(e.target.value.length);
@@ -83,14 +48,6 @@ const CreatePost = () => {
     }
     const { name, value } = e.target;
     setState({ ...state, [name]: value });
-
-    const youtubeRegex =
-      /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
-    const youtubeMatch = value.match(youtubeRegex);
-    if (youtubeMatch) {
-      const videoId = youtubeMatch[1];
-      fetchYouTubeData(videoId);
-    }
   };
 
   const { darkMode } = useDarkMode();
@@ -181,7 +138,7 @@ const CreatePost = () => {
   }
 
   return (
-    <div className="App" style={{ ...backgroundStyling }}>
+    <div className="App">
       <Form
         id="createPostID"
         onSubmit={handleSubmit}
