@@ -5,7 +5,7 @@ import { useNavigate, Link } from "react-router-dom";
 import getUserInfoAsync from "../../utilities/decodeJwtAsync";
 import { useDarkMode } from "../DarkModeContext";
 
-const CreatePost = () => {
+const CreatePost = ({ popupShow, setPopupShow }) => {
   const MAX_DESCRIPTION_CHAR = 280;
   const GREY_COLOR = "gainsboro";
   const GOLD_COLOR = "gold";
@@ -16,7 +16,6 @@ const CreatePost = () => {
   const [image, setImage] = useState(null);
   const [thumbnail, setThumbnail] = useState(null);
   const [charCountColor, setCharCountColor] = useState(GREY_COLOR);
-  const [popupShow, setPopupShow] = useState(false);
   const navigate = useNavigate();
   const { darkMode } = useDarkMode();
 
