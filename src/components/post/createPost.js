@@ -154,14 +154,21 @@ const CreatePost = ({ popupShow, setPopupShow }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    let post = {};
+    let post = {
+      description: description,
+      image: image,
+      thumbnail: thumbnail,
+      charCountColor: charCountColor,
+    };
 
-    if (!description.trim()) {
+    resetState();
+
+    if (!post.description.trim()) {
       handleEmptyDescription();
       return;
     }
 
-    if (image) {
+    if (post.image) {
       const imageId = await saveImageAndGetImageId();
       if (imageId) {
         post = {
@@ -172,7 +179,6 @@ const CreatePost = ({ popupShow, setPopupShow }) => {
     }
 
     savePost(post);
-    resetState();
     navigate("/getAllPost");
     setPopupShow(false);
   };
