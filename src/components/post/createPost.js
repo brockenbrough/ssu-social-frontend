@@ -19,6 +19,13 @@ const CreatePost = ({ popupShow, setPopupShow }) => {
   const navigate = useNavigate();
   const { darkMode } = useDarkMode();
 
+  const resetState = () => {
+    setDescription("");
+    setImage(null);
+    setThumbnail(null);
+    setCharCountColor(GREY_COLOR);
+  };
+
   const fetchUserInfo = async () => {
     try {
       const userInfo = await getUserInfoAsync();
@@ -165,7 +172,9 @@ const CreatePost = ({ popupShow, setPopupShow }) => {
     }
 
     savePost(post);
+    resetState();
     navigate("/getAllPost");
+    setPopupShow(false);
   };
 
   return (

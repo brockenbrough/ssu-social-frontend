@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useParams, useNavigate } from "react-router";
 import getUserInfo from '../../utilities/decodeJwt'
 import axios from 'axios'
 import Button from 'react-bootstrap/Button';
@@ -15,6 +15,7 @@ export default function FollowerList() {
   const params = useParams();
   const [error, setError] = useState({});
   const { darkMode } = useDarkMode();  // Get dark mode state
+  const navigate = useNavigate();  // Initialize the navigate hook
   
   // This method fetches the user's followers from the database.
   useEffect(() => {
@@ -90,15 +91,40 @@ export default function FollowerList() {
     );
   }
 
-  //if (!user) return (<div><h3>You are not authorized to view this page, Please Login in <Link to={'/login'}><a href='#'>here</a></Link></h3></div>)
-
+  // Back button handler to go to the profile page
+  function handleBack() {
+    navigate(`/PrivateUserProfile/`);  // Replace with the actual route for the profile page
+  }
+  
  // This following section will display the table with the records of individuals and all their followers.
 return (
   <div style={{ backgroundColor: darkMode ? '#000' : '#f6f8fa', color: darkMode ? '#fff' : '#000', minHeight: '100vh' }}>
-    {/* Error message or placeholder area */}
-    <div style={{ color: darkMode ? '#fff' : '#000', padding: '10px', backgroundColor: darkMode ? '#000' : '#f6f8fa', minHeight: '50px' }}>
-      {error.message ? errorMessage() : <p>&nbsp;</p>} {/* Non-breaking space to ensure visibility */}
-    </div>
+      {/* Links to Followers and Following Pages as Buttons */}
+      <div style={{ display: 'flex', justifyContent: 'center', padding: '10px 0' }}>
+        {/* Followers Button: Disabled when on Followers page */}
+        <Button
+          variant={darkMode ? "secondary" : "light"}
+          disabled
+          style={{ marginRight: '10px', cursor: 'default', opacity: 0.7 }}
+        >
+          Followers
+        </Button>
+        
+        {/* Following Button */}
+        <Link to={`/following/${params.id}`}>
+          <Button variant={darkMode ? "dark" : "primary"}>Following</Button>
+        </Link>
+      </div>
+
+      {/* Error message or placeholder area */}
+      <div style={{ color: darkMode ? '#fff' : '#000', padding: '10px', backgroundColor: darkMode ? '#000' : '#f6f8fa', minHeight: '50px' }}>
+        {error.message ? errorMessage() : <p>&nbsp;</p>}
+      </div>
+
+    {/* Back button */}
+    <Button variant="secondary" style={{ marginLeft: 30 }} onClick={handleBack}>
+        Back to Profile
+      </Button>  
 
     {/* Followers section */}
     <h2 style={{ marginLeft: 30 }}>Followers</h2>

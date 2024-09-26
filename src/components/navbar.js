@@ -8,7 +8,6 @@ import ReactNavbar from "react-bootstrap/Navbar";
 import { useDarkMode } from "../components/DarkModeContext";
 import DarkModeButton from "../components/DarkModeButton";
 import Dropdown from "react-bootstrap/Dropdown";
-import { NavLink } from "react-bootstrap";
 import CreatePost from "./post/createPost";
 
 const stickyNavbarStyle = {
@@ -72,20 +71,23 @@ export default function Navbar() {
                   </Dropdown.Menu>
                 </Dropdown>
 
-                <Nav className="ml-auto">
-                  <Nav.Link href="">
-                    <CreatePost
-                      popupShow={popupShow}
-                      setPopupShow={setPopupShow}
-                    />
-                    <span onClick={() => setPopupShow(true)}>
-                      Create Post
-                      <span style={{ fontSize: "1.2rem", marginLeft: "5px" }}>
-                        +
-                      </span>
+                <span
+                  style={{
+                    color: darkMode ? "#fff" : "#000",
+                    cursor: "pointer",
+                  }}
+                >
+                  <CreatePost
+                    popupShow={popupShow}
+                    setPopupShow={setPopupShow}
+                  />
+                  <span onClick={() => setPopupShow(true)}>
+                    Create Post
+                    <span style={{ fontSize: "1.2rem", marginLeft: "5px" }}>
+                      +
                     </span>
-                  </Nav.Link>
-                </Nav>
+                  </span>
+                </span>
               </Container>
             </Container>
           </ReactNavbar>
