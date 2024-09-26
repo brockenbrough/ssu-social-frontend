@@ -72,20 +72,23 @@ export default function Navbar() {
                   </Dropdown.Menu>
                 </Dropdown>
 
-                <Nav className="ml-auto">
-                  <Nav.Link href="">
-                    <CreatePost
-                      popupShow={popupShow}
-                      setPopupShow={setPopupShow}
-                    />
-                    <span onClick={() => setPopupShow(true)}>
-                      Create Post
-                      <span style={{ fontSize: "1.2rem", marginLeft: "5px" }}>
-                        +
-                      </span>
+                <span
+                  style={{
+                    color: darkMode ? "#fff" : "#000",
+                    cursor: "pointer",
+                  }}
+                >
+                  <CreatePost
+                    popupShow={popupShow}
+                    setPopupShow={setPopupShow}
+                  />
+                  <span onClick={() => setPopupShow(true)}>
+                    Create Post
+                    <span style={{ fontSize: "1.2rem", marginLeft: "5px" }}>
+                      +
                     </span>
-                  </Nav.Link>
-                </Nav>
+                  </span>
+                </span>
               </Container>
             </Container>
           </ReactNavbar>
