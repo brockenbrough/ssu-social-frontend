@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useParams, useNavigate } from "react-router";  // Import useNavigate
 import getUserInfo from '../../utilities/decodeJwt'
 import axios from 'axios'
 import Button from 'react-bootstrap/Button';
@@ -14,6 +14,7 @@ export default function FollowingList() {
   const params = useParams();
   const [error, setError] = useState({});
   const { darkMode } = useDarkMode();  // Get dark mode state
+  const navigate = useNavigate();  // Initialize the navigate hook
 
   useEffect(() => {
     // Define a function to get the user's following. People that they follow.
@@ -40,23 +41,6 @@ export default function FollowingList() {
 
     return;
   }, [followings.length]);  // If record length ever changes, this useEffect() is automatically called.
-
-  // A method to unfollow a user from the following list.
-
-  // async function deleteFollowing(userId, targetUserId) {
-  //   const deleteFollowing = {
-  //     userId: userId,
-  //     targetUserId: targetUserId,
-  //   }
-  //   const url = `${process.env.REACT_APP_BACKEND_SERVER_URI}/followers/unfollow`;
-
-  // await axios.delete(url, {
-  //   data: deleteFollowing,
-  // });
-      
-  //   const newFollowing = followings.filter((el) => el !== el); // This causes a re-render because we change state.
-  //   setFollowing(newFollowing);  // This causes a re-render because we change state.
-  // }
 
   const Following = ({ record, user }) => (
     <tr>
@@ -88,16 +72,42 @@ export default function FollowingList() {
     );
   }
 
-  //if (!user) return (<div><h3>You are not authorized to view this page, Please Login in <Link to={'/login'}><a href='#'>here</a></Link></h3></div>)
+  // Back button handler to go to the profile page
+  function handleBack() {
+    navigate(`/PrivateUserProfile/`);  // Replace with the actual route for the profile page
+  }
 
   // This following section will display the table with the user's following. People that they are following.
   return (
     <div style={{ backgroundColor: darkMode ? '#000' : '#f6f8fa', color: darkMode ? '#fff' : '#000', minHeight: '100vh' }}>
-      {/* Error message or placeholder area */}
+      {/* Links to Followers and Following Pages as Buttons */}
+      <div style={{ display: 'flex', justifyContent: 'center', padding: '10px 0' }}>
+        {/* Followers Button: Disabled when on Followers page */}
+        <Link to={`/followers/${params.id}`}>
+        <Button
+          variant={darkMode ? "dark" : "primary"}>Followers
+        </Button>
+        </Link>
+        
+        {/* Following Button */}
+        <Button 
+          variant={darkMode ? "secondary" : "light"}
+          disabled
+          style={{ marginRight: '10px', cursor: 'default', opacity: 0.7 }}
+        >
+          Following</Button>
+      </div>
+
+
       <div style={{ color: darkMode ? '#fff' : '#000', padding: '10px', backgroundColor: darkMode ? '#000' : '#f6f8fa', minHeight: '50px' }}>
         {error.message ? errorMessage() : <p>&nbsp;</p>} {/* Non-breaking space to ensure visibility */}
       </div>
   
+      {/* Back button */}
+      <Button variant="secondary" style={{ marginLeft: 30 }} onClick={handleBack}>
+        Back to Profile
+      </Button>
+
       {/* Following section */}
       <h2 style={{ marginLeft: 30 }}>Following</h2>
       <table className="table table-striped" style={{ marginTop: 20 }}>
