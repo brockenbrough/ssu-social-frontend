@@ -10,7 +10,6 @@ import CreatePostModal from "./createPostModal";
 const CreatePost = () => {
   const [user, setUser] = useState(null);
   const [state, setState] = useState({ content: "" });
-  const [thumbnail, setThumbnail] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
   const [textAreaCount, setTextAreaCount] = useState(0);
   const [color, setColor] = useState("gainsboro");
@@ -190,16 +189,6 @@ const CreatePost = () => {
           <p style={{ color: color, fontSize: "14px", marginTop: "5px" }}>
             {textAreaCount}/{maxText}
           </p>
-          {thumbnail && (
-            <div style={{ marginTop: "10px" }}>
-              <img
-                id="youtubeThumbnail"
-                alt="YouTube Video Thumbnail"
-                style={{ width: "150px", height: "auto" }}
-                src={thumbnail}
-              />
-            </div>
-          )}
         </Form.Group>
 
         <div
