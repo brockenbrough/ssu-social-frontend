@@ -300,17 +300,17 @@ const deleteConfirm = async () => {
               <p class="ssu-text-titlesmall">Profile</p>
               <ul>
                 <button onClick={followerRouteChange}  class="ssu-button-info-clickable">
-                  Followers: {followerCount}
+                  {followerCount} followers 
                 </button>
                 <button onClick={followingRouteChange} class="ssu-button-info-clickable">
-                  Following: {followingCount}
+                  {followingCount} following 
                 </button> 
                 <button  class="ssu-button-info">
-                  {totalLikes} Likes
+                  {totalLikes} likes
                 </button>
               </ul>
               <button onClick={handleShowLogoutConfirmation} class="ssu-button-primary" >
-                  Log Out
+                  Log out
               </button>
               <Modal
                 show={showLogoutConfirmation}
@@ -322,7 +322,7 @@ const deleteConfirm = async () => {
                     background: darkMode ? '#181818' : 'white',
                     color: darkMode ? 'white' : 'black',
                   }}>
-                  <Modal.Title>Log Out</Modal.Title>
+                  <Modal.Title>Log out</Modal.Title>
                 </Modal.Header>
                 <Modal.Body style={{
                     background: darkMode ? '#181818' : 'white',
@@ -340,7 +340,7 @@ const deleteConfirm = async () => {
                   </button>
                 </Modal.Footer>
               </Modal>
-              <button onClick={showUserModal} class="ssu-button-primary" > Edit User Information
+              <button onClick={showUserModal} class="ssu-button-primary" > Edit profile
               </button>
             </Col>
             <Col md={9}>
