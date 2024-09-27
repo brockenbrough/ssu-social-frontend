@@ -29,7 +29,7 @@ export function useCommentCount() {
   return useContext(CommentCountContext);
 }
 
-function CreateComment({ postId, setParentCommentCount }) {
+function CreateComment({ postId, setParentCommentCount, postCardHeight, hasMedia }) {
   const [comments, setComments] = useState([]);
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
@@ -37,11 +37,14 @@ function CreateComment({ postId, setParentCommentCount }) {
   const { darkMode } = useDarkMode();
   const commentsEndRef = useRef(null);
 
-  // Scrolls to the bottom automatically when the comment section is opened or when a new comment is posted
-  useLayoutEffect(() => {
+  const scrollToBottom = () => {
     if (commentsEndRef.current) {
-      commentsEndRef.current.scrollIntoView({ behavior: "auto" });
+      commentsEndRef.current.scrollTop = commentsEndRef.current.scrollHeight;
     }
+  };
+  
+  useEffect(() => {
+    scrollToBottom(); 
   }, [comments]);
 
   useEffect(() => {
@@ -167,11 +170,20 @@ function CreateComment({ postId, setParentCommentCount }) {
   };
 
   function commentList() {
-    if (comments == null) {
+    if (comments === null || comments.length === 0) {
       return (
-        <div>
-          <h3>No Comment Found</h3>
-        </div>
+        <input
+          type="text"
+          placeholder="Be the First to Comment ..."
+          disabled
+          style={{
+            width: '100%',
+            backgroundColor: darkMode ? "#181818" : "#f6f8fa",
+            color: darkMode ? "#888" : "#aaa", 
+            fontSize: "1rem",
+            fontStyle: "italic", 
+          }}
+        />
       );
     }
     return comments.map((comment) => {
@@ -236,10 +248,6 @@ function CreateComment({ postId, setParentCommentCount }) {
     });
   }
 
-  const viewAllComments = () => {
-    navigate("/comments/comment", { state: postId });
-  };
-
   return (
     <div className="container mt-4">
       <div>
@@ -257,15 +265,18 @@ function CreateComment({ postId, setParentCommentCount }) {
         </span>
       </div>
 
-      <div //Scrollable Comment section Div
+      {/* Scrollable Comment section Div */}
+      <div 
+       ref={commentsEndRef}
         style={{
-          maxHeight: "280px",
+          //If it has no media then the scroll height is dynamic to the postcards height *.38
+          maxHeight: hasMedia ? "400px" : `${postCardHeight * 0.38}px`, 
           overflowY: "auto",
           marginTop: "20px",
           border: "1px solid #ccc",
-          paddingTop: "14px",  
-          paddingBottom: "0px",    
-          paddingRight: "13px",  
+          paddingTop: "14px",
+          paddingBottom: "0px",
+          paddingRight: "13px",
           paddingLeft: "13px",
           borderRadius: "5px",
         }}
@@ -273,7 +284,7 @@ function CreateComment({ postId, setParentCommentCount }) {
         <table className="table table-striped" style={{ marginTop: 0 }}>
           <tbody>
             {commentList()}
-            <tr ref={commentsEndRef}></tr>
+            <tr></tr>
           </tbody>
         </table>
       </div>
