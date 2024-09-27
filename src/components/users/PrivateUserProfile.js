@@ -297,7 +297,7 @@ const deleteConfirm = async () => {
         <>
           <Row>
             <Col md={3} className="text-center">
-              <h2>Profile</h2>
+              <p class="ssu-text-titlesmall">Profile</p>
               <ul>
                 <button onClick={followerRouteChange}  class="ssu-button-info-clickable">
                   Followers: {followerCount}

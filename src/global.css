@@ -15,6 +15,14 @@
   @apply bg-white text-gray-800 border border-gray-200 font-normal py-2 px-4 rounded mr-1 ml-1 mt-1 mb-1;
 }
 
+.ssu-text-normalsmall {
+  @apply text-sm text-lime-800;
+}
+
+.ssu-text-titlesmall {
+  @apply text-2xl font-semibold text-lime-800;
+}
+
 .body {
   @apply bg-gray-100 text-gray-900;
 }
