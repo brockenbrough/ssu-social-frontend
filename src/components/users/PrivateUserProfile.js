@@ -297,25 +297,21 @@ const deleteConfirm = async () => {
         <>
           <Row>
             <Col md={3} className="text-center">
-             
-                 <h2 class="text-3xl font-semibold text-green-800 mb-4">
-                 Profile</h2>
-                
-            
+              <h2>Profile</h2>
               <ul>
-                <Button onClick={followerRouteChange}  class="ssu-button-info">
+                <button onClick={followerRouteChange}  class="ssu-button-info-clickable">
                   Followers: {followerCount}
-                </Button>
-                <Button onClick={followingRouteChange} class="ssu-button-info">
+                </button>
+                <button onClick={followingRouteChange} class="ssu-button-info-clickable">
                   Following: {followingCount}
-                </Button>
-                <Button  class="ssu-button-info">
+                </button> 
+                <button  class="ssu-button-info">
                   {totalLikes} Likes
-                </Button>
+                </button>
               </ul>
-              <Button class="ssu-button-primary" onClick={handleShowLogoutConfirmation}>
+              <button onClick={handleShowLogoutConfirmation} class="ssu-button-primary" >
                   Log Out
-              </Button>
+              </button>
               <Modal
                 show={showLogoutConfirmation}
                 onHide={handleCloseLogoutConfirmation}
@@ -336,16 +332,16 @@ const deleteConfirm = async () => {
                     background: darkMode ? '#181818' : 'white',
                     color: darkMode ? 'white' : 'black',
                   }}>
-                  <Button variant="secondary" onClick={handleCloseLogoutConfirmation}>
+                  <button variant="secondary" onClick={handleCloseLogoutConfirmation} class="ssu-button-primary">
                     No
-                  </Button>
-                  <Button variant="primary" onClick={handleLogout}>
+                  </button>
+                  <button variant="primary" onClick={handleLogout} class="ssu-button-primary">
                     Yes
-                  </Button>
+                  </button>
                 </Modal.Footer>
               </Modal>
-              <Button onClick={showUserModal} class="ssu-button-primary" > Edit User Information
-              </Button>
+              <button onClick={showUserModal} class="ssu-button-primary" > Edit User Information
+              </button>
             </Col>
             <Col md={9}>
 
