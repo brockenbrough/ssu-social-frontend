@@ -398,7 +398,7 @@ const Post = ({ posts }) => {
           >
             <Card
               style={{
-                width: "400px",
+                width: "360px",
                 // If it has no media then its height is the orginal post card height
                 height: hasMedia ? "600px" : `${postCardHeight}px`, 
                 paddingBottom: hasMedia ? "0px" : "10px",
