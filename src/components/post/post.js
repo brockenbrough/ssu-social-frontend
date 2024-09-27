@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import getUserInfoAsync from "../../utilities/decodeJwt";
 import Card from "react-bootstrap/Card";
@@ -8,10 +8,11 @@ import axios from "axios";
 import { useDarkMode } from "../DarkModeContext";
 import Modal from "react-bootstrap/Modal";
 import { Form } from "react-bootstrap";
-import CommentModal from "../comments/CommentModal";
 import timeAgo from "../../utilities/timeAgo";
+import CreateComment from '../comments/createComment';
 
 const Post = ({ posts }) => {
+  const [youtubeThumbnail, setYoutubeThumbnail] = useState(null);  
   const [likeCount, setLikeCount] = useState(0);
   const [commentCount, setCommentCount] = useState(0);
   const [isLiked, setIsLiked] = useState(false);
@@ -20,14 +21,16 @@ const Post = ({ posts }) => {
   const { _id: postId } = posts;
   const [user, setUser] = useState(null);
   const { darkMode } = useDarkMode();
-  const [showPostModal, setShowPostModal] = useState(false);
   const [imageSrc, setImageSrc] = useState(null);
   const isCurrentUserPost = user && user.username === posts.username;
   const [showEditModal, setShowEditModal] = useState(false);
   const [editedPost, setEditedPost] = useState({ content: posts.content });
+  const [showCommentCard, setShowCommentCard] = useState(false);
+  const postCardRef = useRef(null);
+  const [postCardHeight, setPostCardHeight] = useState(0);
 
-  const handleShowPostModal = () => setShowPostModal(true);
-  const handleClosePostModal = () => setShowPostModal(false);
+  const handleShowPostModal = () => {setShowCommentCard(!showCommentCard);};
+  const hasMedia = !!(imageSrc || youtubeThumbnail);
 
   const rendercontent = (content) => {
     //Find links within posts.content
@@ -43,6 +46,14 @@ const Post = ({ posts }) => {
       return part;
     });
   };
+
+  //Retreiving Height of the Original Post and all its padding and margins
+  useEffect(() => {
+    if (postCardRef.current) {
+      const postCardRect = postCardRef.current.getBoundingClientRect();
+      setPostCardHeight(postCardRect.height);
+    }
+  }, [posts]);
 
   const displayContent = rendercontent(posts.content);
 
@@ -108,7 +119,6 @@ const Post = ({ posts }) => {
     }
   }, [dataLoaded]);
 
-  const [youtubeThumbnail, setYoutubeThumbnail] = useState(null);
 
   const fetchYouTubeThumbnail = async (videoId) => {
     try {
@@ -244,191 +254,21 @@ const Post = ({ posts }) => {
   };
 
   return (
-    <div className="d-inline-flex p-2">
-      <Card
-        id="postCard"
-        style={{
-          width: "520px",
-          height: imageSrc || youtubeThumbnail ? "600px" : "auto",
-          paddingBottom: imageSrc || youtubeThumbnail ? "0px" : "120px",
-          backgroundColor: darkMode ? "#181818" : "#f6f8fa",
-          position: "relative",
-        }}
-      >
-        <Card.Body style={{ color: darkMode ? "white" : "black" }}>
-          <div style={{ marginBottom: "10px" }}>
-            <Link
-              id="username"
-              to={
-                isCurrentUserPost
-                  ? "/privateUserProfile"
-                  : `/publicProfilePage/${posts.username}`
-              }
-              style={{
-                color: darkMode ? "white" : "black",
-                textDecoration: "none",
-                fontWeight: "bold",
-              }}
-            >
-              @{posts.username}
-            </Link>
-            <p></p>
-
-            {/*  Main Image Styling*/}
-            {imageSrc && (
-              <img
-                src={imageSrc}
-                alt="Post"
-                style={{
-                  width: "100%",
-                  maxWidth: "500px",
-                  height: "100%",
-                  maxHeight: "350px",
-                  objectFit: "contain",
-                  display: "block",
-                  margin: "0 auto",
-                }}
-              />
-            )}
-          </div>
-
-          {/* Wrapping post content in div */}
-          <div
-            className="original-post-content"
-            style={Object.assign(
-              {
-                width: "calc(100% - 20px)",
-                left: "10px",
-                display: "inline-block",
-                backgroundColor: darkMode ? "#222" : "#f0f0f0",
-                marginTop: "10px",
-                padding: "10px",
-                borderRadius: "8px",
-                wordBreak: "break-all",
-                marginBottom: "10px",
-                maxHeight: imageSrc || youtubeThumbnail ? "70px" : "auto",
-              },
-              imageSrc || youtubeThumbnail
-                ? { overflowY: "auto", position: "absolute", bottom: "105px" }
-                : { overflowY: "visible", margin: "auto" }
-            )}
-          >
-            {displayContent}
-          </div>
-
-          {youtubeThumbnail && (
-            <div>
-              <br />
-              <img
-                alt="YouTube Video Thumbnail"
-                src={youtubeThumbnail}
-                style={{
-                  width: "100%",
-                  maxWidth: "500px",
-                  height: "100%",
-                  maxHeight: "350px",
-                  objectFit: "contain",
-                  display: "block",
-                  margin: "0 auto",
-                }}
-              />
-            </div>
-          )}
-
-          <div style={{ position: "absolute", bottom: "10px", width: "100%" }}>
-            <div className="d-flex" style={{ justifyContent: "flex-start", gap: "10px" }}>
-              <Button
-                variant={isLiked ? "outline-danger" : "outline-danger"}
-                onClick={handleLikeClick}
-                style={{ marginRight: "3px" }}
-              >
-                {isLiked ? "♥" : "♡"} <span>{` ${likeCount}`}</span>
-              </Button>
-
-              {isCurrentUserPost && (
-                <Button
-                  onClick={(e) => {
-                    e.stopPropagation(); // Stop the click event from reaching the parent Card
-                    handleShowEditModal();
-                  }}
-                  variant="primary"
-                  style={{ marginRight: "3px" }}
-                >
-                  Edit
-                </Button>
-              )}
-              <Button
-                onClick={handleShowPostModal}
-                className="btn btn-warning"
-                style={{ marginRight: "3px" }}
-              >
-                Comment ({commentCount > 0 ? commentCount : "0"})
-              </Button>
-            </div>
-
-            <p style={{ marginTop: "4px" }}>
-              <span style={{ marginRight: "15px", fontSize: "0.8rem" }}>
-                {formattedDate}
-              </span>
-              <span style={{ fontSize: "0.8rem" }}>{timeAgo(posts.date)}</span>
-            </p>
-          </div>
-        </Card.Body>
-      </Card>
-
-      <Modal show={showPostModal} onHide={handleClosePostModal}>
-        <Modal.Header
-          closeButton
+    <div className="position-relative" style={{ width: "100%" }}>
+      <div className="d-flex justify-content-center p-2" style={{ width: "100%" }}>
+        <Card
+          id="postCard"
+          ref={postCardRef}
           style={{
+            width: "520px",
+            height: hasMedia ? "600px" : "auto",
+            paddingBottom: hasMedia ? "0px" : "170px",
             backgroundColor: darkMode ? "#181818" : "#f6f8fa",
-            color: darkMode ? "white" : "black",
+            position: "relative",
           }}
         >
-          <Modal.Title
-            style={{
-              backgroundColor: darkMode ? "#181818" : "#f6f8fa",
-              color: darkMode ? "white" : "black",
-            }}
-          >
-            Post
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body
-          style={{
-            wordWrap: "break-word",
-            overflowWrap: "break-word",
-            backgroundColor: darkMode ? "#181818" : "#f6f8fa",
-            color: darkMode ? "white" : "black",
-          }}
-        >
-          <p style={{ fontSize: "1.2rem" }}>{posts.content}</p>
-          <p>
-            <span
-              style={{
-                fontSize: "1rem",
-                fontWeight: "bold",
-                marginRight: "10px",
-              }}
-            >
-              <p>
-                {/*  Comment Image Styling*/}
-                {imageSrc && (
-                  <img
-                    src={imageSrc}
-                    alt="Post"
-                    style={{
-                      width: "auto",
-                      maxWidth: "400px",
-                      height: "auto",
-                      maxHeight: "280px",
-                      objectFit: "contain",
-                      display: "block",
-                      margin: "0 auto 14px auto",
-                    }}
-                  />
-                )}
-
-              </p>
+          <Card.Body style={{ color: darkMode ? "white" : "black" }}>
+            <div style={{ marginBottom: "10px" }}>
               <Link
                 id="username"
                 to={
@@ -444,25 +284,135 @@ const Post = ({ posts }) => {
               >
                 @{posts.username}
               </Link>
-            </span>
-            <span style={{ fontSize: "0.8rem", marginRight: "15px" }}>
-              {formattedDate}
-            </span>
-            <span style={{ fontSize: "0.8rem" }}>{timeAgo(posts.date)}</span>
-          </p>
-          <CommentModal postId={posts._id} setCommentCount={setCommentCount} />
-        </Modal.Body>
-        <Modal.Footer
-          style={{
-            backgroundColor: darkMode ? "#181818" : "#f6f8fa",
-            color: darkMode ? "white" : "black",
-          }}
-        >
-          <Button variant="secondary" onClick={handleClosePostModal}>
-            Close
-          </Button>
-        </Modal.Footer>
-      </Modal>
+              <p></p>
+
+              {/*  Main Image Styling*/}
+              {imageSrc && (
+                <img
+                  src={imageSrc}
+                  alt="Post"
+                  style={{
+                    width: "100%",
+                    maxWidth: "500px",
+                    height: "100%",
+                    maxHeight: "350px",
+                    objectFit: "contain",
+                    display: "block",
+                    margin: "0 auto",
+                  }}
+                />
+              )}
+            </div>
+
+            {/* Wrapping post content in div */}
+            <div
+              className="original-post-content"
+              style={Object.assign(
+                {
+                  width: "calc(100% - 20px)",
+                  left: "10px",
+                  display: "inline-block",
+                  backgroundColor: darkMode ? "#222" : "#f0f0f0",
+                  marginTop: "10px",
+                  padding: "10px",
+                  borderRadius: "8px",
+                  wordBreak: "break-all",
+                  marginBottom: "10px",
+                  maxHeight: hasMedia ? "70px" : "auto",
+                },
+                hasMedia
+                  ? { overflowY: "auto", position: "absolute", bottom: "105px" }
+                  : { overflowY: "visible", margin: "auto" }
+              )}
+            >
+              {displayContent}
+            </div>
+
+            {youtubeThumbnail && (
+              <div>
+                <br />
+                <img
+                  alt="YouTube Video Thumbnail"
+                  src={youtubeThumbnail}
+                  style={{
+                    width: "100%",
+                    maxWidth: "500px",
+                    height: "100%",
+                    maxHeight: "350px",
+                    objectFit: "contain",
+                    display: "block",
+                    margin: "0 auto",
+                  }}
+                />
+              </div>
+            )}
+
+            <div style={{ position: "absolute", bottom: "10px", width: "100%" }}>
+              <div className="d-flex" style={{ justifyContent: "flex-start", gap: "10px" }}>
+                <Button
+                  variant={isLiked ? "outline-danger" : "outline-danger"}
+                  onClick={handleLikeClick}
+                  style={{ marginRight: "3px" }}
+                >
+                  {isLiked ? "♥" : "♡"} <span>{` ${likeCount}`}</span>
+                </Button>
+
+                {isCurrentUserPost && (
+                  <Button
+                    onClick={(e) => {
+                      e.stopPropagation(); // Stop the click event from reaching the parent Card
+                      handleShowEditModal();
+                    }}
+                    variant="primary"
+                    style={{ marginRight: "3px" }}
+                  >
+                    Edit
+                  </Button>
+                )}
+                <Button
+                  onClick={handleShowPostModal}
+                  className="btn btn-warning"
+                  style={{ marginRight: "3px" }}
+                >
+                  {showCommentCard ? "Hide Comments" : `Comments (${commentCount > 0 ? commentCount : "0"})`}
+                </Button>
+              </div>
+
+              <p style={{ marginTop: "4px" }}>
+                <span style={{ marginRight: "15px", fontSize: "0.8rem" }}>
+                  {formattedDate}
+                </span>
+                <span style={{ fontSize: "0.8rem" }}>{timeAgo(posts.date)}</span>
+              </p>
+            </div>
+          </Card.Body>
+        </Card>
+
+        {/* Comment Section */}
+        {showCommentCard && (
+          <div
+            style={{
+              position: "absolute",
+              left: "calc(50% + 270px)",
+            }}
+          >
+            <Card
+              style={{
+                width: "400px",
+                // If it has no media then its height is the orginal post card height
+                height: hasMedia ? "600px" : `${postCardHeight}px`, 
+                paddingBottom: hasMedia ? "0px" : "10px",
+                backgroundColor: darkMode ? "#181818" : "#f6f8fa",
+              }}
+            >
+              <Card.Body style={{ color: darkMode ? "white" : "black" }}>
+              <CreateComment postId={postId} setParentCommentCount={setCommentCount} postCardHeight={postCardHeight}  hasMedia={hasMedia}/>
+              </Card.Body>
+            </Card>
+          </div>
+          
+        )}
+      </div>
 
       <Modal show={showEditModal} onHide={handleCloseEditModal}>
         <Modal.Header
