@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import getUserInfoAsync from "../../utilities/decodeJwtAsync"
+import { getUserInfoAsync } from "../../utilities/decodeJwtAsync"
 import {useDarkMode } from '../DarkModeContext';
 export default function ViewImages() {
   const { darkMode } = useDarkMode();

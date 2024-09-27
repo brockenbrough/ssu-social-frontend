@@ -8,7 +8,7 @@ import { UserContext } from "../../App";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import moment from "moment";
-import getUserInfoAsync from "../../utilities/decodeJwtAsync";
+import { getUserInfoAsync } from "../../utilities/decodeJwtAsync";
 import Form from "react-bootstrap/Form";
 import { useDarkMode } from '../DarkModeContext.js';
 

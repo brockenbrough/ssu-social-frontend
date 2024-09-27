@@ -26,30 +26,39 @@ const refreshAccessToken = async (decodedAccessToken) => {
     // Set the new access token to localStorage
     localStorage.setItem('accessToken', newAccessToken);
 
-    return decodedAccessToken;  // Return the original decoded token
+    // Return the new decoded access token
+    const newDecodedToken = jwt_decode(newAccessToken);
+    return newDecodedToken;
   } catch (error) {
     console.error('Error refreshing access token:', error);
     throw error;
   }
 };
 
-const getUserInfoAsync = async () => {
-    const accessToken = localStorage.getItem('accessToken');
-    if (!accessToken) return Promise.resolve(undefined);
-  
-    const decodedAccessToken = jwt_decode(accessToken);
-    const { exp } = decodedAccessToken;
-  
-    if (exp > new Date().getTime() / 1000) {
-      const newAccessToken = refreshAccessToken(decodedAccessToken)
-        .catch(error => {
-          console.error('Error refreshing access token:', error);
-          throw error;
-        });
-        return Promise.resolve(newAccessToken);
-    }
-  
-    return Promise.resolve(undefined);
-  };
 
-  export default getUserInfoAsync;
+const getUserInfoAsync = async () => {
+  const accessToken = localStorage.getItem('accessToken');
+  if (!accessToken) return undefined; // Return undefined directly
+
+  const decodedAccessToken = jwt_decode(accessToken);
+  const { exp } = decodedAccessToken;
+
+  // If token has expired
+  if (exp < new Date().getTime() / 1000) {
+    try {
+      // Attempt to refresh the token
+      const newAccessToken = await refreshAccessToken(decodedAccessToken);
+      // Decode the new access token
+      const newDecodedToken = jwt_decode(newAccessToken);
+      return newDecodedToken;
+    } catch (error) {
+      console.error('Error refreshing access token:', error);
+      throw error;
+    }
+  }
+
+  // Token is still valid
+  return decodedAccessToken;
+};
+
+export { refreshAccessToken, getUserInfoAsync };

@@ -4,7 +4,7 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import axios from 'axios'
-import getUserInfoAsync from "../../utilities/decodeJwtAsync";
+import { getUserInfoAsync } from "../../utilities/decodeJwtAsync";
 
 const EditUser = () => {
   const url = `${process.env.REACT_APP_BACKEND_SERVER_URI}/user/editUser`;

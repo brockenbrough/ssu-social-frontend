@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import getUserInfoAsync from "../../utilities/decodeJwtAsync";
+import { getUserInfoAsync } from "../../utilities/decodeJwtAsync";
 import Post from "./post";
 import "./postlistStyle.css"; 
 import ScrollToTop from "./ScrollToTop";
