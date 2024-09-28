@@ -82,20 +82,23 @@ export default function FollowingList() {
     <div style={{ backgroundColor: darkMode ? '#000' : '#f6f8fa', color: darkMode ? '#fff' : '#000', minHeight: '100vh' }}>
       {/* Links to Followers and Following Pages as Buttons */}
       <div style={{ display: 'flex', justifyContent: 'center', padding: '10px 0' }}>
-        {/* Followers Button: Disabled when on Followers page */}
+        {/* Followers Button */}
         <Link to={`/followers/${params.id}`}>
         <Button
-          variant={darkMode ? "dark" : "primary"}>Followers
+          variant={darkMode ? "dark" : "primary"}
+          style={{ marginRight: '10px', cursor: 'default', opacity: 0.7 }}>
+          Followers
         </Button>
         </Link>
         
-        {/* Following Button */}
+        {/* Following Button: Disabled when on Following page */}
         <Button 
           variant={darkMode ? "secondary" : "light"}
           disabled
           style={{ marginRight: '10px', cursor: 'default', opacity: 0.7 }}
         >
-          Following</Button>
+          Following
+          </Button>
       </div>
 
 
