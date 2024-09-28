@@ -4,11 +4,11 @@
 @import 'tailwindcss/utilities';
 
 .ssu-button-primary {
-  @apply bg-lime-600 text-white font-normal py-1 px-4 rounded hover:bg-blue-600 mr-1 ml-1 mt-1 mb-1;
+  @apply bg-violet-500 text-white font-normal py-1 px-4 rounded hover:bg-violet-600 mr-1 ml-1 mt-1 mb-1;
 }
 
 .ssu-button-info-clickable {
-  @apply bg-lime-100 text-gray-800 border-solid border-lime-900 font-normal py-1 px-4 rounded hover:bg-lime-200 mr-1 ml-1 mt-1 mb-1;
+  @apply bg-violet-50 text-gray-800 border-solid border-violet-200 font-normal py-1 px-4 rounded hover:bg-violet-100 mr-1 ml-1 mt-1 mb-1;
 }
 
 .ssu-button-info {
@@ -16,11 +16,15 @@
 }
 
 .ssu-text-normalsmall {
-  @apply text-sm text-lime-800;
+  @apply text-sm text-gray-800;
 }
 
 .ssu-text-titlesmall {
-  @apply text-2xl font-semibold text-lime-800;
+  @apply text-lg font-semibold text-gray-800;
+}
+
+.ssu-text-titlesmalllight {
+  @apply text-lg font-normal text-gray-800;
 }
 
 .body {

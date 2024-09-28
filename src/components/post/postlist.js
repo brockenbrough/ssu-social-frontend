@@ -142,7 +142,7 @@ function PostList({type, profileUsername}) {
                         category.posts.length > 0 && (
                         <>
                             <div className="text-center">
-                            <h2>{category.title}</h2>
+                            <p class="ssu-text-titlesmalllight">{category.title}</p>
                             </div>
                             <hr />
                             {chunkArray(category.posts, 3).map((chunk, index) => (

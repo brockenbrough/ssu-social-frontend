@@ -345,7 +345,7 @@ const deleteConfirm = async () => {
             </Col>
             <Col md={9}>
 
-              <h3>Your Posts</h3>
+              <p class="ssu-text-titlesmall">Your posts</p>
               <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-start', gap: '1rem' }}>
                 <PostList type="privateuserprofile" />
               </div>
