@@ -349,33 +349,31 @@ const Post = ({ posts }) => {
 
             <div style={{ position: "absolute", bottom: "10px", width: "100%" }}>
               <div className="d-flex" style={{ justifyContent: "flex-start", gap: "10px" }}>
-                <Button
-                  variant={isLiked ? "outline-danger" : "outline-danger"}
-                  onClick={handleLikeClick}
-                  style={{ marginRight: "3px" }}
+                <button
+                  onClick={handleLikeClick} class="ssu-button-info-clickable"
                 >
                   {isLiked ? "♥" : "♡"} <span>{` ${likeCount}`}</span>
-                </Button>
+                </button>
 
+                
+                <button
+                  onClick={handleShowPostModal}
+                  class="ssu-button-info-clickable"
+                >
+                  {showCommentCard ? "Hide Comments" : `💬 ${commentCount > 0 ? commentCount : "0"}`}
+                </button>
                 {isCurrentUserPost && (
-                  <Button
+                  <button
                     onClick={(e) => {
                       e.stopPropagation(); // Stop the click event from reaching the parent Card
                       handleShowEditModal();
                     }}
                     variant="primary"
-                    style={{ marginRight: "3px" }}
+                    class="ssu-button-primary"
                   >
                     Edit
-                  </Button>
+                  </button>
                 )}
-                <Button
-                  onClick={handleShowPostModal}
-                  className="btn btn-warning"
-                  style={{ marginRight: "3px" }}
-                >
-                  {showCommentCard ? "Hide Comments" : `Comments (${commentCount > 0 ? commentCount : "0"})`}
-                </Button>
               </div>
 
               <p style={{ marginTop: "4px" }}>
