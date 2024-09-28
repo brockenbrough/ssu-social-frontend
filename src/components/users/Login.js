@@ -4,12 +4,12 @@ import axios from "axios";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import getUserInfo from "../../utilities/decodeJwt";
-import image1 from "../users/1.jpg";
-import image2 from "../users/2.jpg";
-import image3 from "../users/3.jpg";
-import image4 from "../users/4.jpg";
-import image5 from "../users/5.jpg";
-import image6 from "../users/6.jpg";
+const image1 = "/1.jpg"; // Path to images in the public folder
+const image2 = "/2.jpg";
+const image3 = "/3.jpg";
+const image4 = "/4.jpg";
+const image5 = "/5.jpg";
+const image6 = "/6.jpg";
 
 const PRIMARY_COLOR = "#622A0F";
 const SECONDARY_COLOR = "#FFFFFF";

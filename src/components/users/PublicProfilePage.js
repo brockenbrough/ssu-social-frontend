@@ -94,7 +94,7 @@ export default function PublicUserList() {
 
   return (
     <div style={containerStyle}>
-      <DarkModeButton />
+      
       <Container className="mt-5">
         <Row>
           <Col md={4} className="text-center mb-3">

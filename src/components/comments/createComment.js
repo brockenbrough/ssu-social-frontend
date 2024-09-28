@@ -273,11 +273,8 @@ function CreateComment({ postId, setParentCommentCount, postCardHeight, hasMedia
           maxHeight: hasMedia ? "400px" : `${postCardHeight * 0.38}px`, 
           overflowY: "auto",
           marginTop: "20px",
-          border: "1px solid #ccc",
-          paddingTop: "14px",
           paddingBottom: "0px",
           paddingRight: "13px",
-          paddingLeft: "13px",
           borderRadius: "5px",
         }}
       >
@@ -312,7 +309,7 @@ function CreateComment({ postId, setParentCommentCount, postCardHeight, hasMedia
           <button
             type="submit"
             className="btn btn-primary d-flex justify-content-center align-items-center"
-            style={{ width: "10%" }}
+            style={{ width: "10%",paddingRight: "16px" }}
           >
             Post
           </button>

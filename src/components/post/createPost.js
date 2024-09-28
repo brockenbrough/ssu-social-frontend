@@ -2,8 +2,9 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { Form, Button, Modal } from "react-bootstrap";
 import { useNavigate, Link } from "react-router-dom";
-import getUserInfoAsync from "../../utilities/decodeJwtAsync";
+import { getUserInfoAsync } from "../../utilities/decodeJwtAsync";
 import { useDarkMode } from "../DarkModeContext";
+import apiClient from "../../utilities/apiClient";
 
 const CreatePost = ({ popupShow, setPopupShow }) => {
   const MAX_DESCRIPTION_CHAR = 280;
@@ -142,8 +143,8 @@ const CreatePost = ({ popupShow, setPopupShow }) => {
         content: description,
         username: user.username,
       };
-      await axios.post(
-        `${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/createPost`,
+      await apiClient.post(
+        `/posts/createPost`,
         post
       );
     } catch (error) {
