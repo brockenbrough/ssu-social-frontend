@@ -13,11 +13,11 @@ function PostList({ type, profileUsername }) {
   const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const fetchUserInfo = async () => {
+  const fetchUser = async () => {
     try {
-      const userInfo = await getUserInfoAsync();
-      if (userInfo) {
-        setUser(userInfo);
+      const user = await getUserInfoAsync();
+      if (user) {
+        setUser(user);
       }
     } catch (error) {
       console.error("Error fetching user:", error);
@@ -25,7 +25,7 @@ function PostList({ type, profileUsername }) {
   };
 
   useEffect(() => {
-    fetchUserInfo();
+    fetchUser();
   }, [type]);
 
   useEffect(() => {
