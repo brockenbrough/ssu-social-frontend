@@ -12,19 +12,15 @@ function PostList({ type, profileUsername }) {
   const [user, setUser] = useState(null);
   const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [username, setUsername] = useState(null);
-  const [userId, setUserId] = useState(null);
 
   const fetchUserInfo = async () => {
     try {
       const userInfo = await getUserInfoAsync();
       if (userInfo) {
         setUser(userInfo);
-        setUsername(userInfo.username);
-        setUserId(userInfo.id);
       }
     } catch (error) {
-      console.error("Error fetching user info:", error);
+      console.error("Error fetching user:", error);
     }
   };
 
@@ -33,19 +29,19 @@ function PostList({ type, profileUsername }) {
   }, [type]);
 
   useEffect(() => {
-    if (username) {
+    if (user) {
       getPosts();
     }
-  }, [username]);
+  }, [user]);
 
   async function getPosts() {
     let url;
     if (type === "feed") {
-      url = username
-        ? `${process.env.REACT_APP_BACKEND_SERVER_URI}/feed/${username}`
+      url = user
+        ? `${process.env.REACT_APP_BACKEND_SERVER_URI}/feed/${user.username}`
         : `${process.env.REACT_APP_BACKEND_SERVER_URI}/feed/`;
     } else if (type === "privateuserprofile") {
-      url = `${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getAllByUsername/${username}`;
+      url = `${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getAllByUsername/${user.username}`;
     } else if (type === "publicuserprofile") {
       url = `${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getAllByUsername/${profileUsername}`;
     } else if (type === "all") {
