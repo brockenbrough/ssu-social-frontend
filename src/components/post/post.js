@@ -284,15 +284,7 @@ const Post = ({ posts }) => {
                 <img
                   src={imageSrc}
                   alt="Post"
-                  style={{
-                    width: "100%",
-                    maxWidth: "500px",
-                    height: "100%",
-                    maxHeight: "350px",
-                    objectFit: "contain",
-                    display: "block",
-                    margin: "0 auto",
-                  }}
+                  class="ssu-post-img"
                 />
               )}
             </div>

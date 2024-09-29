@@ -33,7 +33,11 @@
 
 .ssu-textlink-bold {
   @apply text-sm font-semibold
-   text-gray-800 dark:text-white no-underline hover:text-purple-500
+   text-gray-800 dark:text-white no-underline hover:text-purple-500;
+}
+
+.ssu-post-img {
+  @apply w-full rounded-lg max-w-[500px] h-full max-h-[350px] object-contain block mx-auto;
 }
 
 .body {
