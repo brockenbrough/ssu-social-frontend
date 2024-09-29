@@ -1,106 +1,430 @@
-import React, { useState, useEffect } from "react"; // Import necessary hooks from React for state and lifecycle management
-import { Image } from "react-bootstrap"; // Import Bootstrap's Image component for profile image
-import { Link, useNavigate } from "react-router-dom"; // Import Link and navigation hooks for routing
-import axios from "axios"; // Import axios for making HTTP requests (unused but can be added for future API calls)
-import { getUserInfoAsync } from "../../utilities/decodeJwtAsync"; // Import custom function to fetch user information asynchronously
-import { useDarkMode } from "../DarkModeContext.js"; // Import context hook to handle dark mode
-import PostList from "../post/postlist"; // Import PostList component to display the user's posts
+import React, { useState, useEffect, useContext, useCallback } from "react";
+import { Image } from "react-bootstrap";
+import { Row, Col } from "react-bootstrap";
+import Card from "react-bootstrap/Card";
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
+import { UserContext } from "../../App";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import moment from "moment";
+import { getUserInfoAsync } from "../../utilities/decodeJwtAsync";
+import Form from "react-bootstrap/Form";
+import { useDarkMode } from '../DarkModeContext.js';
+
+import PostList from "../post/postlist";
+import EditUser from './editUserPage.js';
+import UploadImages from "../images/uploadImages.js";
 
 const PrivateUserProfile = () => {
-  // Destructure darkMode value from DarkModeContext and set container styles based on it
   const { darkMode } = useDarkMode();
-  const containerStyle = darkMode ? "bg-black text-white min-h-screen" : "bg-white text-black min-h-screen";
 
-  // State variables to manage user data, follower, following, and likes count
+  const containerStyle = {
+    background: darkMode ? 'black' : 'white',
+    color: darkMode ? 'white' : 'black',
+    minHeight: '100vh',
+    // Add other styles here
+  };
+
+  // State for showing delete confirmation modal
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+  const handleCloseDeleteConfirmation = () => setShowDeleteConfirmation(false);
+  const handleShowDeleteConfirmation = () => setShowDeleteConfirmation(true);
+
+  // State for showing logout confirmation modal
+  const [showLogoutConfirmation, setShowLogoutConfirmation] = useState(false);
+  const handleCloseLogoutConfirmation = () => setShowLogoutConfirmation(false);
+  const handleShowLogoutConfirmation = () => setShowLogoutConfirmation(true);
+
+  const [showUploadModal, setShowUploadModal] = useState(false);
+  const handleCloseUploadModal = () => setShowUploadModal(false);
+  const handleShowUploadModal = () => setShowUploadModal(true);
+
+
+  const [totalLikes, setTotalLikes] = useState(0); // State to store total likes
+
+
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [profileImageFilename, setProfileImageFilename] = useState("");
+  const [userProfileImage, setUserProfileImage] = useState("");
+
+  const [showPostModal, setShowPostModal] = useState(false);
+  const [selectedPost, setSelectedPost] = useState(null);
+
+  // Function to open the post modal
+  const openPostModal = (post) => {
+    setSelectedPost(post);
+    setShowPostModal(true);
+  };
+
+  // Function to close the post modal
+  const closePostModal = () => {
+    setShowPostModal(false);
+    setSelectedPost(null);
+  };
+
+  const onFileChange = event => {
+    setSelectedFile(event.target.files[0]);
+};
+
+
+const onUpload = async () => {
+  if (selectedFile) {
+    const formData = new FormData();
+    formData.append("profileImage", selectedFile);
+
+    try {
+      console.log('Username:', username);
+      const res = await axios.post(`${process.env.REACT_APP_BACKEND_SERVER_URI}/user/updateProfileImage/${username}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      setUserProfileImage(res.data.filePath);  // Update the profile image in the state
+    } catch (error) {
+      console.error("Error uploading profile image:", error);
+    }
+  } else {
+    console.error("No files selected");
+  }
+};
+
+
+const profileImageUrl = profileImageFilename ? `./routes/users/user.images/image/${profileImageFilename}` : null;
+ 
+  // Fetch the user context
   const [user, setUser] = useState(null);
+  const [userId, setUserId] = useState(null);
   const [username, setUsername] = useState(null);
+
+  // State for the form to create a new post
+  const [form, setForm] = useState({ content: "" });
+
+  // State to store user's posts
+  const [posts, setPosts] = useState([]);
+
+  
   const [followerCount, setFollowerCount] = useState(0);
   const [followingCount, setFollowingCount] = useState(0);
-  const [totalPosts, setTotalPosts] = useState(0);
 
-  const navigate = useNavigate(); // Hook to programmatically navigate between pages
+  // Used for navigation
+  const navigate = useNavigate();
 
-  // Function to fetch user information from an asynchronous utility
+  // State for the post to be deleted
+  const [postToDelete, setPostToDelete] = useState(null);
+
+  // Function to open the delete confirmation modal
+  const openDeleteModal = (post) => {
+    setPostToDelete(post);
+    handleShowDeleteConfirmation();
+  };
+
+  // Function to navigate to follower list
+  const followerRouteChange = () => {
+    navigate(`/followers/${username}`);
+  };
+
+  // Function to navigate to following list
+  const followingRouteChange = () => {
+    navigate(`/following/${username}`);
+  };
+
+  // Function to handle user logout
+  const handleLogout = () => {
+    localStorage.clear();
+    navigate("/");
+  };
+
   const fetchUserInfo = async () => {
     try {
-      const userInfo = await getUserInfoAsync(); // Call function to get user info from a JWT token
+      const userInfo = await getUserInfoAsync();
       if (userInfo) {
-        setUser(userInfo); // Set user state with the received data
-        setUsername(userInfo.username); // Set username state
+        setUser(userInfo);
+        setUsername(userInfo.username);
+        setUserId(userInfo.id);
       }
     } catch (error) {
-      console.error("Error fetching user info:", error); // Log error if user info fetch fails
+      console.error("Error fetching user info:", error);
     }
   };
 
-  // UseEffect hook to fetch user data when the component is first rendered
   useEffect(() => {
-    fetchUserInfo();
+    fetchUserInfo(); // Fetch user info
   }, []);
 
+  const fetchFollowerCount = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_BACKEND_SERVER_URI}/followers/${username}`
+      );
+      if (response.data.length > 0) {
+        setFollowerCount(response.data[0].followers.length);
+      } else {
+        setFollowerCount(0);
+      }
+    } catch (error) {
+      console.error(`Error fetching follower count: ${error.message}`);
+    }
+  };
+
+  // Function to fetch following count
+  const fetchFollowingCount = async () => {
+    var followCount;
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_BACKEND_SERVER_URI}/following/${username}`
+      );
+      if (response.data.length > 0) {
+        setFollowingCount(response.data[0].following.length);
+        followCount = response.data[0].following.length;
+      
+      }
+    } catch (error) {
+      console.error(`Error fetching following count: ${error.message}`);
+    }
+    console.log("Post call Following Count:", followingCount);
+  };
+
+  const fetchTotalLikes = async () => {
+    try {
+      console.log(username);
+      const res = await axios.get(
+        `${process.env.REACT_APP_BACKEND_SERVER_URI}/user-totallikes/${username}`
+      );
+    setTotalLikes(res.data);
+  } catch (error) {
+    console.error("Error fetching total likes:", error);
+  }
+  }; 
+
+  const fetchPosts = useCallback(async () => {
+    try {
+      const res = await axios.get(
+        `${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getAllByUsername/${username}`
+      );
+      setPosts(res.data);
+    } catch (error) {
+      alert(
+        `Unable to get posts from ${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getAllByUsername/${username}`
+      );
+    }
+  }, [username]); // Include only the username as a dependency
+
+  // Fetch user's posts when the component mounts and when username changes
+
+  // Handle changes in the form input
+  const handleChange = (event) => {
+    const { id, value } = event.target;
+    setForm({ ...form, [id]: value });
+  };
+
+  // Handle the submission of a new post
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const { content } = form;
+    const newPost = { content, username };
+    try {
+      await axios.post(
+        `${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/createPost`,
+        newPost
+      );
+      fetchPosts();
+      setForm({ content: "" });
+    } catch (error) {
+      alert(
+        `Unable to create post: ${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/createPost`
+      );
+    }
+  };
+
+  useEffect(() => {
+    fetchPosts();
+    fetchFollowerCount(); // Fetch follower count
+    fetchFollowingCount(); // Fetch following count
+    fetchTotalLikes();
+  }, [username, fetchPosts]); // Include username and fetchPosts as dependencies
+ 
+
+const deleteConfirm = async () => {
+    if (postToDelete) {
+      try {
+        await axios.delete(
+          `${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/deletePost/${postToDelete._id}`
+        );
+        handleCloseDeleteConfirmation();
+        fetchPosts();
+      } catch (error) {
+        alert(
+          `Unable to delete post: ${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/deletePost/${postToDelete._id}`
+        );
+      }
+    }
+  };
+
+  useEffect(() => {
+    
+    async function fetchProfileImage() {
+      try {
+        // Get the filename associated with the user
+        const response = await axios.get(`/some-endpoint-to-get-filename/${username}`);
+        const filename = response.data.filename;
+  
+        // Now use the filename to get the image
+        const res = await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_URI}/user/profileImage/${filename}`);
+        setUserProfileImage(res.data.filePath);
+      } catch (error) {
+        console.error("Error fetching profile image:", error);
+      }
+    }
+    
+  
+    fetchProfileImage();
+  }, [username]);
+  ; // Include username and fetchTotalLikes as dependencies
+
+  const [ userModal, setUserModal ] = useState(false);
+  const showUserModal = () => {
+    setUserModal(true);
+  };
+  const closeUserModal = () => {
+    setUserModal(false);
+  }
+
   return (
-    <div className={`${containerStyle} flex flex-col items-center`}> {/* Main container with responsive and styling based on dark mode */}
-      {user ? ( /* Conditional rendering: if user data exists, show the profile */
+    <div style={containerStyle}>
+      {user ? (
         <>
-          <div className="w-full max-w-2xl p-6"> {/* Profile wrapper with padding */}
-            {/* Profile Section */}
-            <div className="flex items-center justify-center mb-8"> {/* Centered profile image and info */}
-              <div className="text-center">
-                <Image 
-                  src={user.profileImageUrl || "/default-profile.png"} // Display user's profile image or a default one if unavailable
-                  roundedCircle 
-                  className="object-cover w-32 h-32 mb-2 border-4 border-gray-300"
-                />
-                <p className="text-sm text-gray-500">{user.username}</p> {/* Username directly below the profile image */}
-                
-                <h1 className="mt-2 text-2xl font-bold">{user.name}</h1> {/* Centered name as a heading */}
-                
-                <div className="flex justify-center mt-4 space-x-8"> {/* Follower, Following, and Likes count */}
-                  <div className="text-center">
-                    <p className="text-lg font-bold">{followerCount}</p> {/* Display follower count as integer */}
-                    <button onClick={() => navigate(`/followers/${username}`)} className="text-sm font-semibold">
-                      followers
-                    </button>
-                  </div>
-                  <div className="text-center">
-                    <p className="text-lg font-bold">{followingCount}</p> {/* Display following count as integer */}
-                    <button onClick={() => navigate(`/following/${username}`)} className="text-sm font-semibold">
-                      following
-                    </button>
-                  </div>
-                  <div className="text-center">
-                    <p className="text-lg font-bold">{totalPosts}</p> {/* Display total likes as integer */}
-                    <button className="text-sm font-semibold">
-                      posts
-                    </button>
-                  </div>
-                </div>
+          <Row>
+            <Col md={3} className="text-center">
+              <p class="ssu-text-titlesmall">Profile</p>
+              <ul>
+                <button onClick={followerRouteChange}  class="ssu-button-info-clickable">
+                  {followerCount} followers 
+                </button>
+                <button onClick={followingRouteChange} class="ssu-button-info-clickable">
+                  {followingCount} following 
+                </button> 
+                <button  class="ssu-button-info">
+                  {totalLikes} likes
+                </button>
+              </ul>
+              <button onClick={handleShowLogoutConfirmation} class="ssu-button-primary" >
+                  Log out
+              </button>
+              <Modal
+                show={showLogoutConfirmation}
+                onHide={handleCloseLogoutConfirmation}
+                backdrop="static"
+                keyboard={false}
+              >
+                <Modal.Header closeButton style={{
+                    background: darkMode ? '#181818' : 'white',
+                    color: darkMode ? 'white' : 'black',
+                  }}>
+                  <Modal.Title>Log out</Modal.Title>
+                </Modal.Header>
+                <Modal.Body style={{
+                    background: darkMode ? '#181818' : 'white',
+                    color: darkMode ? 'white' : 'black',
+                  }}>Are you sure you want to Log Out?</Modal.Body>
+                <Modal.Footer style={{
+                    background: darkMode ? '#181818' : 'white',
+                    color: darkMode ? 'white' : 'black',
+                  }}>
+                  <button variant="secondary" onClick={handleCloseLogoutConfirmation} class="ssu-button-primary">
+                    No
+                  </button>
+                  <button variant="primary" onClick={handleLogout} class="ssu-button-primary">
+                    Yes
+                  </button>
+                </Modal.Footer>
+              </Modal>
+              <button onClick={showUserModal} class="ssu-button-primary" > Edit profile
+              </button>
+            </Col>
+            <Col md={9}>
 
-                <button onClick={() => navigate('/edit-profile')} className="px-4 py-2 mt-4 text-white bg-blue-500 rounded">
-                  Edit Profile {/* Button to navigate to edit profile page */}
-                </button>
-                <button onClick={() => navigate('/follow-requests')} className="px-4 py-2 mt-4 text-white bg-blue-500 rounded">
-                  Follow Requests {/* Button to navigate to edit profile page */}
-                </button>
-                <button onClick={() => navigate('/discover-people')} className="px-4 py-2 mt-4 text-white bg-blue-500 rounded">
-                  Discover {/* Button to navigate to edit profile page */}
-                </button>
+              <p class="ssu-text-titlesmall">Your posts</p>
+              <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-start', gap: '1rem' }}>
+                <PostList type="privateuserprofile" />
               </div>
-            </div>
-
-            {/* Posts Section */}
-            <div className="grid grid-cols-3 gap-4"> {/* Display user's posts in a grid layout */}
-              <PostList type="privateuserprofile" /> {/* PostList component fetching posts related to the user's profile */}
-            </div>
-          </div>
+            </Col>
+          </Row>
         </>
       ) : (
-        <div className="text-center"> {/* If user is not logged in, display a login prompt */}
-          <p>Please <Link to="/" className="underline">log in</Link> to view your profile.</p>
+        <div className="col-md-12 text-center" style={{ fontSize: '24px', fontWeight: 'bold' }}>
+          <p>
+            Please <Link to="/" style={{ textDecoration: 'underline' }}>log in</Link> to view your profile.
+          </p>
         </div>
       )}
+      <Modal show={showDeleteConfirmation} onHide={handleCloseDeleteConfirmation} backdrop="static" keyboard={false}>
+        <Modal.Header closeButton>
+          <Modal.Title>Delete Confirmation</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Are you sure you want to delete this post?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseDeleteConfirmation}>
+            No
+          </Button>
+          <Button variant="primary" onClick={deleteConfirm}>
+            Yes
+          </Button>
+        </Modal.Footer>
+      </Modal>
+      <Modal show={showUploadModal} onHide={handleCloseUploadModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Change Profile Picture</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <input type="file" onChange={onFileChange} />
+          {selectedImage && (
+            <img
+              src={URL.createObjectURL(selectedImage)}
+              alt="Selected Profile"
+              style={{ width: '100%', marginTop: '10px' }}
+            />
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseUploadModal}>
+            Close
+          </Button>
+          <Button onClick={onUpload}>Upload Profile Image</Button>
+        </Modal.Footer>
+      </Modal>
+      <Modal show={showPostModal} onHide={closePostModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Post</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {selectedPost && (
+            <div>
+              <p>Username: {selectedPost.username}</p>
+              <p>{selectedPost.content}</p>
+              <p>{moment(selectedPost.date).format("MMMM Do YYYY, h:mm A")}</p>
+            </div>
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={closePostModal}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+      <Modal show={userModal} onHide={closeUserModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Edit Profile</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <EditUser />
+        </Modal.Body>
+      </Modal>
     </div>
   );
 };
 
-export default PrivateUserProfile; // Export component for use in the app
+export default PrivateUserProfile;
