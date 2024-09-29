@@ -284,7 +284,7 @@ const Post = ({ posts }) => {
                 color: darkMode ? "white" : "black",
               }}
             >
-              {displayContent} testtest
+              {displayContent}
             </p>
 
             {/* youtube */}
