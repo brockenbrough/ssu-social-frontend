@@ -20,7 +20,7 @@
 }
 
 .ssu-text-normalsmall {
-  @apply text-sm text-gray-800;
+  @apply text-sm text-gray-800 break-words;
 }
 
 .ssu-text-titlesmall {
@@ -34,6 +34,10 @@
 .ssu-textlink-bold {
   @apply text-sm font-semibold
    text-gray-800 dark:text-white no-underline hover:text-purple-500;
+}
+
+.ssu-post-card {
+  @apply w-[520px] max-w-sm p-3 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700;
 }
 
 .ssu-post-img {

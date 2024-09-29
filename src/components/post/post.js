@@ -256,18 +256,7 @@ const Post = ({ posts }) => {
   return (
     <div className="position-relative" style={{ width: "100%" }}>
       <div className="d-flex justify-content-center p-2" style={{ width: "100%" }}>
-        <Card
-          id="postCard"
-          ref={postCardRef}
-          style={{
-            width: "520px",
-            height: hasMedia ? "auto" : "auto",
-            paddingBottom: hasMedia ? "0px" : "1px",
-            backgroundColor: darkMode ? "#181818" : "#f6f8fa",
-            position: "relative",
-          }}
-        >
-          <Card.Body style={{ color: darkMode ? "white" : "black" }}>
+        <div class="ssu-post-card">
             <div>
 
               {/*  author of post */} 
@@ -350,8 +339,8 @@ const Post = ({ posts }) => {
               </p>
 
             </div>
-          </Card.Body>
-        </Card>
+
+        </div>
 
         {/* Comment Section */}
         {showCommentCard && (
