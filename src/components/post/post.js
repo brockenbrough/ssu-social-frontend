@@ -261,14 +261,14 @@ const Post = ({ posts }) => {
           ref={postCardRef}
           style={{
             width: "520px",
-            height: hasMedia ? "600px" : "auto",
-            paddingBottom: hasMedia ? "0px" : "170px",
+            height: hasMedia ? "auto" : "auto",
+            paddingBottom: hasMedia ? "0px" : "1px",
             backgroundColor: darkMode ? "#181818" : "#f6f8fa",
             position: "relative",
           }}
         >
           <Card.Body style={{ color: darkMode ? "white" : "black" }}>
-            <div style={{ marginBottom: "10px" }}>
+            <div>
 
               {/*  author of post */} 
               <a href={
@@ -279,7 +279,7 @@ const Post = ({ posts }) => {
                   @{posts.username}
               </a>
 
-              {/*  Main Image Styling*/}
+              {/*  image */}
               {imageSrc && (
                 <img
                   src={imageSrc}
@@ -288,66 +288,67 @@ const Post = ({ posts }) => {
                 />
               )}
 
-              {/* Post text */}
+              {/* post text */}
               <p class="ssu-text-normalsmall">
                 {displayContent}
               </p>
 
-            </div>
-
-            {youtubeThumbnail && (
-              <div>
-                <br />
-                <img
-                  alt="YouTube Video Thumbnail"
-                  src={youtubeThumbnail}
-                  style={{
-                    width: "100%",
-                    maxWidth: "500px",
-                    height: "100%",
-                    maxHeight: "350px",
-                    objectFit: "contain",
-                    display: "block",
-                    margin: "0 auto",
-                  }}
-                />
-              </div>
-            )}
-
-            <div style={{ position: "absolute", bottom: "10px", width: "100%" }}>
-              <div className="d-flex" style={{ justifyContent: "flex-start", gap: "10px" }}>
-                <button
-                  onClick={handleLikeClick} class="ssu-button-info-clickable"
-                >
-                  {isLiked ? "♥" : "♡"} <span>{` ${likeCount}`}</span>
-                </button>
-
-                <button
-                  onClick={handleShowPostModal}
-                  class="ssu-button-info-clickable"
-                >
-                  {showCommentCard ? "Hide Comments" : `💬 ${commentCount > 0 ? commentCount : "0"}`}
-                </button>
-                {isCurrentUserPost && (
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation(); // Stop the click event from reaching the parent Card
-                      handleShowEditModal();
+              {/* youtube */}
+              {youtubeThumbnail && (
+                <div>
+                  <br />
+                  <img
+                    alt="YouTube Video Thumbnail"
+                    src={youtubeThumbnail}
+                    style={{
+                      width: "100%",
+                      maxWidth: "500px",
+                      height: "100%",
+                      maxHeight: "350px",
+                      objectFit: "contain",
+                      display: "block",
+                      margin: "0 auto",
                     }}
-                    variant="primary"
-                    class="ssu-button-primary"
-                  >
-                    Edit
-                  </button>
-                )}
-              </div>
+                  />
+                </div>
+              )}
 
+              {/* like and comment icons */}
+              <button
+                onClick={handleLikeClick} class="ssu-button-info-clickable"
+              >
+                {isLiked ? "♥" : "♡"} <span>{` ${likeCount}`}</span>
+              </button>
+
+              <button
+                onClick={handleShowPostModal}
+                class="ssu-button-info-clickable"
+              >
+                {showCommentCard ? "Hide Comments" : `💬 ${commentCount > 0 ? commentCount : "0"}`}
+              </button>
+
+               {/* edit button */}
+              {isCurrentUserPost && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation(); // Stop the click event from reaching the parent Card
+                    handleShowEditModal();
+                  }}
+                  variant="primary"
+                  class="ssu-button-primary"
+                >
+                  Edit
+                </button>
+              )}
+
+              {/* post date */}
               <p style={{ marginTop: "4px" }}>
                 <span style={{ marginRight: "15px", fontSize: "0.8rem" }}>
                   {formattedDate}
                 </span>
                 <span style={{ fontSize: "0.8rem" }}>{timeAgo(posts.date)}</span>
               </p>
+
             </div>
           </Card.Body>
         </Card>
