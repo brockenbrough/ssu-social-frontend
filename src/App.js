@@ -28,16 +28,18 @@ import UpdatePost from "./components/post/updatePost";
 import createComment from "./components/comments/createComment";
 import UploadImages from "./components/images/uploadImages";
 import ViewImages from "./components/images/viewImages";
-import GetToken from './components/getToken'
+import GetToken from "./components/getToken";
 
 import Test from "./Test";
 import { createContext, useState, useEffect } from "react";
 import Comment from "./components/comments/comment";
 
 export const UserContext = createContext();
+export const PostContext = createContext();
 
 const App = () => {
   const [user, setUser] = useState();
+  const [posts, setPosts] = useState([]);
 
   useEffect(() => {
     setUser(getUserInfo());
@@ -45,48 +47,76 @@ const App = () => {
 
   return (
     <>
-    <DarkModeProvider>
-      <Navbar />
-      <UserContext.Provider value={user}>
-      
-        <Routes>
-          <Route exact path="/" element={<Login />} />
-          <Route exact path="/signup" element={<Signup />} />
-          <Route exact path="/editUserPage" element={<EditUserPage />} />
-          <Route path="/privateUserProfile" element={<PrivateUserProfile />} />
-          <Route path="/privateUserLikeList"  element={<PrivateUserLikeList />}/>
-          <Route path="/postLikedByPage" element={<postLikedByPage />}/>
-          <Route path="/publicProfilePage/:username" element={<PublicProfilePage />} />
-          <Route path="/publicUser" element={<PublicUser />} />
-          <Route path="/project-notes-contributors" element={<ContributorList />}/>
-          <Route path="/project-notes/editContributor/:id" element={<EditContributor />} />
-          <Route path="/project-notes/create" element={<CreateContributor />} />
-          <Route path="/project-notes/contributors" element={<ContributorList />}/>
-          
-          <Route path="/feed-algorithm" element={<ForYouPage />} />
-          <Route path="/publicFeed" element={<PublicFeedPage />} />
-          <Route path="/comments/comment" element={<CommentList />} />
-          <Route path="/comments/editComment/:id" element={<EditComment />} />
-          <Route path="/test" element={<Test />} />
-          <Route path="/followers/:id" element={<FollowerList />} />
-          <Route path="/following/:id" element={<FollowingList />} />
-          <Route path="/followCompsTestPage/:id" element={<FollowCompsTestPage />} />
-          <Route path="/createpost" element={<CreatePost />} />
-          <Route path="/getallpost" element={<GetAllPost />} />
-          <Route path="/updatepost/:postId" element={<UpdatePost />} />
-          <Route path="/createComment/:postId" element={<CreateComments />} />
-          <Route path="/uploadImages" element={<UploadImages />} />
-          <Route path="/viewImages" element={<ViewImages />} />
+      <DarkModeProvider>
+        <PostContext.Provider value={[posts, setPosts]}>
+          <Navbar />
+          <UserContext.Provider value={user}>
+            <Routes>
+              <Route exact path="/" element={<Login />} />
+              <Route exact path="/signup" element={<Signup />} />
+              <Route exact path="/editUserPage" element={<EditUserPage />} />
+              <Route
+                path="/privateUserProfile"
+                element={<PrivateUserProfile />}
+              />
+              <Route
+                path="/privateUserLikeList"
+                element={<PrivateUserLikeList />}
+              />
+              <Route path="/postLikedByPage" element={<postLikedByPage />} />
+              <Route
+                path="/publicProfilePage/:username"
+                element={<PublicProfilePage />}
+              />
+              <Route path="/publicUser" element={<PublicUser />} />
+              <Route
+                path="/project-notes-contributors"
+                element={<ContributorList />}
+              />
+              <Route
+                path="/project-notes/editContributor/:id"
+                element={<EditContributor />}
+              />
+              <Route
+                path="/project-notes/create"
+                element={<CreateContributor />}
+              />
+              <Route
+                path="/project-notes/contributors"
+                element={<ContributorList />}
+              />
 
-          <Route path="/get-token" element={<GetToken />} />
+              <Route path="/feed-algorithm" element={<ForYouPage />} />
+              <Route path="/publicFeed" element={<PublicFeedPage />} />
+              <Route path="/comments/comment" element={<CommentList />} />
+              <Route
+                path="/comments/editComment/:id"
+                element={<EditComment />}
+              />
+              <Route path="/test" element={<Test />} />
+              <Route path="/followers/:id" element={<FollowerList />} />
+              <Route path="/following/:id" element={<FollowingList />} />
+              <Route
+                path="/followCompsTestPage/:id"
+                element={<FollowCompsTestPage />}
+              />
+              <Route path="/createpost" element={<CreatePost />} />
+              <Route path="/getallpost" element={<GetAllPost />} />
+              <Route path="/updatepost/:postId" element={<UpdatePost />} />
+              <Route
+                path="/createComment/:postId"
+                element={<CreateComments />}
+              />
+              <Route path="/uploadImages" element={<UploadImages />} />
+              <Route path="/viewImages" element={<ViewImages />} />
 
-        </Routes>
-      </UserContext.Provider>
+              <Route path="/get-token" element={<GetToken />} />
+            </Routes>
+          </UserContext.Provider>
+        </PostContext.Provider>
       </DarkModeProvider>
     </>
   );
 };
 
-
-
-export default App
+export default App;

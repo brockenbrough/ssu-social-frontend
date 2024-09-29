@@ -1,16 +1,17 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getUserInfoAsync } from "../../utilities/decodeJwtAsync";
 import Post from "./post";
 import "./postlistStyle.css";
 import ScrollToTop from "./ScrollToTop";
 import { useDarkMode } from "../DarkModeContext";
+import { PostContext } from "../../App";
 
 function PostList({ type, profileUsername }) {
   const { darkMode } = useDarkMode();
   const [user, setUser] = useState(null);
-  const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useContext(PostContext);
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchUser = async () => {
@@ -32,7 +33,7 @@ function PostList({ type, profileUsername }) {
     if (user) {
       getPosts();
     }
-  }, [user]);
+  }, [user, posts]);
 
   async function getPosts() {
     let url;

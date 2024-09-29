@@ -1,10 +1,11 @@
 import axios from "axios";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Form, Button, Modal } from "react-bootstrap";
 import { useNavigate, Link } from "react-router-dom";
 import { getUserInfoAsync } from "../../utilities/decodeJwtAsync";
 import { useDarkMode } from "../DarkModeContext";
 import apiClient from "../../utilities/apiClient";
+import { PostContext } from "../../App";
 
 const CreatePost = ({ popupShow, setPopupShow }) => {
   const MAX_DESCRIPTION_CHAR = 280;
@@ -19,6 +20,7 @@ const CreatePost = ({ popupShow, setPopupShow }) => {
   const [charCountColor, setCharCountColor] = useState(GREY_COLOR);
   const navigate = useNavigate();
   const { darkMode } = useDarkMode();
+  const [posts, setPosts] = useContext(PostContext);
 
   const resetState = () => {
     setDescription("");
@@ -143,10 +145,7 @@ const CreatePost = ({ popupShow, setPopupShow }) => {
         content: description,
         username: user.username,
       };
-      await apiClient.post(
-        `/posts/createPost`,
-        post
-      );
+      await apiClient.post(`/posts/createPost`, post);
     } catch (error) {
       console.error("Error creating post:", error);
     }
@@ -179,6 +178,7 @@ const CreatePost = ({ popupShow, setPopupShow }) => {
       }
     }
 
+    setPosts([...posts, post]);
     savePost(post);
     navigate("/getAllPost");
     setPopupShow(false);
