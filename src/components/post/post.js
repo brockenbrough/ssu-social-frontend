@@ -287,30 +287,12 @@ const Post = ({ posts }) => {
                   class="ssu-post-img"
                 />
               )}
-            </div>
 
-            {/* Wrapping post content in div */}
-            <div
-              className="original-post-content"
-              style={Object.assign(
-                {
-                  width: "calc(100% - 20px)",
-                  left: "10px",
-                  display: "inline-block",
-                  backgroundColor: darkMode ? "#222" : "#f0f0f0",
-                  marginTop: "10px",
-                  padding: "10px",
-                  borderRadius: "8px",
-                  wordBreak: "break-all",
-                  marginBottom: "10px",
-                  maxHeight: hasMedia ? "70px" : "auto",
-                },
-                hasMedia
-                  ? { overflowY: "auto", position: "absolute", bottom: "105px" }
-                  : { overflowY: "visible", margin: "auto" }
-              )}
-            >
-              {displayContent}
+              {/* Post text */}
+              <p class="ssu-text-normalsmall">
+                {displayContent}
+              </p>
+
             </div>
 
             {youtubeThumbnail && (
@@ -340,7 +322,6 @@ const Post = ({ posts }) => {
                   {isLiked ? "♥" : "♡"} <span>{` ${likeCount}`}</span>
                 </button>
 
-                
                 <button
                   onClick={handleShowPostModal}
                   class="ssu-button-info-clickable"
