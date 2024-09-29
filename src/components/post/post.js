@@ -259,15 +259,6 @@ const Post = ({ posts }) => {
         <div class="ssu-post-card">
             <div>
 
-              {/*  author of post */} 
-              <a href={
-                    isCurrentUserPost
-                      ? "/privateUserProfile"
-                      : `/publicProfilePage/${posts.username}`
-                  } class="ssu-textlink-bold" >
-                  @{posts.username}
-              </a>
-
               {/*  image */}
               {imageSrc && (
                 <img
@@ -276,6 +267,15 @@ const Post = ({ posts }) => {
                   class="ssu-post-img"
                 />
               )}
+
+              {/*  author of post */} 
+              <a href={
+                    isCurrentUserPost
+                      ? "/privateUserProfile"
+                      : `/publicProfilePage/${posts.username}`
+                  } class="ssu-textlink-bold" >
+                  @{posts.username}
+              </a>
 
               {/* post text */}
               <p class="ssu-text-normalsmall">

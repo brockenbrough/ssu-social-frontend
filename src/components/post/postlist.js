@@ -105,11 +105,6 @@ function PostList({type, profileUsername}) {
         return chunked_arr;
     };
     
-    console.log('API Response:', posts);
-    console.log('Today Posts:', todayPosts);
-    console.log('This Week Posts:', thisWeekPosts);
-    console.log('a while ago posts', aWhileAgoPosts)
-    
     return (
         <>
             {isLoading ? (

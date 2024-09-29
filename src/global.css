@@ -37,11 +37,11 @@
 }
 
 .ssu-post-card {
-  @apply w-[520px] max-w-sm p-3 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700;
+  @apply w-[520px] max-w-sm p-2 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700;
 }
 
 .ssu-post-img {
-  @apply w-full rounded-lg max-w-[500px] h-full max-h-[350px] object-contain block mx-auto;
+  @apply rounded-lg;
 }
 
 .body {
