@@ -9,10 +9,10 @@ import { useDarkMode } from "../DarkModeContext";
 import Modal from "react-bootstrap/Modal";
 import { Form } from "react-bootstrap";
 import timeAgo from "../../utilities/timeAgo";
-import CreateComment from '../comments/createComment';
+import CreateComment from "../comments/createComment";
 
 const Post = ({ posts }) => {
-  const [youtubeThumbnail, setYoutubeThumbnail] = useState(null);  
+  const [youtubeThumbnail, setYoutubeThumbnail] = useState(null);
   const [likeCount, setLikeCount] = useState(0);
   const [commentCount, setCommentCount] = useState(0);
   const [isLiked, setIsLiked] = useState(false);
@@ -29,7 +29,9 @@ const Post = ({ posts }) => {
   const postCardRef = useRef(null);
   const [postCardHeight, setPostCardHeight] = useState(0);
 
-  const handleShowPostModal = () => {setShowCommentCard(!showCommentCard);};
+  const handleShowPostModal = () => {
+    setShowCommentCard(!showCommentCard);
+  };
   const hasMedia = !!(imageSrc || youtubeThumbnail);
 
   const rendercontent = (content) => {
@@ -118,7 +120,6 @@ const Post = ({ posts }) => {
       handleIsLiked();
     }
   }, [dataLoaded]);
-
 
   const fetchYouTubeThumbnail = async (videoId) => {
     try {
@@ -255,91 +256,93 @@ const Post = ({ posts }) => {
 
   return (
     <div className="position-relative" style={{ width: "100%" }}>
-      <div className="d-flex justify-content-center p-2" style={{ width: "100%" }}>
+      <div
+        className="d-flex justify-content-center p-2"
+        style={{ width: "100%" }}
+      >
         <div class="ssu-post-card">
-            <div>
+          <div>
+            {/*  image */}
+            {imageSrc && <img src={imageSrc} alt="Post" class="ssu-post-img" />}
 
-              {/*  image */}
-              {imageSrc && (
+            {/*  author of post */}
+            <a
+              href={
+                isCurrentUserPost
+                  ? "/privateUserProfile"
+                  : `/publicProfilePage/${posts.username}`
+              }
+              class="ssu-textlink-bold"
+            >
+              @{posts.username}
+            </a>
+
+            {/* post text */}
+            <p
+              class="ssu-text-normalsmall"
+              style={{
+                color: darkMode ? "white" : "black",
+              }}
+            >
+              {displayContent} testtest
+            </p>
+
+            {/* youtube */}
+            {youtubeThumbnail && (
+              <div>
+                <br />
                 <img
-                  src={imageSrc}
-                  alt="Post"
-                  class="ssu-post-img"
-                />
-              )}
-
-              {/*  author of post */} 
-              <a href={
-                    isCurrentUserPost
-                      ? "/privateUserProfile"
-                      : `/publicProfilePage/${posts.username}`
-                  } class="ssu-textlink-bold" >
-                  @{posts.username}
-              </a>
-
-              {/* post text */}
-              <p class="ssu-text-normalsmall">
-                {displayContent}
-              </p>
-
-              {/* youtube */}
-              {youtubeThumbnail && (
-                <div>
-                  <br />
-                  <img
-                    alt="YouTube Video Thumbnail"
-                    src={youtubeThumbnail}
-                    style={{
-                      width: "100%",
-                      maxWidth: "500px",
-                      height: "100%",
-                      maxHeight: "350px",
-                      objectFit: "contain",
-                      display: "block",
-                      margin: "0 auto",
-                    }}
-                  />
-                </div>
-              )}
-
-              {/* like and comment icons */}
-              <button
-                onClick={handleLikeClick} class="ssu-button-info-clickable"
-              >
-                {isLiked ? "♥" : "♡"} <span>{` ${likeCount}`}</span>
-              </button>
-
-              <button
-                onClick={handleShowPostModal}
-                class="ssu-button-info-clickable"
-              >
-                {showCommentCard ? "Hide Comments" : `💬 ${commentCount > 0 ? commentCount : "0"}`}
-              </button>
-
-               {/* edit button */}
-              {isCurrentUserPost && (
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation(); // Stop the click event from reaching the parent Card
-                    handleShowEditModal();
+                  alt="YouTube Video Thumbnail"
+                  src={youtubeThumbnail}
+                  style={{
+                    width: "100%",
+                    maxWidth: "500px",
+                    height: "100%",
+                    maxHeight: "350px",
+                    objectFit: "contain",
+                    display: "block",
+                    margin: "0 auto",
                   }}
-                  variant="primary"
-                  class="ssu-button-primary"
-                >
-                  Edit
-                </button>
-              )}
+                />
+              </div>
+            )}
 
-              {/* post date */}
-              <p style={{ marginTop: "4px" }}>
-                <span style={{ marginRight: "15px", fontSize: "0.8rem" }}>
-                  {formattedDate}
-                </span>
-                <span style={{ fontSize: "0.8rem" }}>{timeAgo(posts.date)}</span>
-              </p>
+            {/* like and comment icons */}
+            <button onClick={handleLikeClick} class="ssu-button-info-clickable">
+              {isLiked ? "♥" : "♡"} <span>{` ${likeCount}`}</span>
+            </button>
 
-            </div>
+            <button
+              onClick={handleShowPostModal}
+              class="ssu-button-info-clickable"
+            >
+              {showCommentCard
+                ? "Hide Comments"
+                : `💬 ${commentCount > 0 ? commentCount : "0"}`}
+            </button>
 
+            {/* edit button */}
+            {isCurrentUserPost && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation(); // Stop the click event from reaching the parent Card
+                  handleShowEditModal();
+                }}
+                variant="primary"
+                class="ssu-button-primary"
+              >
+                Edit
+              </button>
+            )}
+
+            {/* post date */}
+            <p style={{ marginTop: "4px" }}>
+              <span style={{ marginRight: "15px", fontSize: "0.8rem" }}>
+                {formattedDate}
+              </span>
+              <span style={{ fontSize: "0.8rem" }}>{timeAgo(posts.date)}</span>
+            </p>
+          </div>
         </div>
 
         {/* Comment Section */}
@@ -354,17 +357,21 @@ const Post = ({ posts }) => {
               style={{
                 width: "360px",
                 // If it has no media then its height is the orginal post card height
-                height: hasMedia ? "600px" : `${postCardHeight}px`, 
+                height: hasMedia ? "600px" : `${postCardHeight}px`,
                 paddingBottom: hasMedia ? "0px" : "10px",
                 backgroundColor: darkMode ? "#181818" : "#f6f8fa",
               }}
             >
               <Card.Body style={{ color: darkMode ? "white" : "black" }}>
-              <CreateComment postId={postId} setParentCommentCount={setCommentCount} postCardHeight={postCardHeight}  hasMedia={hasMedia}/>
+                <CreateComment
+                  postId={postId}
+                  setParentCommentCount={setCommentCount}
+                  postCardHeight={postCardHeight}
+                  hasMedia={hasMedia}
+                />
               </Card.Body>
             </Card>
           </div>
-          
         )}
       </div>
 
