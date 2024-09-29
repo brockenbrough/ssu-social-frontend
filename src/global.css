@@ -31,6 +31,11 @@
   @apply text-lg font-normal text-gray-800;
 }
 
+.ssu-textlink-bold {
+  @apply text-sm font-semibold
+   text-gray-800 dark:text-white no-underline hover:text-purple-500
+}
+
 .body {
   @apply bg-gray-100 text-gray-900;
 }

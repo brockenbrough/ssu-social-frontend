@@ -269,22 +269,15 @@ const Post = ({ posts }) => {
         >
           <Card.Body style={{ color: darkMode ? "white" : "black" }}>
             <div style={{ marginBottom: "10px" }}>
-              <Link
-                id="username"
-                to={
-                  isCurrentUserPost
-                    ? "/privateUserProfile"
-                    : `/publicProfilePage/${posts.username}`
-                }
-                style={{
-                  color: darkMode ? "white" : "black",
-                  textDecoration: "none",
-                  fontWeight: "bold",
-                }}
-              >
-                @{posts.username}
-              </Link>
-              <p></p>
+
+              {/*  author of post */} 
+              <a href={
+                    isCurrentUserPost
+                      ? "/privateUserProfile"
+                      : `/publicProfilePage/${posts.username}`
+                  } class="ssu-textlink-bold" >
+                  @{posts.username}
+              </a>
 
               {/*  Main Image Styling*/}
               {imageSrc && (
