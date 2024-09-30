@@ -98,11 +98,11 @@ export default function PublicUserList() {
       <Container className="mt-5">
         <Row>
           <Col md={4} className="text-center mb-3">
-            {/* <Image
+            <Image
               src={"https://robohash.org/" + username + "?set=set5"}
               roundedCircle
               style={{ width: '150px', height: '150px' }}
-            /> */}
+            />
             <h3>{username}</h3>
             <FollowButton
               className="mt-2 btn-sm"
