@@ -15,7 +15,6 @@ import { useDarkMode } from '../DarkModeContext.js';
 import PostList from "../post/postlist";
 import EditUser from './editUserPage.js';
 import UploadImages from "../images/uploadImages.js";
-import ProfileImage from "../images/ProfileImage.js";
 
 const PrivateUserProfile = () => {
   const { darkMode } = useDarkMode();
@@ -298,8 +297,7 @@ const deleteConfirm = async () => {
         <>
           <Row>
             <Col md={3} className="text-center">
-              {/* <p class="ssu-text-titlesmall">Profile</p> */}
-              <ProfileImage></ProfileImage>
+              <p class="ssu-text-titlesmall">Profile</p>
               <ul>
                 <button onClick={followerRouteChange}  class="ssu-button-info-clickable">
                   {followerCount} followers 
