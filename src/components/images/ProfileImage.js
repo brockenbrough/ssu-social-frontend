@@ -6,10 +6,11 @@ import { useDarkMode } from "../DarkModeContext";
 
 const ProfileImage = () => {
     const { darkMode } = useDarkMode();
+ 
 
     return (<Image
         roundedCircle
-        src={"https://robohash.org/" + Math.random() + "?set=set5"}
+        src={"ProfileIcon.png"}
         style={{ background: darkMode ? '#181818' : 'white',
         color: darkMode ? 'white' : 'black',
         border: darkMode ? '1px solid white' : '1px solid black',
