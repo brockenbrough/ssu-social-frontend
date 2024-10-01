@@ -93,9 +93,9 @@ function PostList({ type, profileUsername }) {
     .sort((a, b) => new Date(b.date) - new Date(a.date));
 
   const timeCategories = [
-    { title: "Happening now", posts: todayPosts },
-    { title: "This past week", posts: thisWeekPosts },
-    { title: "Throwback posts", posts: aWhileAgoPosts },
+    { posts: todayPosts },
+    { posts: thisWeekPosts },
+    { posts: aWhileAgoPosts },
   ];
 
   const chunkArray = (array, size) => {
@@ -154,7 +154,6 @@ function PostList({ type, profileUsername }) {
                   <div className="text-center">
                     <p class="ssu-text-titlesmalllight">{category.title}</p>
                   </div>
-                  <hr />
                   {chunkArray(category.posts, 3).map((chunk, index) => (
                     <div className="d-flex flex-column align-items-center">
                       {chunk.map((post) => (
