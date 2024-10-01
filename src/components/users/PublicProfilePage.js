@@ -8,6 +8,7 @@ import { useDarkMode } from '../DarkModeContext.js';
 import DarkModeButton from '../DarkModeButton';
 import FollowButton from '../following/followButton';
 import PostList from '../post/postlist';
+import ProfileImage from '../images/ProfileImage.js';
 
 export default function PublicUserList() {
   const { darkMode } = useDarkMode();
@@ -98,11 +99,7 @@ export default function PublicUserList() {
       <Container className="mt-5">
         <Row>
           <Col md={4} className="text-center mb-3">
-            <Image
-              src={"https://robohash.org/" + username + "?set=set5"}
-              roundedCircle
-              style={{ width: '150px', height: '150px' }}
-            />
+            <ProfileImage></ProfileImage>
             <h3>{username}</h3>
             <FollowButton
               className="mt-2 btn-sm"
