@@ -22,6 +22,7 @@ const CreatePost = ({ popupShow, setPopupShow }) => {
   const { darkMode } = useDarkMode();
   const [posts, setPosts] = useContext(PostContext);
 
+  // Reset form state
   const resetState = () => {
     setDescription("");
     setImage(null);
@@ -29,6 +30,7 @@ const CreatePost = ({ popupShow, setPopupShow }) => {
     setCharCountColor(GREY_COLOR);
   };
 
+  // Fetch user information asynchronously
   const fetchUserInfo = async () => {
     try {
       const userInfo = await getUserInfoAsync();
@@ -44,6 +46,7 @@ const CreatePost = ({ popupShow, setPopupShow }) => {
     fetchUserInfo();
   }, []);
 
+  // Update character count color dynamically
   const updateCharCountColor = (textLength) => {
     if (textLength === MAX_DESCRIPTION_CHAR) {
       setCharCountColor(RED_COLOR);
@@ -54,6 +57,7 @@ const CreatePost = ({ popupShow, setPopupShow }) => {
     }
   };
 
+  // Fetch YouTube thumbnail
   const fetchYoutubeThumbnail = async (link) => {
     const youtubeRegex =
       /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
@@ -61,7 +65,7 @@ const CreatePost = ({ popupShow, setPopupShow }) => {
 
     try {
       const response = await axios.get(
-        `https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${videoId}&key=AIzaSyAV6-k-24JeM4Lmd3Q5V3n-5YK1hxEtmU4`
+        `https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${videoId}&key=YOUR_YOUTUBE_API_KEY`
       );
       const thumbnailUrl =
         response.data.items[0]?.snippet?.thumbnails?.medium?.url;
@@ -71,6 +75,7 @@ const CreatePost = ({ popupShow, setPopupShow }) => {
     }
   };
 
+  // Check if the link is a valid YouTube link
   const isYoutubeLink = (link) => {
     const youtubeRegex =
       /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
@@ -111,10 +116,12 @@ const CreatePost = ({ popupShow, setPopupShow }) => {
     alert("You need a description in order to create this post.");
   };
 
-  const saveImageAndGetImageId = async () => {
+  // Function to handle image upload and return the S3 URI
+  const saveImageAndGetImageUri = async () => {
     const formData = new FormData();
     formData.append("image", image);
-
+    formData.append("name", user.username);  // Ensure the username is sent for validation
+  
     try {
       const response = await fetch(
         `${process.env.REACT_APP_BACKEND_SERVER_URI}/images/create`,
@@ -123,17 +130,18 @@ const CreatePost = ({ popupShow, setPopupShow }) => {
           body: formData,
         }
       );
-
+  
       if (response.ok) {
         const data = await response.json();
-        return data.imageId;
+        console.log("Image URI from backend:", data.imageUri);  // Debugging log
+        return data.imageUri;  // Ensure this is the S3 URL returned from the backend
       } else {
         alert("Image was not saved. HTTP status code: " + response.status);
       }
     } catch (error) {
       console.error("Error:", error);
     }
-
+  
     return null;
   };
 
@@ -144,6 +152,7 @@ const CreatePost = ({ popupShow, setPopupShow }) => {
         id: user.id,
         content: description,
         username: user.username,
+        imageUri: post.imageUri,  // Ensure imageUri is included
       };
       await apiClient.post(`/posts/createPost`, post);
     } catch (error) {
@@ -153,33 +162,34 @@ const CreatePost = ({ popupShow, setPopupShow }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     let post = {
       description: description,
-      image: image,
       thumbnail: thumbnail,
       charCountColor: charCountColor,
     };
-
-    resetState();
-
+  
     if (!post.description.trim()) {
-      handleEmptyDescription();
+      alert("You need a description in order to create this post.");
       return;
     }
-
-    if (post.image) {
-      const imageId = await saveImageAndGetImageId();
-      if (imageId) {
+  
+    // If there's an image, upload it and get the image URI
+    if (image) {
+      const imageUri = await saveImageAndGetImageUri();
+      if (imageUri) {
         post = {
           ...post,
-          imageId: imageId,
+          imageUri: imageUri,  // Add imageUri to the post object
         };
       }
     }
-
+  
+    console.log("Post object before saving:", post);  // Debugging log to see post object
+  
     setPosts([...posts, post]);
-    savePost(post);
+    await savePost(post);  // Ensure imageUri is sent in savePost function
+    resetState();
     navigate("/getAllPost");
     setPopupShow(false);
   };
@@ -273,7 +283,6 @@ const CreatePost = ({ popupShow, setPopupShow }) => {
                     />
                   </div>
                 )}
-
                 <Button type="submit" style={{ width: "100%" }}>
                   Create Post
                 </Button>

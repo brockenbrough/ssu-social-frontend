@@ -21,7 +21,6 @@ const Post = ({ posts }) => {
   const { _id: postId } = posts;
   const [user, setUser] = useState(null);
   const { darkMode } = useDarkMode();
-  const [imageSrc, setImageSrc] = useState(null);
   const isCurrentUserPost = user && user.username === posts.username;
   const [showEditModal, setShowEditModal] = useState(false);
   const [editedPost, setEditedPost] = useState({ content: posts.content });
@@ -32,15 +31,15 @@ const Post = ({ posts }) => {
   const handleShowPostModal = () => {
     setShowCommentCard(!showCommentCard);
   };
-  const hasMedia = !!(imageSrc || youtubeThumbnail);
+
+  const hasMedia = !!(posts.imageUri || youtubeThumbnail);
 
   const rendercontent = (content) => {
-    //Find links within posts.content
     const urlRegex = /(https?:\/\/[^\s]+)/g;
     return content.split(urlRegex).map((part, index) => {
       if (index % 2 === 1) {
         return (
-          <a key={index} href={part} target="_blank" rel="noopener nonreferrer">
+          <a key={index} href={part} target="_blank" rel="noopener noreferrer">
             {part}
           </a>
         );
@@ -49,7 +48,6 @@ const Post = ({ posts }) => {
     });
   };
 
-  //Retreiving Height of the Original Post and all its padding and margins
   useEffect(() => {
     if (postCardRef.current) {
       const postCardRect = postCardRef.current.getBoundingClientRect();
@@ -65,31 +63,6 @@ const Post = ({ posts }) => {
     fetchLikeCount();
     fetchCommentCount();
   }, [posts._id]);
-
-  useEffect(() => {
-    if (posts.imageId) {
-      fetchImage(posts.imageId);
-    }
-  }, [posts.imageId]);
-
-  const fetchImage = (imageId) => {
-    axios
-      .get(`${process.env.REACT_APP_BACKEND_SERVER_URI}/images/${imageId}`, {
-        responseType: "arraybuffer",
-      })
-      .then((response) => {
-        const base64 = btoa(
-          new Uint8Array(response.data).reduce(
-            (data, byte) => data + String.fromCharCode(byte),
-            ""
-          )
-        );
-        setImageSrc(
-          `data:${response.headers["content-type"]};base64,${base64}`
-        );
-      })
-      .catch((error) => console.error("Error fetching image:", error));
-  };
 
   const fetchLikeCount = () => {
     fetch(
@@ -136,7 +109,6 @@ const Post = ({ posts }) => {
 
   useEffect(() => {
     if (posts.content) {
-      // Check if the post content contains a YouTube link
       const youtubeRegex =
         /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
       const youtubeMatch = posts.content.match(youtubeRegex);
@@ -203,17 +175,10 @@ const Post = ({ posts }) => {
   };
 
   const handleShowEditModal = () => {
-    // Check if the current user is the owner of the post
     if (isCurrentUserPost) {
       setEditedPost({ content: posts.content });
-
-      if (posts.imageId) {
-        fetchImage(posts.imageId);
-      }
-
       setShowEditModal(true);
     } else {
-      // Display a message or handle the case where the current user is not the owner
       alert("You don't have permission to edit this post.");
     }
   };
@@ -231,7 +196,6 @@ const Post = ({ posts }) => {
         }
       )
       .then((response) => {
-        console.log(response);
         handleCloseEditModal();
         window.location.reload();
       })
@@ -246,7 +210,6 @@ const Post = ({ posts }) => {
         `${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/deletePost/${posts._id}`
       )
       .then((response) => {
-        console.log(response);
         handleCloseEditModal();
       })
       .catch((error) => {
@@ -256,38 +219,39 @@ const Post = ({ posts }) => {
 
   return (
     <div className="position-relative" style={{ width: "100%" }}>
-      <div
-        className="d-flex justify-content-center p-2"
-        style={{ width: "100%" }}
-      >
-        <div class="ssu-post-card">
+      <div className="d-flex justify-content-center p-2" style={{ width: "100%" }}>
+        <div className="ssu-post-card">
           <div>
             {/*  image */}
-            {imageSrc && <img src={imageSrc} alt="Post" class="ssu-post-img" />}
-
+            {posts.imageUri && (
+              <img
+                src={posts.imageUri}
+                alt="Post"
+                className="ssu-post-img"
+                style={{
+                  width: "100%",
+                  maxWidth: "500px",
+                  height: "100%",
+                  maxHeight: "350px",
+                  objectFit: "contain",
+                  display: "block",
+                  margin: "0 auto",
+                }}
+              />
+            )}
             {/*  author of post */}
             <a
-              href={
-                isCurrentUserPost
-                  ? "/privateUserProfile"
-                  : `/publicProfilePage/${posts.username}`
-              }
-              class="ssu-textlink-bold"
+              href={isCurrentUserPost ? "/privateUserProfile" : `/publicProfilePage/${posts.username}`}
+              className="ssu-textlink-bold"
             >
               @{posts.username}
             </a>
-
             {/* post text */}
-            <p
-              class="ssu-text-normalsmall"
-              style={{
-                color: darkMode ? "white" : "black",
-              }}
-            >
+            <p className="ssu-text-normalsmall" style={{ color: darkMode ? "white" : "black" }}>
               {displayContent}
             </p>
 
-            {/* youtube */}
+            {/* YouTube Thumbnail */}
             {youtubeThumbnail && (
               <div>
                 <br />
@@ -307,39 +271,30 @@ const Post = ({ posts }) => {
               </div>
             )}
 
-            {/* like and comment icons */}
-            <button onClick={handleLikeClick} class="ssu-button-info-clickable">
+            {/* Like and comment buttons */}
+            <button onClick={handleLikeClick} className="ssu-button-info-clickable">
               {isLiked ? "♥" : "♡"} <span>{` ${likeCount}`}</span>
             </button>
-
-            <button
-              onClick={handleShowPostModal}
-              class="ssu-button-info-clickable"
-            >
-              {showCommentCard
-                ? "Hide Comments"
-                : `💬 ${commentCount > 0 ? commentCount : "0"}`}
+            <button onClick={handleShowPostModal} className="ssu-button-info-clickable">
+              {showCommentCard ? "Hide Comments" : `💬 ${commentCount > 0 ? commentCount : "0"}`}
             </button>
 
-            {/* edit button */}
+            {/* Edit button */}
             {isCurrentUserPost && (
               <button
                 onClick={(e) => {
                   e.stopPropagation(); // Stop the click event from reaching the parent Card
                   handleShowEditModal();
                 }}
-                variant="primary"
-                class="ssu-button-primary"
+                className="ssu-button-primary"
               >
                 Edit
               </button>
             )}
 
-            {/* post date */}
+            {/* Post date */}
             <p style={{ marginTop: "4px" }}>
-              <span style={{ marginRight: "15px", fontSize: "0.8rem" }}>
-                {formattedDate}
-              </span>
+              <span style={{ marginRight: "15px", fontSize: "0.8rem" }}>{formattedDate}</span>
               <span style={{ fontSize: "0.8rem" }}>{timeAgo(posts.date)}</span>
             </p>
           </div>
@@ -347,16 +302,10 @@ const Post = ({ posts }) => {
 
         {/* Comment Section */}
         {showCommentCard && (
-          <div
-            style={{
-              position: "absolute",
-              left: "calc(50% + 270px)",
-            }}
-          >
+          <div style={{ position: "absolute", left: "calc(50% + 270px)" }}>
             <Card
               style={{
                 width: "360px",
-                // If it has no media then its height is the orginal post card height
                 height: hasMedia ? "600px" : `${postCardHeight}px`,
                 paddingBottom: hasMedia ? "0px" : "10px",
                 backgroundColor: darkMode ? "#181818" : "#f6f8fa",
@@ -375,6 +324,7 @@ const Post = ({ posts }) => {
         )}
       </div>
 
+      {/* Edit Modal */}
       <Modal show={showEditModal} onHide={handleCloseEditModal}>
         <Modal.Header
           closeButton
@@ -383,19 +333,15 @@ const Post = ({ posts }) => {
             color: darkMode ? "white" : "black",
           }}
         >
-          <Modal.Title
-            style={{ backgroundColor: darkMode ? "#181818" : "#f6f8fa" }}
-          >
+          <Modal.Title style={{ backgroundColor: darkMode ? "#181818" : "#f6f8fa" }}>
             Would you like to update or delete your post?
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body
-          style={{ backgroundColor: darkMode ? "#181818" : "#f6f8fa" }}
-        >
-          {/*  'Edit' Image Styling*/}
-          {imageSrc && (
+        <Modal.Body style={{ backgroundColor: darkMode ? "#181818" : "#f6f8fa" }}>
+          {/*  'Edit' Image Styling */}
+          {posts.imageUri && (
             <img
-              src={imageSrc}
+              src={posts.imageUri}
               alt="Post"
               style={{
                 width: "auto",
@@ -424,9 +370,7 @@ const Post = ({ posts }) => {
             </Form.Group>
           </Form>
         </Modal.Body>
-        <Modal.Footer
-          style={{ backgroundColor: darkMode ? "#181818" : "#f6f8fa" }}
-        >
+        <Modal.Footer style={{ backgroundColor: darkMode ? "#181818" : "#f6f8fa" }}>
           <Button variant="danger" onClick={handleDeletePost}>
             Delete
           </Button>
