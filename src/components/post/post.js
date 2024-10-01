@@ -34,7 +34,7 @@ const Post = ({ posts }) => {
 
   const hasMedia = !!(posts.imageUri || youtubeThumbnail);
 
-  const renderContent = (content) => {
+  const rendercontent = (content) => {
     const urlRegex = /(https?:\/\/[^\s]+)/g;
     return content.split(urlRegex).map((part, index) => {
       if (index % 2 === 1) {
@@ -55,7 +55,7 @@ const Post = ({ posts }) => {
     }
   }, [posts]);
 
-  const displayContent = renderContent(posts.content);
+  const displayContent = rendercontent(posts.content);
 
   useEffect(() => {
     const currentUser = getUserInfoAsync();
@@ -220,9 +220,9 @@ const Post = ({ posts }) => {
   return (
     <div className="position-relative" style={{ width: "100%" }}>
       <div className="d-flex justify-content-center p-2" style={{ width: "100%" }}>
-        <div className={`ssu-post-card ${darkMode ? "dark" : ""}`}>
+        <div className={`ssu-post-card ${darkMode ? "dark" : ""}`} >
           <div>
-            {/* Image display with tailwind CSS and global styling */}
+            {/*  image */}
             {posts.imageUri && (
               <img
                 src={posts.imageUri}
@@ -230,14 +230,14 @@ const Post = ({ posts }) => {
                 className="ssu-post-img"
               />
             )}
-            {/* Author */}
+            {/*  author of post */}
             <a
               href={isCurrentUserPost ? "/privateUserProfile" : `/publicProfilePage/${posts.username}`}
-              className="ssu-textlink-bold"
+              className="ssu-textlink-bold" style={{ color: darkMode ? "white" : "black" }}
             >
               @{posts.username}
             </a>
-            {/* Post content */}
+            {/* post text */}
             <p className="ssu-text-normalsmall" style={{ color: darkMode ? "white" : "black" }}>
               {displayContent}
             </p>
@@ -249,127 +249,126 @@ const Post = ({ posts }) => {
                 <img
                   alt="YouTube Video Thumbnail"
                   src={youtubeThumbnail}
-                  className="ssu-post-img"
+                  style={{
+                    width: "100%",
+                    maxWidth: "500px",
+                    height: "100%",
+                    maxHeight: "350px",
+                    objectFit: "contain",
+                    display: "block",
+                    margin: "0 auto",
+                  }}
                 />
               </div>
             )}
 
-            {/* Like and Comment buttons */}
-            <button onClick={handleLikeClick} className="ssu-button-info-clickable">
+            {/* Like and comment buttons */}
+            <button onClick={handleLikeClick} className="ssu-button-info-clickable" >
               {isLiked ? "♥" : "♡"} <span>{` ${likeCount}`}</span>
             </button>
             <button onClick={handleShowPostModal} className="ssu-button-info-clickable">
-              {showCommentCard ? "Hide Comments" : `💬 ${commentCount
-              > 0 ? commentCount : "0"}`}
-              </button>
-  
-              {/* Edit button */}
-              {isCurrentUserPost && (
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation(); // Stop the click event from reaching the parent Card
-                    handleShowEditModal();
-                  }}
-                  className="ssu-button-primary"
-                >
-                  Edit
-                </button>
-              )}
-  
-              {/* Post date */}
-              <p style={{ marginTop: "4px" }}>
-                <span style={{ marginRight: "15px", fontSize: "0.8rem" }}>
-                  {formattedDate}
-                </span>
-                <span style={{ fontSize: "0.8rem" }}>{timeAgo(posts.date)}</span>
-              </p>
-            </div>
-          </div>
-  
-          {/* Comment Section */}
-          {showCommentCard && (
-            <div style={{ position: "absolute", left: "calc(50% + 270px)" }}>
-              <Card
-                style={{
-                  width: "360px",
-                  height: hasMedia ? "600px" : `${postCardHeight}px`,
-                  paddingBottom: hasMedia ? "0px" : "10px",
-                  backgroundColor: darkMode ? "#181818" : "#f6f8fa",
+              {showCommentCard ? "Hide Comments" : `💬 ${commentCount > 0 ? commentCount : "0"}`}
+            </button>
+            {/* Edit button */}
+            {isCurrentUserPost && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation(); // Stop the click event from reaching the parent Card
+                  handleShowEditModal();
                 }}
+                className="ssu-button-primary"
               >
-                <Card.Body style={{ color: darkMode ? "white" : "black" }}>
-                  <CreateComment
-                    postId={postId}
-                    setParentCommentCount={setCommentCount}
-                    postCardHeight={postCardHeight}
-                    hasMedia={hasMedia}
-                  />
-                </Card.Body>
-              </Card>
-            </div>
-          )}
+                Edit
+              </button>
+            )}
+            {/* Post date */}
+            <p style={{ marginTop: "4px" }}>
+              <span style={{ marginRight: "15px", fontSize: "0.8rem" }}>{formattedDate}</span>
+              <span style={{ fontSize: "0.8rem" }}>{timeAgo(posts.date)}</span>
+            </p>
+          </div>
         </div>
-  
-        {/* Edit Modal */}
-        <Modal show={showEditModal} onHide={handleCloseEditModal}>
-          <Modal.Header
-            closeButton
-            style={{
-              backgroundColor: darkMode ? "#181818" : "#f6f8fa",
-              color: darkMode ? "white" : "black",
-            }}
-          >
-            <Modal.Title>
-              Would you like to update or delete your post?
-            </Modal.Title>
-          </Modal.Header>
-          <Modal.Body style={{ backgroundColor: darkMode ? "#181818" : "#f6f8fa" }}>
-            {/* Edit Image Styling */}
-            {posts.imageUri && (
-              <img
-                src={posts.imageUri}
-                alt="Post"
+        {/* Comment Section */}
+        {showCommentCard && (
+          <div style={{ position: "absolute", left: "calc(50% + 270px)" }}>
+            <Card
+              style={{
+                width: "360px",
+                height: hasMedia ? "600px" : `${postCardHeight}px`,
+                paddingBottom: hasMedia ? "0px" : "10px",
+                backgroundColor: darkMode ? "#181818" : "#f6f8fa",
+              }}
+            >
+              <Card.Body style={{ color: darkMode ? "white" : "black" }}>
+                <CreateComment
+                  postId={postId}
+                  setParentCommentCount={setCommentCount}
+                  postCardHeight={postCardHeight}
+                  hasMedia={hasMedia}
+                />
+              </Card.Body>
+            </Card>
+          </div>
+        )}
+      </div>
+      {/* Edit Modal */}
+      <Modal show={showEditModal} onHide={handleCloseEditModal}>
+        <Modal.Header
+          closeButton
+          style={{
+            backgroundColor: darkMode ? "#181818" : "#f6f8fa",
+            color: darkMode ? "white" : "black",
+          }}
+        >
+          <Modal.Title style={{ backgroundColor: darkMode ? "#181818" : "#f6f8fa" }}>
+            Would you like to update or delete your post?
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body style={{ backgroundColor: darkMode ? "#181818" : "#f6f8fa" }}>
+          {/*  'Edit' Image Styling */}
+          {posts.imageUri && (
+            <img
+              src={posts.imageUri}
+              alt="Post"
+              style={{
+                width: "auto",
+                maxWidth: "400px",
+                height: "auto",
+                maxHeight: "280px",
+                objectFit: "contain",
+                display: "block",
+                margin: "0 auto 14px auto",
+              }}
+            />
+          )}
+          <Form>
+            <Form.Group controlId="editPostContent">
+              <Form.Control
+                as="textarea"
+                rows={3}
+                value={editedPost.content}
+                onChange={(e) => setEditedPost({ content: e.target.value })}
                 style={{
-                  width: "auto",
-                  maxWidth: "400px",
-                  height: "auto",
-                  maxHeight: "280px",
-                  objectFit: "contain",
-                  display: "block",
-                  margin: "0 auto 14px auto",
+                  backgroundColor: darkMode ? "#181818" : "#f6f8fa",
+                  color: darkMode ? "white" : "black",
                 }}
               />
-            )}
-  
-            <Form>
-              <Form.Group controlId="editPostContent">
-                <Form.Control
-                  as="textarea"
-                  rows={3}
-                  value={editedPost.content}
-                  onChange={(e) => setEditedPost({ content: e.target.value })}
-                  style={{
-                    backgroundColor: darkMode ? "#181818" : "#f6f8fa",
-                    color: darkMode ? "white" : "black",
-                  }}
-                />
-              </Form.Group>
-            </Form>
-          </Modal.Body>
-          <Modal.Footer style={{ backgroundColor: darkMode ? "#181818" : "#f6f8fa" }}>
-            <Button variant="danger" onClick={handleDeletePost}>
-              Delete
-            </Button>
-            <Button variant="secondary" onClick={handleCloseEditModal}>
-              Cancel
-            </Button>
-            <Button variant="primary" onClick={handleEditPost}>
-              Save
-            </Button>
-          </Modal.Footer>
-        </Modal>
-      </div>
-    );
-  };
-  
-  export default Post;
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer style={{ backgroundColor: darkMode ? "#181818" : "#f6f8fa" }}>
+          <Button variant="danger" onClick={handleDeletePost}>
+            Delete
+          </Button>
+          <Button variant="secondary" onClick={handleCloseEditModal}>
+            Cancel
+          </Button>
+          <Button variant="primary" onClick={handleEditPost}>
+            Save
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </div>
+  );
+};
+export default Post;
