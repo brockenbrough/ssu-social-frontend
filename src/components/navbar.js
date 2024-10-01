@@ -24,10 +24,10 @@ export default function Navbar() {
           src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXPnHm79GDZXZjpifapjAOWRsJcA_C3FgxWQLlbto&s"
           rounded
           className="mr-2"
-          style={{ width: "60px", height: "60px", marginLeft: '40px' }}
+          style={{ width: "60px", height: "60px", marginLeft: '30px' }}
         />
         <span className={`navbar-brand ${darkMode ? "text-light" : "text-dark"}`}
-        style={{ fontSize: "1.5rem", marginLeft:'10px' }}>
+        style={{ fontSize: "1.5rem" }}>
           
           SSU Social
         </span>

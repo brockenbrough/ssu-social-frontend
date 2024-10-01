@@ -67,7 +67,7 @@
 
 /* Sidebar Navbar */
 .sidebar-navbar {
-  @apply fixed top-0 left-0 h-full w-48 bg-gray-800 shadow-lg z-50; /* Adjust the height if needed */
+  @apply fixed top-0 left-0 h-full w-40 bg-gray-800 shadow-lg z-50; /* Adjust the height if needed */
   box-shadow: 4px 0 10px rgba(0, 0, 0, 0.2);
   overflow-y: auto; /* Enable scrolling if content overflows */
   display: flex;
@@ -88,7 +88,7 @@
 
 
 .bg-cream {
-  background-color: #eae6d7; /* Adjust to your desired cream color */
+  background-color: #F5F5DC; /* Adjust to your desired cream color */
 }
 
 /* Sidebar */
