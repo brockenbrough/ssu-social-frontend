@@ -24,7 +24,7 @@ const PrivateUserProfile = () => {
     background: darkMode ? 'black' : 'white',
     color: darkMode ? 'white' : 'black',
     minHeight: '100vh',
-    // Add other styles here
+    paddingLeft: '250px', // Adjust this based on your sidebar width
   };
 
   // State for showing delete confirmation modal
@@ -297,22 +297,22 @@ const deleteConfirm = async () => {
       {user ? (
         <>
           <Row>
-            <Col md={3} className="text-center">
-              <ProfileImage></ProfileImage>
-              <ul>
-                <button onClick={followerRouteChange}  class="ssu-button-info-clickable">
-                  {followerCount} followers 
-                </button>
-                <button onClick={followingRouteChange} class="ssu-button-info-clickable">
-                  {followingCount} following 
-                </button> 
-                <button  class="ssu-button-info">
-                  {totalLikes} likes
-                </button>
-              </ul>
-              <button onClick={handleShowLogoutConfirmation} class="ssu-button-primary" >
-                  Log out
-              </button>
+          <Col md={3} className="text-center" style={{ marginTop: '150px' }}> {/* Adjust marginTop as needed */}
+  <ProfileImage />
+  <ul>
+    <button onClick={followerRouteChange} className="ssu-button-info-clickable">
+      {followerCount} followers 
+    </button>
+    <button onClick={followingRouteChange} className="ssu-button-info-clickable">
+      {followingCount} following 
+    </button> 
+    <button className="ssu-button-info">
+      {totalLikes} likes
+    </button>
+  </ul>
+  <button onClick={handleShowLogoutConfirmation} className="ssu-button-primary">
+    Log out
+  </button>
               <Modal
                 show={showLogoutConfirmation}
                 onHide={handleCloseLogoutConfirmation}
@@ -347,7 +347,7 @@ const deleteConfirm = async () => {
             <Col md={9}>
 
               <p class="ssu-text-titlesmall">Your posts</p>
-              <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-start', gap: '1rem' }}>
+              <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-start', gap: '1rem', marginTop: '100px' }}>
                 <PostList type="privateuserprofile" />
               </div>
             </Col>

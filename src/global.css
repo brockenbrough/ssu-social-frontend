@@ -65,13 +65,39 @@
   @apply text-xl font-bold text-blue-500;
 }
 
+/* Sidebar Navbar */
+.sidebar-navbar {
+  @apply fixed top-0 left-0 h-full w-48 bg-gray-800 shadow-lg z-50; /* Adjust the height if needed */
+  box-shadow: 4px 0 10px rgba(0, 0, 0, 0.2);
+  overflow-y: auto; /* Enable scrolling if content overflows */
+  display: flex;
+  flex-direction: column; /* Stack items vertically */
+}
+
+/* Dark Mode Adjustments */
+.sidebar-navbar.dark {
+  background-color: #1C1C1E
+}
+
+/* Navbar Links */
+.sidebar-navbar a {
+  @apply flex items-center text-gray-300 hover:bg-gray-700 rounded-lg py-2 px-4 transition duration-200; /* Adjust padding */
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+
+.bg-cream {
+  background-color: #eae6d7; /* Adjust to your desired cream color */
+}
+
 /* Sidebar */
 .sidebar {
   @apply w-64 h-screen fixed top-0 bg-white shadow-lg py-6 px-4;
 }
 
 .sidebar-item {
-  @apply flex items-center text-gray-700 hover:bg-gray-100 rounded-lg py-3 px-4 transition duration-200;
+  @apply flex items-center text-gray-300 hover:bg-gray-700 rounded-lg py-4 px-6 text-lg transition duration-200; /* Increased padding and font size */
 }
 
 .sidebar-item svg {
@@ -129,3 +155,6 @@
 .footer {
   @apply text-center text-gray-500 text-sm mt-12 mb-6;
 }
+
+
+

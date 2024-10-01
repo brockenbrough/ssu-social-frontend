@@ -1,152 +1,63 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import getUserInfo from "../utilities/decodeJwt";
-import Container from "react-bootstrap/Container";
-import Nav from "react-bootstrap/Nav";
 import Image from "react-bootstrap/Image";
-import ReactNavbar from "react-bootstrap/Navbar";
 import { useDarkMode } from "../components/DarkModeContext";
-import DarkModeButton from "../components/DarkModeButton";
-import Dropdown from "react-bootstrap/Dropdown";
 import CreatePost from "./post/createPost";
-
-const stickyNavbarStyle = {
-  position: "sticky",
-  top: 0,
-  zIndex: 100,
-};
+import DarkModeButton from "./DarkModeButton"; // Import your Dark Mode button
 
 export default function Navbar() {
   const [user, setUser] = useState(getUserInfo());
   const [popupShow, setPopupShow] = useState(false);
   const { darkMode } = useDarkMode();
-  const location = useLocation(); // Get current path
+  const location = useLocation();
 
   useEffect(() => {
-    const userInfo = getUserInfo(); // Store user info in a variable
-    setUser(userInfo); // Update state
-  }, []); // Empty dependency array to make sure this only runs once when the component mounts and not loop infinitely
-
-  const publicUser = () => {
-    if (user) {
-      return (
-        <div style={stickyNavbarStyle}>
-          <ReactNavbar
-            bg={darkMode ? "dark" : "light"}
-            variant={darkMode ? "dark" : "light"}
-          >
-            <Container>
-              <div style={{ display: "flex", alignItems: "center" }}>
-                <Nav.Link
-                  href="/feed-algorithm"
-                  className={`navbar-brand ${
-                    darkMode ? "text-light" : "text-dark"
-                  }`}
-                >
-                  <Image
-                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXPnHm79GDZXZjpifapjAOWRsJcA_C3FgxWQLlbto&s"
-                    rounded
-                    className="mr-2"
-                    style={{ width: "30px", height: "30px" }}
-                  />
-                  SSU Social
-                </Nav.Link>
-              </div>
-              <Container className="ml-auto">
-                <Dropdown>
-                  <Dropdown.Toggle
-                    variant={darkMode ? "dark" : "light"}
-                    id="dropdown-basic"
-                  >
-                    Menu
-                  </Dropdown.Toggle>
-                  <Dropdown.Menu>
-                    <Dropdown.Item href="/feed-algorithm">
-                      For you
-                    </Dropdown.Item>
-                    <Dropdown.Item href="/getallpost">Discover</Dropdown.Item>
-                    <Dropdown.Item href="/privateUserProfile">
-                      Profile
-                    </Dropdown.Item>
-                  </Dropdown.Menu>
-                </Dropdown>
-
-                <span
-                  style={{
-                    color: darkMode ? "#fff" : "#000",
-                    cursor: "pointer",
-                  }}
-                >
-                  <CreatePost
-                    popupShow={popupShow}
-                    setPopupShow={setPopupShow}
-                  />
-                  <span onClick={() => setPopupShow(true)}>
-                    Create Post
-                    <span style={{ fontSize: "1.2rem", marginLeft: "5px" }}>
-                      +
-                    </span>
-                  </span>
-                </span>
-              </Container>
-            </Container>
-          </ReactNavbar>
-        </div>
-      );
-    } else {
-      return (
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "flex-end",
-          }}
-        >
-          <Image
-            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXPnHm79GDZXZjpifapjAOWRsJcA_C3FgxWQLlbto&s"
-            rounded
-            className="mr-2"
-            style={{ width: "30px", height: "30px" }}
-          />
-          <Nav.Link
-            href="/"
-            className={`navbar-brand ${darkMode ? "text-light" : "text-dark"}`}
-          >
-            SSU Social
-          </Nav.Link>
-          <Container className="ml-auto">
-            <Dropdown>
-              <Dropdown.Toggle
-                variant={darkMode ? "dark" : "light"}
-                id="dropdown-basic"
-              >
-                Menu
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item href="/">Login</Dropdown.Item>
-                <Dropdown.Item href="/signup">Register</Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-          </Container>
-        </div>
-      );
-    }
-  };
+    const userInfo = getUserInfo();
+    setUser(userInfo);
+  }, []);
 
   return (
-    <ReactNavbar
-      bg={darkMode ? "dark" : "light"}
-      variant={darkMode ? "dark" : "light"}
-      style={{ position: "sticky", top: 0, zIndex: 100 }}
-    >
-      <Container>
-        <Nav>{publicUser()}</Nav>
-      </Container>
-      {/* Conditionally render the DarkModeButton based on the current pathname */}
-      {location.pathname !== "/" && location.pathname !== "/signup" && (
+    <div className={`sidebar-navbar ${darkMode ? "dark" : "bg-cream"}`}>
+      <div style={{ padding: "20px" }}>
+        <Image
+          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXPnHm79GDZXZjpifapjAOWRsJcA_C3FgxWQLlbto&s"
+          rounded
+          className="mr-2"
+          style={{ width: "60px", height: "60px", marginLeft: '40px' }}
+        />
+        <span className={`navbar-brand ${darkMode ? "text-light" : "text-dark"}`}
+        style={{ fontSize: "1.5rem", marginLeft:'10px' }}>
+          
+          SSU Social
+        </span>
+      </div>
+
+      {/* Create Post Button */}
+      <span style={{ color: darkMode ? "#fff" : "#000", cursor: "pointer", marginBottom: "20px", fontSize: "1.2rem", marginLeft:"0.8rem" }}>
+        <CreatePost popupShow={popupShow} setPopupShow={setPopupShow} />
+        <span onClick={() => setPopupShow(true)}>
+          Create Post <span style={{ fontSize: "1.2rem", marginLeft: "5px" }}>+</span>
+        </span>
+      </span>
+
+      {/* Direct Links Instead of Dropdown */}
+      <div className="flex flex-col mb-4">
+  <a href="/feed-algorithm" className={`sidebar-item ${darkMode ? "text-light" : "text-dark"} no-underline`}>
+    For You
+  </a>
+  <a href="/getallpost" className={`sidebar-item ${darkMode ? "text-light" : "text-dark"} no-underline`}>
+    Discover
+  </a>
+  <a href="/privateUserProfile" className={`sidebar-item ${darkMode ? "text-light" : "text-dark"} no-underline`}>
+    Profile
+  </a>
+</div>
+
+      {/* Dark Mode Button */}
+      <div style={{ marginTop: 'auto', padding: '20px' }}>
         <DarkModeButton />
-      )}
-    </ReactNavbar>
+      </div>
+    </div>
   );
 }
