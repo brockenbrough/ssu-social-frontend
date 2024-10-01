@@ -29,6 +29,7 @@ const Login = () => {
   const containerImages = [image4,image5,image6];
   const getNextImageIndex = () => (currentImageIndex + 1) % backgroundImages.length;
   const navigate = useNavigate();
+  const [fieldErrors, setFieldErrors] = useState({username: "", password: "",});
 
   let labelStyling = {
     color: PRIMARY_COLOR,
@@ -44,6 +45,7 @@ const Login = () => {
 
   const handleChange = ({ currentTarget: input }) => {
     setData({ ...data, [input.name]: input.value });
+    setFieldErrors({ ...fieldErrors, [input.name]: "" });
   };
 
   const togglePasswordVisibility = () => {
@@ -76,6 +78,20 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    setFieldErrors({ username: "", password: "" });
+
+    let errors = {};
+    
+    // Simple validation for empty fields
+    if (!data.username) errors.username = "Username is required.";
+    if (!data.password) errors.password = "Password is required.";
+
+    // If there are validation errors, set them and stop submission
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
+      return;
+    }
     try {
       setLoading(true); // Set loading to true before making the request
 
@@ -89,10 +105,10 @@ const Login = () => {
       setLoading(false); // Set loading to false in case of an error
 
       if (error.response) {
-        alert(`Error: ${error.response.data} ${error.response.status} ${url}`);
+        setFieldErrors({ ...fieldErrors, password: "Invalid username or password." });
         console.log(error.response.data);
       } else {
-        alert(`${error.message}. An error occurred contacting ${url}`);
+        setFieldErrors({ ...fieldErrors, password: `${error.message}. Unable to reach the server.` })
         console.log("Error", error.message);
       }
       setError("Something went wrong. Please try again.");
@@ -130,12 +146,20 @@ const Login = () => {
                 <Form>
                   <Form.Group className="mb-3" controlId="formBasicEmail">
                   <Form.Label style={labelStyling}>User Name</Form.Label>
-                  <Form.Control type="username" name="username" onChange={handleChange} placeholder="Enter username" />
+                  <Form.Control type="username" name="username" onChange={handleChange} placeholder="Enter username" isInvalid={!!fieldErrors.username}/>
+                  {fieldErrors.username && (
+                    <Form.Text className="text-danger">{fieldErrors.username}</Form.Text>
+                  )}
                   <Form.Text className="text-muted">We just might sell your data</Form.Text>
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formBasicPassword">
                   <Form.Label style={labelStyling}>Password</Form.Label>
-                  <Form.Control type={passwordVisible ? "text" : "password"} name="password" placeholder="Password" onChange={handleChange} />
+                  <Form.Control type={passwordVisible ? "text" : "password"} name="password" placeholder="Password" onChange={handleChange} isInvalid={!!fieldErrors.password}/>
+                  {fieldErrors.password && (
+                    <Form.Text className="text-danger">{fieldErrors.password}</Form.Text>
+                  )
+
+                  }
                   <Button variant="secondary" onClick={togglePasswordVisibility} className="mt-2">
                     {passwordVisible ? "Hide Password" : "Show Password"}
                   </Button>
