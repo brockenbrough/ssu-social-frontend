@@ -14,7 +14,7 @@ const ProfileImage = () => {
         style={{ background: darkMode ? '#181818' : 'white',
         color: darkMode ? 'white' : 'black',
         border: darkMode ? '1px solid white' : '1px solid black',
-        marginLeft: '15px' }}
+        marginLeft: '10px' }}
       />);
 };
 
