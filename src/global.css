@@ -37,7 +37,10 @@
 }
 
 .ssu-post-card {
-  @apply w-[520px] max-w-sm p-2 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700;
+  @apply w-[520px] max-w-sm p-2 bg-white border border-gray-200 rounded-lg shadow;
+}
+.ssu-post-card.dark {
+  @apply bg-gray-800 border-gray-700;
 }
 
 .ssu-post-img {
@@ -138,7 +141,7 @@
 }
 
 .post-actions button {
-  @apply flex items-center space-x-1 text-sm hover:text-blue-500;
+  @apply flex items-center space-x-1 text-sm hover:text-blue-500 ;
 }
 
 /* Buttons */

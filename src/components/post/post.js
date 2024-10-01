@@ -220,7 +220,7 @@ const Post = ({ posts }) => {
   return (
     <div className="position-relative" style={{ width: "100%" }}>
       <div className="d-flex justify-content-center p-2" style={{ width: "100%" }}>
-        <div className="ssu-post-card">
+        <div className={`ssu-post-card ${darkMode ? "dark" : ""}`} >
           <div>
             {/*  image */}
             {posts.imageUri && (
@@ -242,7 +242,7 @@ const Post = ({ posts }) => {
             {/*  author of post */}
             <a
               href={isCurrentUserPost ? "/privateUserProfile" : `/publicProfilePage/${posts.username}`}
-              className="ssu-textlink-bold"
+              className="ssu-textlink-bold" style={{ color: darkMode ? "white" : "black" }}
             >
               @{posts.username}
             </a>
@@ -272,7 +272,7 @@ const Post = ({ posts }) => {
             )}
 
             {/* Like and comment buttons */}
-            <button onClick={handleLikeClick} className="ssu-button-info-clickable">
+            <button onClick={handleLikeClick} className="ssu-button-info-clickable" >
               {isLiked ? "♥" : "♡"} <span>{` ${likeCount}`}</span>
             </button>
             <button onClick={handleShowPostModal} className="ssu-button-info-clickable">
