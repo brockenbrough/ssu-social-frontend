@@ -180,7 +180,7 @@ function PostList({ type, profileUsername }) {
                   <div className="text-center">
                     <p class="ssu-text-titlesmalllight">{category.title}</p>
                   </div>
-                  {chunkArray(category.posts, posts.length).map((chunk) => (
+                  {chunkArray(category.posts, posts.length * 2).map((chunk) => (
                     <div className="d-flex flex-column align-items-center">
                       {chunk.map((post, index) => {
                         console.log(posts.length);
