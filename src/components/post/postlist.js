@@ -102,39 +102,6 @@ function PostList({ type, profileUsername }) {
     [isLoading, hasMore]
   );
 
-  const now = new Date();
-  const todayPosts = posts
-    .filter((post) => now - new Date(post.date) <= 24 * 60 * 60 * 1000)
-    .sort((a, b) => new Date(b.date) - new Date(a.date));
-
-  const thisWeekPosts = posts
-    .filter(
-      (post) =>
-        now - new Date(post.date) > 24 * 60 * 60 * 1000 &&
-        now - new Date(post.date) <= 7 * 24 * 60 * 60 * 1000
-    )
-    .sort((a, b) => new Date(b.date) - new Date(a.date));
-
-  const aWhileAgoPosts = posts
-    .filter((post) => now - new Date(post.date) > 7 * 24 * 60 * 60 * 1000)
-    .sort((a, b) => new Date(b.date) - new Date(a.date));
-
-  const timeCategories = [
-    { posts: todayPosts },
-    { posts: thisWeekPosts },
-    { posts: aWhileAgoPosts },
-  ];
-
-  const chunkArray = (array, size) => {
-    const chunked_arr = [];
-    let copied = [...array];
-    const numOfChild = Math.ceil(copied.length / size);
-    for (let i = 0; i < numOfChild; i++) {
-      chunked_arr.push(copied.splice(0, size));
-    }
-    return chunked_arr;
-  };
-
   return (
     <>
       {isLoading && page === 1 ? (
@@ -173,46 +140,21 @@ function PostList({ type, profileUsername }) {
             minHeight: "100vh",
           }}
         >
-          {timeCategories.map((category) => {
-            return (
-              category.posts.length > 0 && (
-                <>
-                  <div className="text-center">
-                    <p class="ssu-text-titlesmalllight">{category.title}</p>
+          <div className="d-flex flex-column align-items-center">
+            {posts.map((post, index) => {
+              if (posts.length === index + 1) {
+                return (
+                  <div ref={lastPostRef} key={post._id}>
+                    <Post posts={post} className="cards m-2" />
                   </div>
-                  {chunkArray(category.posts, category.posts.length).map(
-                    (chunk) => (
-                      <div className="d-flex flex-column align-items-center">
-                        {chunk.map((post, index) => {
-                          console.log(
-                            "category post length: ",
-                            category.posts.length
-                          );
-
-                          <Post posts={post} className="cards m-2" />;
-                          if (posts.length === index + 1) {
-                            return (
-                              <div ref={lastPostRef} key={post._id}>
-                                <Post posts={post} className="cards m-2" />
-                              </div>
-                            );
-                          } else {
-                            return (
-                              <Post
-                                key={post._id}
-                                posts={post}
-                                className="cards m-2"
-                              />
-                            );
-                          }
-                        })}
-                      </div>
-                    )
-                  )}
-                </>
-              )
-            );
-          })}
+                );
+              } else {
+                return (
+                  <Post key={post._id} posts={post} className="cards m-2" />
+                );
+              }
+            })}
+          </div>
           <ScrollToTop />
         </div>
       )}
