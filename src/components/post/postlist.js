@@ -140,21 +140,31 @@ function PostList({ type, profileUsername }) {
             minHeight: "100vh",
           }}
         >
-          <div className="d-flex flex-column align-items-center">
-            {posts.map((post, index) => {
-              if (posts.length === index + 1) {
-                return (
-                  <div ref={lastPostRef} key={post._id}>
-                    <Post posts={post} className="cards m-2" />
-                  </div>
-                );
-              } else {
+          {type === "all" ? (
+            <div className="d-flex flex-column align-items-center">
+              {posts.map((post, index) => {
+                if (posts.length === index + 1) {
+                  return (
+                    <div ref={lastPostRef} key={post._id}>
+                      <Post posts={post} className="cards m-2" />
+                    </div>
+                  );
+                } else {
+                  return (
+                    <Post key={post._id} posts={post} className="cards m-2" />
+                  );
+                }
+              })}
+            </div>
+          ) : (
+            <div className="d-flex flex-column align-items-center">
+              {posts.map((post) => {
                 return (
                   <Post key={post._id} posts={post} className="cards m-2" />
                 );
-              }
-            })}
-          </div>
+              })}
+            </div>
+          )}
           <ScrollToTop />
         </div>
       )}
