@@ -180,29 +180,35 @@ function PostList({ type, profileUsername }) {
                   <div className="text-center">
                     <p class="ssu-text-titlesmalllight">{category.title}</p>
                   </div>
-                  {chunkArray(category.posts, posts.length * 2).map((chunk) => (
-                    <div className="d-flex flex-column align-items-center">
-                      {chunk.map((post, index) => {
-                        console.log(posts.length);
-                        <Post posts={post} className="cards m-2" />;
-                        if (posts.length === index + 1) {
-                          return (
-                            <div ref={lastPostRef} key={post._id}>
-                              <Post posts={post} className="cards m-2" />
-                            </div>
+                  {chunkArray(category.posts, category.posts.length).map(
+                    (chunk) => (
+                      <div className="d-flex flex-column align-items-center">
+                        {chunk.map((post, index) => {
+                          console.log(
+                            "category post length: ",
+                            category.posts.length
                           );
-                        } else {
-                          return (
-                            <Post
-                              key={post._id}
-                              posts={post}
-                              className="cards m-2"
-                            />
-                          );
-                        }
-                      })}
-                    </div>
-                  ))}
+
+                          <Post posts={post} className="cards m-2" />;
+                          if (posts.length === index + 1) {
+                            return (
+                              <div ref={lastPostRef} key={post._id}>
+                                <Post posts={post} className="cards m-2" />
+                              </div>
+                            );
+                          } else {
+                            return (
+                              <Post
+                                key={post._id}
+                                posts={post}
+                                className="cards m-2"
+                              />
+                            );
+                          }
+                        })}
+                      </div>
+                    )
+                  )}
                 </>
               )
             );
