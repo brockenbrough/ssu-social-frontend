@@ -97,10 +97,21 @@ export default function FollowerList() {
   }
   
  // This following section will display the table with the records of individuals and all their followers.
-return (
+ return (
   <div style={{ backgroundColor: darkMode ? '#000' : '#f6f8fa', color: darkMode ? '#fff' : '#000', minHeight: '100vh' }}>
-      {/* Links to Followers and Following Pages as Buttons */}
-      <div style={{ display: 'flex', justifyContent: 'center', padding: '10px 0' }}>
+    
+    {/* Flex container for the Back to Profile and Followers/Following buttons */}
+    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 30px' }}>
+
+      {/* Back to Profile button aligned to the left */}
+      <Button
+        variant={darkMode ? "dark" : "secondary"}
+        onClick={handleBack}>
+        Back to Profile
+      </Button>
+
+      {/* Followers and Following buttons centered */}
+      <div style={{ margin: 'auto' }}>
         {/* Followers Button: Disabled when on Followers page */}
         <Button
           variant={darkMode ? "secondary" : "light"}
@@ -109,22 +120,22 @@ return (
         >
           Followers
         </Button>
-        
+
         {/* Following Button */}
         <Link to={`/following/${params.id}`}>
           <Button variant={darkMode ? "dark" : "primary"}>Following</Button>
         </Link>
       </div>
+    </div>
 
       {/* Error message or placeholder area */}
       <div style={{ color: darkMode ? '#fff' : '#000', padding: '10px', backgroundColor: darkMode ? '#000' : '#f6f8fa', minHeight: '50px' }}>
         {error.message ? errorMessage() : <p>&nbsp;</p>}
       </div>
-
-    {/* Back button */}
-    <Button variant="secondary" style={{ marginLeft: 30 }} onClick={handleBack}>
-        Back to Profile
-      </Button>  
+ 
+      <div style={{ color: darkMode ? '#fff' : '#000', padding: '10px', backgroundColor: darkMode ? '#000' : '#f6f8fa', minHeight: '50px' }}>
+        {error.message ? errorMessage() : <p>&nbsp;</p>} {/* Non-breaking space to ensure visibility */}
+      </div>
 
     {/* Followers section */}
     <h2 style={{ marginLeft: 30 }}>Followers</h2>

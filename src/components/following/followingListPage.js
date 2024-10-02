@@ -80,36 +80,48 @@ export default function FollowingList() {
   // This following section will display the table with the user's following. People that they are following.
   return (
     <div style={{ backgroundColor: darkMode ? '#000' : '#f6f8fa', color: darkMode ? '#fff' : '#000', minHeight: '100vh' }}>
-      {/* Links to Followers and Following Pages as Buttons */}
-      <div style={{ display: 'flex', justifyContent: 'center', padding: '10px 0' }}>
-        {/* Followers Button */}
-        <Link to={`/followers/${params.id}`}>
-        <Button
-          variant={darkMode ? "dark" : "primary"}
-          style={{ marginRight: '10px', cursor: 'default', opacity: 0.7 }}>
-          Followers
-        </Button>
-        </Link>
+      
+      {/* Flex container for Back to Profile and Followers/Following buttons */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 30px' }}>
         
-        {/* Following Button: Disabled when on Following page */}
-        <Button 
-          variant={darkMode ? "secondary" : "light"}
-          disabled
-          style={{ marginRight: '10px', cursor: 'default', opacity: 0.7 }}
-        >
-          Following
+        {/* Back to Profile button aligned to the left */}
+        <Button
+          variant={darkMode ? "dark" : "secondary"}
+          onClick={handleBack}>
+          Back to Profile
+        </Button>
+  
+        {/* Followers and Following buttons centered */}
+        <div style={{ margin: 'auto' }}>
+          {/* Followers Button */}
+          <Link to={`/followers/${params.id}`}>
+            <Button
+              variant={darkMode ? "dark" : "primary"}
+              style={{ marginRight: '10px', cursor: 'default' }}
+            >
+              Followers
+            </Button>
+          </Link>
+  
+          {/* Following Button: Disabled when on Following page */}
+          <Button 
+            variant={darkMode ? "secondary" : "light"}
+            disabled
+            style={{ marginRight: '10px', cursor: 'default', opacity: 0.7 }}
+          >
+            Following
           </Button>
+        </div>
       </div>
-
-
+  
+      {/* Error message or placeholder area */}
       <div style={{ color: darkMode ? '#fff' : '#000', padding: '10px', backgroundColor: darkMode ? '#000' : '#f6f8fa', minHeight: '50px' }}>
         {error.message ? errorMessage() : <p>&nbsp;</p>} {/* Non-breaking space to ensure visibility */}
       </div>
   
-      {/* Back button */}
-      <Button variant="secondary" style={{ marginLeft: 30 }} onClick={handleBack}>
-        Back to Profile
-      </Button>
+      <div style={{ color: darkMode ? '#fff' : '#000', padding: '10px', backgroundColor: darkMode ? '#000' : '#f6f8fa', minHeight: '50px' }}>
+        {error.message ? errorMessage() : <p>&nbsp;</p>} {/* Non-breaking space to ensure visibility */}
+      </div>
 
       {/* Following section */}
       <h2 style={{ marginLeft: 30 }}>Following</h2>
