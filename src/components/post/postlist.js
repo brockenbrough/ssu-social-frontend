@@ -1,5 +1,11 @@
 import axios from "axios";
-import React, { useContext, useEffect, useState } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { Link } from "react-router-dom";
 import { getUserInfoAsync } from "../../utilities/decodeJwtAsync";
 import Post from "./post";
@@ -9,10 +15,14 @@ import { useDarkMode } from "../DarkModeContext";
 import { PostContext } from "../../App";
 
 function PostList({ type, profileUsername }) {
+  const POST_PER_PAGE = 15;
   const { darkMode } = useDarkMode();
   const [user, setUser] = useState(null);
   const [posts, setPosts] = useContext(PostContext);
   const [isLoading, setIsLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const observer = useRef();
 
   const fetchUser = async () => {
     try {
@@ -33,10 +43,11 @@ function PostList({ type, profileUsername }) {
     if (user) {
       getPosts();
     }
-  }, [user, posts]);
+  }, [user, page]);
 
   async function getPosts() {
     let url;
+
     if (type === "feed") {
       url = user
         ? `${process.env.REACT_APP_BACKEND_SERVER_URI}/feed/${user.username}`
@@ -46,7 +57,7 @@ function PostList({ type, profileUsername }) {
     } else if (type === "publicuserprofile") {
       url = `${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getAllByUsername/${profileUsername}`;
     } else if (type === "all") {
-      url = `${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getAllPosts`;
+      url = `${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getPostPage?page=${page}&postPerPage=${POST_PER_PAGE}`;
     }
 
     try {
@@ -66,7 +77,9 @@ function PostList({ type, profileUsername }) {
         const postData = await Promise.all(postsPromises);
         setPosts(postData.filter((post) => post));
       } else {
-        setPosts(response.data);
+        const newPosts = response.data;
+        setPosts((prevPosts) => [...prevPosts, ...newPosts]);
+        setHasMore(newPosts.length > 0);
       }
     } catch (error) {
       console.error("Failed to fetch posts:", error.message);
@@ -75,10 +88,24 @@ function PostList({ type, profileUsername }) {
     }
   }
 
+  const lastPostRef = useCallback(
+    (node) => {
+      if (isLoading) return;
+      if (observer.current) observer.current.disconnect();
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasMore) {
+          setPage((prevPage) => prevPage + 1);
+        }
+      });
+      if (node) observer.current.observe(node);
+    },
+    [isLoading, hasMore]
+  );
+
   const now = new Date();
   const todayPosts = posts
     .filter((post) => now - new Date(post.date) <= 24 * 60 * 60 * 1000)
-    .sort((a, b) => new Date(b.date) - new Date(a.date)); // Newest at the top
+    .sort((a, b) => new Date(b.date) - new Date(a.date));
 
   const thisWeekPosts = posts
     .filter(
@@ -110,9 +137,8 @@ function PostList({ type, profileUsername }) {
 
   return (
     <>
-      {isLoading ? (
+      {isLoading && page === 1 ? (
         <div className="text-center">
-          {/* Updated the src attribute to point to the location of loading.gif */}
           <img
             src="/loading.gif"
             alt="Loading..."
@@ -154,11 +180,26 @@ function PostList({ type, profileUsername }) {
                   <div className="text-center">
                     <p class="ssu-text-titlesmalllight">{category.title}</p>
                   </div>
-                  {chunkArray(category.posts, 3).map((chunk, index) => (
+                  {chunkArray(category.posts, posts.length).map((chunk) => (
                     <div className="d-flex flex-column align-items-center">
-                      {chunk.map((post) => (
-                        <Post posts={post} className="cards m-2" />
-                      ))}
+                      {chunk.map((post, index) => {
+                        <Post posts={post} className="cards m-2" />;
+                        if (posts.length === index + 1) {
+                          return (
+                            <div ref={lastPostRef} key={post._id}>
+                              <Post posts={post} className="cards m-2" />
+                            </div>
+                          );
+                        } else {
+                          return (
+                            <Post
+                              key={post._id}
+                              posts={post}
+                              className="cards m-2"
+                            />
+                          );
+                        }
+                      })}
                     </div>
                   ))}
                 </>
