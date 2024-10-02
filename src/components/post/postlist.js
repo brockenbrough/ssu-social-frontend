@@ -15,7 +15,7 @@ import { useDarkMode } from "../DarkModeContext";
 import { PostContext } from "../../App";
 
 function PostList({ type, profileUsername }) {
-  const POST_PER_PAGE = 15;
+  const POST_PER_PAGE = 5;
   const { darkMode } = useDarkMode();
   const [user, setUser] = useState(null);
   const [posts, setPosts] = useContext(PostContext);
@@ -183,6 +183,7 @@ function PostList({ type, profileUsername }) {
                   {chunkArray(category.posts, posts.length).map((chunk) => (
                     <div className="d-flex flex-column align-items-center">
                       {chunk.map((post, index) => {
+                        console.log(posts.length);
                         <Post posts={post} className="cards m-2" />;
                         if (posts.length === index + 1) {
                           return (
