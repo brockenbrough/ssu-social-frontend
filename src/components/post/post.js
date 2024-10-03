@@ -228,10 +228,6 @@ const Post = ({ posts }) => {
       >
         <div className={`ssu-post-card ${darkMode ? "dark" : ""}`}>
           <div>
-            {/*  image */}
-            {posts.imageUri && (
-              <img src={posts.imageUri} alt="Post" className="ssu-post-img" />
-            )}
             {/*  author of post */}
             <a
               href={
@@ -251,6 +247,11 @@ const Post = ({ posts }) => {
             >
               {displayContent}
             </p>
+            {/*  image */}
+            {posts.imageUri && (
+              <img src={posts.imageUri} alt="Post" className="ssu-post-img" />
+            )}
+            
 
             {/* YouTube Thumbnail */}
             {youtubeThumbnail && (
@@ -300,7 +301,7 @@ const Post = ({ posts }) => {
               </button>
             )}
             {/* Post date */}
-            <p style={{ marginTop: "4px" }}>
+            <p style={{ marginTop: "4px", textAlign: "right" }}>
               <span style={{ marginRight: "15px", fontSize: "0.8rem" }}>
                 {formattedDate}
               </span>
