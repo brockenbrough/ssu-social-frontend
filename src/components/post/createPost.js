@@ -289,9 +289,9 @@ const CreatePost = ({ popupShow, setPopupShow }) => {
                     />
                   </div>
                 )}
-                <Button type="submit" style={{ width: "100%" }}>
-                  Create Post
-                </Button>
+                <Button type="submit" style={{ width: "100%" }} disabled={isSubmitting}>
+  Create Post
+</Button>
               </Form>
             ) : (
               <h3>
