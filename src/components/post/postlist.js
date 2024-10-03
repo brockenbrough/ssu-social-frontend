@@ -53,9 +53,9 @@ function PostList({ type, profileUsername }) {
         ? `${process.env.REACT_APP_BACKEND_SERVER_URI}/feed/${user.username}`
         : `${process.env.REACT_APP_BACKEND_SERVER_URI}/feed/`;
     } else if (type === "privateuserprofile") {
-      url = `${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getAllByUsername/${user.username}`;
+      url = `${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getPostPageByUsername/${user.username}?page=${page}&postPerPage=${POST_PER_PAGE}`;
     } else if (type === "publicuserprofile") {
-      url = `${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getAllByUsername/${profileUsername}`;
+      url = `${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getPostPageByUsername/${profileUsername}?page=${page}&postPerPage=${POST_PER_PAGE}`;
     } else if (type === "all") {
       url = `${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getPostPage?page=${page}&postPerPage=${POST_PER_PAGE}`;
     }
@@ -140,7 +140,7 @@ function PostList({ type, profileUsername }) {
             minHeight: "100vh",
           }}
         >
-          {type === "all" ? (
+          {["all", "privateuserprofile", "publicuserprofile"].includes(type) ? (
             <div className="d-flex flex-column align-items-center">
               {posts.map((post, index) => {
                 if (posts.length === index + 1) {
