@@ -126,7 +126,7 @@ const Post = ({ posts }) => {
   const handleLikeClick = async (e) => {
     e.stopPropagation();
   
-    if (!user || !user.id || isLoading) return; // Prevent clicking if loading
+    if (!user || !user.id || isLoading) return; // Prevent action if no user or loading
   
     const userId = user.id;
     setIsLoading(true); // Set loading state to true
@@ -145,7 +145,7 @@ const Post = ({ posts }) => {
         await axios.delete(`${process.env.REACT_APP_BACKEND_SERVER_URI}/likes/unLike`, {
           data: { postId, userId },
         });
-        setLikeCount((prevCount) => prevCount - 1); // Decrement like count
+        setLikeCount((prevCount) => Math.max(prevCount - 1, 0)); // Decrement like count, prevent negative
         setIsLiked(false); // Update isLiked to false
       }
     } catch (error) {
@@ -161,7 +161,6 @@ const Post = ({ posts }) => {
     }
   };
   
-
   const handleIsLiked = async () => {
     if (!user || !user.id) return;
 
