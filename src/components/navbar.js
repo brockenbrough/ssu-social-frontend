@@ -59,5 +59,6 @@ export default function Navbar() {
         <DarkModeButton />
       </div>
     </div>
+
   );
 }
