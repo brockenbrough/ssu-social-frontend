@@ -99,7 +99,7 @@ export default function PublicUserList() {
       <Container className="mt-5">
         <Row>
           <Col md={4} className="text-center mb-3">
-            <ProfileImage></ProfileImage>
+            <ProfileImage />
             <h3>{username}</h3>
             <FollowButton
               className="mt-2 btn-sm"
