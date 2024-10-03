@@ -163,7 +163,7 @@ const CreatePost = ({ popupShow, setPopupShow }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+    if (isSubmitting) return;
     let post = {
       description: description,
       thumbnail: thumbnail,
