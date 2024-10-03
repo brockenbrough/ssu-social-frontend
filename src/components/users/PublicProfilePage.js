@@ -98,8 +98,7 @@ export default function PublicUserList() {
       
       <Container className="mt-5">
         <Row>
-          {/* <Col md={4} className="text-center mb-3"> */}
-          <Col md={3} className="text-center" style={{ marginTop: '150px' }}> {/* Adjust marginTop as needed */}
+          <Col md={4} className="text-center mb-3">
             <ProfileImage />
             <h3>{username}</h3>
             <FollowButton
