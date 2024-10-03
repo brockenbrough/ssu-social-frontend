@@ -35,6 +35,7 @@ const Post = ({ posts }) => {
   const hasMedia = !!(posts.imageUri || youtubeThumbnail);
 
   const rendercontent = (content) => {
+    if (!content) return content;
     const urlRegex = /(https?:\/\/[^\s]+)/g;
     return content.split(urlRegex).map((part, index) => {
       if (index % 2 === 1) {
@@ -219,26 +220,33 @@ const Post = ({ posts }) => {
 
   return (
     <div className="position-relative" style={{ width: "100%" }}>
-      <div className="d-flex justify-content-center p-2" style={{ width: "100%" }}>
-        <div className={`ssu-post-card ${darkMode ? "dark" : ""}`} >
+      <div
+        className="d-flex justify-content-center p-2"
+        style={{ width: "100%" }}
+      >
+        <div className={`ssu-post-card ${darkMode ? "dark" : ""}`}>
           <div>
             {/*  image */}
             {posts.imageUri && (
-              <img
-                src={posts.imageUri}
-                alt="Post"
-                className="ssu-post-img"
-              />
+              <img src={posts.imageUri} alt="Post" className="ssu-post-img" />
             )}
             {/*  author of post */}
             <a
-              href={isCurrentUserPost ? "/privateUserProfile" : `/publicProfilePage/${posts.username}`}
-              className="ssu-textlink-bold" style={{ color: darkMode ? "white" : "black" }}
+              href={
+                isCurrentUserPost
+                  ? "/privateUserProfile"
+                  : `/publicProfilePage/${posts.username}`
+              }
+              className="ssu-textlink-bold"
+              style={{ color: darkMode ? "white" : "black" }}
             >
               @{posts.username}
             </a>
             {/* post text */}
-            <p className="ssu-text-normalsmall" style={{ color: darkMode ? "white" : "black" }}>
+            <p
+              className="ssu-text-normalsmall"
+              style={{ color: darkMode ? "white" : "black" }}
+            >
               {displayContent}
             </p>
 
@@ -263,11 +271,19 @@ const Post = ({ posts }) => {
             )}
 
             {/* Like and comment buttons */}
-            <button onClick={handleLikeClick} className="ssu-button-info-clickable" >
+            <button
+              onClick={handleLikeClick}
+              className="ssu-button-info-clickable"
+            >
               {isLiked ? "♥" : "♡"} <span>{` ${likeCount}`}</span>
             </button>
-            <button onClick={handleShowPostModal} className="ssu-button-info-clickable">
-              {showCommentCard ? "Hide Comments" : `💬 ${commentCount > 0 ? commentCount : "0"}`}
+            <button
+              onClick={handleShowPostModal}
+              className="ssu-button-info-clickable"
+            >
+              {showCommentCard
+                ? "Hide Comments"
+                : `💬 ${commentCount > 0 ? commentCount : "0"}`}
             </button>
             {/* Edit button */}
             {isCurrentUserPost && (
@@ -283,7 +299,9 @@ const Post = ({ posts }) => {
             )}
             {/* Post date */}
             <p style={{ marginTop: "4px" }}>
-              <span style={{ marginRight: "15px", fontSize: "0.8rem" }}>{formattedDate}</span>
+              <span style={{ marginRight: "15px", fontSize: "0.8rem" }}>
+                {formattedDate}
+              </span>
               <span style={{ fontSize: "0.8rem" }}>{timeAgo(posts.date)}</span>
             </p>
           </div>
@@ -320,11 +338,15 @@ const Post = ({ posts }) => {
             color: darkMode ? "white" : "black",
           }}
         >
-          <Modal.Title style={{ backgroundColor: darkMode ? "#181818" : "#f6f8fa" }}>
+          <Modal.Title
+            style={{ backgroundColor: darkMode ? "#181818" : "#f6f8fa" }}
+          >
             Would you like to update or delete your post?
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body style={{ backgroundColor: darkMode ? "#181818" : "#f6f8fa" }}>
+        <Modal.Body
+          style={{ backgroundColor: darkMode ? "#181818" : "#f6f8fa" }}
+        >
           {/*  'Edit' Image Styling */}
           {posts.imageUri && (
             <img
@@ -356,7 +378,9 @@ const Post = ({ posts }) => {
             </Form.Group>
           </Form>
         </Modal.Body>
-        <Modal.Footer style={{ backgroundColor: darkMode ? "#181818" : "#f6f8fa" }}>
+        <Modal.Footer
+          style={{ backgroundColor: darkMode ? "#181818" : "#f6f8fa" }}
+        >
           <Button variant="danger" onClick={handleDeletePost}>
             Delete
           </Button>
