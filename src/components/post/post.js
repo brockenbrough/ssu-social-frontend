@@ -123,40 +123,48 @@ const Post = ({ posts }) => {
 
   const handleLikeClick = (e) => {
     e.stopPropagation();
-
+  
     if (!user || !user.id) return;
-
+  
     const userId = user.id;
-    if (!isLiked) {
-      axios
-        .post(`${process.env.REACT_APP_BACKEND_SERVER_URI}/likes/like`, {
-          postId,
-          userId,
-        })
-        .then(() => {
-          setLikeCount((prevCount) => prevCount + 1);
-          setIsLiked(true);
-        })
-        .catch((error) => {
-          if (
-            error.response &&
-            error.response.status >= 400 &&
-            error.response.status <= 500
-          ) {
-            console.error("Error liking:", error.response.data.message);
-          }
-        });
-    } else {
-      axios
-        .delete(`${process.env.REACT_APP_BACKEND_SERVER_URI}/likes/unLike`, {
-          data: { postId, userId },
-        })
-        .then(() => {
-          setLikeCount((prevCount) => prevCount - 1);
-          setIsLiked(false);
-        })
-        .catch((error) => console.error("Error unliking:", error));
-    }
+  
+    // Disable button to prevent rapid clicks
+    setIsLiked((prev) => {
+      if (!prev) {
+        // If not liked, send the like request
+        axios
+          .post(`${process.env.REACT_APP_BACKEND_SERVER_URI}/likes/like`, {
+            postId,
+            userId,
+          })
+          .then(() => {
+            setLikeCount((prevCount) => prevCount + 1); // Increment like count
+            return true; // Update isLiked to true
+          })
+          .catch((error) => {
+            if (
+              error.response &&
+              error.response.status >= 400 &&
+              error.response.status <= 500
+            ) {
+              console.error("Error liking:", error.response.data.message);
+            }
+          });
+        return true; // Temporarily set isLiked to true
+      } else {
+        // If already liked, send the unlike request
+        axios
+          .delete(`${process.env.REACT_APP_BACKEND_SERVER_URI}/likes/unLike`, {
+            data: { postId, userId },
+          })
+          .then(() => {
+            setLikeCount((prevCount) => prevCount - 1); // Decrement like count
+            return false; // Update isLiked to false
+          })
+          .catch((error) => console.error("Error unliking:", error));
+        return false; // Temporarily set isLiked to false
+      }
+    });
   };
 
   const handleIsLiked = async () => {
