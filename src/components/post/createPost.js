@@ -145,6 +145,7 @@ const CreatePost = ({ popupShow, setPopupShow }) => {
     return null;
   };
 
+  const [isSubmitting, setIsSubmitting] = useState(false); // Add a state to track submission
   const savePost = async (post) => {
     try {
       post = {
@@ -173,6 +174,11 @@ const CreatePost = ({ popupShow, setPopupShow }) => {
       alert("You need a description in order to create this post.");
       return;
     }
+    setIsSubmitting(true); // Disable the button
+
+    await savePost(post); // Wait for the post to be saved
+    
+    setIsSubmitting(false); // Re-enable the button after submission
   
     // If there's an image, upload it and get the image URI
     if (image) {
