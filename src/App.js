@@ -43,7 +43,7 @@ const App = () => {
     setUser(getUserInfo());
   }, []);
 
-  const hideNavbarPaths = ["/"]; // Path to hide the Navbar
+  const hideNavbarPaths = ["/", "/signup"]; // Path to hide the Navbar
 
   return (
     <DarkModeProvider>
