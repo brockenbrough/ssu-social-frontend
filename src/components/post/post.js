@@ -121,51 +121,46 @@ const Post = ({ posts }) => {
     }
   }, [posts.content]);
 
-  const handleLikeClick = (e) => {
+  const [isLoading, setIsLoading] = useState(false); // Add loading state
+
+  const handleLikeClick = async (e) => {
     e.stopPropagation();
   
-    if (!user || !user.id) return;
+    if (!user || !user.id || isLoading) return; // Prevent clicking if loading
   
     const userId = user.id;
+    setIsLoading(true); // Set loading state to true
   
-    // Disable button to prevent rapid clicks
-    setIsLiked((prev) => {
-      if (!prev) {
+    try {
+      if (!isLiked) {
         // If not liked, send the like request
-        axios
-          .post(`${process.env.REACT_APP_BACKEND_SERVER_URI}/likes/like`, {
-            postId,
-            userId,
-          })
-          .then(() => {
-            setLikeCount((prevCount) => prevCount + 1); // Increment like count
-            return true; // Update isLiked to true
-          })
-          .catch((error) => {
-            if (
-              error.response &&
-              error.response.status >= 400 &&
-              error.response.status <= 500
-            ) {
-              console.error("Error liking:", error.response.data.message);
-            }
-          });
-        return true; // Temporarily set isLiked to true
+        await axios.post(`${process.env.REACT_APP_BACKEND_SERVER_URI}/likes/like`, {
+          postId,
+          userId,
+        });
+        setLikeCount((prevCount) => prevCount + 1); // Increment like count
+        setIsLiked(true); // Update isLiked to true
       } else {
         // If already liked, send the unlike request
-        axios
-          .delete(`${process.env.REACT_APP_BACKEND_SERVER_URI}/likes/unLike`, {
-            data: { postId, userId },
-          })
-          .then(() => {
-            setLikeCount((prevCount) => prevCount - 1); // Decrement like count
-            return false; // Update isLiked to false
-          })
-          .catch((error) => console.error("Error unliking:", error));
-        return false; // Temporarily set isLiked to false
+        await axios.delete(`${process.env.REACT_APP_BACKEND_SERVER_URI}/likes/unLike`, {
+          data: { postId, userId },
+        });
+        setLikeCount((prevCount) => prevCount - 1); // Decrement like count
+        setIsLiked(false); // Update isLiked to false
       }
-    });
+    } catch (error) {
+      if (
+        error.response &&
+        error.response.status >= 400 &&
+        error.response.status <= 500
+      ) {
+        console.error("Error liking/unliking:", error.response.data.message);
+      }
+    } finally {
+      setIsLoading(false); // Reset loading state
+    }
   };
+  
 
   const handleIsLiked = async () => {
     if (!user || !user.id) return;
