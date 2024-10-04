@@ -196,7 +196,7 @@ const CreatePost = ({ popupShow, setPopupShow }) => {
     await savePost(post); // Wait for the post to be saved
     setIsSubmitting(false); // Re-enable the button after submission
     resetState();
-    setRefreshPosts(1);
+    setRefreshPosts(refreshPosts + 1);
     navigate("/getAllPost");
     setPopupShow(false);
   };

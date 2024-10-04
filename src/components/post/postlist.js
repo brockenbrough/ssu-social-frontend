@@ -41,10 +41,18 @@ function PostList({ type, profileUsername }) {
   }, [type]);
 
   useEffect(() => {
+    setPage(1);
+    setPosts([]);
+    setHasMore(true);
+    setIsLoading(true);
+    getPosts();
+  }, [refreshPosts]);
+
+  useEffect(() => {
     if (user) {
       getPosts();
     }
-  }, [user, page, refreshPosts]);
+  }, [user, page]);
 
   async function getPosts() {
     let url;
