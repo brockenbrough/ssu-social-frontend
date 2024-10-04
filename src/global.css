@@ -155,5 +155,48 @@
   @apply text-center text-gray-500 text-sm mt-12 mb-6;
 }
 
+/* Comment Section Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  @apply w-2 h-2; 
+  border-radius: 9999px; 
+}
 
+.custom-scrollbar::-webkit-scrollbar-track {
+  @apply bg-gray-200;
+  border-radius: 9999px; 
+}
 
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  @apply bg-gray-500;
+  border-radius: 9999px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-700;
+}
+/* DarkMode Comment Section Scrollbar */
+.custom-scrollbar-dark::-webkit-scrollbar-track {
+  @apply bg-gray-800;
+}
+
+.custom-scrollbar-dark::-webkit-scrollbar-thumb {
+  @apply bg-gray-600;
+  border-radius: 9999px; 
+}
+
+.custom-scrollbar-dark::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-400;
+}
+
+.ssu-no-comments {
+  @apply text-center text-gray-500 py-4;
+}
+
+/* No Comment Message Styling */
+.comment-input {
+  @apply w-full italic text-base bg-transparent text-gray-300 border-none outline-none;
+}
+
+.dark .comment-input {
+  @apply text-gray-400;
+}

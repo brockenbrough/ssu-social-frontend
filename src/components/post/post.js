@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useLayoutEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import getUserInfoAsync from "../../utilities/decodeJwt";
 import Card from "react-bootstrap/Card";
@@ -49,13 +49,14 @@ const Post = ({ posts }) => {
     });
   };
 
-  useEffect(() => {
-    if (postCardRef.current) {
-      const postCardRect = postCardRef.current.getBoundingClientRect();
+  useLayoutEffect(() => {
+    const postCardElement = postCardRef.current;
+    if (postCardElement) {
+      const postCardRect = postCardElement.getBoundingClientRect();
       setPostCardHeight(postCardRect.height);
     }
-  }, [posts, commentCount]); 
-  
+  }, [posts, commentCount]);  
+
   const displayContent = rendercontent(posts.content);
 
   useEffect(() => {
@@ -125,12 +126,12 @@ const Post = ({ posts }) => {
 
   const handleLikeClick = async (e) => {
     e.stopPropagation();
-  
+
     if (!user || !user.id || isLoading) return; // Prevent action if no user or loading
-  
+
     const userId = user.id;
     setIsLoading(true); // Set loading state to true
-  
+
     try {
       if (!isLiked) {
         // If not liked, send the like request
@@ -160,7 +161,7 @@ const Post = ({ posts }) => {
       setIsLoading(false); // Reset loading state
     }
   };
-  
+
   const handleIsLiked = async () => {
     if (!user || !user.id) return;
 
@@ -251,7 +252,7 @@ const Post = ({ posts }) => {
             {posts.imageUri && (
               <img src={posts.imageUri} alt="Post" className="ssu-post-img" />
             )}
-            
+
 
             {/* YouTube Thumbnail */}
             {youtubeThumbnail && (
@@ -316,7 +317,7 @@ const Post = ({ posts }) => {
               style={{
                 width: "360px",
                 height: `${postCardHeight}px`,
-                paddingBottom: hasMedia ? "0px" : "10px",
+                
                 backgroundColor: darkMode ? "#181818" : "#f6f8fa",
               }}
             >
