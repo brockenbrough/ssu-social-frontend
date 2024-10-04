@@ -42,9 +42,9 @@ function CreateComment({ postId, setParentCommentCount, postCardHeight, hasMedia
       commentsEndRef.current.scrollTop = commentsEndRef.current.scrollHeight;
     }
   };
-  
+
   useEffect(() => {
-    scrollToBottom(); 
+    scrollToBottom();
   }, [comments]);
 
   useEffect(() => {
@@ -170,22 +170,6 @@ function CreateComment({ postId, setParentCommentCount, postCardHeight, hasMedia
   };
 
   function commentList() {
-    if (comments === null || comments.length === 0) {
-      return (
-        <input
-          type="text"
-          placeholder="Be the First to Comment ..."
-          disabled
-          style={{
-            width: '100%',
-            backgroundColor: darkMode ? "#181818" : "#f6f8fa",
-            color: darkMode ? "#888" : "#aaa", 
-            fontSize: "1rem",
-            fontStyle: "italic", 
-          }}
-        />
-      );
-    }
     return comments.map((comment) => {
       return (
         <Card
@@ -254,9 +238,10 @@ function CreateComment({ postId, setParentCommentCount, postCardHeight, hasMedia
         <span className="mb-4">
           <span
             style={{
-              fontSize: "1.5rem",
+              fontSize: "1.2rem",
               fontWeight: "bold",
               marginRight: "12px",
+              marginTop: "0px",
             }}
           >
             Comments
@@ -266,12 +251,11 @@ function CreateComment({ postId, setParentCommentCount, postCardHeight, hasMedia
       </div>
 
       {/* Scrollable Comment section Div */}
-      <div 
-       ref={commentsEndRef}
+      <div
+        ref={commentsEndRef}
         style={{
-          //If it has no media then the scroll height is dynamic to the postcards height *.38
-          maxHeight: hasMedia ? "400px" : `${postCardHeight * 0.38}px`, 
-          overflowY: "auto",
+          maxHeight: `${postCardHeight * 0.38 }px`,
+          overflowY: "scroll", 
           marginTop: "20px",
           paddingBottom: "0px",
           paddingRight: "13px",
@@ -304,12 +288,15 @@ function CreateComment({ postId, setParentCommentCount, postCardHeight, hasMedia
               marginRight: "2%",
               backgroundColor: darkMode ? "#181818" : "#f6f8fa",
               color: darkMode ? "white" : "black",
+              pointerEvents: 'auto',
+              position: 'relative',
+              zIndex: 10,
             }}
           />
           <button
             type="submit"
             className="btn btn-primary d-flex justify-content-center align-items-center"
-            style={{ width: "10%",paddingRight: "16px" }}
+            style={{ width: "10%", paddingRight: "16px", zIndex: 10, }}
           >
             Post
           </button>

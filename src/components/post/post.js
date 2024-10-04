@@ -54,8 +54,8 @@ const Post = ({ posts }) => {
       const postCardRect = postCardRef.current.getBoundingClientRect();
       setPostCardHeight(postCardRect.height);
     }
-  }, [posts]);
-
+  }, [posts, commentCount]); 
+  
   const displayContent = rendercontent(posts.content);
 
   useEffect(() => {
@@ -226,7 +226,7 @@ const Post = ({ posts }) => {
         className="d-flex justify-content-center p-2"
         style={{ width: "100%" }}
       >
-        <div className={`ssu-post-card ${darkMode ? "dark" : ""}`}>
+        <div ref={postCardRef} className={`ssu-post-card ${darkMode ? "dark" : ""}`}>
           <div>
             {/*  author of post */}
             <a
@@ -311,11 +311,11 @@ const Post = ({ posts }) => {
         </div>
         {/* Comment Section */}
         {showCommentCard && (
-          <div style={{ position: "absolute", left: "calc(50% + 270px)" }}>
+          <div style={{ position: "absolute", left: "calc(50% + 200px)" }}>
             <Card
               style={{
                 width: "360px",
-                height: hasMedia ? "600px" : `${postCardHeight}px`,
+                height: `${postCardHeight}px`,
                 paddingBottom: hasMedia ? "0px" : "10px",
                 backgroundColor: darkMode ? "#181818" : "#f6f8fa",
               }}
