@@ -46,13 +46,11 @@ const getUserInfoAsync = async () => {
   // If token has expired
   if (exp < new Date().getTime() / 1000) {
     try {
-      // Attempt to refresh the token
-      const newAccessToken = await refreshAccessToken(decodedAccessToken);
-      // Decode the new access token
-      const newDecodedToken = jwt_decode(newAccessToken);
-      return newDecodedToken;
+
+      localStorage.removeItem('accessToken');
+
     } catch (error) {
-      console.error('Error refreshing access token:', error);
+      console.error('Token has expired', error);
       throw error;
     }
   }
