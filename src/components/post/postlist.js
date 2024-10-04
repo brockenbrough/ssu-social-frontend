@@ -12,13 +12,14 @@ import Post from "./post";
 import "./postlistStyle.css";
 import ScrollToTop from "./ScrollToTop";
 import { useDarkMode } from "../DarkModeContext";
-import { PostContext } from "../../App";
+import { PostContext, RefreshPostsContext } from "../../App";
 
 function PostList({ type, profileUsername }) {
   const POST_PER_PAGE = 5;
   const { darkMode } = useDarkMode();
   const [user, setUser] = useState(null);
   const [posts, setPosts] = useContext(PostContext);
+  const [refreshPosts, setRefreshPosts] = useContext(RefreshPostsContext);
   const [isLoading, setIsLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
@@ -43,7 +44,7 @@ function PostList({ type, profileUsername }) {
     if (user) {
       getPosts();
     }
-  }, [user, page]);
+  }, [user, page, refreshPosts]);
 
   async function getPosts() {
     let url;

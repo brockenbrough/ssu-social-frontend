@@ -33,10 +33,12 @@ import Test from "./Test";
 
 export const UserContext = createContext();
 export const PostContext = createContext();
+export const RefreshPostsContext = createContext();
 
 const App = () => {
   const [user, setUser] = useState();
   const [posts, setPosts] = useState([]);
+  const [refreshPosts, setSetRefreshPosts] = useState();
   const location = useLocation(); // Get the current location
 
   useEffect(() => {
@@ -48,6 +50,7 @@ const App = () => {
   return (
     <DarkModeProvider>
       <PostContext.Provider value={[posts, setPosts]}>
+      <RefreshPostsContext.Provider value={[refreshPosts, setSetRefreshPosts]}>
         {!hideNavbarPaths.includes(location.pathname) && <Navbar />}
         <UserContext.Provider value={user}>
           <Routes>
@@ -80,6 +83,7 @@ const App = () => {
             <Route path="/get-token" element={<GetToken />} />
           </Routes>
         </UserContext.Provider>
+        </RefreshPostsContext.Provider>
       </PostContext.Provider>
     </DarkModeProvider>
   );

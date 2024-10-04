@@ -6,6 +6,7 @@ import { getUserInfoAsync } from "../../utilities/decodeJwtAsync";
 import { useDarkMode } from "../DarkModeContext";
 import apiClient from "../../utilities/apiClient";
 import { PostContext } from "../../App";
+import { RefreshPostsContext } from "../../App";
 
 const CreatePost = ({ popupShow, setPopupShow }) => {
   const MAX_DESCRIPTION_CHAR = 280;
@@ -21,6 +22,7 @@ const CreatePost = ({ popupShow, setPopupShow }) => {
   const navigate = useNavigate();
   const { darkMode } = useDarkMode();
   const [posts, setPosts] = useContext(PostContext);
+  const [refreshPosts, setRefreshPosts] = useContext(RefreshPostsContext);
 
   // Reset form state
   const resetState = () => {
@@ -175,10 +177,6 @@ const CreatePost = ({ popupShow, setPopupShow }) => {
       return;
     }
     setIsSubmitting(true); // Disable the button
-
-    await savePost(post); // Wait for the post to be saved
-    
-    setIsSubmitting(false); // Re-enable the button after submission
   
     // If there's an image, upload it and get the image URI
     if (image) {
@@ -194,8 +192,11 @@ const CreatePost = ({ popupShow, setPopupShow }) => {
     console.log("Post object before saving:", post);  // Debugging log to see post object
   
     setPosts([...posts, post]);
-    await savePost(post);  // Ensure imageUri is sent in savePost function
+
+    await savePost(post); // Wait for the post to be saved
+    setIsSubmitting(false); // Re-enable the button after submission
     resetState();
+    setRefreshPosts(1);
     navigate("/getAllPost");
     setPopupShow(false);
   };
