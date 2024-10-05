@@ -6,7 +6,7 @@ import { getUserInfoAsync } from "../../utilities/decodeJwtAsync";
 import { useDarkMode } from "../DarkModeContext";
 import apiClient from "../../utilities/apiClient";
 import { PostContext } from "../../App";
-import { RefreshPostsContext } from "../../App";
+import { PostPageContext } from "../../App";
 
 const CreatePost = ({ popupShow, setPopupShow }) => {
   const MAX_DESCRIPTION_CHAR = 280;
@@ -22,7 +22,7 @@ const CreatePost = ({ popupShow, setPopupShow }) => {
   const navigate = useNavigate();
   const { darkMode } = useDarkMode();
   const [posts, setPosts] = useContext(PostContext);
-  const [refreshPosts, setRefreshPosts] = useContext(RefreshPostsContext);
+  const [postPage, setPostPage] = useContext(PostPageContext);
 
   // Reset form state
   const resetState = () => {
@@ -196,8 +196,8 @@ const CreatePost = ({ popupShow, setPopupShow }) => {
     await savePost(post); // Wait for the post to be saved
     setIsSubmitting(false); // Re-enable the button after submission
     resetState();
-    setRefreshPosts(refreshPosts + 1);
-    navigate("/getAllPost");
+    setPostPage(0);
+    //navigate("/getAllPost");
     setPopupShow(false);
   };
 

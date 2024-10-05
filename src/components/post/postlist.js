@@ -12,16 +12,15 @@ import Post from "./post";
 import "./postlistStyle.css";
 import ScrollToTop from "./ScrollToTop";
 import { useDarkMode } from "../DarkModeContext";
-import { PostContext, RefreshPostsContext } from "../../App";
+import { PostContext, PostPageContext } from "../../App";
 
 function PostList({ type, profileUsername }) {
   const POST_PER_PAGE = 5;
   const { darkMode } = useDarkMode();
   const [user, setUser] = useState(null);
   const [posts, setPosts] = useContext(PostContext);
-  const [refreshPosts, setRefreshPosts] = useContext(RefreshPostsContext);
   const [isLoading, setIsLoading] = useState(true);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useContext(PostPageContext);
   const [hasMore, setHasMore] = useState(true);
   const observer = useRef();
 
@@ -41,15 +40,7 @@ function PostList({ type, profileUsername }) {
   }, [type]);
 
   useEffect(() => {
-    setPage(1);
-    setPosts([]);
-    setHasMore(true);
-    setIsLoading(true);
-    getPosts();
-  }, [refreshPosts]);
-
-  useEffect(() => {
-    if (user) {
+       if (user) {
       getPosts();
     }
   }, [user, page]);
@@ -57,7 +48,7 @@ function PostList({ type, profileUsername }) {
   async function getPosts() {
     let url;
 
-    if (type === "feed") {
+     if (type === "feed") {
       url = user
         ? `${process.env.REACT_APP_BACKEND_SERVER_URI}/feed/${user.username}`
         : `${process.env.REACT_APP_BACKEND_SERVER_URI}/feed/`;
@@ -87,7 +78,14 @@ function PostList({ type, profileUsername }) {
         setPosts(postData.filter((post) => post));
       } else {
         const newPosts = response.data;
-        setPosts((prevPosts) => [...prevPosts, ...newPosts]);
+    
+        if (page <= 1) {
+          setPosts(newPosts);
+          setPage(1);  // handles case where page=0 from create post forced refress
+        } else {
+          setPosts((prevPosts) => [...prevPosts, ...newPosts]);
+        }
+
         setHasMore(newPosts.length > 0);
       }
     } catch (error) {
