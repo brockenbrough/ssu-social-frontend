@@ -1,15 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { Container, Row, Col, Button } from "react-bootstrap";
-import getUserInfo from '../../utilities/decodeJwt';
-import axios from 'axios';
+import getUserInfo from "../../utilities/decodeJwt";
+import axios from "axios";
 import Post from "../post/post";
-import FollowButton from '../following/followButton';
+import FollowButton from "../following/followButton";
 
 export default function PublicUserList() {
   const [user, setUser] = useState({});
   const { username } = useParams();
   const [posts, setPosts] = useState([]);
+  const [followerCount, setFollowerCount] = useState(0);
+
+  const updateFollowerCount = (newFollowerCount) => {
+    setFollowerCount(newFollowerCount);
+  };
 
   const fetchPosts = async () => {
     try {
@@ -18,7 +23,9 @@ export default function PublicUserList() {
       );
       setPosts(response.data);
     } catch (error) {
-      alert(`Unable to fetch posts by user: ${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getAllByUsername/${username}`);
+      alert(
+        `Unable to fetch posts by user: ${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getAllByUsername/${username}`
+      );
     }
   };
 
@@ -28,27 +35,28 @@ export default function PublicUserList() {
     setUser(userInfo);
   }, []);
 
- 
   if (!user) {
     return (
       <div style={{ textAlign: "center" }}>
         <h4>
-          You must <a href="/login">log in</a> or <a href="/signup">register</a> to view this page
+          You must <a href="/login">log in</a> or <a href="/signup">register</a>{" "}
+          to view this page
         </h4>
       </div>
     );
   }
-    
+
   return (
     <Container className="mt-5">
       <Row className="mb-3">
         <Col className="text-center">
           <h2>
-            {username} 
+            {username}
             <FollowButton
               className="ml-3 btn-sm"
               username={user.username}
               targetUserId={username}
+              onUpdateFollowerCount={updateFollowerCount}
             />
           </h2>
         </Col>
