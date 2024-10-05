@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useState, useEffect, useRef } from "react";
 import { DarkModeProvider } from "./components/DarkModeContext";
 import { Route, Routes, useLocation } from "react-router-dom";
 
@@ -28,6 +28,7 @@ import UpdatePost from "./components/post/updatePost";
 import UploadImages from "./components/images/uploadImages";
 import ViewImages from "./components/images/viewImages";
 import GetToken from "./components/getToken";
+import useRefreshTokenOnActivity from "./components/hooks/refreshTokenOnActivity";
 
 import Test from "./Test";
 
@@ -40,6 +41,8 @@ const App = () => {
   const [posts, setPosts] = useState([]);
   const [page, setSetPage] = useState(1);
   const location = useLocation(); // Get the current location
+
+  useRefreshTokenOnActivity();
 
   useEffect(() => {
     setUser(getUserInfo());

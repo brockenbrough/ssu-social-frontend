@@ -37,6 +37,12 @@ function CreateComment({ postId, setParentCommentCount, postCardHeight, hasMedia
   const { darkMode } = useDarkMode();
   const commentsEndRef = useRef(null);
 
+  useLayoutEffect(() => {
+    if (commentsEndRef.current) {
+      commentsEndRef.current.style.height = `${postCardHeight - 130}px`;
+    }
+  }, [postCardHeight, comments]);
+
   const scrollToBottom = () => {
     if (commentsEndRef.current) {
       commentsEndRef.current.scrollTop = commentsEndRef.current.scrollHeight;
@@ -170,6 +176,16 @@ function CreateComment({ postId, setParentCommentCount, postCardHeight, hasMedia
   };
 
   function commentList() {
+    if (comments === null || comments.length === 0) {
+      return (
+        <input
+          type="text"
+          placeholder="Be the First to Comment ..."
+          disabled
+          className="comment-input" 
+        />
+      );
+    }
     return comments.map((comment) => {
       return (
         <Card
@@ -233,12 +249,12 @@ function CreateComment({ postId, setParentCommentCount, postCardHeight, hasMedia
   }
 
   return (
-    <div className="container mt-4">
+    <div className="container mt-0">
       <div>
-        <span className="mb-4">
+        <span>
           <span
             style={{
-              fontSize: "1.2rem",
+              fontSize: "1.25rem",
               fontWeight: "bold",
               marginRight: "12px",
               marginTop: "0px",
@@ -253,16 +269,16 @@ function CreateComment({ postId, setParentCommentCount, postCardHeight, hasMedia
       {/* Scrollable Comment section Div */}
       <div
         ref={commentsEndRef}
+        className={`custom-scrollbar ${darkMode ? "custom-scrollbar-dark" : ""}`}
         style={{
-          maxHeight: `${postCardHeight * 0.38 }px`,
-          overflowY: "scroll", 
-          marginTop: "20px",
+          overflowY: "auto",
+          marginTop: "15px",
           paddingBottom: "0px",
           paddingRight: "13px",
           borderRadius: "5px",
         }}
       >
-        <table className="table table-striped" style={{ marginTop: 0 }}>
+        <table className="table table-striped" style={{ marginTop: 0, marginBottom: "0px" }}>
           <tbody>
             {commentList()}
             <tr></tr>
