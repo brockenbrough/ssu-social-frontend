@@ -29,9 +29,21 @@ const Post = ({ posts }) => {
   const postCardRef = useRef(null);
   const [postCardHeight, setPostCardHeight] = useState(0);
   const [postPage, setPostPage] = useContext(PostPageContext);
+  const [isAnimationActive, setIsAnimationActive] = useState(false);
+  const [isSlidingOut, setIsSlidingOut] = useState(false);
 
   const handleShowPostModal = () => {
-    setShowCommentCard(!showCommentCard);
+    if (showCommentCard) {
+      setIsSlidingOut(true);
+      setTimeout(() => {
+        setIsAnimationActive(false);
+        setShowCommentCard(false);
+        setIsSlidingOut(false);
+      }, 300); //Animation durration delay (0.3 ms)
+    } else {
+      setIsAnimationActive(true);
+      setShowCommentCard(true);
+    }
   };
 
   const hasMedia = !!(posts.imageUri || youtubeThumbnail);
@@ -315,14 +327,16 @@ const Post = ({ posts }) => {
         </div>
         {/* Comment Section */}
         {showCommentCard && (
-          <div style={{ position: "absolute", left: "calc(50% + 200px)" }}>
+          <div style={{ position: "absolute", left: "calc(50% + 200px)" }}
+            className={isAnimationActive && (showCommentCard && !isSlidingOut ? "animate-slide-in-left" : "animate-slide-out-left")}
+          >
             <Card
               style={{
                 width: "360px",
                 height: `${postCardHeight}px`,
-                
                 backgroundColor: darkMode ? "#181818" : "#f6f8fa",
               }}
+              className="shadow-lg rounded-lg"
             >
               <Card.Body style={{ color: darkMode ? "white" : "black" }}>
                 <CreateComment
