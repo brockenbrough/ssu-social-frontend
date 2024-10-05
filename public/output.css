@@ -819,8 +819,8 @@ a:hover {
   width: 16rem;
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
-  padding-top: 1.5rem;
-  padding-bottom: 1.5rem;
+  padding-top: 1.0rem;
+  padding-bottom: 1.0rem;
   padding-left: 1rem;
   padding-right: 1rem;
   --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
@@ -832,8 +832,8 @@ a:hover {
   display: flex;
   align-items: center;
   border-radius: 0.5rem;
-  padding-top: 0.75rem;
-  padding-bottom: 0.75rem;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
   padding-left: 1rem;
   padding-right: 1rem;
   --tw-text-opacity: 1;
@@ -847,7 +847,7 @@ a:hover {
 
 .sidebar-item:hover {
   --tw-bg-opacity: 1;
-  background-color: rgb(243 244 246 / var(--tw-bg-opacity));
+  background-color: rgb(143 144 146 / var(--tw-bg-opacity));
 }
 
 .sidebar-item svg {
