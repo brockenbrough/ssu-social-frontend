@@ -57,7 +57,7 @@ const Post = ({ posts }) => {
       const postCardRect = postCardElement.getBoundingClientRect();
       setPostCardHeight(postCardRect.height);
     }
-  }, [posts, commentCount]);  
+  }, [posts, commentCount, showCommentCard]);
 
   const displayContent = rendercontent(posts.content);
 
