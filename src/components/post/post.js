@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect, useRef } from "react";
+import React, { useState, useEffect, useLayoutEffect, useRef, useContext } from "react";
 import { Link } from "react-router-dom";
 import getUserInfoAsync from "../../utilities/decodeJwt";
 import Card from "react-bootstrap/Card";
@@ -10,6 +10,7 @@ import Modal from "react-bootstrap/Modal";
 import { Form } from "react-bootstrap";
 import timeAgo from "../../utilities/timeAgo";
 import CreateComment from "../comments/createComment";
+import { PostPageContext } from "../../App";
 
 const Post = ({ posts }) => {
   const [youtubeThumbnail, setYoutubeThumbnail] = useState(null);
@@ -27,6 +28,7 @@ const Post = ({ posts }) => {
   const [showCommentCard, setShowCommentCard] = useState(false);
   const postCardRef = useRef(null);
   const [postCardHeight, setPostCardHeight] = useState(0);
+  const [postPage, setPostPage] = useContext(PostPageContext);
 
   const handleShowPostModal = () => {
     setShowCommentCard(!showCommentCard);
@@ -215,6 +217,7 @@ const Post = ({ posts }) => {
       )
       .then((response) => {
         handleCloseEditModal();
+        setPostPage(0);  // this signals postlist to redisplay it's list.
       })
       .catch((error) => {
         console.error(error);
