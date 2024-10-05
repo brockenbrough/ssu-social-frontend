@@ -120,7 +120,7 @@ function PostList({ type, profileUsername }) {
           />
         </div>
       ) : posts.length === 0 ? (
-        <div className="text-center" style={{ fontSize: "1.5em" }}>
+        <div className="ssu-text-titlesmall">
           {type === "feed" ? (
             <p>
               <strong>{user.username}</strong>, your{" "}
@@ -142,23 +142,25 @@ function PostList({ type, profileUsername }) {
         <div
           className="App"
           style={{
-            backgroundColor: darkMode ? "#000" : "#f6f8fa",
+            backgroundColor: darkMode ? "#ffffff" : "#f6f8fa",
             color: darkMode ? "#fff" : "#000",
+            margin: 0,
+            padding: 0,
             minHeight: "100vh",
           }}
         >
           {["all", "privateuserprofile", "publicuserprofile"].includes(type) ? (
-            <div className="d-flex flex-column align-items-center">
+            <div className="ssu-post-list">
               {posts.map((post, index) => {
                 if (posts.length === index + 1) {
                   return (
                     <div ref={lastPostRef} key={post._id}>
-                      <Post posts={post} className="cards m-2" />
+                      <Post posts={post}/>
                     </div>
                   );
                 } else {
                   return (
-                    <Post key={post._id} posts={post} className="cards m-2" />
+                    <Post key={post._id} posts={post}/>
                   );
                 }
               })}
