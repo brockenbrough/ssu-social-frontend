@@ -1,14 +1,12 @@
-import React, { useState, useCallback, useLayoutEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { Container, Row, Col, Card, Image } from 'react-bootstrap';
-import axios from 'axios';
-import moment from 'moment';
-import getUserInfo from '../../utilities/decodeJwt';
-import { useDarkMode } from '../DarkModeContext.js';
-import DarkModeButton from '../DarkModeButton';
-import FollowButton from '../following/followButton';
-import PostList from '../post/postlist';
-import ProfileImage from '../images/ProfileImage.js';
+import React, { useState, useCallback, useLayoutEffect } from "react";
+import { useParams, Link } from "react-router-dom";
+import { Container, Row, Col, Card, Image } from "react-bootstrap";
+import axios from "axios";
+import getUserInfo from "../../utilities/decodeJwt";
+import { useDarkMode } from "../DarkModeContext.js";
+import FollowButton from "../following/followButton";
+import PostList from "../post/postlist";
+import ProfileImage from "../images/ProfileImage.js";
 
 export default function PublicUserList() {
   const { darkMode } = useDarkMode();
@@ -19,9 +17,9 @@ export default function PublicUserList() {
   const [followingCount, setFollowingCount] = useState(0);
 
   const containerStyle = {
-    background: darkMode ? 'black' : 'white',
-    color: darkMode ? 'white' : 'black',
-    minHeight: '100vh',
+    background: darkMode ? "black" : "white",
+    color: darkMode ? "white" : "black",
+    minHeight: "100vh",
   };
 
   const fetchUserInfoAndPosts = useCallback(async () => {
@@ -29,7 +27,9 @@ export default function PublicUserList() {
       const postsResponse = await axios.get(
         `${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getAllByUsername/${username}`
       );
-      const sortedPosts = postsResponse.data.sort((a, b) => new Date(b.date) - new Date(a.date));
+      const sortedPosts = postsResponse.data.sort(
+        (a, b) => new Date(b.date) - new Date(a.date)
+      );
       setPosts(sortedPosts);
 
       try {
@@ -41,41 +41,36 @@ export default function PublicUserList() {
         } else {
           setFollowerCount(0);
         }
-        } catch (error) {
-          console.error(`Error fetching follower count: ${error.message}`);
-      };
+      } catch (error) {
+        console.error(`Error fetching follower count: ${error.message}`);
+      }
 
       var followCount;
-    try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_BACKEND_SERVER_URI}/following/${username}`
-      );
-      if (response.data.length > 0) {
-        setFollowingCount(response.data[0].following.length);
-        followCount = response.data[0].following.length;
-      
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_BACKEND_SERVER_URI}/following/${username}`
+        );
+        if (response.data.length > 0) {
+          setFollowingCount(response.data[0].following.length);
+          followCount = response.data[0].following.length;
+        }
+      } catch (error) {
+        console.error(`Error fetching following count: ${error.message}`);
       }
-    } catch (error) {
-      console.error(`Error fetching following count: ${error.message}`);
-    }
-    console.log("Post call Following Count:", followingCount);
+      console.log("Post call Following Count:", followingCount);
     } catch (error) {
       console.error(`Error fetching data: ${error.message}`);
     }
-    
   }, [username]);
 
-  // Function to update the follower count after follow/unfollow
   const updateFollowerCount = (newFollowerCount) => {
     setFollowerCount(newFollowerCount);
   };
-  
-  // Ensures the page starts at the top when the component is first rendered
+
   useLayoutEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  // Fetch posts and user info when the component is mounted
   useLayoutEffect(() => {
     fetchUserInfoAndPosts();
 
@@ -87,7 +82,8 @@ export default function PublicUserList() {
     return (
       <div style={{ textAlign: "center" }}>
         <h4>
-          You must <a href="/login">log in</a> or <a href="/signup">register</a> to view this page
+          You must <a href="/login">log in</a> or <a href="/signup">register</a>{" "}
+          to view this page
         </h4>
       </div>
     );
@@ -95,7 +91,6 @@ export default function PublicUserList() {
 
   return (
     <div style={containerStyle}>
-      
       <Container className="mt-5">
         <Row>
           <Col md={4} className="text-center mb-3">
@@ -120,5 +115,4 @@ export default function PublicUserList() {
       </Container>
     </div>
   );
-  
 }
