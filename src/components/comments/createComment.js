@@ -39,7 +39,7 @@ function CreateComment({ postId, setParentCommentCount, postCardHeight, hasMedia
 
   useLayoutEffect(() => {
     if (commentsEndRef.current) {
-      commentsEndRef.current.style.height = `${postCardHeight - 130}px`;
+      commentsEndRef.current.style.height = `${postCardHeight - 132}px`;
     }
   }, [postCardHeight, comments]);
 
@@ -182,7 +182,7 @@ function CreateComment({ postId, setParentCommentCount, postCardHeight, hasMedia
           type="text"
           placeholder="Be the First to Comment ..."
           disabled
-          className="comment-input" 
+          className="comment-input-blank"
         />
       );
     }
@@ -287,32 +287,40 @@ function CreateComment({ postId, setParentCommentCount, postCardHeight, hasMedia
       </div>
 
       <form onSubmit={handleSubmit}>
-        <div className="d-flex align-items-center mt-3">
-          <input
-            type="text"
-            className="form-control"
+        <div className="text-sm text-gray-600 text-right">
+          {formData.commentContent.length}/110
+        </div>
+        <div className="flex items-center mt-1 relative">
+          <textarea
+            className={`comment-input custom-scrollbar resize-none w-full max-h-9 
+            ${formData.commentContent.length === 0 ? "overflow-hidden" : "overflow-y-auto"}`}
             id="commentContent"
             name="commentContent"
             value={formData.commentContent}
-            onChange={(e) =>
-              setFormData({ ...formData, commentContent: e.target.value })
-            }
+            maxLength="110"
+            onChange={(e) => {
+              if (e.target.value.length <= 110) {
+                setFormData({ ...formData, commentContent: e.target.value });
+              }
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault(); 
+                handleSubmit(e);
+              }
+            }}
             required
             placeholder="Write a comment..."
             style={{
-              width: "88%",
-              marginRight: "2%",
-              backgroundColor: darkMode ? "#181818" : "#f6f8fa",
-              color: darkMode ? "white" : "black",
-              pointerEvents: 'auto',
-              position: 'relative',
+              pointerEvents: "auto",
+              position: "relative",
               zIndex: 10,
             }}
           />
           <button
             type="submit"
-            className="btn btn-primary d-flex justify-content-center align-items-center"
-            style={{ width: "10%", paddingRight: "16px", zIndex: 10, }}
+            className="post-button ml-2"
+            style={{ zIndex: 10 }}
           >
             Post
           </button>

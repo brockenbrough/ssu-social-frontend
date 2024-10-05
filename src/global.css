@@ -196,11 +196,24 @@
   @apply text-center text-gray-500 py-4;
 }
 
-/* No Comment Message Styling */
-.comment-input {
+/* "Be the first to comment..." Message Styling */
+.comment-input-blank {
   @apply w-full italic text-base bg-transparent text-gray-300 border-none outline-none;
 }
 
-.dark .comment-input {
+.dark .comment-input-blank {
   @apply text-gray-400;
+}
+
+/* Comment Section Post Button and comment box */
+.comment-input {
+  @apply w-full h-10 bg-gray-100 text-gray-800 border border-gray-300 rounded-lg px-2 py-1 dark:bg-white dark:text-black dark:border-gray-600 not-italic resize-none overflow-hidden;
+}
+
+.comment-input::placeholder {
+  @apply italic text-gray-400 dark:text-gray-600;
+}
+
+.post-button {
+  @apply ssu-button-primary;
 }
