@@ -227,7 +227,7 @@ const Post = ({ posts }) => {
   return (
     <div className="position-relative" style={{ width: "100%" }}>
       <div
-        className="d-flex justify-content-center p-2"
+        className="d-flex justify-content-center margin: 0, padding: 0"
         style={{ width: "100%" }}
       >
         <div ref={postCardRef} className={`ssu-post-card ${darkMode ? "dark" : ""}`}>
