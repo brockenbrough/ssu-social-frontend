@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useLayoutEffect } from "react";
-import { useParams, Link } from "react-router-dom";
-import { Container, Row, Col, Card, Image } from "react-bootstrap";
+import { useParams } from "react-router-dom";
+import { Container, Row, Col } from "react-bootstrap";
 import axios from "axios";
 import getUserInfo from "../../utilities/decodeJwt";
 import { useDarkMode } from "../DarkModeContext.js";
