@@ -1,21 +1,31 @@
-import React from 'react';
-import { useDarkMode } from './DarkModeContext';
+import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSun, faMoon } from '@fortawesome/free-solid-svg-icons'; // Import the icons
+import { faSun, faMoon } from '@fortawesome/free-regular-svg-icons'; // Import the icons
 
 function DarkModeButton() {
-  const { darkMode, toggleDarkMode } = useDarkMode();
+  const [isDarkMode, setIsDarkMode] = useState(() =>
+    document.documentElement.classList.contains('dark')
+  );
+  const toggleTailwindTheme = () => {
+    document.documentElement.classList.toggle('dark');
+    setIsDarkMode((prevMode) => !prevMode); // Update React state after DOM change
+  }
 
   const handleClick = () => {
-    toggleDarkMode(); // Toggle dark mode
+    //toggleDarkMode(); 
+    toggleTailwindTheme();
   };
 
   return (
-    <button onClick={handleClick} id="darkModeButton" style={{ background: 'transparent', border: 'none', cursor: 'pointer' }}>
-      {darkMode ? (
-        <FontAwesomeIcon icon={faSun} style={{ color: '#F59E0B', fontSize: '42px' }} /> // Sun icon for light mode
+    <button
+      onClick={handleClick}
+      id="darkModeButton"
+      style={{ background: 'transparent', border: 'none', cursor: 'pointer' }}
+    >
+      {isDarkMode ? 
+      (<FontAwesomeIcon icon={faMoon} style={{ color: '#6B7280', fontSize: '28px' }} /> // Sun icon for light mode
       ) : (
-        <FontAwesomeIcon icon={faMoon} style={{ color: '#6B7280', fontSize: '42px' }} /> // Moon icon for dark mode
+      <FontAwesomeIcon icon={faSun} style={{ color: '#F59E0B', fontSize: '28px' }} /> // Moon icon for dark mode
       )}
     </button>
   );

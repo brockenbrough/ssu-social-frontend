@@ -242,7 +242,7 @@ const Post = ({ posts }) => {
         className="d-flex justify-content-center margin: 0, padding: 0"
         style={{ width: "100%" }}
       >
-        <div ref={postCardRef} className={`ssu-post-card ${darkMode ? "dark" : ""}`}>
+        <div ref={postCardRef} className="ssu-post-card">
           <div>
             {/*  author of post */}
             <a
@@ -252,15 +252,11 @@ const Post = ({ posts }) => {
                   : `/publicProfilePage/${posts.username}`
               }
               className="ssu-textlink-bold"
-              style={{ color: darkMode ? "white" : "black" }}
             >
               @{posts.username}
             </a>
             {/* post text */}
-            <p
-              className="ssu-text-normalsmall"
-              style={{ color: darkMode ? "white" : "black" }}
-            >
+            <p className="ssu-text-normalsmall">
               {displayContent}
             </p>
             {/*  image */}
@@ -317,11 +313,8 @@ const Post = ({ posts }) => {
               </button>
             )}
             {/* Post date */}
-            <p style={{ marginTop: "4px", textAlign: "right" }}>
-              <span style={{ marginRight: "15px", fontSize: "0.8rem" }}>
-                {formattedDate}
-              </span>
-              <span style={{ fontSize: "0.8rem" }}>{timeAgo(posts.date)}</span>
+            <p className="ssu-text-tinyright">
+                {formattedDate} {timeAgo(posts.date)}
             </p>
           </div>
         </div>

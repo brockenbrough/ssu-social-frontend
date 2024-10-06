@@ -3,32 +3,40 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
+.ssu-page-container {
+  @apply bg-white dark:bg-black text-black dark:text-white min-h-screen pl-64;
+}
+
 .ssu-button-bold {
-  @apply bg-violet-500 text-white font-normal py-1 px-4 rounded hover:bg-violet-600 mr-1 ml-1 mt-1 mb-1;
+  @apply bg-violet-500 text-white dark:text-black font-normal py-1 px-4 rounded hover:bg-violet-600 mr-1 ml-1 mt-1 mb-1;
 }
 
 .ssu-button-primary {
-  @apply bg-gray-500 text-white font-normal py-1 px-2 rounded hover:bg-gray-600 mr-1 ml-1 mt-1 mb-1;
+  @apply bg-gray-500 dark:bg-gray-300 text-white dark:text-black font-normal py-1 px-2 rounded hover:bg-violet-600 mr-1 ml-1 mt-1 mb-1;
 }
 
 .ssu-button-info-clickable {
-  @apply bg-gray-50 text-gray-800 border-solid border-gray-100 font-normal py-1 px-1 rounded hover:bg-violet-100 mr-1 ml-1 mt-1 mb-1;
+  @apply bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-white border-solid border-gray-100 font-normal py-1 px-1 rounded hover:bg-violet-800 mr-1 ml-1 mt-1 mb-1;
 }
 
 .ssu-button-info {
-  @apply bg-white text-gray-800 border border-gray-200 font-normal py-1 px-1 rounded mr-1 ml-1 mt-1 mb-1;
+  @apply bg-white dark:bg-black text-gray-800 dark:text-white border border-gray-200 font-normal py-1 px-1 rounded mr-1 ml-1 mt-1 mb-1;
+}
+
+.ssu-text-tinyright {
+  @apply mt-1 text-right mr-[15px] text-[0.8rem] text-gray-800 dark:text-white break-words;
 }
 
 .ssu-text-normalsmall {
-  @apply text-sm text-gray-800 break-words;
+  @apply text-sm text-gray-800 dark:text-white break-words;
 }
 
 .ssu-text-titlesmall {
-  @apply text-lg font-semibold text-gray-800;
+  @apply text-lg font-semibold text-gray-800 dark:text-white;
 }
 
 .ssu-text-titlesmalllight {
-  @apply text-lg font-normal text-gray-800;
+  @apply text-lg font-normal text-gray-800 dark:text-white;
 }
 
 .ssu-textlink-bold {
@@ -37,7 +45,7 @@
 }
 
 .ssu-post-card {
-  @apply w-[520px] max-w-sm p-2 m-0 bg-white border border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700;
+  @apply w-[520px] max-w-sm p-2 m-0 bg-white dark:bg-gray-800 border border-gray-200 rounded-lg  dark:border-gray-700;
 }
 
 .ssu-post-img {

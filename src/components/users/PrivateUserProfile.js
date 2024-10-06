@@ -21,8 +21,8 @@ const PrivateUserProfile = () => {
   const { darkMode } = useDarkMode();
 
   const containerStyle = {
-    background: darkMode ? 'black' : 'white',
-    color: darkMode ? 'white' : 'black',
+    background: darkMode ? 'black' : 'pink',
+    color: darkMode ? 'pink' : 'black',
     minHeight: '100vh',
     paddingLeft: '250px', // Adjust this based on your sidebar width
   };
@@ -293,7 +293,8 @@ const deleteConfirm = async () => {
   }
 
   return (
-    <div style={containerStyle}>
+    <div className="ssu-page-container">
+  
       {user ? (
         <>
           <Row>
