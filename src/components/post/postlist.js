@@ -139,16 +139,7 @@ function PostList({ type, profileUsername }) {
           )}
         </div>
       ) : (
-        <div
-          className="App"
-          style={{
-            backgroundColor: darkMode ? "#ffffff" : "#f6f8fa",
-            color: darkMode ? "#fff" : "#000",
-            margin: 0,
-            padding: 0,
-            minHeight: "100vh",
-          }}
-        >
+        <div className="ssu-post-list">
           {["all", "privateuserprofile", "publicuserprofile"].includes(type) ? (
             <div className="ssu-post-list">
               {posts.map((post, index) => {

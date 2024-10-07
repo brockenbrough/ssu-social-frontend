@@ -31,6 +31,7 @@ const ScrollToTop = () => {
     isVisible && (
       <button
         onClick={handleScrollToTop}
+        className="ssu-button-primary"
         style={{
           position: "fixed",
           bottom: "40px",

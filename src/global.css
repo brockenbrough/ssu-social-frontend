@@ -44,6 +44,11 @@
    text-gray-800 dark:text-white no-underline hover:text-purple-500;
 }
 
+
+.ssu-post-list {
+  @apply m-0 p-0 min-h-screen bg-white dark:bg-gray-800;
+}
+
 .ssu-post-card {
   @apply w-[520px] max-w-sm p-2 m-0 bg-white dark:bg-gray-800 border border-gray-200 rounded-lg  dark:border-gray-700;
 }
