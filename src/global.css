@@ -4,7 +4,7 @@
 @import 'tailwindcss/utilities';
 
 .ssu-page-container {
-  @apply bg-white dark:bg-black text-black dark:text-white min-h-screen pl-64;
+  @apply bg-white dark:bg-gray-800 text-black dark:text-white min-h-screen pl-64;
 }
 
 .ssu-button-bold {
@@ -20,7 +20,7 @@
 }
 
 .ssu-button-info {
-  @apply bg-white dark:bg-black text-gray-800 dark:text-white border border-gray-200 font-normal py-1 px-1 rounded mr-1 ml-1 mt-1 mb-1;
+  @apply bg-white dark:bg-gray-800 text-gray-800 dark:text-white border border-gray-200 font-normal py-1 px-1 rounded mr-1 ml-1 mt-1 mb-1;
 }
 
 .ssu-text-tinyright {
