@@ -24,7 +24,6 @@ const CreatePost = ({ popupShow, setPopupShow }) => {
   const [posts, setPosts] = useContext(PostContext);
   const [postPage, setPostPage] = useContext(PostPageContext);
 
-  // Reset form state
   const resetState = () => {
     setDescription("");
     setImage(null);
@@ -32,7 +31,6 @@ const CreatePost = ({ popupShow, setPopupShow }) => {
     setCharCountColor(GREY_COLOR);
   };
 
-  // Fetch user information asynchronously
   const fetchUserInfo = async () => {
     try {
       const userInfo = await getUserInfoAsync();
@@ -48,7 +46,6 @@ const CreatePost = ({ popupShow, setPopupShow }) => {
     fetchUserInfo();
   }, []);
 
-  // Update character count color dynamically
   const updateCharCountColor = (textLength) => {
     if (textLength === MAX_DESCRIPTION_CHAR) {
       setCharCountColor(RED_COLOR);
@@ -59,7 +56,6 @@ const CreatePost = ({ popupShow, setPopupShow }) => {
     }
   };
 
-  // Fetch YouTube thumbnail
   const fetchYoutubeThumbnail = async (link) => {
     const youtubeRegex =
       /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
@@ -77,7 +73,6 @@ const CreatePost = ({ popupShow, setPopupShow }) => {
     }
   };
 
-  // Check if the link is a valid YouTube link
   const isYoutubeLink = (link) => {
     const youtubeRegex =
       /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
@@ -118,12 +113,11 @@ const CreatePost = ({ popupShow, setPopupShow }) => {
     alert("You need a description in order to create this post.");
   };
 
-  // Function to handle image upload and return the S3 URI
   const saveImageAndGetImageUri = async () => {
     const formData = new FormData();
     formData.append("image", image);
-    formData.append("name", user.username);  // Ensure the username is sent for validation
-  
+    formData.append("name", user.username);
+
     try {
       const response = await fetch(
         `${process.env.REACT_APP_BACKEND_SERVER_URI}/images/create`,
@@ -132,21 +126,21 @@ const CreatePost = ({ popupShow, setPopupShow }) => {
           body: formData,
         }
       );
-  
+
       if (response.ok) {
         const data = await response.json();
-        return data.imageUri;  // Ensure this is the S3 URL returned from the backend
+        return data.imageUri;
       } else {
         alert("Image was not saved. HTTP status code: " + response.status);
       }
     } catch (error) {
       console.error("Error:", error);
     }
-  
+
     return null;
   };
 
-  const [isSubmitting, setIsSubmitting] = useState(false); // Add a state to track submission
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const savePost = async (post) => {
     try {
       post = {
@@ -154,7 +148,7 @@ const CreatePost = ({ popupShow, setPopupShow }) => {
         id: user.id,
         content: description,
         username: user.username,
-        imageUri: post.imageUri,  // Ensure imageUri is included
+        imageUri: post.imageUri,
       };
       await apiClient.post(`/posts/createPost`, post);
     } catch (error) {
@@ -170,31 +164,29 @@ const CreatePost = ({ popupShow, setPopupShow }) => {
       thumbnail: thumbnail,
       charCountColor: charCountColor,
     };
-  
+
     if (!post.description.trim()) {
       alert("You need a description in order to create this post.");
       return;
     }
-    setIsSubmitting(true); // Disable the button
-  
-    // If there's an image, upload it and get the image URI
+    setIsSubmitting(true);
+
     if (image) {
       const imageUri = await saveImageAndGetImageUri();
       if (imageUri) {
         post = {
           ...post,
-          imageUri: imageUri,  // Add imageUri to the post object
+          imageUri: imageUri,
         };
       }
     }
-    
+
     setPosts([...posts, post]);
 
-    await savePost(post); // Wait for the post to be saved
-    setIsSubmitting(false); // Re-enable the button after submission
+    await savePost(post);
+    setIsSubmitting(false);
     resetState();
     setPostPage(0);
-    //navigate("/getAllPost");
     setPopupShow(false);
   };
 
@@ -287,9 +279,13 @@ const CreatePost = ({ popupShow, setPopupShow }) => {
                     />
                   </div>
                 )}
-                <Button type="submit" style={{ width: "100%" }} disabled={isSubmitting}>
-  Create Post
-</Button>
+                <Button
+                  type="submit"
+                  style={{ width: "100%" }}
+                  disabled={isSubmitting}
+                >
+                  Create Post
+                </Button>
               </Form>
             ) : (
               <h3>
