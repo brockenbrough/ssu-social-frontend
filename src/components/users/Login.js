@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import getUserInfo from "../../utilities/decodeJwt";
-const image1 = "/1.jpg"; // Path to images in the public folder
+
+const image1 = "/1.jpg";
 const image2 = "/2.jpg";
 const image3 = "/3.jpg";
 const image4 = "/4.jpg";
@@ -19,17 +22,17 @@ const Login = () => {
   const [user, setUser] = useState(null);
   const [data, setData] = useState({ username: "", password: "" });
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false); // New state for loading indicator
+  const [loading, setLoading] = useState(false);
   const [light, setLight] = useState(false);
   const [bgColor, setBgColor] = useState(SECONDARY_COLOR);
   const [bgText, setBgText] = useState("Light Mode");
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const backgroundImages = [image1, image2, image3];
-  const containerImages = [image4,image5,image6];
+  const containerImages = [image4, image5, image6];
   const getNextImageIndex = () => (currentImageIndex + 1) % backgroundImages.length;
   const navigate = useNavigate();
-  const [fieldErrors, setFieldErrors] = useState({username: "", password: "",});
+  const [fieldErrors, setFieldErrors] = useState({ username: "", password: "" });
 
   let labelStyling = {
     color: PRIMARY_COLOR,
@@ -82,33 +85,31 @@ const Login = () => {
     setFieldErrors({ username: "", password: "" });
 
     let errors = {};
-    
-    // Simple validation for empty fields
+
     if (!data.username) errors.username = "Username is required.";
     if (!data.password) errors.password = "Password is required.";
 
-    // If there are validation errors, set them and stop submission
     if (Object.keys(errors).length > 0) {
       setFieldErrors(errors);
       return;
     }
     try {
-      setLoading(true); // Set loading to true before making the request
+      setLoading(true);
 
       const { data: res } = await axios.post(url, data);
       const { accessToken } = res;
       localStorage.setItem("accessToken", accessToken);
       window.location.reload();
 
-      setLoading(false); // Set loading to false after receiving the response
+      setLoading(false);
     } catch (error) {
-      setLoading(false); // Set loading to false in case of an error
+      setLoading(false);
 
       if (error.response) {
         setFieldErrors({ ...fieldErrors, password: "Invalid username or password." });
         console.log(error.response.data);
       } else {
-        setFieldErrors({ ...fieldErrors, password: `${error.message}. Unable to reach the server.` })
+        setFieldErrors({ ...fieldErrors, password: `${error.message}. Unable to reach the server.` });
         console.log("Error", error.message);
       }
       setError("Something went wrong. Please try again.");
@@ -117,22 +118,22 @@ const Login = () => {
 
   if (user) {
     navigate("/feed-algorithm");
-    return null; // Returning null if the user is already logged in
+    return null;
   }
 
   let backgroundStyling = {
     background: bgColor,
     backgroundImage: `url(${backgroundImages[currentImageIndex]}), url(${backgroundImages[getNextImageIndex()]}), url(${backgroundImages[getNextImageIndex()]})`,
     backgroundSize: 'cover',
-    backgroundPosition: 'left top, center top, right top', // Adjusted positions for side by side
+    backgroundPosition: 'left top, center top, right top',
     backgroundRepeat: 'no-repeat',
-    cursor: loading ? 'wait' : 'auto' // Change cursor based on loading state
+    cursor: loading ? 'wait' : 'auto',
   };
 
   let containerStyle = {
-    background: "white", // White background
-    borderRadius: "10px", // Add border-radius for a rounded container
-    padding: "20px", // Add padding to the container
+    background: "white",
+    borderRadius: "10px",
+    padding: "20px",
   };
 
   return (
@@ -142,40 +143,54 @@ const Login = () => {
           <div className="row d-flex justify-content-center align-items-center h-100" style={backgroundStyling}>
             <div className="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
               <div style={containerStyle}>
-
                 <Form>
                   <Form.Group className="mb-3" controlId="formBasicEmail">
-                  <Form.Label style={labelStyling}>User Name</Form.Label>
-                  <Form.Control type="username" name="username" onChange={handleChange} placeholder="Enter username" isInvalid={!!fieldErrors.username}/>
-                  {fieldErrors.username && (
-                    <Form.Text className="text-danger">{fieldErrors.username}</Form.Text>
-                  )}
-                  <Form.Text className="text-muted">We just might sell your data</Form.Text>
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="formBasicPassword">
-                  <Form.Label style={labelStyling}>Password</Form.Label>
-                  <Form.Control type={passwordVisible ? "text" : "password"} name="password" placeholder="Password" onChange={handleChange} isInvalid={!!fieldErrors.password}/>
-                  {fieldErrors.password && (
-                    <Form.Text className="text-danger">{fieldErrors.password}</Form.Text>
-                  )
+                    <Form.Label style={labelStyling}>User Name</Form.Label>
+                    <Form.Control type="username" name="username" onChange={handleChange} placeholder="Enter username" isInvalid={!!fieldErrors.username} />
+                    {fieldErrors.username && (
+                      <Form.Text className="text-danger">{fieldErrors.username}</Form.Text>
+                    )}
+                    <Form.Text className="text-muted">We just might sell your data</Form.Text>
+                  </Form.Group>
+                  <Form.Group className="mb-3" controlId="formBasicPassword">
+                    <Form.Label style={labelStyling}>Password</Form.Label>
+                    <div className="input-group">
+                      <Form.Control
+                        type={passwordVisible ? "text" : "password"}
+                        name="password"
+                        placeholder="Password"
+                        onChange={handleChange}
+                        isInvalid={!!fieldErrors.password}
+                      />
+                      <button
+                        type="button"
+                        onClick={togglePasswordVisibility}
+                        style={{
+                          background: "transparent",
+                          border: "none",
+                          padding: "0 10px",
+                          cursor: "pointer",
+                          color: PRIMARY_COLOR,
+                        }}
+                      >
+                        <FontAwesomeIcon icon={passwordVisible ? faEyeSlash : faEye} />
+                      </button>
+                    </div>
+                    {fieldErrors.password && (
+                      <Form.Text className="text-danger">{fieldErrors.password}</Form.Text>
+                    )}
+                  </Form.Group>
+                  <Form.Group className="mb-3" controlId="formBasicCheckbox">
+                    <Form.Text className="text-muted pt-1">
+                      Need an account?
+                      <span>
+                        <Link to="/signup" style={labelStyling}> Sign up</Link>
+                      </span>
+                      <br></br>
+                      This site is hosted on free services. There may be a 2-3 minute delay in the response if the site has not been used recently.
+                    </Form.Text>
+                  </Form.Group>
 
-                  }
-                  <Button variant="secondary" onClick={togglePasswordVisibility} className="mt-2">
-                    {passwordVisible ? "Hide Password" : "Show Password"}
-                  </Button>
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="formBasicCheckbox">
-                  <Form.Text className="text-muted pt-1">
-                    Need an account?
-                    <span>
-                      <Link to="/signup" style={labelStyling}> Sign up</Link>
-                    </span>
-                    <br></br>
-                    This site is hosted on free services.  There may be a 2-3 minute delay
-                    in the response if the site has not been used recently.
-                  </Form.Text>
-                </Form.Group>
-                  
                   {error && <div style={labelStyling} className="pt-3">{error}</div>}
                   <Button variant="primary" type="submit" onClick={handleSubmit} style={buttonStyling} className="mt-2">
                     {loading ? "Logging in..." : "Log in"}
@@ -183,7 +198,6 @@ const Login = () => {
                 </Form>
               </div>
             </div>
-            {/* Slideshow Container on the Side */}
             <div className="col-md-4 d-none d-md-block">
               <div style={{ height: "100%", overflow: "hidden" }}>
                 <img
@@ -193,9 +207,9 @@ const Login = () => {
                     width: "100%",
                     height: "100%",
                     objectFit: "cover",
-                    boxShadow: "4px 4px 8px rgba(0, 0, 0, 0.1)", // Adjust the shadow properties as needed
-                    border: "4px solid #ddd", // Adjust the border properties as needed
-                    borderRadius: "8px" // Adjust the border radius as needed for rounded corners
+                    boxShadow: "4px 4px 8px rgba(0, 0, 0, 0.1)",
+                    border: "4px solid #ddd",
+                    borderRadius: "8px",
                   }}
                 />
               </div>
