@@ -11,6 +11,7 @@ import { Form } from "react-bootstrap";
 import timeAgo from "../../utilities/timeAgo";
 import CreateComment from "../comments/createComment";
 import { PostPageContext } from "../../App";
+import apiClient from "../../utilities/apiClient";
 
 const Post = ({ posts }) => {
   const [youtubeThumbnail, setYoutubeThumbnail] = useState(null);
@@ -223,9 +224,9 @@ const Post = ({ posts }) => {
   };
 
   const handleDeletePost = () => {
-    axios
+    apiClient
       .delete(
-        `${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/deletePost/${posts._id}`
+        `/posts/deletePost/${posts._id}`
       )
       .then((response) => {
         handleCloseEditModal();
