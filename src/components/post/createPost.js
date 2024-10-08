@@ -135,7 +135,6 @@ const CreatePost = ({ popupShow, setPopupShow }) => {
   
       if (response.ok) {
         const data = await response.json();
-        console.log("Image URI from backend:", data.imageUri);  // Debugging log
         return data.imageUri;  // Ensure this is the S3 URL returned from the backend
       } else {
         alert("Image was not saved. HTTP status code: " + response.status);
@@ -188,9 +187,7 @@ const CreatePost = ({ popupShow, setPopupShow }) => {
         };
       }
     }
-  
-    console.log("Post object before saving:", post);  // Debugging log to see post object
-  
+    
     setPosts([...posts, post]);
 
     await savePost(post); // Wait for the post to be saved
