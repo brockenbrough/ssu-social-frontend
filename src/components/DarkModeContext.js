@@ -1,19 +1,36 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useEffect, useState } from "react";
 
 const DarkModeContext = createContext();
 
 export const DarkModeProvider = ({ children }) => {
-  const [darkMode, setDarkMode] = useState(() => {
-    // Check local storage for the initial dark mode preference
-    const storedDarkMode = localStorage.getItem('darkMode');
-    return storedDarkMode ? JSON.parse(storedDarkMode) : false;
-  });
+  const [darkMode, setDarkMode] = useState(false);
+
+  useEffect(() => {
+    if (isDarkMode()) {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+      setDarkMode(true);
+    }
+  }, []);
+
+  const isDarkMode = () => {
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "dark") {
+      return true;
+    } else {
+      return false;
+    }
+  };
 
   const toggleDarkMode = () => {
-    const newDarkMode = !darkMode;
-    setDarkMode(newDarkMode);
-    // Update local storage with the new dark mode preference
-    localStorage.setItem('darkMode', JSON.stringify(newDarkMode));
+    if (document.documentElement.classList.contains("dark")) {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    } else {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    }
+    setDarkMode((prevMode) => !prevMode);
   };
 
   return (

@@ -1,32 +1,11 @@
 import React, { useEffect, useState } from "react";
+import { useDarkMode } from "./DarkModeContext";
 
 function DarkModeButton() {
-  const [darkMode, setDarkMode] = useState(false);
-
-  useEffect(() => {
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme === "dark") {
-      document.documentElement.classList.add("dark");
-      setDarkMode(true);
-    } else {
-      document.documentElement.classList.remove("dark");
-      setDarkMode(false);
-    }
-  }, []);
-
-  const toggleTailwindTheme = () => {
-    if (document.documentElement.classList.contains("dark")) {
-      document.documentElement.classList.remove("dark");
-      localStorage.setItem("theme", "light");
-    } else {
-      document.documentElement.classList.add("dark");
-      localStorage.setItem("theme", "dark");
-    }
-    setDarkMode((prevMode) => !prevMode);
-  };
+  const { darkMode, toggleDarkMode } = useDarkMode();
 
   const handleClick = () => {
-    toggleTailwindTheme();
+    toggleDarkMode();
   };
 
   return (
