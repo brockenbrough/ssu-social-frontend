@@ -10,7 +10,14 @@ function ForYouPage() {
 
     if (!user) {
         return (
-            <div style={{backgroundColor: darkMode ? "#000" : "#f6f8fa", color: darkMode ? "#fff" : "#000", minHeight: '100vh'}}>
+            <div 
+                style={{
+                    backgroundColor: darkMode ? "#000" : "#f6f8fa", 
+                    color: darkMode ? "#fff" : "#000", 
+                    minHeight: '100vh',
+                    paddingLeft: '170px' // Ensure content isn't hidden by the sidebar
+                }}
+            >
                 <h3>
                     You are not authorized to view this page. Please Login in{" "}
                     <Link to="/login" style={{ color: darkMode ? '#00f' : '#007bff' }}>here</Link>
@@ -20,9 +27,16 @@ function ForYouPage() {
     }
 
     return (
-        <div style={{ backgroundColor: darkMode ? "#000" : "#f6f8fa", color: darkMode ? "#fff" : "#000", minHeight: '100vh' }}>
-            <h2 style={{textAlign: 'center'}}>For you</h2>
-            <PostList type="feed" username={user.username}  darkMode={darkMode}  />
+        <div 
+            style={{
+                backgroundColor: darkMode ? "#000" : "#f6f8fa", 
+                color: darkMode ? "#fff" : "#000", 
+                minHeight: '100vh',
+                paddingLeft: '170px' // Ensure content isn't hidden by the sidebar
+            }}
+        >
+            <h2 style={{ textAlign: 'center' }}>For you</h2>
+            <PostList type="feed" username={user.username} darkMode={darkMode} />
         </div>
     );
 }

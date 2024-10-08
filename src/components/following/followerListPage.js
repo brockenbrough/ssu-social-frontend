@@ -21,9 +21,7 @@ export default function FollowerList() {
   useEffect(() => {
     async function getFollowers() {
       const response = await fetch(
-        `${
-          process.env.REACT_APP_BACKEND_SERVER_URI
-        }/followers/${params.id.toString()}`
+        `${process.env.REACT_APP_BACKEND_SERVER_URI}/followers/${params.id.toString()}`
       );
 
       if (!response.ok) {
@@ -139,6 +137,7 @@ export default function FollowerList() {
         backgroundColor: darkMode ? "#000" : "#f6f8fa",
         color: darkMode ? "#fff" : "#000",
         minHeight: "100vh",
+        paddingLeft: "170px", // Add left padding to ensure it's not hidden under the sidebar
       }}
     >
       {/* Flex container for the Back to Profile and Followers/Following buttons */}
@@ -183,18 +182,6 @@ export default function FollowerList() {
         }}
       >
         {error.message ? errorMessage() : <p>&nbsp;</p>}
-      </div>
-
-      <div
-        style={{
-          color: darkMode ? "#fff" : "#000",
-          padding: "10px",
-          backgroundColor: darkMode ? "#000" : "#f6f8fa",
-          minHeight: "50px",
-        }}
-      >
-        {error.message ? errorMessage() : <p>&nbsp;</p>}{" "}
-        {/* Non-breaking space to ensure visibility */}
       </div>
 
       {/* Followers section */}
