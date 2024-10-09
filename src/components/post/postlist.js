@@ -11,12 +11,10 @@ import { getUserInfoAsync } from "../../utilities/decodeJwtAsync";
 import Post from "./post";
 import "./postlistStyle.css";
 import ScrollToTop from "./ScrollToTop";
-import { useDarkMode } from "../DarkModeContext";
 import { PostContext, PostPageContext } from "../../App";
 
 function PostList({ type, profileUsername }) {
   const POST_PER_PAGE = 5;
-  const { darkMode } = useDarkMode();
   const [user, setUser] = useState(null);
   const [posts, setPosts] = useContext(PostContext);
   const [isLoading, setIsLoading] = useState(true);
@@ -40,7 +38,7 @@ function PostList({ type, profileUsername }) {
   }, [type]);
 
   useEffect(() => {
-       if (user) {
+    if (user) {
       getPosts();
     }
   }, [user, page]);
@@ -48,7 +46,7 @@ function PostList({ type, profileUsername }) {
   async function getPosts() {
     let url;
 
-     if (type === "feed") {
+    if (type === "feed") {
       url = user
         ? `${process.env.REACT_APP_BACKEND_SERVER_URI}/feed/${user.username}`
         : `${process.env.REACT_APP_BACKEND_SERVER_URI}/feed/`;
@@ -78,10 +76,10 @@ function PostList({ type, profileUsername }) {
         setPosts(postData.filter((post) => post));
       } else {
         const newPosts = response.data;
-    
+
         if (page <= 1) {
           setPosts(newPosts);
-          setPage(1);  // handles case where page=0 from create post forced refress
+          setPage(1); // handles case where page=0 from create post forced refress
         } else {
           setPosts((prevPosts) => [...prevPosts, ...newPosts]);
         }
@@ -146,13 +144,11 @@ function PostList({ type, profileUsername }) {
                 if (posts.length === index + 1) {
                   return (
                     <div ref={lastPostRef} key={post._id}>
-                      <Post posts={post}/>
+                      <Post posts={post} />
                     </div>
                   );
                 } else {
-                  return (
-                    <Post key={post._id} posts={post}/>
-                  );
+                  return <Post key={post._id} posts={post} />;
                 }
               })}
             </div>
