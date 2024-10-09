@@ -38,7 +38,7 @@ export default function Navbar() {
         <CreatePost popupShow={popupShow} setPopupShow={setPopupShow} />
         <span onClick={() => setPopupShow(true)}>
           <FontAwesomeIcon
-            className="mr-2 text-orange-500 group-hover:text-white"
+            className="mr-3 text-orange-500 group-hover:text-white"
             icon={createIcon}
           />
           <span>Create Post</span>
@@ -48,21 +48,21 @@ export default function Navbar() {
       {/* Direct Links Instead of Dropdown */}
       <a href="/feed-algorithm" className="ssu-nav-link group">
         <FontAwesomeIcon
-          className="mr-2 text-orange-500 group-hover:text-white"
+          className="mr-3 text-orange-500 group-hover:text-white"
           icon={forYouIcon}
         />
         For You
       </a>
       <a href="/getallpost" className="ssu-nav-link group">
         <FontAwesomeIcon
-          className="mr-2 text-orange-500 group-hover:text-white"
+          className="mr-3 text-orange-500 group-hover:text-white"
           icon={discoverIcon}
         />
         Discover
       </a>
       <a href="/privateUserProfile" className="ssu-nav-link group">
         <FontAwesomeIcon
-          className="mr-2 text-orange-500 group-hover:text-white"
+          className="mr-3 text-orange-500 group-hover:text-white"
           icon={profileIcon}
         />
         Profile
