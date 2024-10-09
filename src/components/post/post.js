@@ -267,12 +267,14 @@ const Post = ({ posts }) => {
                   ? "/privateUserProfile"
                   : `/publicProfilePage/${posts.username}`
               }
-              className="ssu-textlink-bold font-title"
+              className="ssu-textlink-bold font-title text-gray-900 dark:text-white"
             >
               @{posts.username}
             </a>
             {/* post text */}
-            <p className="font-display mt-2">{displayContent}</p>
+            <p className="font-display mt-2 text-gray-900 dark:text-white">
+              {displayContent}
+            </p>
             {/*  image */}
             {posts.imageUri && (
               <img
@@ -305,7 +307,7 @@ const Post = ({ posts }) => {
             {/* Like and comment buttons */}
             <button
               onClick={handleLikeClick}
-              className="ml-1 mr-4 mt-2 font-menu"
+              className="ml-1 mr-4 mt-2 font-menu text-gray-900 dark:text-white"
             >
               <FontAwesomeIcon
                 icon={isLiked ? solidHeartIcon : regularHeartIcon}
@@ -314,7 +316,7 @@ const Post = ({ posts }) => {
             </button>
             <button
               onClick={handleShowPostModal}
-              className="mr-4 mt-2 font-menu"
+              className="mr-4 mt-2 font-menu text-gray-900 dark:text-white"
             >
               <FontAwesomeIcon
                 className="mr-1"
@@ -334,7 +336,7 @@ const Post = ({ posts }) => {
               </button>
             )}
             {/* Post date */}
-            <p className="ssu-text-tinyright font-menu mt-3">
+            <p className="ssu-text-tinyright font-menu mt-3 text-gray-900 dark:text-white">
               <span className="mr-4">{formattedDate}</span>
               <span>{timeAgo(posts.date)}</span>
             </p>
