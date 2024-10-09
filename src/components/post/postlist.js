@@ -110,11 +110,11 @@ function PostList({ type, profileUsername }) {
   return (
     <>
       {isLoading && page === 1 ? (
-        <div className="text-center">
+        <div className="text-center pt-4">
           <img
             src="/loading.gif"
             alt="Loading..."
-            style={{ width: "50px", height: "50px" }}
+            className="w-12 h-12 inline-block"
           />
         </div>
       ) : posts.length === 0 ? (
