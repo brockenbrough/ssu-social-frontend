@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useLayoutEffect, useRef, useContext } from "react";
+import React, {
+  useState,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useContext,
+} from "react";
 import { Link } from "react-router-dom";
 import getUserInfoAsync from "../../utilities/decodeJwt";
 import Card from "react-bootstrap/Card";
@@ -150,17 +156,23 @@ const Post = ({ posts }) => {
     try {
       if (!isLiked) {
         // If not liked, send the like request
-        await axios.post(`${process.env.REACT_APP_BACKEND_SERVER_URI}/likes/like`, {
-          postId,
-          userId,
-        });
+        await axios.post(
+          `${process.env.REACT_APP_BACKEND_SERVER_URI}/likes/like`,
+          {
+            postId,
+            userId,
+          }
+        );
         setLikeCount((prevCount) => prevCount + 1); // Increment like count
         setIsLiked(true); // Update isLiked to true
       } else {
         // If already liked, send the unlike request
-        await axios.delete(`${process.env.REACT_APP_BACKEND_SERVER_URI}/likes/unLike`, {
-          data: { postId, userId },
-        });
+        await axios.delete(
+          `${process.env.REACT_APP_BACKEND_SERVER_URI}/likes/unLike`,
+          {
+            data: { postId, userId },
+          }
+        );
         setLikeCount((prevCount) => Math.max(prevCount - 1, 0)); // Decrement like count, prevent negative
         setIsLiked(false); // Update isLiked to false
       }
@@ -225,12 +237,10 @@ const Post = ({ posts }) => {
 
   const handleDeletePost = () => {
     apiClient
-      .delete(
-        `/posts/deletePost/${posts._id}`
-      )
+      .delete(`/posts/deletePost/${posts._id}`)
       .then((response) => {
         handleCloseEditModal();
-        setPostPage(0);  // this signals postlist to redisplay it's list.
+        setPostPage(0); // this signals postlist to redisplay it's list.
       })
       .catch((error) => {
         console.error(error);
@@ -257,14 +267,11 @@ const Post = ({ posts }) => {
               @{posts.username}
             </a>
             {/* post text */}
-            <p className="ssu-text-normalsmall">
-              {displayContent}
-            </p>
+            <p className="ssu-text-normalsmall">{displayContent}</p>
             {/*  image */}
             {posts.imageUri && (
               <img src={posts.imageUri} alt="Post" className="ssu-post-img" />
             )}
-
 
             {/* YouTube Thumbnail */}
             {youtubeThumbnail && (
@@ -287,16 +294,10 @@ const Post = ({ posts }) => {
             )}
 
             {/* Like and comment buttons */}
-            <button
-              onClick={handleLikeClick}
-              className="ssu-button-info-clickable"
-            >
+            <button onClick={handleLikeClick} className="mr-3">
               {isLiked ? "♥" : "♡"} <span>{` ${likeCount}`}</span>
             </button>
-            <button
-              onClick={handleShowPostModal}
-              className="ssu-button-info-clickable"
-            >
+            <button onClick={handleShowPostModal}>
               {showCommentCard
                 ? "Hide Comments"
                 : `💬 ${commentCount > 0 ? commentCount : "0"}`}
@@ -315,14 +316,20 @@ const Post = ({ posts }) => {
             )}
             {/* Post date */}
             <p className="ssu-text-tinyright">
-                {formattedDate} {timeAgo(posts.date)}
+              {formattedDate} {timeAgo(posts.date)}
             </p>
           </div>
         </div>
         {/* Comment Section */}
         {showCommentCard && (
-          <div style={{ position: "absolute", left: "calc(50% + 200px)" }}
-            className={isAnimationActive && (showCommentCard && !isSlidingOut ? "animate-slide-in-left" : "animate-slide-out-left")}
+          <div
+            style={{ position: "absolute", left: "calc(50% + 200px)" }}
+            className={
+              isAnimationActive &&
+              (showCommentCard && !isSlidingOut
+                ? "animate-slide-in-left"
+                : "animate-slide-out-left")
+            }
           >
             <Card
               style={{
