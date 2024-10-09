@@ -298,9 +298,7 @@ const Post = ({ posts }) => {
               {isLiked ? "♥" : "♡"} <span>{` ${likeCount}`}</span>
             </button>
             <button onClick={handleShowPostModal}>
-              {showCommentCard
-                ? "Hide Comments"
-                : `💬 ${commentCount > 0 ? commentCount : "0"}`}
+              {`💬 ${commentCount > 0 ? commentCount : "0"}`}
             </button>
             {/* Edit button */}
             {isCurrentUserPost && (
