@@ -86,24 +86,15 @@
   @apply text-xl font-bold text-blue-500;
 }
 
+.ssu-nav-link {
+  @apply font-menu text-lg mb-4 py-2 pl-4 text-gray-900 dark:text-white no-underline cursor-pointer hover:bg-orange-600 rounded-lg transition duration-200 hover:text-white;}
+
 /* Sidebar Navbar */
 .sidebar-navbar {
-  @apply fixed top-0 left-0 h-full w-40 bg-gray-800 shadow-lg z-50; /* Adjust the height if needed */
+  @apply fixed top-0 left-0 h-full w-40 bg-white dark:bg-gray-900 shadow-lg z-50; /* Adjust the height if needed */
   overflow-y: auto; /* Enable scrolling if content overflows */
   display: flex;
   flex-direction: column; /* Stack items vertically */
-}
-
-/* Dark Mode Adjustments */
-.sidebar-navbar.dark {
-  background-color: #1C1C1E
-}
-
-/* Navbar Links */
-.sidebar-navbar a {
-  @apply flex items-center text-gray-300 hover:bg-gray-700 rounded-lg py-2 px-4 transition duration-200; /* Adjust padding */
-  font-size: 1.5rem;
-  margin-bottom: 1.5rem;
 }
 
 
