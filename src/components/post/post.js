@@ -5,7 +5,12 @@ import React, {
   useRef,
   useContext,
 } from "react";
-import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHeart as solidHeartIcon } from "@fortawesome/free-solid-svg-icons";
+import { faHeart as regularHeartIcon } from "@fortawesome/free-regular-svg-icons";
+import { faComment as solidCommentIcon } from "@fortawesome/free-solid-svg-icons";
+import { faComment as regularCommentIcon } from "@fortawesome/free-regular-svg-icons";
+import { faEdit as editIcon } from "@fortawesome/free-solid-svg-icons";
 import getUserInfoAsync from "../../utilities/decodeJwt";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
@@ -294,11 +299,18 @@ const Post = ({ posts }) => {
             )}
 
             {/* Like and comment buttons */}
-            <button onClick={handleLikeClick} className="ml-1 mr-3 mt-2">
-              {isLiked ? "♥" : "♡"} <span>{` ${likeCount}`}</span>
+            <button onClick={handleLikeClick} className="ml-1 mr-4 mt-2">
+              <FontAwesomeIcon
+                icon={isLiked ? solidHeartIcon : regularHeartIcon}
+              />
+              <span>{` ${likeCount}`}</span>
             </button>
-            <button onClick={handleShowPostModal}>
-              {`💬 ${commentCount > 0 ? commentCount : "0"}`}
+            <button onClick={handleShowPostModal} className="mr-4 mt-2">
+              <FontAwesomeIcon
+                className="mr-1"
+                icon={showCommentCard ? solidCommentIcon : regularCommentIcon}
+              />
+              {commentCount > 0 ? commentCount : "0"}
             </button>
             {/* Edit button */}
             {isCurrentUserPost && (
@@ -307,9 +319,8 @@ const Post = ({ posts }) => {
                   e.stopPropagation(); // Stop the click event from reaching the parent Card
                   handleShowEditModal();
                 }}
-                className="ssu-button-primary"
               >
-                Edit
+                <FontAwesomeIcon icon={editIcon} />
               </button>
             )}
             {/* Post date */}
