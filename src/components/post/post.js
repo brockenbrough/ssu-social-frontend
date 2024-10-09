@@ -267,12 +267,14 @@ const Post = ({ posts }) => {
                   ? "/privateUserProfile"
                   : `/publicProfilePage/${posts.username}`
               }
-              className="ssu-textlink-bold"
+              className="ssu-textlink-bold font-title"
             >
               @{posts.username}
             </a>
             {/* post text */}
-            <p className="ssu-text-normalsmall">{displayContent}</p>
+            <p className="ssu-text-normalsmall font-display">
+              {displayContent}
+            </p>
             {/*  image */}
             {posts.imageUri && (
               <img src={posts.imageUri} alt="Post" className="ssu-post-img" />
@@ -299,13 +301,19 @@ const Post = ({ posts }) => {
             )}
 
             {/* Like and comment buttons */}
-            <button onClick={handleLikeClick} className="ml-1 mr-4 mt-2">
+            <button
+              onClick={handleLikeClick}
+              className="ml-1 mr-4 mt-2 font-menu"
+            >
               <FontAwesomeIcon
                 icon={isLiked ? solidHeartIcon : regularHeartIcon}
               />
               <span>{` ${likeCount}`}</span>
             </button>
-            <button onClick={handleShowPostModal} className="mr-4 mt-2">
+            <button
+              onClick={handleShowPostModal}
+              className="mr-4 mt-2 font-menu"
+            >
               <FontAwesomeIcon
                 className="mr-1"
                 icon={showCommentCard ? solidCommentIcon : regularCommentIcon}
@@ -324,7 +332,7 @@ const Post = ({ posts }) => {
               </button>
             )}
             {/* Post date */}
-            <p className="ssu-text-tinyright">
+            <p className="ssu-text-tinyright font-menu">
               {formattedDate} {timeAgo(posts.date)}
             </p>
           </div>
