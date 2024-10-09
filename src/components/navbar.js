@@ -31,11 +31,14 @@ export default function Navbar() {
       </div>
 
       {/* Create Post Button */}
-      <span className="ssu-nav-link">
+      <span className="ssu-nav-link group">
         <CreatePost popupShow={popupShow} setPopupShow={setPopupShow} />
         <span onClick={() => setPopupShow(true)}>
           <span className="mr-2">Create Post</span>
-          <FontAwesomeIcon icon={createIcon} />
+          <FontAwesomeIcon
+            className="text-orange-500 group-hover:text-white"
+            icon={createIcon}
+          />
         </span>
       </span>
 
