@@ -311,7 +311,7 @@ const Post = ({ posts }) => {
             >
               <FontAwesomeIcon
                 icon={isLiked ? solidHeartIcon : regularHeartIcon}
-                className={isLiked ? "text-red-500" : ""}
+                className={isLiked ? "text-orange-500" : ""}
               />
               <span>{` ${likeCount}`}</span>
             </button>
@@ -320,7 +320,7 @@ const Post = ({ posts }) => {
               className="mr-4 mt-2 font-menu text-gray-900 dark:text-white"
             >
               <FontAwesomeIcon
-                className={showCommentCard ? "mr-1 text-red-500" : "mr-1"}
+                className={showCommentCard ? "mr-1 text-orange-500" : "mr-1"}
                 icon={showCommentCard ? solidCommentIcon : regularCommentIcon}
               />
               {commentCount > 0 ? commentCount : "0"}
