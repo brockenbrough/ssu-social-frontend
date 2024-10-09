@@ -28,7 +28,7 @@ export default function Navbar() {
           rounded
           className="w-16 ml-auto mr-auto mt-3"
         />
-        <div className="font-title text-xl mt-2 mb-5 text-center font-bold text-gray-900 dark:text-white">
+        <div className="font-title text-xl mt-2 mb-5 text-center font-bold text-orange-600">
           SSU Social
         </div>
       </div>
@@ -51,21 +51,21 @@ export default function Navbar() {
           className="mr-3 text-orange-500 group-hover:text-white"
           icon={forYouIcon}
         />
-        For You
+        <span>For You</span>
       </a>
       <a href="/getallpost" className="ssu-nav-link group">
         <FontAwesomeIcon
           className="mr-3 text-orange-500 group-hover:text-white"
           icon={discoverIcon}
         />
-        Discover
+        <span>Discover</span>
       </a>
       <a href="/privateUserProfile" className="ssu-nav-link group">
         <FontAwesomeIcon
           className="mr-3 text-orange-500 group-hover:text-white"
           icon={profileIcon}
         />
-        Profile
+        <span>Profile</span>
       </a>
 
       {/* Dark Mode Button */}
