@@ -30,7 +30,7 @@ const Post = ({ posts }) => {
   const [commentCount, setCommentCount] = useState(0);
   const [isLiked, setIsLiked] = useState(false);
   const [dataLoaded, setDataLoaded] = useState(false);
-  const formattedDate = moment(posts.date).format("h:mm A - M/D/YYYY");
+  const formattedDate = moment(posts.date).format("h:mm A • M/D/YYYY");
   const { _id: postId } = posts;
   const [user, setUser] = useState(null);
   const { darkMode } = useDarkMode();
@@ -272,19 +272,21 @@ const Post = ({ posts }) => {
               @{posts.username}
             </a>
             {/* post text */}
-            <p className="ssu-text-normalsmall font-display">
-              {displayContent}
-            </p>
+            <p className="font-display mt-2">{displayContent}</p>
             {/*  image */}
             {posts.imageUri && (
-              <img src={posts.imageUri} alt="Post" className="ssu-post-img" />
+              <img
+                src={posts.imageUri}
+                alt="Post"
+                className="ssu-post-img mt-4 mb-3"
+              />
             )}
 
             {/* YouTube Thumbnail */}
             {youtubeThumbnail && (
               <div>
-                <br />
                 <img
+                  className="ssu-post-img mt-4 mb-3"
                   alt="YouTube Video Thumbnail"
                   src={youtubeThumbnail}
                   style={{
@@ -332,8 +334,9 @@ const Post = ({ posts }) => {
               </button>
             )}
             {/* Post date */}
-            <p className="ssu-text-tinyright font-menu">
-              {formattedDate} {timeAgo(posts.date)}
+            <p className="ssu-text-tinyright font-menu mt-3">
+              <span className="mr-4">{formattedDate}</span>
+              <span>{timeAgo(posts.date)}</span>
             </p>
           </div>
         </div>

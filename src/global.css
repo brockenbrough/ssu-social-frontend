@@ -31,6 +31,10 @@
   @apply text-sm text-gray-800 dark:text-white break-words;
 }
 
+.ssu-text-normalmedium {
+  @apply text-sm text-gray-800 dark:text-white break-words;
+}
+
 .ssu-text-titlesmall {
   @apply text-lg font-semibold text-gray-800 dark:text-white;
 }
