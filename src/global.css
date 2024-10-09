@@ -50,7 +50,7 @@
 }
 
 .ssu-post-card {
-  @apply w-[520px] max-w-sm p-2 m-0 bg-white dark:bg-gray-800 border border-gray-200 rounded-lg  dark:border-gray-700;
+  @apply w-[520px] max-w-sm py-5 px-2 m-0 bg-white dark:bg-gray-800 border-b-2 mt-3 border-gray-200 dark:border-gray-700;
 }
 
 .ssu-post-img {
