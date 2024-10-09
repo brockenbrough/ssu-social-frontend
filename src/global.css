@@ -12,7 +12,7 @@
 }
 
 .ssu-button-primary {
-  @apply bg-gray-500 dark:bg-gray-300 text-white dark:text-black font-normal py-1 px-2 rounded hover:bg-violet-600 mr-1 ml-1 mt-1 mb-1;
+  @apply font-menu bg-orange-500 dark:bg-orange-500 text-white font-bold py-1 px-2 rounded hover:bg-orange-600 mr-1 ml-1 mt-1 mb-1;
 }
 
 .ssu-button-info-clickable {
