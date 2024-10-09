@@ -1,20 +1,14 @@
 import React from "react";
 import PostList from "./postlist";
-import { useDarkMode } from "../DarkModeContext";
 
-//also known as "Discover Page"
 function GetAllPostsPage() {
-  const { darkMode } = useDarkMode();
-
+  // className="bg-white dark:bg-gray-800 text-gray-900 dark:text-yellow min-h-screen"
+  // className="bg-white dark:bg-gray-800 text-center"
   return (
-    <div
-      style={{
-        backgroundColor: darkMode ? "#000" : "#f6f8fa",
-        color: darkMode ? "#fff" : "#000",
-        minHeight: "100vh",
-      }}
-    >
-      <h2 style={{ textAlign: "center" }}>Discover</h2>
+    <div class="dark:bg-gray-800">
+      <div className="pt-4 mb-3 font-bold text-3xl text-center text-grey-900 dark:text-white">
+        Discover
+      </div>
       <PostList type="all" />
     </div>
   );
