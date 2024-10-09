@@ -294,7 +294,7 @@ const Post = ({ posts }) => {
             )}
 
             {/* Like and comment buttons */}
-            <button onClick={handleLikeClick} className="mr-3">
+            <button onClick={handleLikeClick} className="ml-1 mr-3 mt-2">
               {isLiked ? "♥" : "♡"} <span>{` ${likeCount}`}</span>
             </button>
             <button onClick={handleShowPostModal}>
