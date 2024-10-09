@@ -45,7 +45,7 @@
 
 .ssu-textlink-bold {
   @apply text-sm font-semibold
-   text-gray-800 dark:text-white no-underline hover:text-purple-500;
+   text-gray-800 dark:text-white no-underline hover:text-orange-600;
 }
 
 
