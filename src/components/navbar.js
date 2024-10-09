@@ -3,6 +3,7 @@ import getUserInfo from "../utilities/decodeJwt";
 import Image from "react-bootstrap/Image";
 import { useDarkMode } from "../components/DarkModeContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faInbox as inboxIcon } from "@fortawesome/free-solid-svg-icons";
 import { faCirclePlus as createIcon } from "@fortawesome/free-solid-svg-icons";
 import { faStar as forYouIcon } from "@fortawesome/free-solid-svg-icons";
 import { faCompass as discoverIcon } from "@fortawesome/free-solid-svg-icons";
@@ -20,6 +21,10 @@ export default function Navbar() {
     setUser(userInfo);
   }, []);
 
+  const handleInboxClick = () => {
+    console.log("Inbox Clicked");
+  };
+
   return (
     <div className="sidebar-navbar">
       <div>
@@ -34,6 +39,16 @@ export default function Navbar() {
       </div>
 
       {/* Create Post Button */}
+      <span className="ssu-nav-link group" onClick={() => handleInboxClick()}>
+        <span>
+          <FontAwesomeIcon
+            className="mr-3 text-orange-500 group-hover:text-white"
+            icon={inboxIcon}
+          />
+          <span>Inbox</span>
+        </span>
+      </span>
+
       <span className="ssu-nav-link group">
         <CreatePost popupShow={popupShow} setPopupShow={setPopupShow} />
         <span onClick={() => setPopupShow(true)}>
