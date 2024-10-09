@@ -4,6 +4,9 @@ import Image from "react-bootstrap/Image";
 import { useDarkMode } from "../components/DarkModeContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCirclePlus as createIcon } from "@fortawesome/free-solid-svg-icons";
+import { faStar as forYouIcon } from "@fortawesome/free-solid-svg-icons";
+import { faCompass as discoverIcon } from "@fortawesome/free-solid-svg-icons";
+import { faUser as profileIcon } from "@fortawesome/free-solid-svg-icons";
 import CreatePost from "./post/createPost";
 import DarkModeButton from "./DarkModeButton";
 
@@ -34,22 +37,34 @@ export default function Navbar() {
       <span className="ssu-nav-link group">
         <CreatePost popupShow={popupShow} setPopupShow={setPopupShow} />
         <span onClick={() => setPopupShow(true)}>
-          <span className="mr-2">Create Post</span>
           <FontAwesomeIcon
-            className="text-orange-500 group-hover:text-white"
+            className="mr-2 text-orange-500 group-hover:text-white"
             icon={createIcon}
           />
+          <span>Create Post</span>
         </span>
       </span>
 
       {/* Direct Links Instead of Dropdown */}
-      <a href="/feed-algorithm" className="ssu-nav-link">
+      <a href="/feed-algorithm" className="ssu-nav-link group">
+        <FontAwesomeIcon
+          className="mr-2 text-orange-500 group-hover:text-white"
+          icon={forYouIcon}
+        />
         For You
       </a>
-      <a href="/getallpost" className="ssu-nav-link">
+      <a href="/getallpost" className="ssu-nav-link group">
+        <FontAwesomeIcon
+          className="mr-2 text-orange-500 group-hover:text-white"
+          icon={discoverIcon}
+        />
         Discover
       </a>
-      <a href="/privateUserProfile" className="ssu-nav-link">
+      <a href="/privateUserProfile" className="ssu-nav-link group">
+        <FontAwesomeIcon
+          className="mr-2 text-orange-500 group-hover:text-white"
+          icon={profileIcon}
+        />
         Profile
       </a>
 
