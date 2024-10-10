@@ -92,7 +92,7 @@ export default function FollowingList() {
 
   // Back button handler to go to the profile page
   function handleBack() {
-    navigate(`/PrivateUserProfile/`); // Replace with the actual route for the profile page
+    navigate(`/privateUserProfile`); // Replace with the actual route for the profile page
   }
 
   // This following section will display the table with the user's following. People that they are following.

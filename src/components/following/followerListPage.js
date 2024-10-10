@@ -127,7 +127,7 @@ export default function FollowerList() {
 
   // Back button handler to go to the profile page
   function handleBack() {
-    navigate(`/PrivateUserProfile/`); // Replace with the actual route for the profile page
+    navigate(`/privateUserProfile`); // Replace with the actual route for the profile page
   }
 
   // This following section will display the table with the records of individuals and all their followers.
