@@ -224,9 +224,9 @@ const Post = ({ posts }) => {
   };
 
   const handleEditPost = () => {
-    axios
+    apiClient
       .put(
-        `${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/updatePost/${posts._id}`,
+        `/posts/updatePost/${posts._id}`,
         {
           content: editedPost.content,
         }
