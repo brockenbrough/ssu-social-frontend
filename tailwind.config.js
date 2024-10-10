@@ -23,9 +23,9 @@ module.exports = {
           lightUserText: '#2563eb', // light blue
           darkErrorMessage: '#450a0a', // red
           lightErrorMessage: '#450a0a', // cranberry
-          iconBorderOrange: '#ea580c', // orange
-          darkHoverCream: '#f5f5dc', // cream for toggle
-          lightHoverBlue: '#2563eb', // light blue for toggle
+          iconBorder: '#ea580c', // orange
+          darkHover: '#f5f5dc', // cream for toggle
+          lightHover: '#2563eb', // light blue for toggle
         },
       },
     },
