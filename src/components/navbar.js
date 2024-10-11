@@ -93,7 +93,7 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Create Post Button */}
+        {/* Create Inbox Button */}
         <span className="ssu-nav-link group" onClick={() => handleInboxClick()}>
           <span>
             <FontAwesomeIcon
@@ -101,6 +101,12 @@ export default function Navbar() {
               icon={inboxIcon}
             />
             <span>Inbox</span>
+
+            {notifications.length > 0 && (
+              <span className="inline-flex items-center justify-center w-7 h-7 ml-6 text-center text-xs font-medium text-white bg-orange-500 rounded-full group-hover:bg-gray-800">
+                {notifications.length}
+              </span>
+            )}
           </span>
         </span>
 
