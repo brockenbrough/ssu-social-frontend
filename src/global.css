@@ -244,3 +244,18 @@
 .animate-slide-out-left {
   animation: slide-out-left 0.3s ease-out forwards;
 }
+
+
+/* Custom scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #f97316;
+  border-radius: 9999px; 
+}
+
+::-webkit-scrollbar-track {
+  background-color: #6b7280;
+}
