@@ -25,8 +25,6 @@ export default function Navbar() {
     setUser(userInfo);
   }, []);
 
-  console.log(typeof notifications);
-
   const fetchNotifications = async (username) => {
     try {
       const response = await axios.get(
@@ -36,7 +34,17 @@ export default function Navbar() {
       const notifications = response.data.notifications;
       setNotifications(notifications);
     } catch (error) {
-      alert(error);
+      console.error(error);
+    }
+  };
+
+  const deleteNotification = async (notification) => {
+    try {
+      await axios.delete(
+        `${process.env.REACT_APP_BACKEND_SERVER_URI}/notification/deleteById/${notification._id}`
+      );
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -45,13 +53,13 @@ export default function Navbar() {
   };
 
   const handleDeleteNotification = (notification) => {
-    setNotifications(notifications.filter((n) => n.id !== notification.id));
+    setNotifications(notifications.filter((n) => n._id !== notification._id));
+    deleteNotification(notification);
   };
 
   const handleNotificationClick = (notification) => {
     notification.isRead = true;
     setNotifications([...notifications]);
-    // save in the backend
   };
 
   return (
@@ -143,7 +151,7 @@ export default function Navbar() {
               )}
               {notifications.map((notification) => (
                 <div
-                  key={notification.id}
+                  key={notification._id}
                   className="flex justify-between items-center p-2 border-b last:border-b-0 group cursor-pointer"
                 >
                   <span
