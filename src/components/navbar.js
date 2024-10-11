@@ -93,7 +93,7 @@ export default function Navbar() {
       <div>
         {/* Notification Popup */}
         {inboxPopupShow && (
-          <div className="absolute left-40 top-40 w-64 bg-white rounded-md shadow-lg z-10">
+          <div className="fixed left-40 top-40 w-64 bg-white rounded-md shadow-lg z-10">
             <div className="flex justify-between items-center p-3 border-b">
               <h3 className="font-semibold text-gray-800">Notifications</h3>
               <button
