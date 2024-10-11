@@ -148,7 +148,31 @@ const Post = ({ posts }) => {
     }
   }, [posts.content]);
 
-  const [isLoading, setIsLoading] = useState(false); // Add loading state
+  const [isLoading, setIsLoading] = useState(false);
+
+  const saveLikeNotification = async (post, likeUnlike) => {
+    const data = {
+      type: "like",
+      username: post.username,
+      actionUsername: user.username,
+      text: `@${user.username} ${likeUnlike} your post: ${post.content.slice(
+        0,
+        20
+      )}...`,
+      postId: post._id,
+    };
+
+    if (data.username === data.actionUsername) return;
+
+    try {
+      await axios.post(
+        `${process.env.REACT_APP_BACKEND_SERVER_URI}/notification`,
+        data
+      );
+    } catch (error) {
+      console.error("Error saving like notification:", error);
+    }
+  };
 
   const handleLikeClick = async (e) => {
     e.stopPropagation();
@@ -170,6 +194,7 @@ const Post = ({ posts }) => {
         );
         setLikeCount((prevCount) => prevCount + 1); // Increment like count
         setIsLiked(true); // Update isLiked to true
+        saveLikeNotification(posts, "liked");
       } else {
         // If already liked, send the unlike request
         await axios.delete(
@@ -180,6 +205,7 @@ const Post = ({ posts }) => {
         );
         setLikeCount((prevCount) => Math.max(prevCount - 1, 0)); // Decrement like count, prevent negative
         setIsLiked(false); // Update isLiked to false
+        saveLikeNotification(posts, "unliked");
       }
     } catch (error) {
       if (
@@ -225,12 +251,9 @@ const Post = ({ posts }) => {
 
   const handleEditPost = () => {
     apiClient
-      .put(
-        `/posts/updatePost/${posts._id}`,
-        {
-          content: editedPost.content,
-        }
-      )
+      .put(`/posts/updatePost/${posts._id}`, {
+        content: editedPost.content,
+      })
       .then((response) => {
         handleCloseEditModal();
         window.location.reload();
