@@ -17,6 +17,28 @@ export default function Navbar() {
   const [user, setUser] = useState(getUserInfo());
   const [popupShow, setPopupShow] = useState(false);
   const [inboxPopupShow, setInboxPopupShow] = useState(false);
+  const [notifications, setNotifications] = useState([
+    {
+      id: 1,
+      message: "@testtest commented on your post 'Hello World!'",
+    },
+    {
+      id: 2,
+      message: "@testtest liked your post 'Hello World!'",
+    },
+    {
+      id: 3,
+      message: "@testtest shared your post 'Hello World!'",
+    },
+    {
+      id: 4,
+      message: "@testtest mentioned you in a comment",
+    },
+    {
+      id: 5,
+      message: "@testtest mentioned you in a post",
+    },
+  ]);
 
   useEffect(() => {
     const userInfo = getUserInfo();
@@ -112,7 +134,7 @@ export default function Navbar() {
               {Array.from({ length: 5 }, (_, index) => (
                 <div
                   key={index}
-                  className="flex justify-between items-center p-2 border-b last:border-b-0"
+                  className="flex justify-between items-center p-2 border-b last:border-b-0 group"
                 >
                   <p className="text-xs my-1 font-display text-gray-800 dark:text-white">
                     @testtest commented on your post "Hello World!"
@@ -121,10 +143,10 @@ export default function Navbar() {
                     className="text-gray-600 hover:text-gray-800"
                     onClick={() =>
                       console.log(`Close notification ${index + 1}`)
-                    } // Close button action
+                    }
                   >
                     <FontAwesomeIcon
-                      className="text-orange-500"
+                      className="text-transparent group-hover:text-orange-500"
                       icon={deleteIcon}
                     />
                   </button>
