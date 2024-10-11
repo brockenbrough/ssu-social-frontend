@@ -5,9 +5,10 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import axios from 'axios'
 import { getUserInfoAsync } from "../../utilities/decodeJwtAsync";
+import apiClient from '../../utilities/apiClient';
 
 const EditUser = () => {
-  const url = `${process.env.REACT_APP_BACKEND_SERVER_URI}/user/editUser`;
+  const url = `/user/editUser`;
 
   // form validation checks
   const [ errors, setErrors ] = useState({});
@@ -65,7 +66,7 @@ const EditUser = () => {
     }
     else {
       try {
-        const { data: res } = await axios.post(url, form);
+        const { data: res } = await apiClient.put(url, form);
         const { accessToken } = res;
         //store token in localStorage
         localStorage.setItem("accessToken", accessToken);
