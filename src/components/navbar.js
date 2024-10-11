@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import getUserInfo from "../utilities/decodeJwt";
 import Image from "react-bootstrap/Image";
-import { useDarkMode } from "../components/DarkModeContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faInbox as inboxIcon } from "@fortawesome/free-solid-svg-icons";
 import { faCirclePlus as createIcon } from "@fortawesome/free-solid-svg-icons";
@@ -20,23 +19,53 @@ export default function Navbar() {
   const [notifications, setNotifications] = useState([
     {
       id: 1,
-      message: "@testtest commented on your post 'Hello World!'",
+      type: "follow",
+      username: "elephant",
+      actionUsername: "testtest",
+      isRead: false,
+      postId: null,
+      date: "2024-10-11T00:13:24.241+00:00",
+      text: "@testtest followed you",
     },
     {
       id: 2,
-      message: "@testtest liked your post 'Hello World!'",
+      type: "comment",
+      username: "elephant",
+      actionUsername: "testtest",
+      isRead: true,
+      postId: null,
+      date: "2024-10-11T00:13:24.241+00:00",
+      text: "@testtest commented on your post 'Hello World!'",
     },
     {
       id: 3,
-      message: "@testtest shared your post 'Hello World!'",
+      type: "follow",
+      username: "elephant",
+      actionUsername: "testtest",
+      isRead: false,
+      postId: null,
+      date: "2024-10-11T00:13:24.241+00:00",
+      text: "@testtest followed you",
     },
     {
       id: 4,
-      message: "@testtest mentioned you in a comment",
+      type: "comment",
+      username: "elephant",
+      actionUsername: "testtest",
+      isRead: false,
+      postId: null,
+      date: "2024-10-11T00:13:24.241+00:00",
+      text: "@testtest commented on your post 'Hello World!'",
     },
     {
       id: 5,
-      message: "@testtest mentioned you in a post",
+      type: "comment",
+      username: "elephant",
+      actionUsername: "testtest",
+      isRead: true,
+      postId: null,
+      date: "2024-10-11T00:13:24.241+00:00",
+      text: "@testtest commented on your post 'Hello World!'",
     },
   ]);
 
@@ -47,6 +76,16 @@ export default function Navbar() {
 
   const handleInboxClick = () => {
     setInboxPopupShow(!inboxPopupShow);
+  };
+
+  const handleDeleteNotification = (notification) => {
+    setNotifications(notifications.filter((n) => n.id !== notification.id));
+  };
+
+  const handleNotificationClick = (notification) => {
+    notification.isRead = true;
+    setNotifications([...notifications]);
+    // save in the backend
   };
 
   return (
@@ -131,19 +170,33 @@ export default function Navbar() {
               </button>
             </div>
             <div className="p-1 rounded-b-md dark:bg-gray-800 dark:rounded-none h-56 overflow-y-scroll">
-              {Array.from({ length: 5 }, (_, index) => (
+              {notifications.length === 0 && (
+                <p className="text-sm my-4 text-center min-h-6 font-display text-gray-800 dark:text-white">
+                  No notifications
+                </p>
+              )}
+              {notifications.map((notification) => (
                 <div
-                  key={index}
-                  className="flex justify-between items-center p-2 border-b last:border-b-0 group"
+                  key={notification.id}
+                  className="flex justify-between items-center p-2 border-b last:border-b-0 group cursor-pointer"
                 >
-                  <p className="text-xs my-1 font-display text-gray-800 dark:text-white">
-                    @testtest commented on your post "Hello World!"
-                  </p>
+                  <span
+                    className="w-full"
+                    onClick={() => handleNotificationClick(notification)}
+                  >
+                    {notification.isRead ? (
+                      <p className="text-xs my-1 min-h-6 font-display text-gray-800 dark:text-white">
+                        {notification.text}
+                      </p>
+                    ) : (
+                      <p className="text-xs font-bold my-1 min-h-6 font-display text-gray-800 dark:text-white">
+                        {notification.text}
+                      </p>
+                    )}
+                  </span>
                   <button
                     className="text-gray-600 hover:text-gray-800"
-                    onClick={() =>
-                      console.log(`Close notification ${index + 1}`)
-                    }
+                    onClick={() => handleDeleteNotification(notification)}
                   >
                     <FontAwesomeIcon
                       className="text-transparent group-hover:text-orange-500"
