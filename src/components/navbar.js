@@ -48,6 +48,20 @@ export default function Navbar() {
     }
   };
 
+  const markNotificationAsRead = async (notification) => {
+    try {
+      await axios.put(
+        `${process.env.REACT_APP_BACKEND_SERVER_URI}/notification`,
+        {
+          id: notification._id,
+          isRead: true,
+        }
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const handleInboxClick = () => {
     setInboxPopupShow(!inboxPopupShow);
   };
@@ -58,8 +72,11 @@ export default function Navbar() {
   };
 
   const handleNotificationClick = (notification) => {
+    if (notification.isRead) return;
+
     notification.isRead = true;
     setNotifications([...notifications]);
+    markNotificationAsRead(notification);
   };
 
   return (
