@@ -8,6 +8,8 @@ import { faCirclePlus as createIcon } from "@fortawesome/free-solid-svg-icons";
 import { faStar as forYouIcon } from "@fortawesome/free-solid-svg-icons";
 import { faCompass as discoverIcon } from "@fortawesome/free-solid-svg-icons";
 import { faUser as profileIcon } from "@fortawesome/free-solid-svg-icons";
+import { faXmark as closeIcon } from "@fortawesome/free-solid-svg-icons";
+import { faTrash as deleteIcon } from "@fortawesome/free-solid-svg-icons";
 import CreatePost from "./post/createPost";
 import DarkModeButton from "./DarkModeButton";
 
@@ -93,24 +95,27 @@ export default function Navbar() {
       <div>
         {/* Notification Popup */}
         {inboxPopupShow && (
-          <div className="fixed left-40 top-40 w-64 bg-white rounded-md shadow-lg z-10">
-            <div className="flex justify-between items-center p-3 border-b">
-              <h3 className="font-semibold text-gray-800">Notifications</h3>
+          <div className="fixed left-40 top-40 w-64 rounded-md shadow-lg z-10 bg-white ">
+            <div className="flex justify-between items-center rounded-t-md p-3 bg-orange-500">
+              <h3 className="text-white font-title">Notifications</h3>
               <button
                 onClick={() => setInboxPopupShow(false)}
                 className="text-gray-600 hover:text-gray-800"
               >
-                &times; {/* close button */}
+                <FontAwesomeIcon
+                  className="text-white text-2xl"
+                  icon={closeIcon}
+                />
               </button>
             </div>
-            <div className="p-2">
-              {Array.from({ length: 3 }, (_, index) => (
+            <div className="p-1 rounded-b-md dark:bg-gray-800 dark:rounded-none h-56 overflow-y-scroll">
+              {Array.from({ length: 5 }, (_, index) => (
                 <div
                   key={index}
                   className="flex justify-between items-center p-2 border-b last:border-b-0"
                 >
-                  <p className="text-sm text-gray-600">
-                    Dummy Notification {index + 1}
+                  <p className="text-xs my-1 font-display text-gray-800 dark:text-white">
+                    @testtest commented on your post "Hello World!"
                   </p>
                   <button
                     className="text-gray-600 hover:text-gray-800"
@@ -118,7 +123,10 @@ export default function Navbar() {
                       console.log(`Close notification ${index + 1}`)
                     } // Close button action
                   >
-                    &times; {/* close button */}
+                    <FontAwesomeIcon
+                      className="text-orange-500"
+                      icon={deleteIcon}
+                    />
                   </button>
                 </div>
               ))}
