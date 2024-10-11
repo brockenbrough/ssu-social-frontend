@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import getUserInfo from "../utilities/decodeJwt";
 import Image from "react-bootstrap/Image";
+import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faInbox as inboxIcon } from "@fortawesome/free-solid-svg-icons";
 import { faCirclePlus as createIcon } from "@fortawesome/free-solid-svg-icons";
@@ -16,63 +17,28 @@ export default function Navbar() {
   const [user, setUser] = useState(getUserInfo());
   const [popupShow, setPopupShow] = useState(false);
   const [inboxPopupShow, setInboxPopupShow] = useState(false);
-  const [notifications, setNotifications] = useState([
-    {
-      id: 1,
-      type: "follow",
-      username: "elephant",
-      actionUsername: "testtest",
-      isRead: false,
-      postId: null,
-      date: "2024-10-11T00:13:24.241+00:00",
-      text: "@testtest followed you",
-    },
-    {
-      id: 2,
-      type: "comment",
-      username: "elephant",
-      actionUsername: "testtest",
-      isRead: true,
-      postId: null,
-      date: "2024-10-11T00:13:24.241+00:00",
-      text: "@testtest commented on your post 'Hello World!'",
-    },
-    {
-      id: 3,
-      type: "follow",
-      username: "elephant",
-      actionUsername: "testtest",
-      isRead: false,
-      postId: null,
-      date: "2024-10-11T00:13:24.241+00:00",
-      text: "@testtest followed you",
-    },
-    {
-      id: 4,
-      type: "comment",
-      username: "elephant",
-      actionUsername: "testtest",
-      isRead: false,
-      postId: null,
-      date: "2024-10-11T00:13:24.241+00:00",
-      text: "@testtest commented on your post 'Hello World!'",
-    },
-    {
-      id: 5,
-      type: "comment",
-      username: "elephant",
-      actionUsername: "testtest",
-      isRead: true,
-      postId: null,
-      date: "2024-10-11T00:13:24.241+00:00",
-      text: "@testtest commented on your post 'Hello World!'",
-    },
-  ]);
+  const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
     const userInfo = getUserInfo();
+    fetchNotifications(userInfo.username);
     setUser(userInfo);
   }, []);
+
+  console.log(typeof notifications);
+
+  const fetchNotifications = async (username) => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_BACKEND_SERVER_URI}/notification/${username}`
+      );
+
+      const notifications = response.data.notifications;
+      setNotifications(notifications);
+    } catch (error) {
+      alert(error);
+    }
+  };
 
   const handleInboxClick = () => {
     setInboxPopupShow(!inboxPopupShow);
