@@ -148,7 +148,7 @@ function CreateComment({
         data
       );
     } catch (error) {
-      console.error("Error saving like notification:", error);
+      console.error("Error saving comment notification:", error);
     }
   };
 
