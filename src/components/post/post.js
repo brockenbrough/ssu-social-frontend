@@ -387,7 +387,7 @@ const Post = ({ posts }) => {
             >
               <Card.Body style={{ color: darkMode ? "white" : "black" }}>
                 <CreateComment
-                  postId={postId}
+                  post={posts}
                   setParentCommentCount={setCommentCount}
                   postCardHeight={postCardHeight}
                   hasMedia={hasMedia}

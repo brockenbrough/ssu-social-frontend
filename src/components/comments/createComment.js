@@ -6,6 +6,7 @@ import React, {
   useContext,
   useRef,
 } from "react";
+import axios from "axios";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import getUserInfo from "../../utilities/decodeJwt";
@@ -29,7 +30,13 @@ export function useCommentCount() {
   return useContext(CommentCountContext);
 }
 
-function CreateComment({ postId, setParentCommentCount, postCardHeight, hasMedia }) {
+function CreateComment({
+  post,
+  setParentCommentCount,
+  postCardHeight,
+  hasMedia,
+}) {
+  const postId = post._id;
   const [comments, setComments] = useState([]);
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
@@ -121,6 +128,30 @@ function CreateComment({ postId, setParentCommentCount, postCardHeight, hasMedia
     commentContent: "",
   });
 
+  const saveCommentNotification = async (post) => {
+    const data = {
+      type: "comment",
+      username: post.username,
+      actionUsername: user.username,
+      text: `@${user.username} commented on your post: ${post.content.slice(
+        0,
+        20
+      )}...`,
+      postId: post._id,
+    };
+
+    if (data.username === data.actionUsername) return;
+
+    try {
+      await axios.post(
+        `${process.env.REACT_APP_BACKEND_SERVER_URI}/notification`,
+        data
+      );
+    } catch (error) {
+      console.error("Error saving like notification:", error);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setCommentCount(commentCount + 1);
@@ -163,6 +194,7 @@ function CreateComment({ postId, setParentCommentCount, postCardHeight, hasMedia
         // Fetch comment count and comments
         fetchCommentCount();
         fetchComments();
+        saveCommentNotification(post);
       } else {
         // Handle errors if needed
         console.error("Error:", response.status);
@@ -269,7 +301,9 @@ function CreateComment({ postId, setParentCommentCount, postCardHeight, hasMedia
       {/* Scrollable Comment section Div */}
       <div
         ref={commentsEndRef}
-        className={`custom-scrollbar ${darkMode ? "custom-scrollbar-dark" : ""}`}
+        className={`custom-scrollbar ${
+          darkMode ? "custom-scrollbar-dark" : ""
+        }`}
         style={{
           overflowY: "auto",
           marginTop: "15px",
@@ -278,7 +312,10 @@ function CreateComment({ postId, setParentCommentCount, postCardHeight, hasMedia
           borderRadius: "5px",
         }}
       >
-        <table className="table table-striped" style={{ marginTop: 0, marginBottom: "0px" }}>
+        <table
+          className="table table-striped"
+          style={{ marginTop: 0, marginBottom: "0px" }}
+        >
           <tbody>
             {commentList()}
             <tr></tr>
@@ -293,7 +330,11 @@ function CreateComment({ postId, setParentCommentCount, postCardHeight, hasMedia
         <div className="flex items-center mt-1 relative">
           <textarea
             className={`comment-input custom-scrollbar resize-none w-full max-h-9 
-            ${formData.commentContent.length === 0 ? "overflow-hidden" : "overflow-y-auto"}`}
+            ${
+              formData.commentContent.length === 0
+                ? "overflow-hidden"
+                : "overflow-y-auto"
+            }`}
             id="commentContent"
             name="commentContent"
             value={formData.commentContent}
@@ -305,7 +346,7 @@ function CreateComment({ postId, setParentCommentCount, postCardHeight, hasMedia
             }}
             onKeyDown={(e) => {
               if (e.key === "Enter" && !e.shiftKey) {
-                e.preventDefault(); 
+                e.preventDefault();
                 handleSubmit(e);
               }
             }}
