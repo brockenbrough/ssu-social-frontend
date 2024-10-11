@@ -22,34 +22,85 @@ export default function FollowButton(props) {
     setUser(getUserInfo());
   }, []); // Get user's info
 
-  // A method to follow a user. Take the id from the params in the link.
+  const saveFollowNotification = async (
+    username,
+    actionUsername,
+    followUnfollow
+  ) => {
+    const data = {
+      type: "follow",
+      username: username,
+      actionUsername: actionUsername,
+      text: `@${actionUsername} ${followUnfollow} you`,
+    };
+
+    if (data.username === data.actionUsername) return;
+
+    try {
+      await axios.post(
+        `${process.env.REACT_APP_BACKEND_SERVER_URI}/notification`,
+        data
+      );
+    } catch (error) {
+      console.error("Error saving follow notification:", error);
+    }
+  };
 
   async function followUser() {
-    const addFollowing = {
-      userId: props.username,
-      targetUserId: props.targetUserId,
-    };
-    const url = `${process.env.REACT_APP_BACKEND_SERVER_URI}/followers/follow`;
-    const res = await axios.post(url, addFollowing);
-    setIsFollowing(true);
+    try {
+      const data = {
+        userId: props.username,
+        targetUserId: props.targetUserId,
+      };
 
-    // Update follower count
-    const updatedFollowerCount = await fetchFollowerCount(props.targetUserId);
-    onUpdateFollowerCount(updatedFollowerCount);
+      const url = `${process.env.REACT_APP_BACKEND_SERVER_URI}/followers/follow`;
+      const res = await axios.post(url, data);
+
+      if (res.status === 200) {
+        setIsFollowing(true);
+
+        const updatedFollowerCount = await fetchFollowerCount(
+          props.targetUserId
+        );
+        onUpdateFollowerCount(updatedFollowerCount);
+        saveFollowNotification(props.targetUserId, props.username, "followed");
+      } else {
+        throw new Error("Failed to follow the user");
+      }
+    } catch (error) {
+      console.error("Error following the user:", error);
+    }
   }
 
   async function unfollowUser() {
-    const unFollow = {
-      userId: props.username,
-      targetUserId: props.targetUserId,
-    };
-    const url = `${process.env.REACT_APP_BACKEND_SERVER_URI}/followers/unfollow`;
-    const res = await axios.delete(url, { data: unFollow });
-    setIsFollowing(false);
+    try {
+      const unFollow = {
+        userId: props.username,
+        targetUserId: props.targetUserId,
+      };
 
-    // Update follower count
-    const updatedFollowerCount = await fetchFollowerCount(props.targetUserId);
-    onUpdateFollowerCount(updatedFollowerCount);
+      const url = `${process.env.REACT_APP_BACKEND_SERVER_URI}/followers/unfollow`;
+      const res = await axios.delete(url, { data: unFollow });
+
+      if (res.status === 200) {
+        setIsFollowing(false);
+
+        // Update follower count
+        const updatedFollowerCount = await fetchFollowerCount(
+          props.targetUserId
+        );
+        onUpdateFollowerCount(updatedFollowerCount);
+        saveFollowNotification(
+          props.targetUserId,
+          props.username,
+          "unfollowed"
+        );
+      } else {
+        console.error("Failed to unfollow the user");
+      }
+    } catch (error) {
+      console.error("Error unfollowing the user:", error);
+    }
   }
 
   // This function is very important, it helps figure out which state the button should be in.
