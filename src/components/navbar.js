@@ -202,7 +202,14 @@ export default function Navbar() {
                   </div>
 
                   {/* Filtered Notification list */}
-                  {filteredNotifications.map((notification) => (
+                  {filteredNotifications.length === 0 ? (
+                  <p className="text-sm my-4 text-center min-h-6 font-display text-gray-800 dark:text-white">
+                    {filter === 'like' && 'No likes found'}
+                    {filter === 'comment' && 'No comments found'}
+                    {filter === 'follow' && 'No follows found'}
+                  </p>
+                ) : 
+                  filteredNotifications.map((notification) => (
                     <div
                       key={notification._id}
                       className="flex justify-between items-center p-2 border-b last:border-b-0 group cursor-pointer"
