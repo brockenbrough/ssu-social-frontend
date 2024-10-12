@@ -21,7 +21,7 @@ export default function Navbar() {
   const [filter, setFilter] = useState(null); // Initialize filter state
 
 
-  // Filter notifications by type
+  // Filter nossu-text-titlesmall
   const filteredNotifications = filter
   ? notifications.filter(notification => notification.type === filter)
   : notifications;
@@ -190,13 +190,13 @@ export default function Navbar() {
                 <>
                   {/* Filter buttons (Likes, Comments, Follows) */}
                   <div className="flex justify-around p-2 bg-gray-100 dark:bg-gray-700">
-                    <button onClick={() => toggleFilter('like')} className="text-sm font-medium">
+                    <button onClick={() => toggleFilter('like')} className="ssu-button-info-clickable">
                       Likes
                     </button>
-                    <button onClick={() => toggleFilter('comment')} className="text-sm font-medium">
+                    <button onClick={() => toggleFilter('comment')} className="ssu-button-info-clickable">
                       Comments
                     </button>
-                    <button onClick={() => toggleFilter('follow')} className="text-sm font-medium">
+                    <button onClick={() => toggleFilter('follow')} className="ssu-button-info-clickable">
                       Follows
                     </button>
                   </div>
