@@ -18,6 +18,18 @@ export default function Navbar() {
   const [popupShow, setPopupShow] = useState(false);
   const [inboxPopupShow, setInboxPopupShow] = useState(false);
   const [notifications, setNotifications] = useState([]);
+  const [filter, setFilter] = useState(null); // Initialize filter state
+
+
+  // Filter notifications by type
+  const filteredNotifications = filter
+  ? notifications.filter(notification => notification.type === filter)
+  : notifications;
+
+  const toggleFilter = (type) => {
+    setFilter(prevFilter => prevFilter === type ? null : type);
+  };
+
 
   useEffect(() => {
     const userInfo = getUserInfo();
@@ -166,42 +178,62 @@ export default function Navbar() {
                 />
               </button>
             </div>
+
+            {/* Notification body */}
             <div className="p-1 rounded-b-md dark:bg-gray-800 dark:rounded-none h-56 overflow-y-scroll">
-              {notifications.length === 0 && (
+              {/* Show "No notifications" if empty */}
+              {notifications.length === 0 ? (
                 <p className="text-sm my-4 text-center min-h-6 font-display text-gray-800 dark:text-white">
                   No notifications
                 </p>
+              ) : (
+                <>
+                  {/* Filter buttons (Likes, Comments, Follows) */}
+                  <div className="flex justify-around p-2 bg-gray-100 dark:bg-gray-700">
+                    <button onClick={() => toggleFilter('like')} className="text-sm font-medium">
+                      Likes
+                    </button>
+                    <button onClick={() => toggleFilter('comment')} className="text-sm font-medium">
+                      Comments
+                    </button>
+                    <button onClick={() => toggleFilter('follow')} className="text-sm font-medium">
+                      Follows
+                    </button>
+                  </div>
+
+                  {/* Filtered Notification list */}
+                  {filteredNotifications.map((notification) => (
+                    <div
+                      key={notification._id}
+                      className="flex justify-between items-center p-2 border-b last:border-b-0 group cursor-pointer"
+                    >
+                      <span
+                        className="w-full"
+                        onClick={() => handleNotificationClick(notification)}
+                      >
+                        {notification.isRead ? (
+                          <p className="text-xs my-1 min-h-6 font-display text-gray-800 dark:text-white">
+                            {notification.text}
+                          </p>
+                        ) : (
+                          <p className="text-xs font-bold my-1 min-h-6 font-display text-gray-800 dark:text-white">
+                            {notification.text}
+                          </p>
+                        )}
+                      </span>
+                      <button
+                        className="text-gray-600 hover:text-gray-800"
+                        onClick={() => handleDeleteNotification(notification)}
+                      >
+                        <FontAwesomeIcon
+                          className="text-transparent group-hover:text-orange-500"
+                          icon={deleteIcon}
+                        />
+                      </button>
+                    </div>
+                  ))}
+                </>
               )}
-              {notifications.map((notification) => (
-                <div
-                  key={notification._id}
-                  className="flex justify-between items-center p-2 border-b last:border-b-0 group cursor-pointer"
-                >
-                  <span
-                    className="w-full"
-                    onClick={() => handleNotificationClick(notification)}
-                  >
-                    {notification.isRead ? (
-                      <p className="text-xs my-1 min-h-6 font-display text-gray-800 dark:text-white">
-                        {notification.text}
-                      </p>
-                    ) : (
-                      <p className="text-xs font-bold my-1 min-h-6 font-display text-gray-800 dark:text-white">
-                        {notification.text}
-                      </p>
-                    )}
-                  </span>
-                  <button
-                    className="text-gray-600 hover:text-gray-800"
-                    onClick={() => handleDeleteNotification(notification)}
-                  >
-                    <FontAwesomeIcon
-                      className="text-transparent group-hover:text-orange-500"
-                      icon={deleteIcon}
-                    />
-                  </button>
-                </div>
-              ))}
             </div>
           </div>
         )}
