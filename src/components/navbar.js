@@ -18,15 +18,16 @@ export default function Navbar() {
   const [popupShow, setPopupShow] = useState(false);
   const [inboxPopupShow, setInboxPopupShow] = useState(false);
   const [notifications, setNotifications] = useState([]);
-  const [filter, setFilter] = useState(null); // Initialize filter state
+  const [filter, setFilter] = useState("like");
+  const [activeFilterTab, setActiveFilterTab] = useState("like");
 
-  // Filter nossu-text-titlesmall
   const filteredNotifications = filter
     ? notifications.filter((notification) => notification.type === filter)
     : notifications;
 
   const toggleFilter = (type) => {
-    setFilter((prevFilter) => (prevFilter === type ? null : type));
+    setFilter(type);
+    setActiveFilterTab(type);
   };
 
   useEffect(() => {
@@ -187,22 +188,34 @@ export default function Navbar() {
               ) : (
                 <>
                   {/* Filter buttons (Likes, Comments, Follows) */}
-                  <div className="flex justify-around p-2 bg-gray-100 dark:bg-gray-700">
+                  <div className="flex justify-around p-2 ">
                     <button
                       onClick={() => toggleFilter("like")}
-                      className="ssu-button-info-clickable"
+                      className={`${
+                        activeFilterTab === "like"
+                          ? "ssu-nav-filter-btn-selected"
+                          : "ssu-nav-filter-btn"
+                      }`}
                     >
                       Likes
                     </button>
                     <button
                       onClick={() => toggleFilter("comment")}
-                      className="ssu-button-info-clickable"
+                      className={`${
+                        activeFilterTab === "comment"
+                          ? "ssu-nav-filter-btn-selected"
+                          : "ssu-nav-filter-btn"
+                      }`}
                     >
                       Comments
                     </button>
                     <button
                       onClick={() => toggleFilter("follow")}
-                      className="ssu-button-info-clickable"
+                      className={`${
+                        activeFilterTab === "follow"
+                          ? "ssu-nav-filter-btn-selected"
+                          : "ssu-nav-filter-btn"
+                      }`}
                     >
                       Follows
                     </button>

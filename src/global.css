@@ -90,6 +90,14 @@
 .ssu-nav-link {
   @apply font-menu text-lg mb-4 py-2 pl-4 text-gray-900 dark:text-white no-underline cursor-pointer hover:bg-orange-600 rounded-lg transition duration-200 hover:text-white;}
 
+.ssu-nav-filter-btn {
+  @apply text-gray-500 dark:text-white font-menu font-bold pb-2 hover:border-b-2 hover:border-orange-500;
+}
+
+.ssu-nav-filter-btn-selected {
+  @apply text-orange-500 font-menu border-b-2 font-bold border-orange-500 pb-2
+}
+
 /* Sidebar Navbar */
 .sidebar-navbar {
   @apply fixed top-0 left-0 h-full w-40 bg-white dark:bg-gray-900 shadow-lg z-50; /* Adjust the height if needed */
