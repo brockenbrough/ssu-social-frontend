@@ -144,7 +144,7 @@ function PostList({ type, profileUsername }) {
                 if (posts.length === index + 1) {
                   return (
                     <div ref={lastPostRef} key={post._id}>
-                      <Post posts={post} />
+                      <Post key={post._id} posts={post} />
                     </div>
                   );
                 } else {
