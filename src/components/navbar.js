@@ -20,16 +20,14 @@ export default function Navbar() {
   const [notifications, setNotifications] = useState([]);
   const [filter, setFilter] = useState(null); // Initialize filter state
 
-
   // Filter nossu-text-titlesmall
   const filteredNotifications = filter
-  ? notifications.filter(notification => notification.type === filter)
-  : notifications;
+    ? notifications.filter((notification) => notification.type === filter)
+    : notifications;
 
   const toggleFilter = (type) => {
-    setFilter(prevFilter => prevFilter === type ? null : type);
+    setFilter((prevFilter) => (prevFilter === type ? null : type));
   };
-
 
   useEffect(() => {
     const userInfo = getUserInfo();
@@ -190,55 +188,65 @@ export default function Navbar() {
                 <>
                   {/* Filter buttons (Likes, Comments, Follows) */}
                   <div className="flex justify-around p-2 bg-gray-100 dark:bg-gray-700">
-                    <button onClick={() => toggleFilter('like')} className="ssu-button-info-clickable">
+                    <button
+                      onClick={() => toggleFilter("like")}
+                      className="ssu-button-info-clickable"
+                    >
                       Likes
                     </button>
-                    <button onClick={() => toggleFilter('comment')} className="ssu-button-info-clickable">
+                    <button
+                      onClick={() => toggleFilter("comment")}
+                      className="ssu-button-info-clickable"
+                    >
                       Comments
                     </button>
-                    <button onClick={() => toggleFilter('follow')} className="ssu-button-info-clickable">
+                    <button
+                      onClick={() => toggleFilter("follow")}
+                      className="ssu-button-info-clickable"
+                    >
                       Follows
                     </button>
                   </div>
 
                   {/* Filtered Notification list */}
                   {filteredNotifications.length === 0 ? (
-                  <p className="text-sm my-4 text-center min-h-6 font-display text-gray-800 dark:text-white">
-                    {filter === 'like' && 'No likes found'}
-                    {filter === 'comment' && 'No comments found'}
-                    {filter === 'follow' && 'No follows found'}
-                  </p>
-                ) : 
-                  filteredNotifications.map((notification) => (
-                    <div
-                      key={notification._id}
-                      className="flex justify-between items-center p-2 border-b last:border-b-0 group cursor-pointer"
-                    >
-                      <span
-                        className="w-full"
-                        onClick={() => handleNotificationClick(notification)}
+                    <p className="text-sm my-4 text-center min-h-6 font-display text-gray-800 dark:text-white">
+                      {filter === "like" && "No Likes Notifications"}
+                      {filter === "comment" && "No Comments Notifications"}
+                      {filter === "follow" && "No Follows Notifications"}
+                    </p>
+                  ) : (
+                    filteredNotifications.map((notification) => (
+                      <div
+                        key={notification._id}
+                        className="flex justify-between items-center p-2 border-b last:border-b-0 group cursor-pointer"
                       >
-                        {notification.isRead ? (
-                          <p className="text-xs my-1 min-h-6 font-display text-gray-800 dark:text-white">
-                            {notification.text}
-                          </p>
-                        ) : (
-                          <p className="text-xs font-bold my-1 min-h-6 font-display text-gray-800 dark:text-white">
-                            {notification.text}
-                          </p>
-                        )}
-                      </span>
-                      <button
-                        className="text-gray-600 hover:text-gray-800"
-                        onClick={() => handleDeleteNotification(notification)}
-                      >
-                        <FontAwesomeIcon
-                          className="text-transparent group-hover:text-orange-500"
-                          icon={deleteIcon}
-                        />
-                      </button>
-                    </div>
-                  ))}
+                        <span
+                          className="w-full"
+                          onClick={() => handleNotificationClick(notification)}
+                        >
+                          {notification.isRead ? (
+                            <p className="text-xs my-1 min-h-6 font-display text-gray-800 dark:text-white">
+                              {notification.text}
+                            </p>
+                          ) : (
+                            <p className="text-xs font-bold my-1 min-h-6 font-display text-gray-800 dark:text-white">
+                              {notification.text}
+                            </p>
+                          )}
+                        </span>
+                        <button
+                          className="text-gray-600 hover:text-gray-800"
+                          onClick={() => handleDeleteNotification(notification)}
+                        >
+                          <FontAwesomeIcon
+                            className="text-transparent group-hover:text-orange-500"
+                            icon={deleteIcon}
+                          />
+                        </button>
+                      </div>
+                    ))
+                  )}
                 </>
               )}
             </div>
