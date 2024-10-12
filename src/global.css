@@ -7,6 +7,7 @@
   @apply bg-white dark:bg-gray-800 text-black dark:text-white min-h-screen pl-64;
 }
 
+
 .ssu-button-bold {
   @apply bg-violet-500 text-white dark:text-black font-normal py-1 px-4 rounded hover:bg-violet-600 mr-1 ml-1 mt-1 mb-1;
 }
@@ -258,4 +259,15 @@
 
 ::-webkit-scrollbar-track {
   background-color: #6b7280;
+}
+
+/* form/document styles for edit profile*/
+
+
+.ssu-form-style{
+  @apply bg-white dark:bg-gray-800 w-full max-w-lg mx-auto p-6  rounded-lg shadow-md;
+}
+
+.ssu-modal-style{
+  @apply bg-white dark:bg-gray-800 p-6 rounded-lg;
 }

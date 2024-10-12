@@ -1,20 +1,14 @@
 import React, { useState, useEffect, useContext, useCallback } from "react";
-import { Image } from "react-bootstrap";
 import { Row, Col } from "react-bootstrap";
-import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import { UserContext } from "../../App";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import moment from "moment";
 import { getUserInfoAsync } from "../../utilities/decodeJwtAsync";
-import Form from "react-bootstrap/Form";
 import { useDarkMode } from '../DarkModeContext.js';
-
 import PostList from "../post/postlist";
 import EditUser from './editUserPage.js';
-import UploadImages from "../images/uploadImages.js";
 import ProfileImage from "../images/ProfileImage.js";
 
 const PrivateUserProfile = () => {
@@ -418,10 +412,10 @@ const deleteConfirm = async () => {
         </Modal.Footer>
       </Modal>
       <Modal show={userModal} onHide={closeUserModal}>
-        <Modal.Header closeButton>
-          <Modal.Title>Edit Profile</Modal.Title>
+        <Modal.Header closeButton className="ssu-modal-style">
+          <Modal.Title className ="ssu-text-titlesmall">Edit Profile</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body className="ssu-modal-style">
           <EditUser />
         </Modal.Body>
       </Modal>

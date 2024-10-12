@@ -1,9 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
-import Col from 'react-bootstrap/Col';
-import Row from 'react-bootstrap/Row';
-import axios from 'axios'
 import { getUserInfoAsync } from "../../utilities/decodeJwtAsync";
 import apiClient from '../../utilities/apiClient';
 
@@ -89,76 +84,96 @@ const EditUser = () => {
     }
   }
 
-  return(
-    <Form>
-          <Form.Group className="mb-3" controlId="formName" >
-            <Form.Label >Username</Form.Label>
-            <Form.Control type="text" placeholder="Enter new username" 
-              id="username"
-              value={form.username}
-              disabled={true}
-              onChange={handleChange}
-              isInvalid={ !!errors.name }
-            />
-            <Form.Control.Feedback type='invalid'>
-              { errors.name }
-            </Form.Control.Feedback>
-          </Form.Group>
-
-          <Form.Group className="mb-3" controlId="formEmail">
-             <Form.Label>Email address</Form.Label>
-             <Form.Control type="email" placeholder="Enter new email address" 
-                id="email"
-                value={form.email}
-                onChange={handleChange}
-                isInvalid = { !!errors.email }
-             />
-             <Form.Control.Feedback type='invalid'>
-              { errors.email }
-             </Form.Control.Feedback>
-          </Form.Group>
-
-          <Form.Group className="mb-3" controlId="formPassword" >
-            <Form.Label>Password</Form.Label>
-            <Form.Control
-              type="password"
-              placeholder="Enter new password"
-              id="password"
-              value={form.password}
-              onChange={handleChange}
-              isInvalid={ !!errors.password }
-            />
-            <Form.Control.Feedback type="invalid">
-              {errors.password}
-            </Form.Control.Feedback>
-          </Form.Group>
-
-          <Form.Group className="mb-3" controlId="formBio" >
-            <Form.Label>Biography</Form.Label>
-            <Form.Control
-              as="textarea"
-              rows={4}
-              placeholder="Enter your bio"
-              id="biography"
-              value={form.biography}
-              onChange={handleChange}
-              isInvalid={ !!errors.biography }
-            />
-            <Form.Control.Feedback type="invalid">
-              {errors.biography}
-            </Form.Control.Feedback>
-          </Form.Group>
-
-        <Row>
-          <Col>
-          <Button variant="primary" type="submit" onClick={handleSubmit}>
-            Submit
-          </Button>
-          </Col>
-        </Row>
-
-        </Form>
-  )
+  return (
+    <form className="ssu-form-style">
+      <div className="mb-4">
+        <label className="block text-gray-700 dark:text-white font-bold mb-2" htmlFor="username">
+          Username
+        </label>
+        <input
+          type="text"
+          id="username"
+          placeholder="Enter new username"
+          value={form.username}
+          disabled={true}
+          onChange={handleChange}
+          className={`w-full bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white border ${errors.username ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'} rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400`}
+        />
+        {errors.username && (
+          <p className="text-red-500 text-sm mt-1">
+            {errors.username}
+          </p>
+        )}
+      </div>
+  
+      <div className="mb-4">
+        <label className="block text-gray-700 dark:text-white font-bold mb-2" htmlFor="email">
+          Email address
+        </label>
+        <input
+          type="email"
+          id="email"
+          placeholder="Enter new email address"
+          value={form.email}
+          onChange={handleChange}
+          className={`w-full bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white border ${errors.email ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'} rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400`}
+        />
+        {errors.email && (
+          <p className="text-red-500 text-sm mt-1">
+            {errors.email}
+          </p>
+        )}
+      </div>
+  
+      <div className="mb-4">
+        <label className="block text-gray-700 dark:text-white font-bold mb-2" htmlFor="password">
+          Password
+        </label>
+        <input
+          type="password"
+          id="password"
+          placeholder="Enter new password"
+          value={form.password}
+          onChange={handleChange}
+          className={`w-full bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white border ${errors.password ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'} rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400`}
+        />
+        {errors.password && (
+          <p className="text-red-500 text-sm mt-1">
+            {errors.password}
+          </p>
+        )}
+      </div>
+  
+      <div className="mb-4">
+        <label className="block text-gray-700 dark:text-white font-bold mb-2" htmlFor="biography">
+          Biography
+        </label>
+        <textarea
+          id="biography"
+          placeholder="Enter your bio"
+          rows="4"
+          value={form.biography}
+          onChange={handleChange}
+          className={`w-full bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white border ${errors.biography ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'} rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400`}
+        ></textarea>
+        {errors.biography && (
+          <p className="text-red-500 text-sm mt-1">
+            {errors.biography}
+          </p>
+        )}
+      </div>
+  
+      <div className="flex justify-end">
+        <button
+          type="submit"
+          onClick={handleSubmit}
+          className="ssu-button-primary"
+        >
+          Submit
+        </button>
+      </div>
+    </form>
+  )  
 }
 
 export default EditUser;
