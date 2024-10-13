@@ -24,19 +24,19 @@ import CreateComment from "../comments/createComment";
 import { PostPageContext } from "../../App";
 import apiClient from "../../utilities/apiClient";
 
-const Post = ({ posts }) => {
+const Post = ({ posts: post }) => {
   const [youtubeThumbnail, setYoutubeThumbnail] = useState(null);
   const [likeCount, setLikeCount] = useState(0);
   const [commentCount, setCommentCount] = useState(0);
   const [isLiked, setIsLiked] = useState(false);
   const [dataLoaded, setDataLoaded] = useState(false);
-  const formattedDate = moment(posts.date).format("h:mm A • M/D/YYYY");
-  const { _id: postId } = posts;
+  const formattedDate = moment(post.date).format("h:mm A • M/D/YYYY");
+  const { _id: postId } = post;
   const [user, setUser] = useState(null);
   const { darkMode } = useDarkMode();
-  const isCurrentUserPost = user && user.username === posts.username;
+  const isCurrentUserPost = user && user.username === post.username;
   const [showEditModal, setShowEditModal] = useState(false);
-  const [editedPost, setEditedPost] = useState({ content: posts.content });
+  const [editedPost, setEditedPost] = useState({ content: post.content });
   const [showCommentCard, setShowCommentCard] = useState(false);
   const postCardRef = useRef(null);
   const [postCardHeight, setPostCardHeight] = useState(0);
@@ -51,14 +51,14 @@ const Post = ({ posts }) => {
         setIsAnimationActive(false);
         setShowCommentCard(false);
         setIsSlidingOut(false);
-      }, 300); //Animation durration delay (0.3 ms)
+      }, 300);
     } else {
       setIsAnimationActive(true);
       setShowCommentCard(true);
     }
   };
 
-  const hasMedia = !!(posts.imageUri || youtubeThumbnail);
+  const hasMedia = !!(post.imageUri || youtubeThumbnail);
 
   const rendercontent = (content) => {
     if (!content) return content;
@@ -81,20 +81,20 @@ const Post = ({ posts }) => {
       const postCardRect = postCardElement.getBoundingClientRect();
       setPostCardHeight(postCardRect.height);
     }
-  }, [posts, commentCount, showCommentCard]);
+  }, [post, commentCount, showCommentCard]);
 
-  const displayContent = rendercontent(posts.content);
+  const displayContent = rendercontent(post.content);
 
   useEffect(() => {
     const currentUser = getUserInfoAsync();
     setUser(currentUser);
     fetchLikeCount();
     fetchCommentCount();
-  }, [posts._id]);
+  }, [post._id]);
 
   const fetchLikeCount = () => {
     fetch(
-      `${process.env.REACT_APP_BACKEND_SERVER_URI}/count/likes-for-post/${posts._id}`
+      `${process.env.REACT_APP_BACKEND_SERVER_URI}/count/likes-for-post/${post._id}`
     )
       .then((response) => response.json())
       .then((data) => {
@@ -109,7 +109,7 @@ const Post = ({ posts }) => {
 
   const fetchCommentCount = () => {
     fetch(
-      `${process.env.REACT_APP_BACKEND_SERVER_URI}/count/comments-for-post/${posts._id}`
+      `${process.env.REACT_APP_BACKEND_SERVER_URI}/count/comments-for-post/${post._id}`
     )
       .then((response) => response.json())
       .then((data) => setCommentCount(data))
@@ -136,17 +136,17 @@ const Post = ({ posts }) => {
   };
 
   useEffect(() => {
-    if (posts.content) {
+    if (post.content) {
       const youtubeRegex =
         /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
-      const youtubeMatch = posts.content.match(youtubeRegex);
+      const youtubeMatch = post.content.match(youtubeRegex);
 
       if (youtubeMatch) {
         const videoId = youtubeMatch[1];
         fetchYouTubeThumbnail(videoId);
       }
     }
-  }, [posts.content]);
+  }, [post.content]);
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -194,7 +194,7 @@ const Post = ({ posts }) => {
         );
         setLikeCount((prevCount) => prevCount + 1); // Increment like count
         setIsLiked(true); // Update isLiked to true
-        saveLikeNotification(posts, "liked");
+        saveLikeNotification(post, "liked");
       } else {
         // If already liked, send the unlike request
         await axios.delete(
@@ -205,7 +205,7 @@ const Post = ({ posts }) => {
         );
         setLikeCount((prevCount) => Math.max(prevCount - 1, 0)); // Decrement like count, prevent negative
         setIsLiked(false); // Update isLiked to false
-        saveLikeNotification(posts, "unliked");
+        saveLikeNotification(post, "unliked");
       }
     } catch (error) {
       if (
@@ -238,7 +238,7 @@ const Post = ({ posts }) => {
 
   const handleShowEditModal = () => {
     if (isCurrentUserPost) {
-      setEditedPost({ content: posts.content });
+      setEditedPost({ content: post.content });
       setShowEditModal(true);
     } else {
       alert("You don't have permission to edit this post.");
@@ -251,7 +251,7 @@ const Post = ({ posts }) => {
 
   const handleEditPost = () => {
     apiClient
-      .put(`/posts/updatePost/${posts._id}`, {
+      .put(`/posts/updatePost/${post._id}`, {
         content: editedPost.content,
       })
       .then((response) => {
@@ -265,7 +265,7 @@ const Post = ({ posts }) => {
 
   const handleDeletePost = () => {
     apiClient
-      .delete(`/posts/deletePost/${posts._id}`)
+      .delete(`/posts/deletePost/${post._id}`)
       .then((response) => {
         handleCloseEditModal();
         setPostPage(0); // this signals postlist to redisplay it's list.
@@ -281,27 +281,31 @@ const Post = ({ posts }) => {
         className="d-flex justify-content-center margin: 0, padding: 0"
         style={{ width: "100%" }}
       >
-        <div ref={postCardRef} className="ssu-post-card">
+        <div
+          ref={postCardRef}
+          id={`post-${post._id}`}
+          className="ssu-post-card"
+        >
           <div>
             {/*  author of post */}
             <a
               href={
                 isCurrentUserPost
                   ? "/privateUserProfile"
-                  : `/publicProfilePage/${posts.username}`
+                  : `/publicProfilePage/${post.username}`
               }
               className="ssu-textlink-bold font-title text-gray-900 dark:text-white"
             >
-              @{posts.username}
+              @{post.username}
             </a>
             {/* post text */}
             <p className="font-display mt-2 text-gray-900 dark:text-white">
               {displayContent}
             </p>
             {/*  image */}
-            {posts.imageUri && (
+            {post.imageUri && (
               <img
-                src={posts.imageUri}
+                src={post.imageUri}
                 alt="Post"
                 className="ssu-post-img mt-4 mb-3"
               />
@@ -362,7 +366,7 @@ const Post = ({ posts }) => {
             {/* Post date */}
             <p className="ssu-text-tinyright font-menu mt-3 text-gray-900 dark:text-white">
               <span className="mr-4">{formattedDate}</span>
-              <span>{timeAgo(posts.date)}</span>
+              <span>{timeAgo(post.date)}</span>
             </p>
           </div>
         </div>
@@ -387,7 +391,7 @@ const Post = ({ posts }) => {
             >
               <Card.Body style={{ color: darkMode ? "white" : "black" }}>
                 <CreateComment
-                  post={posts}
+                  post={post}
                   setParentCommentCount={setCommentCount}
                   postCardHeight={postCardHeight}
                   hasMedia={hasMedia}
@@ -416,9 +420,9 @@ const Post = ({ posts }) => {
           style={{ backgroundColor: darkMode ? "#181818" : "#f6f8fa" }}
         >
           {/*  'Edit' Image Styling */}
-          {posts.imageUri && (
+          {post.imageUri && (
             <img
-              src={posts.imageUri}
+              src={post.imageUri}
               alt="Post"
               style={{
                 width: "auto",

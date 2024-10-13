@@ -105,11 +105,41 @@ export default function Navbar() {
   };
 
   const handleNotificationClick = (notification) => {
-    if (notification.isRead) return;
-
     notification.isRead = true;
     updateNotifications([...notifications]);
     markNotificationAsRead(notification);
+
+    if (notification.postId) {
+      let postElement = null;
+
+      const checkAndScroll = () => {
+        postElement = document.getElementById(`post-${notification.postId}`);
+
+        if (postElement) {
+          postElement.scrollIntoView({ behavior: "smooth", block: "start" });
+        } else if (
+          window.innerHeight + window.scrollY <
+          document.body.scrollHeight
+        ) {
+          window.scrollTo({
+            top: document.body.scrollHeight,
+            behavior: "smooth",
+          });
+
+          setTimeout(checkAndScroll, 1000);
+        } else {
+          console.log(
+            "Reached the bottom of the page, but the post was not found."
+          );
+        }
+
+        if (postElement) {
+          postElement.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      };
+
+      checkAndScroll();
+    }
   };
 
   return (
