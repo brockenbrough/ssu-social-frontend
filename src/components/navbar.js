@@ -20,6 +20,9 @@ export default function Navbar() {
   const [notifications, setNotifications] = useState([]);
   const [filter, setFilter] = useState("like");
   const [activeFilterTab, setActiveFilterTab] = useState("like");
+  const [likeNotifications, setLikeNotifications] = useState([]);
+  const [commentNotifications, setCommentNotifications] = useState([]);
+  const [followNotifications, setFollowNotifications] = useState([]);
 
   const filteredNotifications = filter
     ? notifications.filter((notification) => notification.type === filter)
@@ -36,6 +39,22 @@ export default function Navbar() {
     setUser(userInfo);
   }, []);
 
+  const updateNotifications = (notifications) => {
+    setNotifications(notifications);
+
+    const likeNotifications = notifications.filter((n) => n.type === "like");
+    const commentNotifications = notifications.filter(
+      (n) => n.type === "comment"
+    );
+    const followNotifications = notifications.filter(
+      (n) => n.type === "follow"
+    );
+
+    setLikeNotifications(likeNotifications);
+    setCommentNotifications(commentNotifications);
+    setFollowNotifications(followNotifications);
+  };
+
   const fetchNotifications = async (username) => {
     try {
       const response = await axios.get(
@@ -43,7 +62,7 @@ export default function Navbar() {
       );
 
       const notifications = response.data.notifications;
-      setNotifications(notifications);
+      updateNotifications(notifications);
     } catch (error) {
       console.error(error);
     }
@@ -78,7 +97,10 @@ export default function Navbar() {
   };
 
   const handleDeleteNotification = (notification) => {
-    setNotifications(notifications.filter((n) => n._id !== notification._id));
+    const updatedNotifications = notifications.filter(
+      (n) => n._id !== notification._id
+    );
+    updateNotifications(updatedNotifications);
     deleteNotification(notification);
   };
 
@@ -86,7 +108,7 @@ export default function Navbar() {
     if (notification.isRead) return;
 
     notification.isRead = true;
-    setNotifications([...notifications]);
+    updateNotifications([...notifications]);
     markNotificationAsRead(notification);
   };
 
@@ -164,7 +186,7 @@ export default function Navbar() {
       <div>
         {/* Notification Popup */}
         {inboxPopupShow && (
-          <div className="fixed left-40 top-40 w-64 rounded-md shadow-lg z-10 bg-white ">
+          <div className="fixed left-40 top-40 w-80 rounded-md shadow-lg z-10 bg-white ">
             <div className="flex justify-between items-center rounded-t-md p-3 bg-orange-500">
               <h3 className="text-white font-title">Notifications</h3>
               <button
@@ -193,21 +215,31 @@ export default function Navbar() {
                       onClick={() => toggleFilter("like")}
                       className={`${
                         activeFilterTab === "like"
-                          ? "ssu-nav-filter-btn-selected"
-                          : "ssu-nav-filter-btn"
+                          ? "ssu-nav-filter-btn-selected mr-2"
+                          : "ssu-nav-filter-btn mr-2"
                       }`}
                     >
                       Likes
+                      {likeNotifications.length > 0 && (
+                        <span className="ssu-nav-filter-count">
+                          {likeNotifications.length}
+                        </span>
+                      )}
                     </button>
                     <button
                       onClick={() => toggleFilter("comment")}
                       className={`${
                         activeFilterTab === "comment"
-                          ? "ssu-nav-filter-btn-selected"
-                          : "ssu-nav-filter-btn"
+                          ? "ssu-nav-filter-btn-selected mr-2"
+                          : "ssu-nav-filter-btn mr-2"
                       }`}
                     >
                       Comments
+                      {commentNotifications.length > 0 && (
+                        <span className="ssu-nav-filter-count">
+                          {commentNotifications.length}
+                        </span>
+                      )}
                     </button>
                     <button
                       onClick={() => toggleFilter("follow")}
@@ -218,6 +250,11 @@ export default function Navbar() {
                       }`}
                     >
                       Follows
+                      {followNotifications.length > 0 && (
+                        <span className="ssu-nav-filter-count">
+                          {followNotifications.length}
+                        </span>
+                      )}
                     </button>
                   </div>
 
