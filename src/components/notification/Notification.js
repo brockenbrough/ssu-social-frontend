@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark as closeIcon } from "@fortawesome/free-solid-svg-icons";
 import { faTrash as deleteIcon } from "@fortawesome/free-solid-svg-icons";
@@ -21,6 +21,10 @@ export default function Notification({
   const filteredNotifications = filter
     ? notifications.filter((notification) => notification.type === filter)
     : notifications;
+
+  useEffect(() => {
+    updateNotifications(notifications);
+  }, [notifications]);
 
   const updateNotifications = (notifications) => {
     setNotifications(notifications);
