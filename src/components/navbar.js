@@ -123,10 +123,6 @@ export default function Navbar() {
           });
 
           setTimeout(checkAndScroll, 1000);
-        } else {
-          console.log(
-            "Reached the bottom of the page, but the post was not found."
-          );
         }
 
         if (postElement) {
