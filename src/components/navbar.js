@@ -104,16 +104,12 @@ export default function Navbar() {
     deleteNotification(notification);
   };
 
-  const handleNotificationClick = (notification) => {
-    notification.isRead = true;
-    updateNotifications([...notifications]);
-    markNotificationAsRead(notification);
-
-    if (notification.postId) {
+  const scrollToPost = (postId) => {
+    if (postId) {
       let postElement = null;
 
       const checkAndScroll = () => {
-        postElement = document.getElementById(`post-${notification.postId}`);
+        postElement = document.getElementById(`post-${postId}`);
 
         if (postElement) {
           postElement.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -140,6 +136,16 @@ export default function Navbar() {
 
       checkAndScroll();
     }
+  };
+
+  const handleNotificationClick = (notification) => {
+    if (!notification.isRead) {
+      notification.isRead = true;
+      updateNotifications([...notifications]);
+      markNotificationAsRead(notification);
+    }
+
+    scrollToPost(notification.postId);
   };
 
   return (
