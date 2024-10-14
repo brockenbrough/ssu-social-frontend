@@ -371,7 +371,7 @@
 }
 
 .profile-post-item {
-  @apply relative w-full overflow-hidden rounded-lg shadow-md bg-lightBackground dark:bg-darkBackground; 
+  @apply relative w-full h-64 overflow-hidden rounded-lg shadow-md bg-lightBackground dark:bg-darkBackground; /* Set a fixed height for uniformity */
 }
 
 .profile-post-item img {
@@ -382,6 +382,9 @@
   @apply p-4 text-sm text-lightUserText dark:text-darkUserText; 
 }
 
+.profile-post-item .post-details {
+  @apply p-4 text-sm text-lightUserText dark:text-darkUserText; /* Style for post details such as description */
+}
 
 .modal-header, .modal-footer {
   @apply border-none bg-lightBackground dark:bg-darkBackground;
