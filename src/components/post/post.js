@@ -311,26 +311,19 @@ const Post = ({ posts: post }) => {
               />
             )}
 
-            {/* YouTube Thumbnail */}
+            {/* YouTube Video Embed */}
             {youtubeThumbnail && (
-              <div>
-                <img
-                  className="ssu-post-img mt-4 mb-3"
-                  alt="YouTube Video Thumbnail"
-                  src={youtubeThumbnail}
-                  style={{
-                    width: "100%",
-                    maxWidth: "500px",
-                    height: "100%",
-                    maxHeight: "350px",
-                    objectFit: "contain",
-                    display: "block",
-                    margin: "0 auto",
-                  }}
+              <div style={{ width: '100%', maxWidth: '500px', margin: '0 auto' }}>
+                <iframe
+                  width="100%"
+                  height="350"
+                  src={`https://www.youtube.com/embed/${post.content.match(/(?:v=|\/)([a-zA-Z0-9_-]{11})/)[1]}`}
+                  title="YouTube video player"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
                 />
               </div>
             )}
-
             {/* Like and comment buttons */}
             <button
               onClick={handleLikeClick}
@@ -375,13 +368,13 @@ const Post = ({ posts: post }) => {
           <div
             style={{ position: "absolute", left: "calc(50% + 200px)" }}
             className={
-              isAnimationActive &&(showCommentCard && !isSlidingOut? "animate-slide-in-left": "animate-slide-out-left")
+              isAnimationActive && (showCommentCard && !isSlidingOut ? "animate-slide-in-left" : "animate-slide-out-left")
             }
           >
             <Card
               style={{
                 width: "360px",
-                height: `${postCardHeight+4}px`,
+                height: `${postCardHeight + 4}px`,
               }}
               className="shadow rounded-lg custom-comment-card"
             >
