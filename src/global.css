@@ -3,55 +3,62 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
+.body {
+  @apply bg-lightBackground text-lightMainText; /*Light Mode */
+ }
+ 
+ .dark body{
+  @apply bg-darkBackground text-darkMainText; /*Dark Mode*/
+ }
+ 
 .ssu-page-container {
-  @apply bg-white dark:bg-gray-800 text-black dark:text-white min-h-screen pl-64;
+  @apply min-h-screen pl-64 bg-lightBackground text-lightMainText dark:bg-darkBackground dark:text-darkMainText;
 }
 
 
 .ssu-button-bold {
-  @apply bg-violet-500 text-white dark:text-black font-normal py-1 px-4 rounded hover:bg-violet-600 mr-1 ml-1 mt-1 mb-1;
+  @apply px-4 py-1 mt-1 mb-1 ml-1 mr-1 font-normal text-white rounded bg-violet-500 dark:text-black hover:bg-violet-600;
 }
 
 .ssu-button-primary {
-  @apply font-menu bg-orange-500 dark:bg-orange-500 text-white font-bold py-1 px-2 rounded hover:bg-orange-600 mr-1 ml-1 mt-1 mb-1;
+  @apply px-2 py-1 mt-1 mb-1 ml-1 mr-1 font-bold text-white bg-orange-500 rounded font-menu dark:bg-orange-500 hover:bg-orange-600;
 }
 
 .ssu-button-info-clickable {
-  @apply bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-white border-solid border-gray-100 font-normal py-1 px-1 rounded hover:bg-violet-800 mr-1 ml-1 mt-1 mb-1;
+  @apply px-1 py-1 mt-1 mb-1 ml-1 mr-1 font-normal text-gray-800 border-gray-100 border-solid rounded bg-gray-50 dark:bg-gray-700 dark:text-white hover:bg-violet-800;
 }
 
 .ssu-button-info {
-  @apply bg-white dark:bg-gray-800 text-gray-800 dark:text-white border border-gray-200 font-normal py-1 px-1 rounded mr-1 ml-1 mt-1 mb-1;
+  @apply px-1 py-1 mt-1 mb-1 ml-1 mr-1 font-normal text-gray-800 bg-white border border-gray-200 rounded dark:bg-gray-800 dark:text-white;
 }
 
 .ssu-text-tinyright {
-  @apply mt-1 text-right mr-[15px] text-[0.8rem] text-gray-800 dark:text-white break-words;
+  @apply mt-1 text-right mr-[15px] text-[0.8rem]  text-lightMainText dark:text-darkMainText break-words;
 }
 
 .ssu-text-normalsmall {
-  @apply text-sm text-gray-800 dark:text-white break-words;
+  @apply text-sm break-words text-lightMainText dark:text-darkMainText;
 }
 
 .ssu-text-normalmedium {
-  @apply text-sm text-gray-800 dark:text-white break-words;
+  @apply text-sm break-words text-lightMainText dark:text-darkMainText ;
 }
 
 .ssu-text-titlesmall {
-  @apply text-lg font-semibold text-gray-800 dark:text-white;
+  @apply text-lg font-semibold text-lightMainText dark:text-darkMainText;
 }
 
 .ssu-text-titlesmalllight {
-  @apply text-lg font-normal text-gray-800 dark:text-white;
+  @apply text-lg font-normal text-lightMainText dark:text-darkMainText;
 }
 
 .ssu-textlink-bold {
-  @apply text-sm font-semibold
-   text-gray-800 dark:text-white no-underline hover:text-orange-500;
+  @apply text-sm font-semibold no-underline text-lightMainText dark:text-darkMainText hover:text-orange-500;
 }
 
 
 .ssu-post-list {
-  @apply m-0 p-0 min-h-screen bg-white dark:bg-gray-800;
+  @apply min-h-screen p-0 m-0 bg-white dark:bg-gray-800;
 }
 
 .ssu-post-card {
@@ -63,35 +70,31 @@
 }
 
 .ssu-post-list {
-  @apply flex flex-col items-center m-0 p-0;
-}
-
-.body {
-  @apply bg-gray-100 text-gray-900;
+  @apply flex flex-col items-center p-0 m-0;
 }
 
 .a {
-  @apply text-blue-500 hover:underline;
+  @apply  text-lightMainText dark:text-darkMainText hover:underline;
 }
 
 /* Navbar */
 .nav {
-  @apply bg-white fixed top-0 w-full shadow-sm py-3 px-6 flex justify-between items-center z-50;
+  @apply fixed top-0 z-50 flex items-center justify-between w-full px-6 py-3 bg-white shadow-sm;
 }
 
 .nav a {
-  @apply text-gray-800 font-semibold;
+  @apply font-semibold text-lightMainText dark:text-darkMainText;
 }
 
 .nav-logo {
-  @apply text-xl font-bold text-blue-500;
+  @apply text-xl font-bold text-lightMainText dark:text-darkMainText;
 }
 
 .ssu-nav-link {
-  @apply font-menu text-lg mb-4 py-2 pl-4 text-gray-900 dark:text-white no-underline cursor-pointer hover:bg-orange-600 rounded-lg transition duration-200 hover:text-white;}
+  @apply py-2 pl-4 mb-4 text-lg no-underline transition duration-200 rounded-lg cursor-pointer text-lightMainText dark:text-darkMainText font-menu hover:bg-orange-600 hover:text-white;}
 
 .ssu-nav-filter-btn {
-  @apply text-sm text-gray-500 dark:text-white font-menu font-bold pb-2 hover:border-b-2 hover:border-orange-500;
+  @apply pb-2 text-sm font-bold text-gray-500 dark:text-white font-menu hover:border-b-2 hover:border-orange-500;
 }
 
 .ssu-nav-filter-btn-selected {
@@ -105,7 +108,7 @@
 
 /* Sidebar Navbar */
 .sidebar-navbar {
-  @apply fixed top-0 left-0 h-full w-40 bg-white dark:bg-gray-900 shadow-lg z-50; /* Adjust the height if needed */
+  @apply fixed top-0 left-0 z-50 w-40 h-full bg-white shadow-lg dark:bg-gray-900; /* Adjust the height if needed */
   overflow-y: auto; /* Enable scrolling if content overflows */
   display: flex;
   flex-direction: column; /* Stack items vertically */
@@ -118,11 +121,11 @@
 
 /* Sidebar */
 .sidebar {
-  @apply w-64 h-screen fixed top-0 bg-white shadow-lg py-6 px-4;
+  @apply fixed top-0 w-64 h-screen px-4 py-6 shadow-lg bg-lightBackground dark:bg-darkBackground;
 }
 
 .sidebar-item {
-  @apply flex items-center text-gray-300 hover:bg-gray-700 rounded-lg py-4 px-6 text-lg transition duration-200; /* Increased padding and font size */
+  @apply flex items-center px-6 py-4 text-lg transition duration-200 rounded-lg text-lightMainText dark:text-darkMainText hover:bg-gray-700; /* Increased padding and font size */
 }
 
 .sidebar-item svg {
@@ -131,11 +134,11 @@
 
 /* Feed Section */
 .feed {
-  @apply w-full max-w-2xl mx-auto pt-20 mb-20;
+  @apply w-full max-w-2xl pt-20 mx-auto mb-20;
 }
 
 .post {
-  @apply bg-white shadow-md rounded-lg mb-6 p-4;
+  @apply p-4 mb-6 bg-white rounded-lg shadow-md;
 }
 
 .post-header {
@@ -143,23 +146,23 @@
 }
 
 .post-header img {
-  @apply w-10 h-10 rounded-full mr-3;
+  @apply w-10 h-10 mr-3 rounded-full;
 }
 
 .post-header .name {
-  @apply font-semibold text-gray-800;
+  @apply font-semibold text-lightMainText dark:text-darkMainText;
 }
 
 .post-header .username {
-  @apply text-gray-500;
+  @apply  text-lightMainText dark:text-darkMainText;
 }
 
 .post-body {
-  @apply text-gray-700;
+  @apply  text-lightUserText dark:text-darkUserText;
 }
 
 .post-actions {
-  @apply flex justify-between items-center mt-4 text-gray-500;
+  @apply flex items-center justify-between mt-4 text-lightMainText dark:text-darkMainText;
 }
 
 .post-actions button {
@@ -168,17 +171,17 @@
 
 /* Buttons */
 .button-primary {
-  @apply bg-blue-500 text-white font-semibold py-2 px-4 rounded-full hover:bg-blue-600 transition duration-200;
+  @apply px-4 py-2 font-semibold text-white transition duration-200 bg-blue-500 rounded-full hover:bg-blue-600;
 }
 
 /* Input Fields */
 .input-field {
-  @apply w-full bg-gray-100 border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:ring-2 focus:ring-blue-400 focus:outline-none;
+  @apply w-full px-4 py-2 bg-gray-100 border border-gray-300 rounded-lg text-lightMainText dark:text-darkMainText focus:ring-2 focus:ring-blue-400 focus:outline-none;
 }
 
 /* Footer */
 .footer {
-  @apply text-center text-gray-500 text-sm mt-12 mb-6;
+  @apply mt-12 mb-6 text-sm text-center text-lightMainText dark:text-darkMainText;
 }
 
 /* Comment Section Scrollbar */
@@ -216,16 +219,16 @@
 
 /* Individual Comment Component Styling */
 .ssu-comment-username {
-  @apply text-black dark:text-white font-bold no-underline;
+  @apply font-bold no-underline text-lightMainText dark:text-darkMainText;
 }
 
 .ssu-comment-timeago {
-  @apply text-gray-500 dark:text-gray-400 text-sm;
+  @apply text-sm text-lightMainText dark:text-darkMainText;
   margin-left: 5px;
 }
 
 .ssu-comment-content {
-  @apply text-black dark:text-white text-base;
+  @apply text-base text-black dark:text-white;
   overflow-wrap: break-word;
   word-break: break-word;
   white-space: normal;
@@ -233,22 +236,22 @@
 
 /* Comment card background styling */
 .custom-comment-card {
-  @apply bg-white text-black; 
+  @apply text-black bg-white; 
   box-shadow: none;
 }
 
 .dark .custom-comment-card {
-  @apply bg-gray-900 text-white; 
+  @apply text-white bg-gray-900; 
   box-shadow: none;
 }
 
 .ssu-no-comments {
-  @apply text-center text-gray-500 py-4;
+  @apply py-4 text-center text-gray-500;
 }
 
 /* "Be the first to comment..." Message Styling */
 .comment-input-blank {
-  @apply w-full italic text-base bg-transparent text-gray-300 border-none outline-none;
+  @apply w-full text-base italic text-gray-300 bg-transparent border-none outline-none;
 }
 
 .dark .comment-input-blank {
@@ -257,7 +260,7 @@
 
 /* Comment Section Post Button and comment box */
 .comment-input {
-  @apply w-full h-10 bg-gray-100 text-gray-800 border border-gray-300 rounded-lg px-2 py-1 dark:bg-white dark:text-black dark:border-gray-600 not-italic resize-none overflow-hidden;
+  @apply w-full h-10 px-2 py-1 overflow-hidden not-italic text-gray-800 bg-gray-100 border border-gray-300 rounded-lg resize-none dark:bg-white dark:text-black dark:border-gray-600;
 }
 
 .comment-input::placeholder {
@@ -306,9 +309,152 @@
 
 
 .ssu-form-style{
-  @apply bg-white dark:bg-gray-800 w-full max-w-lg mx-auto p-6  rounded-lg shadow-md;
+  @apply w-full max-w-lg p-6 mx-auto bg-white rounded-lg shadow-md dark:bg-gray-800;
 }
 
 .ssu-modal-style{
-  @apply bg-white dark:bg-gray-800 p-6 rounded-lg;
+  @apply p-6 bg-white rounded-lg dark:bg-gray-800;
 }
+
+
+/* Start - Private User Profile Page Layout*/
+.ssu-profilePage-container {
+  @apply min-h-screen pl-64 bg-lightBackground text-lightMainText dark:bg-darkBackground dark:text-darkMainText;
+}
+
+.profile-header {
+  @apply flex items-center justify-between pb-5 mb-10 border-gray-300 dark:border-gray-700;
+}
+
+.profile-image img {
+  @apply object-cover w-40 h-40 border rounded-full border-iconBorder;
+}
+
+.profile-info {
+  @apply flex-1 ml-8;
+}
+
+.profile-info .username {
+  @apply mb-3 text-2xl font-semibold text-lightMainText dark:text-darkMainText;
+}
+
+.profile-info .edit-profile-btn {
+  @apply px-4 py-2 mb-5 text-sm font-medium border rounded-lg shadow-md cursor-pointer bg-lightBackground text-lightMainText dark:bg-darkBackground dark:text-darkMainText;
+}
+
+.profile-stats {
+  @apply flex gap-10 text-base text-lightMainText dark:text-darkMainText;
+}
+
+.stat-item {
+  @apply flex flex-col items-center text-center;
+}
+
+.stat-number {
+  @apply mt-1 text-right mr-[15px] text-[0.8rem];
+}
+
+.stat-label {
+  @apply text-lightMainText dark:text-darkMainText;
+}
+
+.profile-stats div span {
+  @apply mr-2 font-semibold;
+}
+
+.profile-bio {
+  @apply text-sm leading-6 text-lightUserText dark:text-darkUserText;
+}
+
+.profile-posts {
+  @apply grid w-full grid-cols-3 gap-4; 
+}
+
+.profile-post-item {
+  @apply relative w-full overflow-hidden rounded-lg shadow-md bg-lightBackground dark:bg-darkBackground; 
+}
+
+.profile-post-item img {
+  @apply object-cover w-full h-full; 
+}
+
+.profile-post-item p {
+  @apply p-4 text-sm text-lightUserText dark:text-darkUserText; 
+}
+
+
+.modal-header, .modal-footer {
+  @apply border-none bg-lightBackground dark:bg-darkBackground;
+}
+
+.modal-body img {
+  @apply w-full h-auto;
+}
+
+
+@media screen and (max-width: 768px) {
+  .profile-header {
+    @apply flex-col items-center text-center;
+  }
+
+  .profile-info {
+    @apply mt-5 ml-0;
+  }
+
+  .profile-posts {
+    @apply grid-cols-2;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .profile-posts {
+    @apply grid-cols-1;
+  }
+
+  /* Responsive grid for medium screens (e.g., tablets) */
+  @media screen and (max-width: 1024px) {
+    .profile-posts {
+      grid-template-columns: repeat(2, 1fr); 
+    }
+  }
+  
+  /* Responsive grid for small screens (e.g., mobile) */
+  @media screen and (max-width: 768px) {
+    .profile-posts {
+      grid-template-columns: 1fr; 
+    }
+  }
+  
+    .profile-image img {
+      @apply w-24 h-24;
+    }
+  }
+
+.toggle-button {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  font-size: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--main-text-color);
+  z-index: 1000;
+}
+
+.side-menu {
+  @apply fixed top-0 right-0 h-full w-64 bg-lightBackground dark:bg-darkBackground shadow-lg transform translate-x-full transition-transform duration-300 ease-in-out z-[999];
+}
+
+.side-menu.open {
+  @apply transform translate-x-0;
+}
+
+.menu-item {
+  @apply block px-5 py-4 text-lg text-left border-gray-300 cursor-pointer text-lightMainText dark:text-darkMainText;
+}
+
+.menu-item:hover {
+  @apply bg-lightHover dark:bg-darkHover;
+}
+/* End - Private User Profile Page Layout*/

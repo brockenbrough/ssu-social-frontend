@@ -14,12 +14,8 @@ import ProfileImage from "../images/ProfileImage.js";
 const PrivateUserProfile = () => {
   const { darkMode } = useDarkMode();
 
-  const containerStyle = {
-    background: darkMode ? 'black' : 'pink',
-    color: darkMode ? 'pink' : 'black',
-    minHeight: '100vh',
-    paddingLeft: '250px', // Adjust this based on your sidebar width
-  };
+  // State for toggling sidebar menu
+ const [showMenu, setShowMenu] = useState(false);
 
   // State for showing delete confirmation modal
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
@@ -35,9 +31,8 @@ const PrivateUserProfile = () => {
   const handleCloseUploadModal = () => setShowUploadModal(false);
   const handleShowUploadModal = () => setShowUploadModal(true);
 
-
-  const [totalLikes, setTotalLikes] = useState(0); // State to store total likes
-
+  
+  const [totalLikes, setTotalLikes] = useState(0); 
 
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
@@ -282,79 +277,114 @@ const deleteConfirm = async () => {
   const showUserModal = () => {
     setUserModal(true);
   };
+  
   const closeUserModal = () => {
     setUserModal(false);
   }
+  
+// Toggle sidebar menu
+  const toggleMenu = () => {
+    setShowMenu(!showMenu);
+  };
 
   return (
-    <div className="ssu-page-container">
-  
-      {user ? (
-        <>
-          <Row>
-          <Col md={3} className="text-center" style={{ marginTop: '150px' }}> {/* Adjust marginTop as needed */}
-  <ProfileImage />
-  <ul>
-    <button onClick={followerRouteChange} className="ssu-button-info-clickable">
-      {followerCount} followers 
-    </button>
-    <button onClick={followingRouteChange} className="ssu-button-info-clickable">
-      {followingCount} following 
-    </button> 
-    <button className="ssu-button-info">
-      {totalLikes} likes
-    </button>
-  </ul>
-  <button onClick={handleShowLogoutConfirmation} className="ssu-button-primary">
-    Log out
-  </button>
-              <Modal
-                show={showLogoutConfirmation}
-                onHide={handleCloseLogoutConfirmation}
-                backdrop="static"
-                keyboard={false}
-              >
-                <Modal.Header closeButton style={{
-                    background: darkMode ? '#181818' : 'white',
-                    color: darkMode ? 'white' : 'black',
-                  }}>
-                  <Modal.Title>Log out</Modal.Title>
-                </Modal.Header>
-                <Modal.Body style={{
-                    background: darkMode ? '#181818' : 'white',
-                    color: darkMode ? 'white' : 'black',
-                  }}>Are you sure you want to Log Out?</Modal.Body>
-                <Modal.Footer style={{
-                    background: darkMode ? '#181818' : 'white',
-                    color: darkMode ? 'white' : 'black',
-                  }}>
-                  <button variant="secondary" onClick={handleCloseLogoutConfirmation} class="ssu-button-primary">
-                    No
-                  </button>
-                  <button variant="primary" onClick={handleLogout} class="ssu-button-primary">
-                    Yes
-                  </button>
-                </Modal.Footer>
-              </Modal>
-              <button onClick={showUserModal} class="ssu-button-primary" > Edit profile
-              </button>
-            </Col>
-            <Col md={9}>
+    <div className="ssu-profilePage-container">
+      <button onClick={toggleMenu} className="toggle-button">
+       &#x22EE; {/* Three dots button */}
+     </button>
+      {/* Left Sidebar Menu */}
+     {showMenu && (
+       <div className={`side-menu ${showMenu ? "open" : ""}`}>
+         <button onClick={() => userModal(true)} className="menu-item">
+           Account Settings
+         </button>
+         <button className="menu-item">Personal Information</button>
+         <button onClick={() => handleShowLogoutConfirmation(true)} className="ssu-button-primary">
+           log Out
+         </button>
+       </div>
+     )}
 
-              <p class="ssu-text-titlesmall">Your posts</p>
-              <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-start', gap: '1rem' }}>
-                <PostList type="privateuserprofile" />
+      {user ? (
+         <>
+         <div className="profile-header">
+           <div className="profile-image">
+             <ProfileImage />
+           </div>
+           <div className="profile-info">
+             <div className="username">{user.username}</div>
+             <button onClick={showUserModal} class="edit-profile-btn" >
+               edit profile
+             </button>
+             <div className="profile-stats">
+           <div className="stat-item">
+             <span className="stat-number">{posts.length}</span>
+             <span className="stat-label">posts</span>
+           </div>
+           <div className="stat-item">
+             <span className="stat-number">{followerCount}</span>
+             <span className="stat-label">followers</span>
+           </div>
+           <div className="stat-item">
+             <span className="stat-number">{followingCount}</span>
+             <span className="stat-label">following</span>
+             </div>
+             </div>
+             <div className="profile-bio">{user.bio}</div>
+             </div>
+             </div>
+             
+          {/* Post Grid */}
+          <div className="profile-posts">
+            {posts.map((post, index) => (
+              <div key={index} className="profile-post-item" onClick={() => openPostModal(post)}>
+                {post.image ? (
+                  <img src={post.image} alt={`Post by ${post.username}`} />
+                ) : (
+                  <p>{post.content}</p>
+                )}
               </div>
-            </Col>
-          </Row>
+            ))}
+          </div>
         </>
+     
       ) : (
-        <div className="col-md-12 text-center" style={{ fontSize: '24px', fontWeight: 'bold' }}>
+        <div className="text-center col-md-12" style={{ fontSize: '24px', fontWeight: 'bold' }}>
           <p>
             Please <Link to="/" style={{ textDecoration: 'underline' }}>log in</Link> to view your profile.
           </p>
         </div>
       )}
+      
+      <Modal
+               show={showLogoutConfirmation}
+               onHide={handleCloseLogoutConfirmation}
+               backdrop="static"
+               keyboard={false}
+             >
+               <Modal.Header closeButton style={{
+                   background: darkMode ? '#181818' : 'white',
+                   color: darkMode ? 'white' : 'black',
+                 }}>
+                 <Modal.Title>log out</Modal.Title>
+               </Modal.Header>
+               <Modal.Body style={{
+                   background: darkMode ? '#181818' : 'white',
+                   color: darkMode ? 'white' : 'black',
+                 }}>Are you sure you want to log out?</Modal.Body>
+               <Modal.Footer style={{
+                   background: darkMode ? '#181818' : 'white',
+                   color: darkMode ? 'white' : 'black',
+                 }}>
+                 <button variant="secondary" onClick={handleCloseLogoutConfirmation} class="ssu-button-primary">
+                   No
+                 </button>
+                 <button variant="primary" onClick={handleLogout} class="ssu-button-primary">
+                   Yes
+                 </button>
+               </Modal.Footer>
+             </Modal>
+             
       <Modal show={showDeleteConfirmation} onHide={handleCloseDeleteConfirmation} backdrop="static" keyboard={false}>
         <Modal.Header closeButton>
           <Modal.Title>Delete Confirmation</Modal.Title>
@@ -371,6 +401,7 @@ const deleteConfirm = async () => {
           </Button>
         </Modal.Footer>
       </Modal>
+      
       <Modal show={showUploadModal} onHide={handleCloseUploadModal}>
         <Modal.Header closeButton>
           <Modal.Title>Change Profile Picture</Modal.Title>
@@ -392,6 +423,7 @@ const deleteConfirm = async () => {
           <Button onClick={onUpload}>Upload Profile Image</Button>
         </Modal.Footer>
       </Modal>
+      
       <Modal show={showPostModal} onHide={closePostModal}>
         <Modal.Header closeButton>
           <Modal.Title>Post</Modal.Title>
@@ -411,14 +443,16 @@ const deleteConfirm = async () => {
           </Button>
         </Modal.Footer>
       </Modal>
+      
       <Modal show={userModal} onHide={closeUserModal}>
-        <Modal.Header closeButton className="ssu-modal-style">
-          <Modal.Title className ="ssu-text-titlesmall">Edit Profile</Modal.Title>
-        </Modal.Header>
-        <Modal.Body className="ssu-modal-style">
-          <EditUser />
-        </Modal.Body>
-      </Modal>
+       <Modal.Header closeButton>
+         <Modal.Title>Edit Profile</Modal.Title>
+       </Modal.Header>
+       <Modal.Body>
+         <EditUser />
+       </Modal.Body>
+     </Modal>
+      
     </div>
   );
 };
