@@ -62,8 +62,13 @@ const Post = ({ posts: post }) => {
 
   const rendercontent = (content) => {
     if (!content) return content;
+  
     const urlRegex = /(https?:\/\/[^\s]+)/g;
-    return content.split(urlRegex).map((part, index) => {
+    const youtubeRegex =
+      /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})(?:[^\s]*)?/;
+    const filteredContent = content.replace(youtubeRegex, "");
+  
+    return filteredContent.split(urlRegex).map((part, index) => {
       if (index % 2 === 1) {
         return (
           <a key={index} href={part} target="_blank" rel="noopener noreferrer">
@@ -74,7 +79,7 @@ const Post = ({ posts: post }) => {
       return part;
     });
   };
-
+  
   useLayoutEffect(() => {
     const postCardElement = postCardRef.current;
     if (postCardElement) {
