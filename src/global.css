@@ -202,16 +202,44 @@
 }
 /* DarkMode Comment Section Scrollbar */
 .custom-scrollbar-dark::-webkit-scrollbar-track {
-  @apply bg-gray-800;
+  @apply bg-gray-200;
 }
 
 .custom-scrollbar-dark::-webkit-scrollbar-thumb {
-  @apply bg-gray-600;
+  @apply bg-orange-500;
   border-radius: 9999px; 
 }
 
 .custom-scrollbar-dark::-webkit-scrollbar-thumb:hover {
-  @apply bg-gray-400;
+  @apply bg-orange-600;
+}
+
+/* Individual Comment Component Styling */
+.ssu-comment-username {
+  @apply text-black dark:text-white font-bold no-underline;
+}
+
+.ssu-comment-timeago {
+  @apply text-gray-500 dark:text-gray-400 text-sm;
+  margin-left: 5px;
+}
+
+.ssu-comment-content {
+  @apply text-black dark:text-white text-base;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  white-space: normal;
+}
+
+/* Comment card background styling */
+.custom-comment-card {
+  @apply bg-white text-black; 
+  box-shadow: none;
+}
+
+.dark .custom-comment-card {
+  @apply bg-gray-900 text-white; 
+  box-shadow: none;
 }
 
 .ssu-no-comments {
@@ -242,7 +270,7 @@
 
 /* Comment Card Animation Sliding */
 @keyframes slide-in-left {
-  0% { transform: translateX(-20%); opacity: 0; }
+  0% { transform: translateX(-10%); opacity: 0; }
   100% { transform: translateX(0); opacity: 1; }
 }
 
@@ -252,7 +280,7 @@
 
 @keyframes slide-out-left {
   0% { transform: translateX(0); opacity: 1; }
-  100% { transform: translateX(-20%); opacity: 0; }
+  100% { transform: translateX(-10%); opacity: 0; }
 }
 
 .animate-slide-out-left {

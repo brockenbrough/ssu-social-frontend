@@ -375,21 +375,17 @@ const Post = ({ posts: post }) => {
           <div
             style={{ position: "absolute", left: "calc(50% + 200px)" }}
             className={
-              isAnimationActive &&
-              (showCommentCard && !isSlidingOut
-                ? "animate-slide-in-left"
-                : "animate-slide-out-left")
+              isAnimationActive &&(showCommentCard && !isSlidingOut? "animate-slide-in-left": "animate-slide-out-left")
             }
           >
             <Card
               style={{
                 width: "360px",
-                height: `${postCardHeight}px`,
-                backgroundColor: darkMode ? "#181818" : "#f6f8fa",
+                height: `${postCardHeight+4}px`,
               }}
-              className="shadow-lg rounded-lg"
+              className="shadow rounded-lg custom-comment-card"
             >
-              <Card.Body style={{ color: darkMode ? "white" : "black" }}>
+              <Card.Body>
                 <CreateComment
                   post={post}
                   setParentCommentCount={setCommentCount}

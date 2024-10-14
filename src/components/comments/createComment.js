@@ -8,10 +8,7 @@ import React, {
 } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
 import getUserInfo from "../../utilities/decodeJwt";
-import { useDarkMode } from "../DarkModeContext";
-import Card from "react-bootstrap/Card";
 import Stack from "react-bootstrap/Stack";
 import timeAgo from "../../utilities/timeAgo";
 const CommentCountContext = createContext();
@@ -34,14 +31,11 @@ function CreateComment({
   post,
   setParentCommentCount,
   postCardHeight,
-  hasMedia,
 }) {
   const postId = post._id;
   const [comments, setComments] = useState([]);
   const [user, setUser] = useState(null);
-  const navigate = useNavigate();
-  const [commentCount, setCommentCount] = useState(0); // Comment count state
-  const { darkMode } = useDarkMode();
+  const [commentCount, setCommentCount] = useState(0); 
   const commentsEndRef = useRef(null);
 
   useLayoutEffect(() => {
@@ -220,62 +214,30 @@ function CreateComment({
     }
     return comments.map((comment) => {
       return (
-        <Card
-          body
-          outline
-          color="success"
-          className="mx-0 my-2"
-          style={{
-            width: "100%",
-            color: darkMode ? "white" : "black",
-            backgroundColor: darkMode ? "#181818" : "#f6f8fa",
-            borderColor: darkMode ? "#f6f8fa" : "#181818",
-          }}
-        >
-          <Card.Body
-            style={{
-              margin: "0",
-              padding: "0",
-              color: darkMode ? "white" : "black",
-              backgroundColor: darkMode ? "#181818" : "#f6f8fa",
-            }}
-          >
-            <Stack>
-              <span>
-                <span style={{ fontWeight: "bold", fontSize: "1rem" }}>
-                  <Link
-                    id="username"
-                    to={
-                      user.username === comment.username
-                        ? "/privateUserProfile"
-                        : `/publicProfilePage/${comment.username}`
-                    }
-                    style={{
-                      color: darkMode ? "white" : "black",
-                      textDecoration: "none",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    @{comment.username}
-                  </Link>
-                </span>
-                <span style={{ marginLeft: "5px", fontSize: "0.8rem" }}>
-                  {timeAgo(comment.date)}
-                </span>
-                <br />
-                <span
-                  style={{
-                    overflowWrap: "break-word",
-                    wordBreak: "break-word",
-                    whiteSpace: "normal",
-                  }}
-                >
-                  {comment.commentContent}
-                </span>
+        //Spacing Between Comments is "mb-2", Comment Border is set to none
+        <div className="w-full custom-comment-card mx-0 mb-2"> 
+          <Stack style={{border:"none"}}>
+            <span>
+              <span style={{ fontWeight: "bold", fontSize: "1rem" }}>
+                <Link
+                  id="username"
+                  to={user.username === comment.username ? "/privateUserProfile" : `/publicProfilePage/${comment.username}`}
+                  className="ssu-comment-username">
+                  @{comment.username}
+                </Link>
               </span>
-            </Stack>
-          </Card.Body>
-        </Card>
+              <span className="ssu-comment-timeago">
+                {timeAgo(comment.date)}
+              </span>
+              <br />
+              <span
+                className="ssu-comment-content"
+              >
+                {comment.commentContent}
+              </span>
+            </span>
+          </Stack>
+        </div>
       );
     });
   }
@@ -301,9 +263,7 @@ function CreateComment({
       {/* Scrollable Comment section Div */}
       <div
         ref={commentsEndRef}
-        className={`custom-scrollbar ${
-          darkMode ? "custom-scrollbar-dark" : ""
-        }`}
+        className="custom-scrollbar custom-scrollbar-dark mx-0"
         style={{
           overflowY: "auto",
           marginTop: "15px",
@@ -324,17 +284,13 @@ function CreateComment({
       </div>
 
       <form onSubmit={handleSubmit}>
-        <div className="text-sm text-gray-600 text-right">
+        <div className="text-sm text-gray-600 dark:text-gray-300 text-right">
           {formData.commentContent.length}/110
         </div>
         <div className="flex items-center mt-1 relative">
           <textarea
-            className={`comment-input custom-scrollbar resize-none w-full max-h-9 
-            ${
-              formData.commentContent.length === 0
-                ? "overflow-hidden"
-                : "overflow-y-auto"
-            }`}
+            className={`comment-input custom-scrollbar custom-scrollbar-dark resize-none w-full max-h-9 
+            ${formData.commentContent.length === 0 ? "overflow-hidden" : "overflow-y-auto"}`}
             id="commentContent"
             name="commentContent"
             value={formData.commentContent}
