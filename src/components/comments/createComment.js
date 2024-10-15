@@ -6,6 +6,7 @@ import React, {
   useContext,
   useRef,
 } from "react";
+import EmojiPicker from 'emoji-picker-react';
 import axios from "axios";
 import { Link } from "react-router-dom";
 import getUserInfo from "../../utilities/decodeJwt";
@@ -35,8 +36,15 @@ function CreateComment({
   const postId = post._id;
   const [comments, setComments] = useState([]);
   const [user, setUser] = useState(null);
-  const [commentCount, setCommentCount] = useState(0); 
+  const [commentCount, setCommentCount] = useState(0);
   const commentsEndRef = useRef(null);
+  const textareaRef = useRef(null);
+  const emojiPickerRef = useRef(null);
+  const emojiButtonRef = useRef(null);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [formData, setFormData] = useState({
+    commentContent: "",
+  });
 
   useLayoutEffect(() => {
     if (commentsEndRef.current) {
@@ -118,9 +126,36 @@ function CreateComment({
     }
   };
 
-  const [formData, setFormData] = useState({
-    commentContent: "",
-  });
+  // Once an emoji is clicked its added to the textarea
+  const handleEmojiClick = (emojiObject) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      commentContent: prevState.commentContent + emojiObject.emoji
+    }));
+  };
+
+  // Emoji Box listener to close the box after clicked outside of the box
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      // Check if the click is outside the emoji picker, emoji button, and textarea
+      if (
+        emojiPickerRef.current &&
+        !emojiPickerRef.current.contains(event.target) &&
+        emojiButtonRef.current &&
+        !emojiButtonRef.current.contains(event.target) &&
+        textareaRef.current &&
+        !textareaRef.current.contains(event.target) // Don't close if textarea is clicked
+      ) {
+        setShowEmojiPicker(false); // Close emoji picker
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const saveCommentNotification = async (post) => {
     const data = {
@@ -181,6 +216,7 @@ function CreateComment({
       if (response.ok) {
         // Reset Form
         setFormData({ commentContent: "" });
+        setShowEmojiPicker(false);
 
         // Update comments
         setComments([...comments, newComment]);
@@ -215,8 +251,8 @@ function CreateComment({
     return comments.map((comment) => {
       return (
         //Spacing Between Comments is "mb-2", Comment Border is set to none
-        <div className="w-full custom-comment-card mx-0 mb-2"> 
-          <Stack style={{border:"none"}}>
+        <div className="w-full custom-comment-card mx-0 mb-2">
+          <Stack style={{ border: "none" }}>
             <span>
               <span style={{ fontWeight: "bold", fontSize: "1rem" }}>
                 <Link
@@ -289,6 +325,7 @@ function CreateComment({
         </div>
         <div className="flex items-center mt-1 relative">
           <textarea
+            ref={textareaRef}
             className={`comment-input custom-scrollbar custom-scrollbar-dark resize-none w-full max-h-9 
             ${formData.commentContent.length === 0 ? "overflow-hidden" : "overflow-y-auto"}`}
             id="commentContent"
@@ -304,6 +341,7 @@ function CreateComment({
               if (e.key === "Enter" && !e.shiftKey) {
                 e.preventDefault();
                 handleSubmit(e);
+                setShowEmojiPicker(false);
               }
             }}
             required
@@ -314,6 +352,37 @@ function CreateComment({
               zIndex: 10,
             }}
           />
+          {/* Emoji Picker Button */}
+          <div className="relative">
+            <button
+              ref={emojiButtonRef}
+              type="button"
+              onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+              className="text-2xl bg-transparent border-none cursor-pointer focus:outline-none hover:text-blue-500"
+            >
+              😀
+            </button>
+
+            {/* Emoji Picker */}
+            {showEmojiPicker && (
+              <div ref={emojiPickerRef} className="absolute bottom-12 left-[-236px] z-50">
+                <EmojiPicker
+                  onEmojiClick={(emojiObject) => {
+                    const newContentLength = formData.commentContent.length + emojiObject.emoji.length;
+
+                    if (newContentLength <= 255) {
+                      setFormData((prevState) => ({
+                        ...prevState,
+                        commentContent: prevState.commentContent + emojiObject.emoji
+                      }));
+                    }
+                  }}
+                  theme={document.documentElement.classList.contains('dark') ? 'dark' : 'light'} 
+                />
+              </div>
+            )}
+            
+          </div>
           <button
             type="submit"
             className="post-button ml-2"

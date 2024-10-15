@@ -14,6 +14,7 @@
     "axios": "^1.2.1",
     "bootstrap": "^5.3.2",
     "data": "^0.6.1",
+    "emoji-picker-react": "^4.12.0",
     "i": "^0.3.7",
     "jwt-decode": "^3.1.2",
     "moment": "^2.29.4",
