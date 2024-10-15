@@ -62,12 +62,12 @@ const Post = ({ posts: post }) => {
 
   const rendercontent = (content) => {
     if (!content) return content;
-  
+
     const urlRegex = /(https?:\/\/[^\s]+)/g;
     const youtubeRegex =
       /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})(?:[^\s]*)?/;
     const filteredContent = content.replace(youtubeRegex, "");
-  
+
     return filteredContent.split(urlRegex).map((part, index) => {
       if (index % 2 === 1) {
         return (
@@ -79,7 +79,7 @@ const Post = ({ posts: post }) => {
       return part;
     });
   };
-  
+
   useLayoutEffect(() => {
     const postCardElement = postCardRef.current;
     if (postCardElement) {
@@ -318,11 +318,15 @@ const Post = ({ posts: post }) => {
 
             {/* YouTube Video Embed */}
             {youtubeThumbnail && (
-              <div style={{ width: '100%', maxWidth: '500px', margin: '0 auto' }}>
+              <div
+                style={{ width: "100%", maxWidth: "500px", margin: "0 auto" }}
+              >
                 <iframe
                   width="100%"
                   height="350"
-                  src={`https://www.youtube.com/embed/${post.content.match(/(?:v=|\/)([a-zA-Z0-9_-]{11})/)[1]}`}
+                  src={`https://www.youtube.com/embed/${
+                    post.content.match(/(?:v=|\/)([a-zA-Z0-9_-]{11})/)[1]
+                  }`}
                   title="YouTube video player"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
@@ -336,7 +340,7 @@ const Post = ({ posts: post }) => {
             >
               <FontAwesomeIcon
                 icon={isLiked ? solidHeartIcon : regularHeartIcon}
-                className={isLiked ? "text-orange-500" : ""}
+                className={isLiked ? "text-red-500" : ""}
               />
               <span>{` ${likeCount}`}</span>
             </button>
@@ -345,7 +349,7 @@ const Post = ({ posts: post }) => {
               className="mr-4 mt-2 font-menu text-gray-900 dark:text-white"
             >
               <FontAwesomeIcon
-                className={showCommentCard ? "mr-1 text-orange-500" : "mr-1"}
+                className={showCommentCard ? "mr-1 text-blue-500" : "mr-1"}
                 icon={showCommentCard ? solidCommentIcon : regularCommentIcon}
               />
               {commentCount > 0 ? commentCount : "0"}
@@ -373,7 +377,10 @@ const Post = ({ posts: post }) => {
           <div
             style={{ position: "absolute", left: "calc(50% + 200px)" }}
             className={
-              isAnimationActive && (showCommentCard && !isSlidingOut ? "animate-slide-in-left" : "animate-slide-out-left")
+              isAnimationActive &&
+              (showCommentCard && !isSlidingOut
+                ? "animate-slide-in-left"
+                : "animate-slide-out-left")
             }
           >
             <Card

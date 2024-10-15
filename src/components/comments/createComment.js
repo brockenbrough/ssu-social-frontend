@@ -285,7 +285,7 @@ function CreateComment({
 
       <form onSubmit={handleSubmit}>
         <div className="text-sm text-gray-600 dark:text-gray-300 text-right">
-          {formData.commentContent.length}/110
+          {formData.commentContent.length}/255
         </div>
         <div className="flex items-center mt-1 relative">
           <textarea
@@ -294,9 +294,9 @@ function CreateComment({
             id="commentContent"
             name="commentContent"
             value={formData.commentContent}
-            maxLength="110"
+            maxLength="255"
             onChange={(e) => {
-              if (e.target.value.length <= 110) {
+              if (e.target.value.length <= 255) {
                 setFormData({ ...formData, commentContent: e.target.value });
               }
             }}
