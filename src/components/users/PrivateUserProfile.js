@@ -10,6 +10,7 @@ import { useDarkMode } from '../DarkModeContext.js';
 import PostList from "../post/postlist";
 import EditUser from './editUserPage.js';
 import ProfileImage from "../images/ProfileImage.js";
+import UploadImages from "../images/uploadImages.js";
 
 const PrivateUserProfile = () => {
   const { darkMode } = useDarkMode();
@@ -310,6 +311,7 @@ const deleteConfirm = async () => {
          <div className="profile-header">
            <div className="profile-image">
              <ProfileImage />
+             <Button onClick={UploadImages}>Upload Profile Image</Button>
            </div>
            <div className="profile-info">
              <div className="username">{user.username}</div>
