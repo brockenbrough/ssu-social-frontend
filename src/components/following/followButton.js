@@ -4,6 +4,7 @@ import getUserInfo from "../../utilities/decodeJwt";
 import axios from "axios";
 import Button from "react-bootstrap/Button";
 import "./followingSheet.css";
+import apiClient from "../../utilities/apiClient";
 
 export default function FollowButton(props) {
   const routeChange = () => {
@@ -36,10 +37,7 @@ export default function FollowButton(props) {
     if (data.username === data.actionUsername) return;
 
     try {
-      await axios.post(
-        `${process.env.REACT_APP_BACKEND_SERVER_URI}/notification`,
-        data
-      );
+      await apiClient.post(`/notification`, data);
     } catch (error) {
       console.error("Error saving follow notification:", error);
     }
@@ -149,13 +147,13 @@ export default function FollowButton(props) {
 
   function MainFollowButton() {
     const buttonStyles = {
-      padding: '8px 16px',
-      fontSize: '1rem',
-      width: 'auto',
-      height: 'auto',
-      minWidth: '100px',
+      padding: "8px 16px",
+      fontSize: "1rem",
+      width: "auto",
+      height: "auto",
+      minWidth: "100px",
     };
-  
+
     if (isFollowingBool) {
       return (
         <button
@@ -179,7 +177,7 @@ export default function FollowButton(props) {
         </button>
       );
     }
-  }  
+  }
 
   //if (!user) return (<div><h3>You are not authorized to view this page, Please Login in <Link to={'/login'}><a href='#'>here</a></Link></h3></div>)
 
