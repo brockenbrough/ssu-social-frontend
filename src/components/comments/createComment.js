@@ -128,10 +128,14 @@ function CreateComment({
 
   // Once an emoji is clicked its added to the textarea
   const handleEmojiClick = (emojiObject) => {
-    setFormData((prevState) => ({
-      ...prevState,
-      commentContent: prevState.commentContent + emojiObject.emoji
-    }));
+    const newContentLength = formData.commentContent.length + emojiObject.emoji.length;
+
+    if (newContentLength <= 255) {
+      setFormData((prevState) => ({
+        ...prevState,
+        commentContent: prevState.commentContent + emojiObject.emoji,
+      }));
+    }
   };
 
   // Emoji Box listener to close the box after clicked outside of the box
@@ -358,7 +362,7 @@ function CreateComment({
               ref={emojiButtonRef}
               type="button"
               onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-              className="text-2xl bg-transparent border-none cursor-pointer focus:outline-none hover:text-blue-500"
+              className="text-2xl bg-transparent border-none cursor-pointer"
             >
               😀
             </button>
@@ -367,21 +371,11 @@ function CreateComment({
             {showEmojiPicker && (
               <div ref={emojiPickerRef} className="absolute bottom-12 left-[-236px] z-50">
                 <EmojiPicker
-                  onEmojiClick={(emojiObject) => {
-                    const newContentLength = formData.commentContent.length + emojiObject.emoji.length;
-
-                    if (newContentLength <= 255) {
-                      setFormData((prevState) => ({
-                        ...prevState,
-                        commentContent: prevState.commentContent + emojiObject.emoji
-                      }));
-                    }
-                  }}
-                  theme={document.documentElement.classList.contains('dark') ? 'dark' : 'light'} 
+                  onEmojiClick={handleEmojiClick}
+                  theme={document.documentElement.classList.contains('dark') ? 'dark' : 'light'}
                 />
               </div>
             )}
-            
           </div>
           <button
             type="submit"
