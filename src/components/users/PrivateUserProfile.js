@@ -171,6 +171,10 @@ const profileImageUrl = profileImageFilename ? `./routes/users/user.images/image
         followCount = response.data[0].following.length;
       
       }
+      const userResponse = await axios.get(
+        `${process.env.REACT_APP_BACKEND_SERVER_URI}/user/getUserByUsername/${username}`
+      );
+      setUser(userResponse.data);
     } catch (error) {
       console.error(`Error fetching following count: ${error.message}`);
     }
@@ -332,7 +336,7 @@ const deleteConfirm = async () => {
                 <span className="stat-label">following</span>
               </div>
             </div>
-             <div className="profile-bio">{user.bio}</div>
+             <div className="profile-bio">{user.biography}</div>
              </div>
              </div>
              
