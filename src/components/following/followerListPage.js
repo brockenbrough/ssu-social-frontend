@@ -2,22 +2,19 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router";
 import getUserInfo from "../../utilities/decodeJwt";
 import axios from "axios";
-import Button from "react-bootstrap/Button";
 import FollowButton from "./followButton.js";
 import { Link } from "react-router-dom";
-import { useDarkMode } from "../DarkModeContext"; // Import dark mode hook
+import { useDarkMode } from "../DarkModeContext";
 
-// The FollowerList component.  This is the main component in this file.
 export default function FollowerList() {
   const [user, setUser] = useState({});
   const [followers, setFollowers] = useState([]);
   const params = useParams();
   const [error, setError] = useState({});
-  const { darkMode } = useDarkMode(); // Get dark mode state
-  const navigate = useNavigate(); // Initialize the navigate hook
+  const { darkMode } = useDarkMode();
+  const navigate = useNavigate();
   const [followerCount, setFollowerCount] = useState(0);
 
-  // This method fetches the user's followers from the database.
   useEffect(() => {
     async function getFollowers() {
       const response = await fetch(
@@ -32,7 +29,7 @@ export default function FollowerList() {
 
       try {
         const fetchedFollowers = await response.json();
-        setFollowers(fetchedFollowers[0].followers); // update state.  when state changes, we automatically re-render.
+        setFollowers(fetchedFollowers[0].followers);
       } catch (error) {
         setError(error);
       }
@@ -44,7 +41,6 @@ export default function FollowerList() {
     return;
   }, [followers.length]);
 
-  // A method to delete a follower.
   async function deleteFollower(userId, targetUserId) {
     const deleteFollower = {
       userId: userId,
@@ -56,8 +52,8 @@ export default function FollowerList() {
       data: deleteFollower,
     });
 
-    const newFollowers = followers.filter((el) => el !== el); // This causes a re-render because we change state. Helps cause a re-render.
-    setFollowers(newFollowers); // This causes a re-render because we change state.
+    const newFollowers = followers.filter((el) => el !== el);
+    setFollowers(newFollowers);
   }
 
   const updateFollowerCount = (newFollowerCount) => {
@@ -65,44 +61,48 @@ export default function FollowerList() {
   };
 
   const Follower = ({ record, user, deletePerson }) => (
-    <tr>
-      <td className="fs-4">
+    <tr className="h-16"> 
+      <td className="flex items-center justify-between px-4" style={{ minWidth: '200px' }}>
         <Link
           to={`/publicProfilePage/${record}`}
-          style={{ textDecoration: "none", color: darkMode ? "#fff" : "#000" }}
+          className={`text-${darkMode ? 'white' : 'black'} text-xl`}
+          style={{ textDecoration: 'none' }}
         >
           {record}
         </Link>
-      </td>
-      <td>
-        {user.username !== record ? (
-          <FollowButton
-            username={user.username}
-            targetUserId={record}
-            onUpdateFollowerCount={updateFollowerCount}
-          />
-        ) : (
-          <p></p>
-        )}
-      </td>
-      {user.username === params.id.toString() ? (
-        <td>
-          <Button
-            variant="danger"
-            size="lg"
-            onClick={() => {
-              deletePerson(record);
-            }}
-          >
-            Delete
-          </Button>
-        </td>
-      ) : (
-        <p></p>
-      )}
-    </tr>
-  );
+  
+        
+        <div className="flex items-center justify-center space-x-2">
+          {user.username !== record && (
+            <FollowButton
+              username={user.username}
+              targetUserId={record}
+              onUpdateFollowerCount={updateFollowerCount}
+            />
+          )}
 
+          {user.username === params.id.toString() && (
+            <button
+              className="ssu-button-caution"
+              style={{
+                padding: '8px 16px',
+                fontSize: '1rem',
+                width: 'auto',
+                height: 'auto',
+                minWidth: '100px',
+              }}
+              onClick={() => {
+                deletePerson(record);
+              }}
+            >
+              Delete
+            </button>
+          )}
+        </div>
+      </td>
+    </tr>
+  );  
+       
   function followerList() {
     return followers.map((record) => {
       return (
@@ -125,74 +125,57 @@ export default function FollowerList() {
     );
   }
 
-  // Back button handler to go to the profile page
   function handleBack() {
     navigate(`/privateUserProfile`);
   }
 
-  // This following section will display the table with the records of individuals and all their followers.
   return (
-    <div
-      style={{
-        backgroundColor: darkMode ? "#000" : "#f6f8fa",
-        color: darkMode ? "#fff" : "#000",
-        minHeight: "100vh",
-        paddingLeft: "170px", // Add left padding to ensure it's not hidden under the sidebar
-      }}
-    >
-      {/* Flex container for the Back to Profile and Followers/Following buttons */}
-      <div
+    <div className="dark:bg-gray-800 text-gray-900 dark:text-white min-h-screen pl-40">
+      <div className="flex items-center py-4 px-10">
+      <button
+        className="ssu-button-info-clickable"
+        onClick={handleBack}
         style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          padding: "10px 30px",
+          padding: '9px 15px',
+          fontSize: '1.15rem',
         }}
       >
-        {/* Back to Profile button aligned to the left */}
-        <Button variant={darkMode ? "dark" : "secondary"} onClick={handleBack}>
-          Back to Profile
-        </Button>
+        ← Back to Profile
+      </button>
 
-        {/* Followers and Following buttons centered */}
-        <div style={{ margin: "auto" }}>
-          {/* Followers Button: Disabled when on Followers page */}
-          <Button
-            variant={darkMode ? "secondary" : "light"}
+      <div className="flex-grow flex justify-center mx-4">
+        <div className="flex space-x-2">
+          <button
+            className="ssu-button-disabled"
             disabled
-            style={{ marginRight: "10px", cursor: "default", opacity: 0.7 }}
+            style={{
+              padding: '9px 15px',
+              fontSize: '1.15rem',
+            }}
           >
             Followers
-          </Button>
-
-          {/* Following Button */}
+          </button>
           <Link to={`/following/${params.id}`}>
-            <Button variant={darkMode ? "dark" : "primary"}>Following</Button>
+            <button
+              className="ssu-button-primary"
+              style={{
+                padding: '9px 15px',
+                fontSize: '1.15rem',
+              }}
+            >
+              Following
+            </button>
           </Link>
         </div>
       </div>
+    </div>
 
-      {/* Error message or placeholder area */}
-      <div
-        style={{
-          color: darkMode ? "#fff" : "#000",
-          padding: "10px",
-          backgroundColor: darkMode ? "#000" : "#f6f8fa",
-          minHeight: "50px",
-        }}
-      >
+      <div className="py-2">
         {error.message ? errorMessage() : <p>&nbsp;</p>}
       </div>
 
-      {/* Followers section */}
-      <h2 style={{ marginLeft: 30 }}>Followers</h2>
-      <table className="table table-striped" style={{ marginTop: 20 }}>
-        <thead>
-          <tr>
-            <th style={{ color: darkMode ? "#fff" : "#000" }}>Name</th>{" "}
-            {/* Conditional styling for 'Name' */}
-          </tr>
-        </thead>
+      <h2 className="font-bold text-2xl ml-6">Followers</h2>
+      <table className="table table-striped mt-5">
         <tbody>{followerList()}</tbody>
       </table>
     </div>
