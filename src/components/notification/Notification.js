@@ -1,4 +1,5 @@
 import axios from "axios";
+import apiClient from "../../utilities/apiClient";
 import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark as closeIcon } from "@fortawesome/free-solid-svg-icons";
@@ -44,7 +45,7 @@ export default function Notification({
 
   const deleteNotification = async (notification) => {
     try {
-      await axios.delete(
+      await a.delete(
         `${process.env.REACT_APP_BACKEND_SERVER_URI}/notification/deleteById/${notification._id}`
       );
     } catch (error) {
@@ -54,13 +55,10 @@ export default function Notification({
 
   const markNotificationAsRead = async (notification) => {
     try {
-      await axios.put(
-        `${process.env.REACT_APP_BACKEND_SERVER_URI}/notification`,
-        {
-          id: notification._id,
-          isRead: true,
-        }
-      );
+      await apiClient.put(`/notification`, {
+        id: notification._id,
+        isRead: true,
+      });
     } catch (error) {
       console.error(error);
     }
