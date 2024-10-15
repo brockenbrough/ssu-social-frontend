@@ -342,15 +342,7 @@ const deleteConfirm = async () => {
              
           {/* Post Grid */}
           <div className="profile-posts">
-            {posts.map((post, index) => (
-              <div key={index} className="profile-post-item" onClick={() => openPostModal(post)}>
-                {post.image ? (
-                  <img src={post.image} alt={`Post by ${post.username}`} />
-                ) : (
-                  <p>{post.content}</p>
-                )}
-              </div>
-            ))}
+                 <PostList type="privateuserprofile" />
           </div>
         </>
      
