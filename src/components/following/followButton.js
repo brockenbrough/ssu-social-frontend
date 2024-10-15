@@ -150,25 +150,38 @@ export default function FollowButton(props) {
 
   function MainFollowButton() {
     // Main follow button to follow a user or unfollow a user.
+    const buttonStyles = {
+      padding: '8px 16px', // Increased padding
+      fontSize: '1rem', // Larger font size
+      width: 'auto', // Ensure auto width to fit the text
+      height: 'auto', // Ensure auto height to fit the content
+      minWidth: '100px', // Set a minimum width for better button size
+    };
+  
     if (isFollowingBool) {
       return (
-        <Button
-          variant="outline-primary"
+        <button
+          className="ssu-button-primary"
+          style={buttonStyles} // Apply the custom styles
           id="unfollowButton"
-          size="lg"
           onClick={(e) => unfollowUser()}
         >
-          <span class="message">Following</span>
-        </Button>
+          <span className="message">Following</span>
+        </button>
       );
     } else {
       return (
-        <Button id="followButton" size="lg" onClick={(e) => followUser()}>
+        <button
+          className="ssu-button-primary"
+          style={buttonStyles} // Apply the custom styles
+          id="followButton"
+          onClick={(e) => followUser()}
+        >
           Follow
-        </Button>
+        </button>
       );
     }
-  }
+  }  
 
   //if (!user) return (<div><h3>You are not authorized to view this page, Please Login in <Link to={'/login'}><a href='#'>here</a></Link></h3></div>)
 

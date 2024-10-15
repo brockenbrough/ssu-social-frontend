@@ -317,19 +317,19 @@ const deleteConfirm = async () => {
                edit profile
              </button>
              <div className="profile-stats">
-           <div className="stat-item">
-             <span className="stat-number">{posts.length}</span>
-             <span className="stat-label">posts</span>
-           </div>
-           <div className="stat-item">
-             <span className="stat-number">{followerCount}</span>
-             <span className="stat-label">followers</span>
-           </div>
-           <div className="stat-item">
-             <span className="stat-number">{followingCount}</span>
-             <span className="stat-label">following</span>
-             </div>
-             </div>
+              <div className="stat-item">
+                <span className="stat-number">{posts.length}</span>
+                <span className="stat-label">posts</span>
+              </div>
+              <div className="stat-item" onClick={followerRouteChange} style={{ cursor: 'pointer' }}>
+                <span className="stat-number">{followerCount}</span>
+                <span className="stat-label">followers</span>
+              </div>
+              <div className="stat-item" onClick={followingRouteChange} style={{ cursor: 'pointer' }}>
+                <span className="stat-number">{followingCount}</span>
+                <span className="stat-label">following</span>
+              </div>
+            </div>
              <div className="profile-bio">{user.bio}</div>
              </div>
              </div>
