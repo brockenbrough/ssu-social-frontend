@@ -45,7 +45,7 @@ export default function Notification({
 
   const deleteNotification = async (notification) => {
     try {
-      await a.delete(
+      await axios.delete(
         `${process.env.REACT_APP_BACKEND_SERVER_URI}/notification/deleteById/${notification._id}`
       );
     } catch (error) {
