@@ -14,7 +14,7 @@ import ScrollToTop from "./ScrollToTop";
 import { PostContext, PostPageContext } from "../../App";
 
 function PostList({ type, profileUsername }) {
-  const POST_PER_PAGE = 5;
+  const POST_PER_PAGE = 10;
   const [user, setUser] = useState(null);
   const [posts, setPosts] = useContext(PostContext);
   const [isLoading, setIsLoading] = useState(true);
