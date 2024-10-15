@@ -4,19 +4,17 @@ import getUserInfo from "../../utilities/decodeJwt";
 import axios from "axios";
 import FollowButton from "./followButton.js";
 import { Link } from "react-router-dom";
-import { useDarkMode } from "../DarkModeContext"; // Import dark mode hook
+import { useDarkMode } from "../DarkModeContext";
 
-// The FollowerList component.  This is the main component in this file.
 export default function FollowerList() {
   const [user, setUser] = useState({});
   const [followers, setFollowers] = useState([]);
   const params = useParams();
   const [error, setError] = useState({});
-  const { darkMode } = useDarkMode(); // Get dark mode state
-  const navigate = useNavigate(); // Initialize the navigate hook
+  const { darkMode } = useDarkMode();
+  const navigate = useNavigate();
   const [followerCount, setFollowerCount] = useState(0);
 
-  // This method fetches the user's followers from the database.
   useEffect(() => {
     async function getFollowers() {
       const response = await fetch(
@@ -31,7 +29,7 @@ export default function FollowerList() {
 
       try {
         const fetchedFollowers = await response.json();
-        setFollowers(fetchedFollowers[0].followers); // update state.  when state changes, we automatically re-render.
+        setFollowers(fetchedFollowers[0].followers);
       } catch (error) {
         setError(error);
       }
@@ -43,7 +41,6 @@ export default function FollowerList() {
     return;
   }, [followers.length]);
 
-  // A method to delete a follower.
   async function deleteFollower(userId, targetUserId) {
     const deleteFollower = {
       userId: userId,
@@ -55,8 +52,8 @@ export default function FollowerList() {
       data: deleteFollower,
     });
 
-    const newFollowers = followers.filter((el) => el !== el); // This causes a re-render because we change state. Helps cause a re-render.
-    setFollowers(newFollowers); // This causes a re-render because we change state.
+    const newFollowers = followers.filter((el) => el !== el);
+    setFollowers(newFollowers);
   }
 
   const updateFollowerCount = (newFollowerCount) => {
@@ -64,7 +61,7 @@ export default function FollowerList() {
   };
 
   const Follower = ({ record, user, deletePerson }) => (
-    <tr className="h-16"> {/* Adjust this height to match your button height */}
+    <tr className="h-16"> 
       <td className="flex items-center justify-between px-4" style={{ minWidth: '200px' }}>
         <Link
           to={`/publicProfilePage/${record}`}
@@ -74,9 +71,8 @@ export default function FollowerList() {
           {record}
         </Link>
   
-        {/* Wrapper for buttons to center them */}
-        <div className="flex items-center justify-center space-x-2"> {/* Flexbox for centering */}
-          {/* Follow button */}
+        
+        <div className="flex items-center justify-center space-x-2">
           {user.username !== record && (
             <FollowButton
               username={user.username}
@@ -84,17 +80,16 @@ export default function FollowerList() {
               onUpdateFollowerCount={updateFollowerCount}
             />
           )}
-  
-          {/* Delete button */}
+
           {user.username === params.id.toString() && (
             <button
-              className="ssu-button-caution" // Centered without margin
+              className="ssu-button-caution"
               style={{
-                padding: '8px 16px', // Increased padding for a larger button
-                fontSize: '1rem', // Larger font size
-                width: 'auto', // Ensure auto width to fit the text
-                height: 'auto', // Ensure auto height to fit the content
-                minWidth: '100px', // Set a minimum width for better button size
+                padding: '8px 16px',
+                fontSize: '1rem',
+                width: 'auto',
+                height: 'auto',
+                minWidth: '100px',
               }}
               onClick={() => {
                 deletePerson(record);
@@ -130,9 +125,8 @@ export default function FollowerList() {
     );
   }
 
-  // Back button handler to go to the profile page
   function handleBack() {
-    navigate(`/PrivateUserProfile/`);
+    navigate(`/privateUserProfile`);
   }
 
   return (
@@ -149,7 +143,6 @@ export default function FollowerList() {
         ← Back to Profile
       </button>
 
-      {/* This div allows the buttons to flexibly adjust their position */}
       <div className="flex-grow flex justify-center mx-4">
         <div className="flex space-x-2">
           <button

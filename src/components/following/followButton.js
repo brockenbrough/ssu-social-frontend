@@ -5,7 +5,6 @@ import axios from "axios";
 import Button from "react-bootstrap/Button";
 import "./followingSheet.css";
 
-// The FollowButton component.  This is the main component in this file. We will talk to the user team to implement this component.
 export default function FollowButton(props) {
   const routeChange = () => {
     navigate("/editUserPage");
@@ -149,20 +148,19 @@ export default function FollowButton(props) {
   };
 
   function MainFollowButton() {
-    // Main follow button to follow a user or unfollow a user.
     const buttonStyles = {
-      padding: '8px 16px', // Increased padding
-      fontSize: '1rem', // Larger font size
-      width: 'auto', // Ensure auto width to fit the text
-      height: 'auto', // Ensure auto height to fit the content
-      minWidth: '100px', // Set a minimum width for better button size
+      padding: '8px 16px',
+      fontSize: '1rem',
+      width: 'auto',
+      height: 'auto',
+      minWidth: '100px',
     };
   
     if (isFollowingBool) {
       return (
         <button
           className="ssu-button-primary"
-          style={buttonStyles} // Apply the custom styles
+          style={buttonStyles}
           id="unfollowButton"
           onClick={(e) => unfollowUser()}
         >
@@ -173,7 +171,7 @@ export default function FollowButton(props) {
       return (
         <button
           className="ssu-button-primary"
-          style={buttonStyles} // Apply the custom styles
+          style={buttonStyles}
           id="followButton"
           onClick={(e) => followUser()}
         >

@@ -1,22 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router"; // Import useNavigate
+import { useParams, useNavigate } from "react-router";
 import getUserInfo from "../../utilities/decodeJwt";
 import FollowButton from "./followButton.js";
 import { Link } from "react-router-dom";
-import { useDarkMode } from "../DarkModeContext"; // Import dark mode hook
+import { useDarkMode } from "../DarkModeContext";
 
-// The FollowingList component. This is the main component in this file.
 export default function FollowingList() {
   const [user, setUser] = useState({});
   const [followings, setFollowing] = useState([]);
   const params = useParams();
   const [error, setError] = useState({});
-  const { darkMode } = useDarkMode(); // Get dark mode state
-  const navigate = useNavigate(); // Initialize the navigate hook
+  const { darkMode } = useDarkMode();
+  const navigate = useNavigate();
   const [followerCount, setFollowerCount] = useState(0);
 
   useEffect(() => {
-    // Define a function to get the user's following.
     async function getFollowing() {
       const response = await fetch(
         `${process.env.REACT_APP_BACKEND_SERVER_URI}/following/${params.id.toString()}`
@@ -52,13 +50,12 @@ export default function FollowingList() {
         <Link
           to={`/publicProfilePage/${record}`}
           className={`text-${darkMode ? 'white' : 'black'} text-xl`}
-          style={{ textDecoration: 'none' }} // Remove underline
+          style={{ textDecoration: 'none' }}
         >
           {record}
         </Link>
-        {/* Centered button wrapper */}
+
         <div className="flex items-center justify-center space-x-2">
-          {/* Follow button */}
           {user.username !== record && (
             <FollowButton
               username={user.username}
@@ -105,7 +102,6 @@ export default function FollowingList() {
           ← Back to Profile
         </button>
 
-        {/* This div allows the buttons to flexibly adjust their position */}
         <div className="flex-grow flex justify-center mx-4">
           <div className="flex space-x-2">
             <Link to={`/followers/${params.id}`}>
