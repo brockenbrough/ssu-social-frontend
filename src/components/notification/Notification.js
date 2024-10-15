@@ -55,10 +55,13 @@ export default function Notification({
 
   const markNotificationAsRead = async (notification) => {
     try {
-      await apiClient.put(`/notification`, {
-        id: notification._id,
-        isRead: true,
-      });
+      apiClient.put(
+        `${process.env.REACT_APP_BACKEND_SERVER_URI}/notification`,
+        {
+          id: notification._id,
+          isRead: true,
+        }
+      );
     } catch (error) {
       console.error(error);
     }
