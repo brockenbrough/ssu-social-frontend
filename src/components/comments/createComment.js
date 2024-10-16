@@ -450,10 +450,7 @@ function CreateComment({ post, setParentCommentCount, postCardHeight }) {
                   className="ssu-suggestion-item"
                   onClick={() => {
                     const currentContent = formData.commentContent;
-                    const newContent = currentContent.replace(
-                      /\.\/\w+$/,
-                      emoji.skins[0].native
-                    );
+                    const newContent = currentContent.replace(/\.\/\w*$/, emoji.skins[0].native);
                     setFormData({ ...formData, commentContent: newContent });
                     setShowSuggestions(false);
                   }}
