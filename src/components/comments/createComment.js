@@ -45,13 +45,13 @@ function CreateComment({ post, setParentCommentCount, postCardHeight }) {
   const [formData, setFormData] = useState({
     commentContent: "",
   });
-  const [emojiSuggestions, setEmojiSuggestions] = useState([]); // For live emoji suggestions
-  const [showSuggestions, setShowSuggestions] = useState(false); // To control dropdown visibility
+  const [emojiSuggestions, setEmojiSuggestions] = useState([]); 
+  const [showSuggestions, setShowSuggestions] = useState(false); 
 
   const findEmojiSuggestions = (input) => {
     const emojis = Object.values(data.emojis);
-    const regex = new RegExp(`^${input}`, "i"); // Match shortcodes like "grin"
-    return emojis.filter((emoji) => emoji.id.match(regex)); // Return matched emojis
+    const regex = new RegExp(`^${input}`, "i"); 
+    return emojis.filter((emoji) => emoji.id.match(regex)); 
   };
 
   useEffect(() => {
@@ -198,6 +198,7 @@ function CreateComment({ post, setParentCommentCount, postCardHeight }) {
         ...prevState,
         commentContent: prevState.commentContent + emoji,
       }));
+      setShowEmojiPicker(false);
     }
   };
 
@@ -401,7 +402,7 @@ function CreateComment({ post, setParentCommentCount, postCardHeight }) {
               formData.commentContent.length === 0
                 ? "overflow-hidden"
                 : "overflow-y-auto"
-            }`}
+              }`}
             id="commentContent"
             name="commentContent"
             value={formData.commentContent}
