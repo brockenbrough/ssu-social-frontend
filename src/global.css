@@ -279,6 +279,15 @@
   @apply ssu-button-primary;
 }
 
+/* Emoji dorpdown Comemnt Section*/
+.ssu-suggestions-dropdown {
+  @apply absolute bottom-full bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 max-h-36 overflow-y-auto w-32 z-50 text-black dark:text-white; 
+}
+
+.ssu-suggestion-item {
+  @apply p-2 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 dark:text-white text-black;
+}
+
 /* Comment Card Animation Sliding */
 @keyframes slide-in-left {
   0% { transform: translateX(-10%); opacity: 0; }
@@ -469,3 +478,5 @@
   @apply bg-lightHover dark:bg-darkHover;
 }
 /* End - Private User Profile Page Layout*/
+
+

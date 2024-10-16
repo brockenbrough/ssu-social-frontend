@@ -6,7 +6,8 @@ import React, {
   useContext,
   useRef,
 } from "react";
-import EmojiPicker from 'emoji-picker-react';
+import Picker from '@emoji-mart/react';
+import data from '@emoji-mart/data';
 import axios from "axios";
 import { Link } from "react-router-dom";
 import getUserInfo from "../../utilities/decodeJwt";
@@ -45,6 +46,23 @@ function CreateComment({
   const [formData, setFormData] = useState({
     commentContent: "",
   });
+  const [emojiSuggestions, setEmojiSuggestions] = useState([]); // For live emoji suggestions
+  const [showSuggestions, setShowSuggestions] = useState(false); // To control dropdown visibility
+
+  const findEmojiSuggestions = (input) => {
+    const emojis = Object.values(data.emojis);
+    const regex = new RegExp(`^${input}`, 'i'); // Match shortcodes like "grin"
+    return emojis.filter((emoji) => emoji.id.match(regex)); // Return matched emojis
+  };
+
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setRandomEmoji(getRandomEmoji());
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   useLayoutEffect(() => {
     if (commentsEndRef.current) {
@@ -126,14 +144,51 @@ function CreateComment({
     }
   };
 
+  const findEmojiByShortcode = (shortcode) => {
+    const emojis = Object.values(data.emojis);
+
+    for (const emoji of emojis) {
+      if (emoji.id === shortcode) {
+        return emoji.skins[0].native;
+      }
+    }
+  };
+
+  //Take Id to get short coded emoji "ex: ./grin"
+  const handleEmojiReplacement = (content) => {
+    const emojiShortcutRegex = /(\.\/\w+)/g;
+
+    return content.replace(emojiShortcutRegex, (match) => {
+      const shortcode = match.slice(2);
+      const emoji = findEmojiByShortcode(shortcode);
+
+      return emoji || match;
+    });
+  };
+
+  //Random emoji for mostly face expressions
+  const getRandomEmoji = () => {
+    const faceEmojis = Object.values(data.emojis).filter((emoji) =>
+      emoji.keywords && emoji.keywords.some((keyword) =>
+        ["face", "smile", "happy", "sad", "angry", "expression", "dog"].includes(keyword)
+      )
+    );
+
+    const randomIndex = Math.floor(Math.random() * faceEmojis.length);
+    return faceEmojis[randomIndex].skins[0].native;
+  };
+
+  const [randomEmoji, setRandomEmoji] = useState(getRandomEmoji());
+
   // Once an emoji is clicked its added to the textarea
   const handleEmojiClick = (emojiObject) => {
-    const newContentLength = formData.commentContent.length + emojiObject.emoji.length;
+    const emoji = emojiObject.native;
+    const newContentLength = formData.commentContent.length + emoji.length;
 
     if (newContentLength <= 255) {
       setFormData((prevState) => ({
         ...prevState,
-        commentContent: prevState.commentContent + emojiObject.emoji,
+        commentContent: prevState.commentContent + emoji,
       }));
     }
   };
@@ -337,11 +392,28 @@ function CreateComment({
             value={formData.commentContent}
             maxLength="255"
             onChange={(e) => {
-              if (e.target.value.length <= 255) {
-                setFormData({ ...formData, commentContent: e.target.value });
+              const inputValue = e.target.value;
+              setFormData({ ...formData, commentContent: inputValue });
+
+              const match = inputValue.match(/\.\/(\w*)$/);
+              if (match) {
+                const typedShortcut = match[1];
+                const suggestions = findEmojiSuggestions(typedShortcut);
+                setEmojiSuggestions(suggestions);
+                setShowSuggestions(suggestions.length > 0);
+              } else {
+                setShowSuggestions(false);
               }
             }}
+
             onKeyDown={(e) => {
+              // Check if the spacebar was pressed after typing emoji
+              if (e.key === " ") {
+                const inputValue = formData.commentContent;
+                const replacedContent = handleEmojiReplacement(inputValue);
+                setFormData({ ...formData, commentContent: replacedContent });
+              }
+
               if (e.key === "Enter" && !e.shiftKey) {
                 e.preventDefault();
                 handleSubmit(e);
@@ -356,22 +428,41 @@ function CreateComment({
               zIndex: 10,
             }}
           />
+          {showSuggestions && (
+            <div className="ssu-suggestions-dropdown">
+              {emojiSuggestions.map((emoji) => (
+                <div
+                  key={emoji.id}
+                  className="ssu-suggestion-item"
+                  onClick={() => {
+                    const currentContent = formData.commentContent;
+                    const newContent = currentContent.replace(/\.\/\w+$/, emoji.skins[0].native);
+                    setFormData({ ...formData, commentContent: newContent });
+                    setShowSuggestions(false);
+                  }}
+                >
+                  {emoji.skins[0].native} {emoji.id}
+                </div>
+              ))}
+            </div>
+          )}
+
           {/* Emoji Picker Button */}
           <div className="relative">
             <button
               ref={emojiButtonRef}
               type="button"
               onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-              className="text-2xl bg-transparent border-none cursor-pointer"
+              className="text-2xl bg-transparent cursor-pointer mr-1 ml-1 relative z-10 -mt-1"
             >
-              😀
+              {randomEmoji}
             </button>
 
             {/* Emoji Picker */}
             {showEmojiPicker && (
-              <div ref={emojiPickerRef} className="absolute bottom-12 left-[-236px] z-50">
-                <EmojiPicker
-                  onEmojiClick={handleEmojiClick}
+              <div ref={emojiPickerRef} className="absolute bottom-12 left-[-229px] z-50">
+                <Picker
+                  onEmojiSelect={handleEmojiClick}
                   theme={document.documentElement.classList.contains('dark') ? 'dark' : 'light'}
                 />
               </div>
