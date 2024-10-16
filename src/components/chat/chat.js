@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, createElement } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMessage as chatIcon } from "@fortawesome/free-solid-svg-icons";
 import { faClose as closeIcon } from "@fortawesome/free-solid-svg-icons";
+import { faEdit as createMessageIcon } from "@fortawesome/free-solid-svg-icons";
 import getUserInfo from "../../utilities/decodeJwt";
 
 const Chat = () => {
@@ -20,6 +21,10 @@ const Chat = () => {
   const handleChatClick = () => {
     toogleChat();
     console.log("Chat button clicked");
+  };
+
+  const handleCreateMessage = () => {
+    console.log("Create Chat button clicked");
   };
 
   return (
@@ -42,11 +47,18 @@ const Chat = () => {
             >
               @{user.username}
             </a>
-            <FontAwesomeIcon
-              onClick={toogleChat}
-              className="h-6 text-gray-800 hover:text-orange-500 dark:text-white cursor-pointer"
-              icon={closeIcon}
-            />
+            <div className="flex justify-center">
+              <FontAwesomeIcon
+                onClick={handleCreateMessage}
+                className="h-5 my-auto mr-5 text-gray-800 hover:text-orange-500 dark:text-white cursor-pointer"
+                icon={createMessageIcon}
+              />
+              <FontAwesomeIcon
+                onClick={toogleChat}
+                className="h-6 text-gray-800 hover:text-orange-500 dark:text-white cursor-pointer"
+                icon={closeIcon}
+              />
+            </div>
           </div>
           <div className="p-2">
             {chatHistory.length === 0 && (
