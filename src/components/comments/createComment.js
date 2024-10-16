@@ -29,11 +29,7 @@ export function useCommentCount() {
   return useContext(CommentCountContext);
 }
 
-function CreateComment({
-  post,
-  setParentCommentCount,
-  postCardHeight,
-}) {
+function CreateComment({ post, setParentCommentCount, postCardHeight }) {
   const postId = post._id;
   const [comments, setComments] = useState([]);
   const [user, setUser] = useState(null);
@@ -231,10 +227,7 @@ function CreateComment({
     if (data.username === data.actionUsername) return;
 
     try {
-      await axios.post(
-        `${process.env.REACT_APP_BACKEND_SERVER_URI}/notification`,
-        data
-      );
+      await apiClient.post(`/notification`, data);
     } catch (error) {
       console.error("Error saving comment notification:", error);
     }
@@ -316,8 +309,13 @@ function CreateComment({
               <span style={{ fontWeight: "bold", fontSize: "1rem" }}>
                 <Link
                   id="username"
-                  to={user.username === comment.username ? "/privateUserProfile" : `/publicProfilePage/${comment.username}`}
-                  className="ssu-comment-username">
+                  to={
+                    user.username === comment.username
+                      ? "/privateUserProfile"
+                      : `/publicProfilePage/${comment.username}`
+                  }
+                  className="ssu-comment-username"
+                >
                   @{comment.username}
                 </Link>
               </span>
@@ -325,9 +323,7 @@ function CreateComment({
                 {timeAgo(comment.date)}
               </span>
               <br />
-              <span
-                className="ssu-comment-content"
-              >
+              <span className="ssu-comment-content">
                 {comment.commentContent}
               </span>
             </span>
@@ -386,7 +382,11 @@ function CreateComment({
           <textarea
             ref={textareaRef}
             className={`comment-input custom-scrollbar custom-scrollbar-dark resize-none w-full max-h-9 
-            ${formData.commentContent.length === 0 ? "overflow-hidden" : "overflow-y-auto"}`}
+            ${
+              formData.commentContent.length === 0
+                ? "overflow-hidden"
+                : "overflow-y-auto"
+            }`}
             id="commentContent"
             name="commentContent"
             value={formData.commentContent}

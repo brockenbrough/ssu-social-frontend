@@ -16,13 +16,13 @@ import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import moment from "moment";
 import axios from "axios";
+import apiClient from "../../utilities/apiClient";
 import { useDarkMode } from "../DarkModeContext";
 import Modal from "react-bootstrap/Modal";
 import { Form } from "react-bootstrap";
 import timeAgo from "../../utilities/timeAgo";
 import CreateComment from "../comments/createComment";
 import { PostPageContext } from "../../App";
-import apiClient from "../../utilities/apiClient";
 
 const Post = ({ posts: post }) => {
   const [youtubeThumbnail, setYoutubeThumbnail] = useState(null);
@@ -170,10 +170,7 @@ const Post = ({ posts: post }) => {
     if (data.username === data.actionUsername) return;
 
     try {
-      await axios.post(
-        `${process.env.REACT_APP_BACKEND_SERVER_URI}/notification`,
-        data
-      );
+      await apiClient.post(`/notification`, data);
     } catch (error) {
       console.error("Error saving like notification:", error);
     }

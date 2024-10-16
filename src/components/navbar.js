@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import getUserInfo from "../utilities/decodeJwt";
 import Image from "react-bootstrap/Image";
-import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faInbox as inboxIcon } from "@fortawesome/free-solid-svg-icons";
 import { faCirclePlus as createIcon } from "@fortawesome/free-solid-svg-icons";
@@ -116,9 +115,9 @@ export default function Navbar() {
             />
             <span className="hidden md:inline">Inbox</span>{" "}
             {/* Text hidden on small screens */}
-            {notifications.length > 0 && (
+            {notifications.filter((n) => n.isRead === false).length > 0 && (
               <span className="inline-flex items-center justify-center ml-6 text-xs font-medium text-center rounded-full bg-iconBorder text-lightMainText dark:text-darkMainText w-7 h-7 group-hover:bg-gray-800">
-                {notifications.length}
+                {notifications.filter((n) => n.isRead === false).length}
               </span>
             )}
           </span>
