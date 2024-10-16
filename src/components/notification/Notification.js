@@ -125,7 +125,11 @@ export default function Notification({
       </div>
 
       {/* Notification body */}
-      <div className="p-1 rounded-b-md dark:bg-gray-800 dark:rounded-none h-56 overflow-y-scroll">
+      <div
+        className={`p-1 rounded-b-md dark:bg-gray-800 dark:rounded-none h-56 overflow-y-scroll ${
+          notifications.length < 1 && "no-scrollbar"
+        }`}
+      >
         {/* Show "No notifications" if empty */}
         {notifications.length === 0 ? (
           <p className="text-sm my-4 text-center min-h-6 font-display text-gray-800 dark:text-white">

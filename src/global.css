@@ -225,6 +225,10 @@
   @apply bg-orange-600;
 }
 
+.no-scrollbar::-webkit-scrollbar-track {
+    display: none;
+}
+
 /* Individual Comment Component Styling */
 .ssu-comment-username {
   @apply font-bold no-underline text-lightMainText dark:text-darkMainText;
