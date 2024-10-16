@@ -486,7 +486,7 @@ function CreateComment({ post, setParentCommentCount, postCardHeight }) {
             {showEmojiPicker && (
               <div
                 ref={emojiPickerRef}
-                className="absolute bottom-12 left-[-229px] z-50"
+                className="absolute bottom-12 left-[-254px] z-50"
               >
                 <Picker
                   onEmojiSelect={handleEmojiClick}
