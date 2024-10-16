@@ -15,17 +15,19 @@ module.exports = {
     },
     extend: {
       colors: {
-        darkBackground: '#171717',
-        lightBackground: '#fff7ed',
-        darkMainText: '#f5f5f5', // white
-        lightMainText: '#422006', // dark brown
-        darkUserText: '#f5f5f5', // white
-        lightUserText: '#2563eb', // light blue
-        darkErrorMessage: '#450a0a', // red
-        lightErrorMessage: '#450a0a', // cranberry
-        iconBorder: '#ea580c', // orange
-        darkHover: '#f5f5dc', // cream for toggle
-        lightHover: '#2563eb', // light blue for toggle
+        darkBackground: "#1f2937",
+        lightBackground: "#fafafa",
+        // darkBackground: '#171717',
+        // lightBackground: '#fff7ed',
+        darkMainText: "#f5f5f5", // white
+        lightMainText: "#422006", // dark brown
+        darkUserText: "#f5f5f5", // white
+        lightUserText: "#2563eb", // light blue
+        darkErrorMessage: "#450a0a", // red
+        lightErrorMessage: "#450a0a", // cranberry
+        iconBorder: "#ea580c", // orange
+        darkHover: "#f5f5dc", // cream for toggle
+        lightHover: "#2563eb", // light blue for toggle
       },
     },
   },
