@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import { Form, Button, Modal } from "react-bootstrap";
 import { useNavigate, Link } from "react-router-dom";
 import { getUserInfoAsync } from "../../utilities/decodeJwtAsync";
@@ -23,6 +23,7 @@ const CreatePost = ({ popupShow, setPopupShow }) => {
   const { darkMode } = useDarkMode();
   const [posts, setPosts] = useContext(PostContext);
   const [postPage, setPostPage] = useContext(PostPageContext);
+  const fileInputRef = useRef(null);
 
   const resetState = () => {
     setDescription("");
@@ -90,14 +91,14 @@ const CreatePost = ({ popupShow, setPopupShow }) => {
   };
 
   const handleImageClick = () => {
-    document.getElementById("image").click();
+    fileInputRef.current.click();
   };
 
   const handleImageChange = (e) => {
-    const image = e.target.files[0];
-    setImage(image);
+    const selectedImage = e.target.files[0];
+    setImage(selectedImage);
 
-    if (e.target.files && image) {
+    if (e.target.files && selectedImage) {
       let reader = new FileReader();
 
       reader.onload = (event) => {
@@ -105,7 +106,7 @@ const CreatePost = ({ popupShow, setPopupShow }) => {
         document.getElementById("imagePreview").src = imgPreview;
       };
 
-      reader.readAsDataURL(image);
+      reader.readAsDataURL(selectedImage);
     }
   };
 
@@ -190,6 +191,11 @@ const CreatePost = ({ popupShow, setPopupShow }) => {
     setPopupShow(false);
   };
 
+  const removeImage = () => {
+    setImage(null);
+    fileInputRef.current.value = "";
+  };
+
   return (
     <>
       <Modal show={popupShow} onHide={() => setPopupShow(false)} centered>
@@ -264,24 +270,32 @@ const CreatePost = ({ popupShow, setPopupShow }) => {
                   type="file"
                   id="image"
                   name="image"
+                  ref={fileInputRef}
                   accept="image/*"
                   onChange={handleImageChange}
                   style={{ display: "none" }}
                 />
 
                 {image && (
-                  <div style={{ marginBottom: "15px" }}>
+                  <div className="image-preview-container">
                     <img
                       id="imagePreview"
                       alt="Selected Image"
-                      style={{ width: "180px", height: "auto" }}
+                      className="image-preview"
                       src={URL.createObjectURL(image)}
                     />
+                    <button
+                      type="button"
+                      className="delete-image-button"
+                      onClick={removeImage}
+                    >
+                      &times;
+                    </button>
                   </div>
                 )}
                 <button
                   type="submit"
-                  class="w-full bg-orange-600 p-2 rounded-md text-white"
+                  className="w-full bg-orange-600 p-2 rounded-md text-white"
                   disabled={isSubmitting}
                 >
                   Create Post

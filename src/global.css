@@ -484,4 +484,46 @@
 }
 /* End - Private User Profile Page Layout*/
 
+/* Post image preview styling */
+.image-preview-container {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 1rem;
+}
 
+.image-preview {
+  width: 180px;
+  height: auto;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.delete-image-button {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background-color: red;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 1.5rem;
+  height: 1.5rem;
+  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.delete-image-button:hover {
+  background-color: darkred;
+  transform: scale(1.1);
+}
+
+.delete-image-button:focus {
+  outline: 2px solid #ff0000;
+  background-color: darkred;
+}
