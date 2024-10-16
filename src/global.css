@@ -310,21 +310,26 @@
 
 /* Custom scrollbar styling */
 ::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-thumb {
-  background-color: #f97316;
+  @apply w-2 h-2; 
   border-radius: 9999px; 
 }
 
 ::-webkit-scrollbar-track {
-  background-color: #6b7280;
+  @apply bg-gray-200;
+  border-radius: 9999px; 
 }
 
+::-webkit-scrollbar-thumb {
+  @apply bg-orange-500;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-orange-700;
+}
+
+
 /* form/document styles for edit profile*/
-
-
 .ssu-form-style{
   @apply w-full max-w-lg p-6 mx-auto bg-white rounded-lg shadow-md dark:bg-gray-800;
 }
