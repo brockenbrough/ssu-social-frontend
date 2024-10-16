@@ -227,7 +227,7 @@ function CreateComment({ post, setParentCommentCount, postCardHeight }) {
     if (data.username === data.actionUsername) return;
 
     try {
-      await apiClient.post(`/notification`, data);
+      await axios.post(`${process.env.REACT_APP_BACKEND_SERVER_URI}/notification`, data);
     } catch (error) {
       console.error("Error saving comment notification:", error);
     }
