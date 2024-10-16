@@ -8,7 +8,7 @@ import React, {
 } from "react";
 import Picker from "@emoji-mart/react";
 import data from "@emoji-mart/data";
-import axios from "axios";
+import apiClient from "../../utilities/apiClient";
 import { Link } from "react-router-dom";
 import getUserInfo from "../../utilities/decodeJwt";
 import Stack from "react-bootstrap/Stack";
@@ -45,13 +45,13 @@ function CreateComment({ post, setParentCommentCount, postCardHeight }) {
   const [formData, setFormData] = useState({
     commentContent: "",
   });
-  const [emojiSuggestions, setEmojiSuggestions] = useState([]); 
-  const [showSuggestions, setShowSuggestions] = useState(false); 
+  const [emojiSuggestions, setEmojiSuggestions] = useState([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
 
   const findEmojiSuggestions = (input) => {
     const emojis = Object.values(data.emojis);
-    const regex = new RegExp(`^${input}`, "i"); 
-    return emojis.filter((emoji) => emoji.id.match(regex)); 
+    const regex = new RegExp(`^${input}`, "i");
+    return emojis.filter((emoji) => emoji.id.match(regex));
   };
 
   useEffect(() => {
@@ -240,10 +240,7 @@ function CreateComment({ post, setParentCommentCount, postCardHeight }) {
     if (data.username === data.actionUsername) return;
 
     try {
-      await axios.post(
-        `${process.env.REACT_APP_BACKEND_SERVER_URI}/notification`,
-        data
-      );
+      await apiClient.post(`/notification`, data);
     } catch (error) {
       console.error("Error saving comment notification:", error);
     }
@@ -402,7 +399,7 @@ function CreateComment({ post, setParentCommentCount, postCardHeight }) {
               formData.commentContent.length === 0
                 ? "overflow-hidden"
                 : "overflow-y-auto"
-              }`}
+            }`}
             id="commentContent"
             name="commentContent"
             value={formData.commentContent}
@@ -455,7 +452,10 @@ function CreateComment({ post, setParentCommentCount, postCardHeight }) {
                   className="ssu-suggestion-item"
                   onClick={() => {
                     const currentContent = formData.commentContent;
-                    const newContent = currentContent.replace(/\.\/\w*$/, emoji.skins[0].native);
+                    const newContent = currentContent.replace(
+                      /\.\/\w*$/,
+                      emoji.skins[0].native
+                    );
                     setFormData({ ...formData, commentContent: newContent });
                     setShowSuggestions(false);
                   }}
