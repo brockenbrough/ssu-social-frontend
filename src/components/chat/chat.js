@@ -7,6 +7,7 @@ import getUserInfo from "../../utilities/decodeJwt";
 const Chat = () => {
   const [chatOpen, setChatOpen] = useState(false);
   const [user, setUser] = useState(null);
+  const [chatHistory, setChatHistory] = useState([]);
 
   useEffect(() => {
     setUser(getUserInfo());
@@ -47,7 +48,13 @@ const Chat = () => {
               icon={closeIcon}
             />
           </div>
-          <div className="p-2">Chat content</div>
+          <div className="p-2">
+            {chatHistory.length === 0 && (
+              <p className="text-center font-display mt-4 text-gray-800 dark:text-white">
+                No messages yet
+              </p>
+            )}
+          </div>
         </div>
       )}
     </div>
