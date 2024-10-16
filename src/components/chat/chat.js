@@ -5,11 +5,14 @@ import { faSearch as searchIcon } from "@fortawesome/free-solid-svg-icons";
 import { faClose as closeIcon } from "@fortawesome/free-solid-svg-icons";
 import { faEdit as createMessageIcon } from "@fortawesome/free-solid-svg-icons";
 import getUserInfo from "../../utilities/decodeJwt";
+import ChatSearch from "./chatSearch";
 
 const Chat = () => {
   const [chatOpen, setChatOpen] = useState(false);
   const [user, setUser] = useState(null);
   const [chatHistory, setChatHistory] = useState([]);
+  const TABS = { chat: "chat", search: "search", create: "create" };
+  const [currentTab, setCurrentTab] = useState(TABS.chat);
 
   useEffect(() => {
     setUser(getUserInfo());
@@ -25,6 +28,7 @@ const Chat = () => {
   };
 
   const handleSearchUser = () => {
+    setCurrentTab(TABS.search);
     console.log("Search User button clicked");
   };
 
@@ -75,11 +79,19 @@ const Chat = () => {
               />
             </div>
           </div>
-          <div className="p-2">
-            {chatHistory.length === 0 && (
+          <div className="h-full">
+            {/* Chat Tab */}
+            {currentTab === TABS.chat && chatHistory.length === 0 && (
               <p className="text-center font-display mt-4 text-gray-800 dark:text-white">
                 No messages yet
               </p>
+            )}
+
+            {/* Search Tab */}
+            {currentTab === TABS.search && (
+              <div className="h-full pb-16">
+                <ChatSearch />
+              </div>
             )}
           </div>
         </div>
