@@ -416,6 +416,10 @@ function CreateComment({ post, setParentCommentCount, postCardHeight }) {
                 const suggestions = findEmojiSuggestions(typedShortcut);
                 setEmojiSuggestions(suggestions);
                 setShowSuggestions(suggestions.length > 0);
+
+                if (suggestions.length > 0) {
+                  setShowEmojiPicker(false);
+                }
               } else {
                 setShowSuggestions(false);
               }
@@ -466,7 +470,12 @@ function CreateComment({ post, setParentCommentCount, postCardHeight }) {
             <button
               ref={emojiButtonRef}
               type="button"
-              onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+              onClick={() => {
+                if (!showEmojiPicker) {
+                  setShowSuggestions(false);
+                }
+                setShowEmojiPicker(!showEmojiPicker);
+              }}
               className="text-2xl bg-transparent cursor-pointer mr-1 ml-1 relative z-10 -mt-1"
             >
               {randomEmoji}
