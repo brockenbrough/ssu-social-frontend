@@ -58,16 +58,14 @@ export default function Navbar() {
         </div>
 
         {/* Create Post Button */}
-        <span className="ssu-nav-link group flex justify-center">
+        <span className="ssu-nav-link group">
           <CreatePost popupShow={popupShow} setPopupShow={setPopupShow} />
-          <span
-            onClick={() => setPopupShow(true)}
-            className="flex items-center"
-          >
+          <span onClick={() => setPopupShow(true)}>
             <FontAwesomeIcon
-              className={`text-xl mr-8 text-iconBorder group-hover:text-white md:text-3xl sm:text-2xl md:w-[-24]`} // Move icon left only on small screens
+              className="mr-2 text-lightMainText dark:text-darkMainText group-hover:text-white"
               icon={createIcon}
             />
+            <span className="hidden md:inline">Create Post</span>
           </span>
         </span>
 
