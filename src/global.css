@@ -285,11 +285,11 @@
 
 /* Emoji dorpdown Comemnt Section*/
 .ssu-suggestions-dropdown {
-  @apply absolute bottom-full bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 max-h-36 overflow-y-auto w-32 z-50 text-black dark:text-white; 
+  @apply absolute bottom-full bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 max-h-36 overflow-y-auto w-[228px] z-50 text-black dark:text-white text-base rounded-lg; 
 }
 
 .ssu-suggestion-item {
-  @apply p-2 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 dark:text-white text-black;
+  @apply p-2 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 dark:text-white text-black text-sm border border-gray-300 dark:border-gray-600 rounded-md; 
 }
 
 /* Comment Card Animation Sliding */
