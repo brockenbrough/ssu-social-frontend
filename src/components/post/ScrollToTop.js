@@ -30,13 +30,7 @@ const ScrollToTop = () => {
     isVisible && (
       <button
         onClick={handleScrollToTop}
-        className="ssu-button-primary"
-        style={{
-          position: "fixed",
-          bottom: "40px",
-          right: "40px",
-          zIndex: 1000,
-        }}
+        className="ssu-button-primary fixed bottom-10 right-10 z-8"
       >
         Scroll to Top
       </button>

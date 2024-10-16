@@ -11,6 +11,7 @@ import { getUserInfoAsync } from "../../utilities/decodeJwtAsync";
 import Post from "./post";
 import "./postlistStyle.css";
 import ScrollToTop from "./ScrollToTop";
+import Chat from "../chat/chat";
 import { PostContext, PostPageContext } from "../../App";
 
 function PostList({ type, profileUsername }) {
@@ -162,6 +163,7 @@ function PostList({ type, profileUsername }) {
             </div>
           )}
           <ScrollToTop />
+          <Chat />
         </div>
       )}
     </>
