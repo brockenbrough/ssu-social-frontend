@@ -32,6 +32,10 @@ const Chat = () => {
     console.log("Search User button clicked");
   };
 
+  const handleSearchClose = () => {
+    setCurrentTab(TABS.chat);
+  };
+
   const handleCreateMessage = () => {
     console.log("Create Chat button clicked");
   };
@@ -48,36 +52,56 @@ const Chat = () => {
 
       {/* Chat pop up */}
       {chatOpen && (
-        <div className="fixed bottom-44 right-10 w-96 h-[600px] bg-lightBackground dark:bg-gray-900 border rounded-lg shadow-xl">
+        <div className="fixed bottom-44 right-10 w-96 h-[600px] bg-lightBackground dark:bg-gray-900 border-1 border-gray-500 dark:border-white rounded-lg shadow-xl">
           {/* Titlebar */}
-          <div className="flex justify-between items-center p-3 border-b border-gray-300 font-title">
-            {/* Username */}
-            <a
-              href={"/privateUserProfile"}
-              className="font-title font-bold text-lg no-underline text-gray-900 dark:text-white hover:text-orange-500"
-            >
-              @{user.username}
-            </a>
-            <div className="flex justify-center">
-              {/* Search User  */}
-              <FontAwesomeIcon
-                onClick={handleSearchUser}
-                className="h-5 my-auto mr-5 text-gray-800 hover:text-orange-500 dark:text-white cursor-pointer"
-                icon={searchIcon}
-              />
-              {/* Create Chat  */}
-              <FontAwesomeIcon
-                onClick={handleCreateMessage}
-                className="h-5 my-auto mr-5 text-gray-800 hover:text-orange-500 dark:text-white cursor-pointer"
-                icon={createMessageIcon}
-              />
-              {/* Close Chat pop up  */}
-              <FontAwesomeIcon
-                onClick={toogleChat}
-                className="h-6 text-gray-800 hover:text-orange-500 dark:text-white cursor-pointer"
-                icon={closeIcon}
-              />
-            </div>
+          <div>
+            {/* Search Tab Title Bar*/}
+            {currentTab === TABS.search && (
+              <div className="flex justify-between items-center py-1 border-b border-gray-500 dark:border-white font-title">
+                <input
+                  className="bg-transparent border-1 px-2 rounded font-title w-full h-10 ml-3 border-gray-500 dark:border-white"
+                  placeholder="Search"
+                />
+                {/* Close Search pop up  */}
+                <FontAwesomeIcon
+                  onClick={handleSearchClose}
+                  className="h-6 p-3 text-gray-800 hover:text-orange-500 dark:text-white cursor-pointer"
+                  icon={closeIcon}
+                />
+              </div>
+            )}
+            {/* Chat Tab Title Bar*/}
+            {currentTab === TABS.chat && (
+              <div className="flex justify-between items-center p-3 border-b border-gray-500 dark:border-white font-title">
+                {/* Username */}
+                <a
+                  href={"/privateUserProfile"}
+                  className="font-title font-bold text-lg no-underline text-gray-900 dark:text-white hover:text-orange-500"
+                >
+                  @{user.username}
+                </a>
+                <div className="flex justify-center">
+                  {/* Search User  */}
+                  <FontAwesomeIcon
+                    onClick={handleSearchUser}
+                    className="h-5 my-auto mr-5 text-gray-800 hover:text-orange-500 dark:text-white cursor-pointer"
+                    icon={searchIcon}
+                  />
+                  {/* Create Chat  */}
+                  <FontAwesomeIcon
+                    onClick={handleCreateMessage}
+                    className="h-5 my-auto mr-5 text-gray-800 hover:text-orange-500 dark:text-white cursor-pointer"
+                    icon={createMessageIcon}
+                  />
+                  {/* Close Chat pop up  */}
+                  <FontAwesomeIcon
+                    onClick={toogleChat}
+                    className="h-6 text-gray-800 hover:text-orange-500 dark:text-white cursor-pointer"
+                    icon={closeIcon}
+                  />
+                </div>
+              </div>
+            )}
           </div>
           <div className="h-full">
             {/* Chat Tab */}
