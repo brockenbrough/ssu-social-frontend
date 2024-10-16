@@ -34,7 +34,7 @@ const Chat = () => {
         onClick={handleChatClick}
         className="bg-orange-500 p-3 rounded-full flex justify-center cursor-pointer"
       >
-        <FontAwesomeIcon className="z-10 h-8 text-white" icon={chatIcon} />
+        <FontAwesomeIcon className="z-10 h-7 text-white" icon={chatIcon} />
       </div>
 
       {/* Chat pop up */}
