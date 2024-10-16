@@ -23,8 +23,8 @@ export default function FollowButton(props) {
   }, []); // Get user's info
 
   const saveFollowNotification = async (
-    username,
     actionUsername,
+    username,
     followUnfollow
   ) => {
     const data = {
@@ -60,11 +60,7 @@ export default function FollowButton(props) {
           props.targetUserId
         );
         onUpdateFollowerCount(updatedFollowerCount);
-        saveFollowNotification(
-          currentUser.username,
-          props.username,
-          "followed"
-        );
+        saveFollowNotification(user.username, props.username, "followed");
       } else {
         throw new Error("Failed to follow the user");
       }
@@ -91,11 +87,7 @@ export default function FollowButton(props) {
           props.targetUserId
         );
         onUpdateFollowerCount(updatedFollowerCount);
-        saveFollowNotification(
-          currentUser.username,
-          props.username,
-          "unfollowed"
-        );
+        saveFollowNotification(user.username, props.username, "unfollowed");
       } else {
         console.error("Failed to unfollow the user");
       }
