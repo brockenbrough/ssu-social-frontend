@@ -35,10 +35,15 @@ const Chat = () => {
         <div className="fixed bottom-40 right-10 w-96 h-[600px] bg-lightBackground dark:bg-gray-900 border rounded-lg shadow-xl">
           {/* Titlebar */}
           <div className="flex justify-between items-center p-3 border-b border-gray-300 font-title">
-            <div className="text-lg font-bold">@{user.username}</div>
+            <a
+              href={"/privateUserProfile"}
+              className="font-title font-bold text-lg no-underline text-gray-900 dark:text-white hover:text-orange-500"
+            >
+              @{user.username}
+            </a>
             <FontAwesomeIcon
               onClick={toogleChat}
-              className="h-6 text-gray-500 hover:text-gray-600 cursor-pointer"
+              className="h-6 text-gray-800 hover:text-orange-500 dark:text-white cursor-pointer"
               icon={closeIcon}
             />
           </div>
