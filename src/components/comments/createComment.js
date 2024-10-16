@@ -6,13 +6,16 @@ import React, {
   useContext,
   useRef,
 } from "react";
-import Picker from '@emoji-mart/react';
-import data from '@emoji-mart/data';
+import Picker from "@emoji-mart/react";
+import data from "@emoji-mart/data";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import getUserInfo from "../../utilities/decodeJwt";
 import Stack from "react-bootstrap/Stack";
 import timeAgo from "../../utilities/timeAgo";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPaperPlane as sendIcon } from "@fortawesome/free-solid-svg-icons";
+
 const CommentCountContext = createContext();
 
 export function CommentCountProvider({ children }) {
@@ -47,10 +50,9 @@ function CreateComment({ post, setParentCommentCount, postCardHeight }) {
 
   const findEmojiSuggestions = (input) => {
     const emojis = Object.values(data.emojis);
-    const regex = new RegExp(`^${input}`, 'i'); // Match shortcodes like "grin"
+    const regex = new RegExp(`^${input}`, "i"); // Match shortcodes like "grin"
     return emojis.filter((emoji) => emoji.id.match(regex)); // Return matched emojis
   };
-
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -164,10 +166,20 @@ function CreateComment({ post, setParentCommentCount, postCardHeight }) {
 
   //Random emoji for mostly face expressions
   const getRandomEmoji = () => {
-    const faceEmojis = Object.values(data.emojis).filter((emoji) =>
-      emoji.keywords && emoji.keywords.some((keyword) =>
-        ["face", "smile", "happy", "sad", "angry", "expression", "dog"].includes(keyword)
-      )
+    const faceEmojis = Object.values(data.emojis).filter(
+      (emoji) =>
+        emoji.keywords &&
+        emoji.keywords.some((keyword) =>
+          [
+            "face",
+            "smile",
+            "happy",
+            "sad",
+            "angry",
+            "expression",
+            "dog",
+          ].includes(keyword)
+        )
     );
 
     const randomIndex = Math.floor(Math.random() * faceEmojis.length);
@@ -227,7 +239,10 @@ function CreateComment({ post, setParentCommentCount, postCardHeight }) {
     if (data.username === data.actionUsername) return;
 
     try {
-      await axios.post(`${process.env.REACT_APP_BACKEND_SERVER_URI}/notification`, data);
+      await axios.post(
+        `${process.env.REACT_APP_BACKEND_SERVER_URI}/notification`,
+        data
+      );
     } catch (error) {
       console.error("Error saving comment notification:", error);
     }
@@ -405,7 +420,6 @@ function CreateComment({ post, setParentCommentCount, postCardHeight }) {
                 setShowSuggestions(false);
               }
             }}
-
             onKeyDown={(e) => {
               // Check if the spacebar was pressed after typing emoji
               if (e.key === " ") {
@@ -436,7 +450,10 @@ function CreateComment({ post, setParentCommentCount, postCardHeight }) {
                   className="ssu-suggestion-item"
                   onClick={() => {
                     const currentContent = formData.commentContent;
-                    const newContent = currentContent.replace(/\.\/\w+$/, emoji.skins[0].native);
+                    const newContent = currentContent.replace(
+                      /\.\/\w+$/,
+                      emoji.skins[0].native
+                    );
                     setFormData({ ...formData, commentContent: newContent });
                     setShowSuggestions(false);
                   }}
@@ -460,20 +477,26 @@ function CreateComment({ post, setParentCommentCount, postCardHeight }) {
 
             {/* Emoji Picker */}
             {showEmojiPicker && (
-              <div ref={emojiPickerRef} className="absolute bottom-12 left-[-229px] z-50">
+              <div
+                ref={emojiPickerRef}
+                className="absolute bottom-12 left-[-229px] z-50"
+              >
                 <Picker
                   onEmojiSelect={handleEmojiClick}
-                  theme={document.documentElement.classList.contains('dark') ? 'dark' : 'light'}
+                  theme={
+                    document.documentElement.classList.contains("dark")
+                      ? "dark"
+                      : "light"
+                  }
                 />
               </div>
             )}
           </div>
-          <button
-            type="submit"
-            className="post-button ml-2"
-            style={{ zIndex: 10 }}
-          >
-            Post
+          <button type="submit" className="ml-2 " style={{ zIndex: 10 }}>
+            <FontAwesomeIcon
+              className="text-orange-500 text-2xl "
+              icon={sendIcon}
+            />
           </button>
         </div>
       </form>
