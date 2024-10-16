@@ -60,7 +60,11 @@ export default function FollowButton(props) {
           props.targetUserId
         );
         onUpdateFollowerCount(updatedFollowerCount);
-        saveFollowNotification(props.targetUserId, props.username, "followed");
+        saveFollowNotification(
+          currentUser.username,
+          props.username,
+          "followed"
+        );
       } else {
         throw new Error("Failed to follow the user");
       }
@@ -88,7 +92,7 @@ export default function FollowButton(props) {
         );
         onUpdateFollowerCount(updatedFollowerCount);
         saveFollowNotification(
-          props.targetUserId,
+          currentUser.username,
           props.username,
           "unfollowed"
         );

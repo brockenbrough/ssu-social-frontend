@@ -1,4 +1,3 @@
-import axios from "axios";
 import apiClient from "../../utilities/apiClient";
 import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -45,9 +44,7 @@ export default function Notification({
 
   const deleteNotification = async (notification) => {
     try {
-      await axios.delete(
-        `${process.env.REACT_APP_BACKEND_SERVER_URI}/notification/deleteById/${notification._id}`
-      );
+      await apiClient.delete(`/notification/deleteById/${notification._id}`);
     } catch (error) {
       console.error(error);
     }
@@ -55,13 +52,10 @@ export default function Notification({
 
   const markNotificationAsRead = async (notification) => {
     try {
-      apiClient.put(
-        `${process.env.REACT_APP_BACKEND_SERVER_URI}/notification`,
-        {
-          id: notification._id,
-          isRead: true,
-        }
-      );
+      await apiClient.put(`/notification`, {
+        id: notification._id,
+        isRead: true,
+      });
     } catch (error) {
       console.error(error);
     }

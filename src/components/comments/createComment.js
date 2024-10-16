@@ -6,8 +6,8 @@ import React, {
   useContext,
   useRef,
 } from "react";
-import EmojiPicker from 'emoji-picker-react';
-import axios from "axios";
+import EmojiPicker from "emoji-picker-react";
+import apiClient from "../../utilities/apiClient";
 import { Link } from "react-router-dom";
 import getUserInfo from "../../utilities/decodeJwt";
 import Stack from "react-bootstrap/Stack";
@@ -28,11 +28,7 @@ export function useCommentCount() {
   return useContext(CommentCountContext);
 }
 
-function CreateComment({
-  post,
-  setParentCommentCount,
-  postCardHeight,
-}) {
+function CreateComment({ post, setParentCommentCount, postCardHeight }) {
   const postId = post._id;
   const [comments, setComments] = useState([]);
   const [user, setUser] = useState(null);
@@ -128,7 +124,8 @@ function CreateComment({
 
   // Once an emoji is clicked its added to the textarea
   const handleEmojiClick = (emojiObject) => {
-    const newContentLength = formData.commentContent.length + emojiObject.emoji.length;
+    const newContentLength =
+      formData.commentContent.length + emojiObject.emoji.length;
 
     if (newContentLength <= 255) {
       setFormData((prevState) => ({
@@ -176,10 +173,7 @@ function CreateComment({
     if (data.username === data.actionUsername) return;
 
     try {
-      await axios.post(
-        `${process.env.REACT_APP_BACKEND_SERVER_URI}/notification`,
-        data
-      );
+      await apiClient.post(`/notification`, data);
     } catch (error) {
       console.error("Error saving comment notification:", error);
     }
@@ -261,8 +255,13 @@ function CreateComment({
               <span style={{ fontWeight: "bold", fontSize: "1rem" }}>
                 <Link
                   id="username"
-                  to={user.username === comment.username ? "/privateUserProfile" : `/publicProfilePage/${comment.username}`}
-                  className="ssu-comment-username">
+                  to={
+                    user.username === comment.username
+                      ? "/privateUserProfile"
+                      : `/publicProfilePage/${comment.username}`
+                  }
+                  className="ssu-comment-username"
+                >
                   @{comment.username}
                 </Link>
               </span>
@@ -270,9 +269,7 @@ function CreateComment({
                 {timeAgo(comment.date)}
               </span>
               <br />
-              <span
-                className="ssu-comment-content"
-              >
+              <span className="ssu-comment-content">
                 {comment.commentContent}
               </span>
             </span>
@@ -331,7 +328,11 @@ function CreateComment({
           <textarea
             ref={textareaRef}
             className={`comment-input custom-scrollbar custom-scrollbar-dark resize-none w-full max-h-9 
-            ${formData.commentContent.length === 0 ? "overflow-hidden" : "overflow-y-auto"}`}
+            ${
+              formData.commentContent.length === 0
+                ? "overflow-hidden"
+                : "overflow-y-auto"
+            }`}
             id="commentContent"
             name="commentContent"
             value={formData.commentContent}
@@ -369,10 +370,17 @@ function CreateComment({
 
             {/* Emoji Picker */}
             {showEmojiPicker && (
-              <div ref={emojiPickerRef} className="absolute bottom-12 left-[-236px] z-50">
+              <div
+                ref={emojiPickerRef}
+                className="absolute bottom-12 left-[-236px] z-50"
+              >
                 <EmojiPicker
                   onEmojiClick={handleEmojiClick}
-                  theme={document.documentElement.classList.contains('dark') ? 'dark' : 'light'}
+                  theme={
+                    document.documentElement.classList.contains("dark")
+                      ? "dark"
+                      : "light"
+                  }
                 />
               </div>
             )}
