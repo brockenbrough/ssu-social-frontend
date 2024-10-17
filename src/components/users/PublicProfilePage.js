@@ -71,7 +71,7 @@ export default function PublicUserList() {
   }
 
   return (
-    <div className="ssu-page-container bg-white">
+    <div className="ssu-page-container">
       <div className="profile-header">
         <div className="profile-image">
           <ProfileImage />
