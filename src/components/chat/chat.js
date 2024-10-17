@@ -25,14 +25,14 @@ const Chat = () => {
           _id: "11",
           senderUser: { _id: "2", username: "user2" },
           reciverUser: { _id: "1", username: "user1" },
-          text: "Hi",
+          text: "last message placeholder  long very long very very long message",
           date: "2021-10-10T10:01:00Z",
         },
       ],
       participants: [
         {
           _id: "111",
-          user: { _id: "1", username: "user1" },
+          user: { _id: "1", username: "username_placeHolder" },
           firstMessageId: "11",
         },
         {
@@ -74,8 +74,46 @@ const Chat = () => {
   const handleUserClick = (user) => {
     // if chat room does not exist -> create chat room
     // open chat room
-    if (!chatRooms.some((chatRoom) => chatRoom.user._id === user._id)) {
-      setChatRooms([{ user }, ...chatRooms]);
+    const roomExists = chatRooms.some((room) =>
+      room.participants.some((participant) => participant.user._id === user._id)
+    );
+    if (!roomExists) {
+      const newRooms = [
+        {
+          _id: `room-id-${chatRooms.length + 1}`,
+          messages: [
+            {
+              _id: "10",
+              senderUser: { _id: "1", username: "user1" },
+              reciverUser: { _id: "2", username: "user2" },
+              text: "Hello",
+              date: "2021-10-10T10:00:00Z",
+            },
+            {
+              _id: "11",
+              senderUser: { _id: "2", username: "user2" },
+              reciverUser: { _id: "1", username: "user1" },
+              text: "What's up?",
+              date: "2021-10-10T10:01:00Z",
+            },
+          ],
+          participants: [
+            {
+              _id: "111",
+              user: { _id: user._id, username: user.username },
+              firstMessageId: "11",
+            },
+            {
+              _id: "112",
+              user: { _id: "2", username: "user2" },
+              firstMessageId: "10",
+            },
+          ],
+        },
+        ...chatRooms,
+      ];
+
+      setChatRooms(newRooms);
     }
     setCurrentTab(TABS.history);
   };
@@ -171,10 +209,10 @@ const Chat = () => {
                       <div className="flex-1 font-display text-xs ml-1 text-gray-500 dark:text-gray-300">
                         {room.messages[room.messages.length - 1].text.slice(
                           0,
-                          20
+                          40
                         )}
                         {room.messages[room.messages.length - 1].text.length >
-                        20
+                        40
                           ? "..."
                           : ""}
                       </div>
