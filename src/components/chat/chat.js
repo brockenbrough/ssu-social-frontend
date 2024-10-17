@@ -183,7 +183,8 @@ const Chat = () => {
               </div>
             )}
           </div>
-          <div className="h-full">
+          {/* Tab Body */}
+          <div className="h-full pb-16">
             {/* Chat Tab */}
             {currentTab === TABS.history &&
               (chatRooms.length === 0 ? (
@@ -223,7 +224,7 @@ const Chat = () => {
 
             {/* Search Tab */}
             {currentTab === TABS.search && (
-              <div className="h-full pb-16">
+              <div className="h-full pb-1">
                 <ChatSearch
                   searchInput={searchInput}
                   handleUserClick={handleUserClick}
