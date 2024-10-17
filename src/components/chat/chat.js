@@ -61,6 +61,7 @@ const Chat = () => {
                   className="bg-transparent border-1 px-2 rounded font-title w-full h-10 ml-3 border-gray-500 dark:border-white"
                   onChange={(e) => setSearchInput(e.target.value)}
                   placeholder="Search"
+                  autoFocus={true}
                 />
                 {/* Close Search pop up  */}
                 <FontAwesomeIcon
