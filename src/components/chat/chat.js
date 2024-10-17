@@ -13,6 +13,7 @@ const Chat = () => {
   const [chatHistory, setChatHistory] = useState([]);
   const TABS = { chat: "chat", search: "search", create: "create" };
   const [currentTab, setCurrentTab] = useState(TABS.chat);
+  const [searchInput, setSearchInput] = useState("");
 
   useEffect(() => {
     setUser(getUserInfo());
@@ -58,6 +59,7 @@ const Chat = () => {
               <div className="flex justify-between items-center py-1 border-b border-gray-500 dark:border-white font-title">
                 <input
                   className="bg-transparent border-1 px-2 rounded font-title w-full h-10 ml-3 border-gray-500 dark:border-white"
+                  onChange={(e) => setSearchInput(e.target.value)}
                   placeholder="Search"
                 />
                 {/* Close Search pop up  */}
@@ -112,7 +114,7 @@ const Chat = () => {
             {/* Search Tab */}
             {currentTab === TABS.search && (
               <div className="h-full pb-16">
-                <ChatSearch />
+                <ChatSearch searchInput={searchInput} />
               </div>
             )}
           </div>
