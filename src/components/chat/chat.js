@@ -11,7 +11,7 @@ const Chat = () => {
   const [chatOpen, setChatOpen] = useState(false);
   const [user, setUser] = useState(null);
   const [chatHistory, setChatHistory] = useState([]);
-  const TABS = { chat: "chat", search: "search", create: "create" };
+  const TABS = { chat: "chat", search: "search" };
   const [currentTab, setCurrentTab] = useState(TABS.chat);
   const [searchInput, setSearchInput] = useState("");
 
@@ -27,16 +27,12 @@ const Chat = () => {
     toogleChat();
   };
 
-  const handleSearchUser = () => {
-    setCurrentTab(TABS.search);
-  };
-
   const handleSearchClose = () => {
     setCurrentTab(TABS.chat);
   };
 
-  const handleCreateMessage = () => {
-    console.log("Create Chat button clicked");
+  const handleSearchUser = () => {
+    setCurrentTab(TABS.search);
   };
 
   return (
@@ -82,15 +78,9 @@ const Chat = () => {
                   @{user.username}
                 </a>
                 <div className="flex justify-center">
-                  {/* Search User  */}
-                  <FontAwesomeIcon
-                    onClick={handleSearchUser}
-                    className="h-5 my-auto mr-5 text-gray-800 hover:text-orange-500 dark:text-white cursor-pointer"
-                    icon={searchIcon}
-                  />
                   {/* Create Chat  */}
                   <FontAwesomeIcon
-                    onClick={handleCreateMessage}
+                    onClick={handleSearchUser}
                     className="h-5 my-auto mr-5 text-gray-800 hover:text-orange-500 dark:text-white cursor-pointer"
                     icon={createMessageIcon}
                   />
