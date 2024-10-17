@@ -24,12 +24,10 @@ const Chat = () => {
 
   const handleChatClick = () => {
     toogleChat();
-    console.log("Chat button clicked");
   };
 
   const handleSearchUser = () => {
     setCurrentTab(TABS.search);
-    console.log("Search User button clicked");
   };
 
   const handleSearchClose = () => {
