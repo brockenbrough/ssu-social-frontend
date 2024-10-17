@@ -11,8 +11,8 @@ const Chat = () => {
   const [chatOpen, setChatOpen] = useState(false);
   const [user, setUser] = useState(null);
   const [chatRooms, setChatRooms] = useState([]);
-  const TABS = { chat: "chat", search: "search" };
-  const [currentTab, setCurrentTab] = useState(TABS.chat);
+  const TABS = { history: "history", search: "search", chat: "chat" };
+  const [currentTab, setCurrentTab] = useState(TABS.history);
   const [searchInput, setSearchInput] = useState("");
 
   useEffect(() => {
@@ -32,7 +32,7 @@ const Chat = () => {
   };
 
   const handleSearchClose = () => {
-    setCurrentTab(TABS.chat);
+    setCurrentTab(TABS.history);
   };
 
   const handleRoomClick = (room) => {
@@ -45,7 +45,7 @@ const Chat = () => {
     if (!chatRooms.some((chatRoom) => chatRoom.user._id === user._id)) {
       setChatRooms([{ user }, ...chatRooms]);
     }
-    setCurrentTab(TABS.chat);
+    setCurrentTab(TABS.history);
   };
 
   return (
@@ -81,7 +81,7 @@ const Chat = () => {
               </div>
             )}
             {/* Chat Tab Title Bar*/}
-            {currentTab === TABS.chat && (
+            {currentTab === TABS.history && (
               <div className="flex justify-between items-center p-3 border-b border-gray-500 dark:border-white font-title">
                 {/* Username */}
                 <a
@@ -115,7 +115,7 @@ const Chat = () => {
           </div>
           <div className="h-full">
             {/* Chat Tab */}
-            {currentTab === TABS.chat &&
+            {currentTab === TABS.history &&
               (chatRooms.length === 0 ? (
                 <p className="text-center font-display mt-4 text-gray-800 dark:text-white">
                   No messages yet
