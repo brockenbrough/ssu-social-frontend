@@ -10,7 +10,39 @@ import ChatSearch from "./chatSearch";
 const Chat = () => {
   const [chatOpen, setChatOpen] = useState(false);
   const [user, setUser] = useState(null);
-  const [chatRooms, setChatRooms] = useState([]);
+  const [chatRooms, setChatRooms] = useState([
+    {
+      _id: "1",
+      messages: [
+        {
+          _id: "10",
+          senderUser: { _id: "1", username: "user1" },
+          reciverUser: { _id: "2", username: "user2" },
+          text: "Hello",
+          date: "2021-10-10T10:00:00Z",
+        },
+        {
+          _id: "11",
+          senderUser: { _id: "2", username: "user2" },
+          reciverUser: { _id: "1", username: "user1" },
+          text: "Hi",
+          date: "2021-10-10T10:01:00Z",
+        },
+      ],
+      participants: [
+        {
+          _id: "111",
+          user: { _id: "1", username: "user1" },
+          firstMessageId: "11",
+        },
+        {
+          _id: "112",
+          user: { _id: "2", username: "user2" },
+          firstMessageId: "10",
+        },
+      ],
+    },
+  ]);
   const TABS = { history: "history", search: "search", chat: "chat" };
   const [currentTab, setCurrentTab] = useState(TABS.history);
   const [searchInput, setSearchInput] = useState("");
