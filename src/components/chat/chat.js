@@ -27,17 +27,23 @@ const Chat = () => {
     toogleChat();
   };
 
-  const handleSearchClose = () => {
-    setCurrentTab(TABS.chat);
-  };
-
   const handleSearchUser = () => {
     setCurrentTab(TABS.search);
   };
 
+  const handleSearchClose = () => {
+    setCurrentTab(TABS.chat);
+  };
+
+  const handleRoomClick = (room) => {
+    console.log("Room clicked", room);
+  };
+
   const handleUserClick = (user) => {
-    if (!chatRooms.some((chatRoom) => chatRoom._id === user._id)) {
-      setChatRooms([...chatRooms, user]);
+    // if chat room does not exist -> create chat room
+    // open chat room
+    if (!chatRooms.some((chatRoom) => chatRoom.user._id === user._id)) {
+      setChatRooms([{ user }, ...chatRooms]);
     }
     setCurrentTab(TABS.chat);
   };
@@ -115,9 +121,22 @@ const Chat = () => {
                   No messages yet
                 </p>
               ) : (
-                <p className="text-center font-display mt-4 text-gray-800 dark:text-white">
-                  Yes messages
-                </p>
+                <div className="w-full h-full overflow-y-auto overflow-x-none">
+                  {chatRooms.map((room) => (
+                    <div
+                      key={room.user._id}
+                      className="flex flex-col p-2 border-b border-gray-300 font-title hover:bg-orange-500 cursor-pointer hover:text-white "
+                      onClick={() => handleRoomClick(room)}
+                    >
+                      <div className="flex-1 font-title font-bold mb-1">
+                        @{room.user.username}
+                      </div>
+                      <div className="flex-1 font-display text-xs">
+                        @{room.user._id.slice(0, 20)}...
+                      </div>
+                    </div>
+                  ))}
+                </div>
               ))}
 
             {/* Search Tab */}
