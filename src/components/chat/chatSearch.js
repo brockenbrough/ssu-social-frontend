@@ -30,9 +30,12 @@ const ChatSearch = ({ searchInput }) => {
 
   return (
     currentUser && (
-      <div className="w-full h-full overflow-y-scroll overflow-x-none">
+      <div className="w-full h-full overflow-y-auto overflow-x-none">
         {searchUsers.map((user) => (
-          <div className="flex p-3 border-b border-gray-300 font-title hover:bg-orange-500 cursor-pointer hover:text-white">
+          <div
+            key={user._id}
+            className="flex p-3 border-b border-gray-300 font-title hover:bg-orange-500 cursor-pointer hover:text-white"
+          >
             <span>@{user.username}</span>
           </div>
         ))}
