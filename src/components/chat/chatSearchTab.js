@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import getUserInfo from "../../utilities/decodeJwt";
 import axios from "axios";
 
-const ChatSearch = ({ searchInput, handleUserClick }) => {
+const ChatSearchTab = ({ searchInput, handleUserClick }) => {
   const [currentUser, setCurrentUser] = useState(getUserInfo());
   const [searchUsers, setSearchUsers] = useState([]);
 
@@ -46,4 +46,4 @@ const ChatSearch = ({ searchInput, handleUserClick }) => {
   );
 };
 
-export default ChatSearch;
+export default ChatSearchTab;

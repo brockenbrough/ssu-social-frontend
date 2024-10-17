@@ -5,7 +5,7 @@ import { faSearch as searchIcon } from "@fortawesome/free-solid-svg-icons";
 import { faClose as closeIcon } from "@fortawesome/free-solid-svg-icons";
 import { faEdit as createMessageIcon } from "@fortawesome/free-solid-svg-icons";
 import getUserInfo from "../../utilities/decodeJwt";
-import ChatSearch from "./chatSearch";
+import ChatSearchTab from "./chatSearchTab";
 
 const Chat = () => {
   const [chatOpen, setChatOpen] = useState(false);
@@ -72,8 +72,6 @@ const Chat = () => {
   };
 
   const handleUserClick = (user) => {
-    // if chat room does not exist -> create chat room
-    // open chat room
     const roomExists = chatRooms.some((room) =>
       room.participants.some((participant) => participant.user._id === user._id)
     );
@@ -225,7 +223,7 @@ const Chat = () => {
             {/* Search Tab */}
             {currentTab === TABS.search && (
               <div className="h-full pb-1">
-                <ChatSearch
+                <ChatSearchTab
                   searchInput={searchInput}
                   handleUserClick={handleUserClick}
                 />
