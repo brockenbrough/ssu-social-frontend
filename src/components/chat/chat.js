@@ -9,7 +9,7 @@ import ChatSearch from "./chatSearch";
 
 const Chat = () => {
   const [chatOpen, setChatOpen] = useState(false);
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(getUserInfo());
   const [chatRooms, setChatRooms] = useState([
     {
       _id: "1",
@@ -156,15 +156,25 @@ const Chat = () => {
                 <div className="w-full h-full overflow-y-auto overflow-x-none">
                   {chatRooms.map((room) => (
                     <div
-                      key={room.user._id}
+                      key={room._id}
                       className="flex flex-col p-2 border-b border-gray-300 font-title hover:bg-orange-500 cursor-pointer hover:text-white "
                       onClick={() => handleRoomClick(room)}
                     >
                       <div className="flex-1 font-title font-bold mb-1">
-                        @{room.user.username}
+                        @
+                        {
+                          room.participants.filter(
+                            (p) => p.user._id !== user._id
+                          )[0].user.username
+                        }
                       </div>
                       <div className="flex-1 font-display text-xs">
-                        @{room.user._id.slice(0, 20)}...
+                        @
+                        {room.messages[room.messages.length - 1].text.slice(
+                          0,
+                          20
+                        )}
+                        ...
                       </div>
                     </div>
                   ))}
