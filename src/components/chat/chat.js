@@ -9,6 +9,7 @@ import ChatTitleBar from "./chatTitleBar";
 const Chat = () => {
   const [chatOpen, setChatOpen] = useState(false);
   const [user, setUser] = useState(getUserInfo());
+  const [chatUser, setChatUser] = useState({});
   const [chatRooms, setChatRooms] = useState([
     {
       _id: "1",
@@ -66,53 +67,59 @@ const Chat = () => {
     setCurrentTab(TABS.history);
   };
 
+  const handleChatBackClick = () => {
+    setCurrentTab(TABS.history);
+  };
+
   const handleRoomClick = (room) => {
-    console.log("Room clicked", room);
+    const chatUser = room.participants.filter((p) => p.user._id !== user._id)[0]
+      .user;
+    setChatUser(chatUser);
+    setCurrentTab(TABS.chat);
   };
 
   const handleUserClick = (user) => {
-    const roomExists = chatRooms.some((room) =>
+    let room = chatRooms.find((room) =>
       room.participants.some((participant) => participant.user._id === user._id)
     );
-    if (!roomExists) {
-      const newRooms = [
-        {
-          _id: `room-id-${chatRooms.length + 1}`,
-          messages: [
-            {
-              _id: "10",
-              senderUser: { _id: "1", username: "user1" },
-              reciverUser: { _id: "2", username: "user2" },
-              text: "Hello",
-              date: "2021-10-10T10:00:00Z",
-            },
-            {
-              _id: "11",
-              senderUser: { _id: "2", username: "user2" },
-              reciverUser: { _id: "1", username: "user1" },
-              text: "What's up?",
-              date: "2021-10-10T10:01:00Z",
-            },
-          ],
-          participants: [
-            {
-              _id: "111",
-              user: { _id: user._id, username: user.username },
-              firstMessageId: "11",
-            },
-            {
-              _id: "112",
-              user: { _id: "2", username: "user2" },
-              firstMessageId: "10",
-            },
-          ],
-        },
-        ...chatRooms,
-      ];
 
-      setChatRooms(newRooms);
+    if (!room) {
+      room = {
+        _id: `room-id-${chatRooms.length + 1}`,
+        messages: [
+          {
+            _id: "10",
+            senderUser: { _id: "1", username: "user1" },
+            reciverUser: { _id: "2", username: "user2" },
+            text: "Hello",
+            date: "2021-10-10T10:00:00Z",
+          },
+          {
+            _id: "11",
+            senderUser: { _id: "2", username: "user2" },
+            reciverUser: { _id: "1", username: "user1" },
+            text: "What's up?",
+            date: "2021-10-10T10:01:00Z",
+          },
+        ],
+        participants: [
+          {
+            _id: "111",
+            user: { _id: user._id, username: user.username },
+            firstMessageId: "11",
+          },
+          {
+            _id: "112",
+            user: { _id: "2", username: "user2" },
+            firstMessageId: "10",
+          },
+        ],
+      };
+
+      setChatRooms([room, ...chatRooms]);
     }
-    setCurrentTab(TABS.history);
+
+    handleRoomClick(room);
   };
 
   return (
@@ -130,10 +137,12 @@ const Chat = () => {
         <div className="fixed bottom-44 right-10 w-96 h-[65vh] bg-lightBackground dark:bg-gray-900 border-1 border-gray-500 dark:border-white rounded-lg shadow-xl">
           {/* Titlebar */}
           <ChatTitleBar
+            chatUser={chatUser}
             TABS={TABS}
             currentTab={currentTab}
             handleSearchClose={handleSearchClose}
             handleSearchUser={handleSearchUser}
+            handleChatBackClick={handleChatBackClick}
             setSearchInput={setSearchInput}
             toogleChat={toogleChat}
           />
