@@ -130,7 +130,7 @@ const Chat = () => {
 
       {/* Chat pop up */}
       {chatOpen && (
-        <div className="fixed bottom-44 right-10 w-96 h-[600px] bg-lightBackground dark:bg-gray-900 border-1 border-gray-500 dark:border-white rounded-lg shadow-xl">
+        <div className="fixed bottom-44 right-10 w-96 h-[65vh] bg-lightBackground dark:bg-gray-900 border-1 border-gray-500 dark:border-white rounded-lg shadow-xl">
           {/* Titlebar */}
           <div>
             {/* Search Tab Title Bar*/}
