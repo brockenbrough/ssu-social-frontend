@@ -10,7 +10,7 @@ import ChatSearch from "./chatSearch";
 const Chat = () => {
   const [chatOpen, setChatOpen] = useState(false);
   const [user, setUser] = useState(null);
-  const [chatHistory, setChatHistory] = useState([]);
+  const [chatRooms, setChatRooms] = useState([]);
   const TABS = { chat: "chat", search: "search" };
   const [currentTab, setCurrentTab] = useState(TABS.chat);
   const [searchInput, setSearchInput] = useState("");
@@ -33,6 +33,13 @@ const Chat = () => {
 
   const handleSearchUser = () => {
     setCurrentTab(TABS.search);
+  };
+
+  const handleUserClick = (user) => {
+    if (!chatRooms.some((chatRoom) => chatRoom._id === user._id)) {
+      setChatRooms([...chatRooms, user]);
+    }
+    setCurrentTab(TABS.chat);
   };
 
   return (
@@ -84,6 +91,12 @@ const Chat = () => {
                     className="h-5 my-auto mr-5 text-gray-800 hover:text-orange-500 dark:text-white cursor-pointer"
                     icon={createMessageIcon}
                   />
+                  {/* Search Chat  */}
+                  <FontAwesomeIcon
+                    onClick={handleSearchUser}
+                    className="h-5 my-auto mr-5 text-gray-800 hover:text-orange-500 dark:text-white cursor-pointer"
+                    icon={searchIcon}
+                  />
                   {/* Close Chat pop up  */}
                   <FontAwesomeIcon
                     onClick={toogleChat}
@@ -96,16 +109,24 @@ const Chat = () => {
           </div>
           <div className="h-full">
             {/* Chat Tab */}
-            {currentTab === TABS.chat && chatHistory.length === 0 && (
-              <p className="text-center font-display mt-4 text-gray-800 dark:text-white">
-                No messages yet
-              </p>
-            )}
+            {currentTab === TABS.chat &&
+              (chatRooms.length === 0 ? (
+                <p className="text-center font-display mt-4 text-gray-800 dark:text-white">
+                  No messages yet
+                </p>
+              ) : (
+                <p className="text-center font-display mt-4 text-gray-800 dark:text-white">
+                  Yes messages
+                </p>
+              ))}
 
             {/* Search Tab */}
             {currentTab === TABS.search && (
               <div className="h-full pb-16">
-                <ChatSearch searchInput={searchInput} />
+                <ChatSearch
+                  searchInput={searchInput}
+                  handleUserClick={handleUserClick}
+                />
               </div>
             )}
           </div>

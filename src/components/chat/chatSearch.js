@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import getUserInfo from "../../utilities/decodeJwt";
 import axios from "axios";
 
-const ChatSearch = ({ searchInput }) => {
-  const [currentUser, setCurrentUser] = useState(null);
+const ChatSearch = ({ searchInput, handleUserClick }) => {
+  const [currentUser, setCurrentUser] = useState(getUserInfo());
   const [searchUsers, setSearchUsers] = useState([]);
 
   const fetchSearchUsers = async () => {
@@ -14,6 +14,7 @@ const ChatSearch = ({ searchInput }) => {
         `${process.env.REACT_APP_BACKEND_SERVER_URI}/user/search/${searchInput}`
       );
       const users = response.data;
+
       const result = users.filter(
         (user) => user.username !== currentUser.username
       );
@@ -35,6 +36,7 @@ const ChatSearch = ({ searchInput }) => {
           <div
             key={user._id}
             className="flex p-3 border-b border-gray-300 font-title hover:bg-orange-500 cursor-pointer hover:text-white"
+            onClick={() => handleUserClick(user)}
           >
             <span>@{user.username}</span>
           </div>
