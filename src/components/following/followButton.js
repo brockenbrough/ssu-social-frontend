@@ -31,7 +31,7 @@ export default function FollowButton(props) {
       type: "follow",
       username: username,
       actionUsername: actionUsername,
-      text: `@${actionUsername} ${followUnfollow} you`,
+      text: `@${actionUsername} ${followUnfollow} you.`,
     };
 
     if (data.username === data.actionUsername) return;

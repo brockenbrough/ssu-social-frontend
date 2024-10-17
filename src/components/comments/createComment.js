@@ -233,7 +233,7 @@ function CreateComment({ post, setParentCommentCount, postCardHeight }) {
       text: `@${user.username} commented on your post: ${post.content.slice(
         0,
         20
-      )}...`,
+      )}${post.content.length > 20 ? "..." : "."}`,
       postId: post._id,
     };
 

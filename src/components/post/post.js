@@ -163,7 +163,7 @@ const Post = ({ posts: post }) => {
       text: `@${user.username} ${likeUnlike} your post: ${post.content.slice(
         0,
         20
-      )}...`,
+      )}${post.content.length > 20 ? "..." : "."}`,
       postId: post._id,
     };
 

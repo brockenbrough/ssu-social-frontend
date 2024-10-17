@@ -168,13 +168,15 @@ const Chat = () => {
                           )[0].user.username
                         }
                       </div>
-                      <div className="flex-1 font-display text-xs">
-                        @
+                      <div className="flex-1 font-display text-xs ml-1 text-gray-500 dark:text-gray-300">
                         {room.messages[room.messages.length - 1].text.slice(
                           0,
                           20
                         )}
-                        ...
+                        {room.messages[room.messages.length - 1].text.length >
+                        20
+                          ? "..."
+                          : ""}
                       </div>
                     </div>
                   ))}
