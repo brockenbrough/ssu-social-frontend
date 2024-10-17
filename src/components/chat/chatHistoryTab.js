@@ -10,7 +10,6 @@ const ChatHistoryTab = ({ chatRooms, handleRoomClick }) => {
 
   return (
     <div>
-      {/* Chat Tab */}
       {chatRooms.length === 0 ? (
         <p className="text-center font-display mt-4 text-gray-800 dark:text-white">
           No messages yet
