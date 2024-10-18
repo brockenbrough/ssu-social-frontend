@@ -292,6 +292,7 @@ function CreateComment({ post, setParentCommentCount, postCardHeight }) {
         fetchCommentCount();
         fetchComments();
         saveCommentNotification(post);
+        setParentCommentCount();
       } else {
         // Handle errors if needed
         console.error("Error:", response.status);
@@ -347,7 +348,7 @@ function CreateComment({ post, setParentCommentCount, postCardHeight }) {
                     const success = await deleteComment(comment._id);
                     if (success) {
                       setComments(comments.filter((el) => el._id !== comment._id));
-                      setParentCommentCount((prevCount) => Math.max(prevCount - 1, 0)); 
+                      setParentCommentCount();
                     }
                   }}
                 >

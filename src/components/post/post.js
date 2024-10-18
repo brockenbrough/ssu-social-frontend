@@ -390,7 +390,7 @@ const Post = ({ posts: post }) => {
               <Card.Body>
                 <CreateComment
                   post={post}
-                  setParentCommentCount={setCommentCount}
+                  setParentCommentCount={fetchCommentCount}
                   postCardHeight={postCardHeight}
                   hasMedia={hasMedia}
                 />
