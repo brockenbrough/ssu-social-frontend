@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMessage as chatIcon } from "@fortawesome/free-regular-svg-icons";
 import { faPaperPlane as sendIcon } from "@fortawesome/free-solid-svg-icons";
@@ -128,6 +128,15 @@ const Chat = () => {
     { id: 2, text: "Hi there!", sender: "user2" },
   ]);
   const [newMessage, setNewMessage] = useState("");
+  const messagesEndRef = useRef(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   const handleSendMessage = () => {
     if (newMessage.trim() === "") return;
@@ -218,6 +227,7 @@ const Chat = () => {
                         ))}
                       </div>
                     ))}
+                    <div ref={messagesEndRef} />
                   </div>
 
                   {/* Input Area */}
