@@ -329,6 +329,7 @@ const Post = ({ posts: post }) => {
                   height: "40px", // Adjust size as needed
                   borderRadius: "50%", // Circular image
                   marginRight: "8px",
+                  backgroundColor: "white",
                 }}
               />
               <a
