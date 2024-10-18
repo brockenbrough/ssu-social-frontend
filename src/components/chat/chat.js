@@ -33,12 +33,22 @@ const Chat = () => {
       participants: [
         {
           _id: "111",
-          user: { _id: "1", username: "username_placeHolder" },
+          user: {
+            _id: "1",
+            username: "username_placeHolder",
+            profileImage:
+              "https://ssusocial.s3.us-east-1.amazonaws.com/profilepictures/1729289675193_elephant.jpg",
+          },
           firstMessageId: "11",
         },
         {
           _id: "112",
-          user: { _id: "2", username: "user2" },
+          user: {
+            _id: "2",
+            username: "user2",
+            profileImage:
+              "https://ssusocial.s3.us-east-1.amazonaws.com/profilepictures/1729289675193_elephant.jpg",
+          },
           firstMessageId: "10",
         },
       ],
