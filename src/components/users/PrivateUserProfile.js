@@ -47,28 +47,42 @@ const PrivateUserProfile = () => {
 
   // Fetch user info
   const fetchUserInfo = async () => {
-  try {
-    const userInfo = await getUserInfoAsync();
-    if (userInfo) {
-      setUser(userInfo);
-      setUsername(userInfo.username);
-
-      // Fetch user data including biography
-      const res = await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_URI}/user/getUserByUsername/${userInfo.username}`);
-      setUserProfileImage(res.data.profileImage || "/defaultProfile.png");
-
-      // Ensure biography is part of the fetched user data
-      if (res.data.biography) {
-        setUser((prevUser) => ({
-          ...prevUser,
-          biography: res.data.biography,
-        }));
+    try {
+      const userInfo = await getUserInfoAsync();
+      if (userInfo) {
+        setUser(userInfo);
+        setUsername(userInfo.username);
+  
+        // Fetch user data including biography
+        const res = await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_URI}/user/getUserByUsername/${userInfo.username}`);
+        const fetchedProfileImage = res.data.profileImage;
+        const defaultProfileImageUrl = "https://ssusocial.s3.amazonaws.com/profilepictures/ProfileIcon.png"; // Default profile picture URL
+  
+        if (fetchedProfileImage) {
+          // Check if the image exists in S3
+          try {
+            await axios.head(fetchedProfileImage);
+            setUserProfileImage(fetchedProfileImage); // Image exists
+          } catch (error) {
+            // Image doesn't exist in S3, fallback to default
+            setUserProfileImage(defaultProfileImageUrl);
+          }
+        } else {
+          setUserProfileImage(defaultProfileImageUrl); // Use default image
+        }
+  
+        // Ensure biography is part of the fetched user data
+        if (res.data.biography) {
+          setUser((prevUser) => ({
+            ...prevUser,
+            biography: res.data.biography,
+          }));
+        }
       }
+    } catch (error) {
+      console.error("Error fetching user info:", error);
     }
-  } catch (error) {
-    console.error("Error fetching user info:", error);
-  }
-};
+  };  
 
   useEffect(() => {
     fetchUserInfo();
