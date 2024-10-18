@@ -94,7 +94,7 @@ const ChatTab = () => {
       </div>
 
       {/* Input Area */}
-      <div className="p-2 flex items-center">
+      <div className="px-2 pt-2 pb-3 flex items-center">
         <textarea
           type="text"
           value={newMessage}

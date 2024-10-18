@@ -5,6 +5,7 @@ import { faEdit as createMessageIcon } from "@fortawesome/free-solid-svg-icons";
 import { faAngleLeft as backIcon } from "@fortawesome/free-solid-svg-icons";
 import getUserInfo from "../../utilities/decodeJwt";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const ChatTitleBar = ({
   chatUser,
@@ -17,6 +18,9 @@ const ChatTitleBar = ({
   toogleChat,
 }) => {
   const [user, setUser] = useState(getUserInfo());
+  const defaultProfileImageUrl =
+    "https://ssusocial.s3.amazonaws.com/profilepictures/ProfileIcon.png";
+  const navigate = useNavigate();
 
   useEffect(() => {
     setUser(getUserInfo());
@@ -52,6 +56,18 @@ const ChatTitleBar = ({
               icon={backIcon}
             />
           </div>
+
+          {/* Chat User Profile Image */}
+          <img
+            src={chatUser.profileImageUrl || defaultProfileImageUrl}
+            alt="Profile"
+            className="h-10 w-10 rounded-full bg-white cursor-pointer mr-2"
+            onClick={() => {
+              chatUser.username === user.username
+                ? navigate("/privateUserProfile")
+                : navigate(`/publicProfilePage/${chatUser.username}`);
+            }}
+          />
           {/* Chat Username */}
           <a
             href={`/publicProfilePage/${chatUser.username}`}
