@@ -59,7 +59,7 @@ const ChatTitleBar = ({
 
           {/* Chat User Profile Image */}
           <img
-            src={chatUser.profileImageUrl || defaultProfileImageUrl}
+            src={chatUser.profileImage || defaultProfileImageUrl}
             alt="Profile Image"
             className="h-9 w-9 rounded-full bg-white cursor-pointer mr-2"
             onClick={() => {
@@ -83,7 +83,7 @@ const ChatTitleBar = ({
           {/* Chat User Profile Image */}
           <span className="flex items-center">
             <img
-              src={user.profileImageUrl || defaultProfileImageUrl}
+              src={user.profileImage || defaultProfileImageUrl}
               alt="Profile Image"
               className="h-9 w-9 rounded-full bg-white cursor-pointer mr-2"
               onClick={() => {
