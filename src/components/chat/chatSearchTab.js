@@ -4,6 +4,8 @@ import axios from "axios";
 
 const ChatSearchTab = ({ searchInput, handleUserClick }) => {
   const [currentUser, setCurrentUser] = useState(getUserInfo());
+  const defaultProfileImageUrl =
+    "https://ssusocial.s3.amazonaws.com/profilepictures/ProfileIcon.png";
   const [searchUsers, setSearchUsers] = useState([]);
 
   const fetchSearchUsers = async () => {
@@ -35,10 +37,19 @@ const ChatSearchTab = ({ searchInput, handleUserClick }) => {
         {searchUsers.map((user) => (
           <div
             key={user._id}
-            className="flex p-3 border-b border-gray-300 font-title hover:bg-orange-500 cursor-pointer hover:text-white"
+            className="flex p-2 border-b border-gray-300 font-title hover:bg-orange-500 cursor-pointer hover:text-white"
             onClick={() => handleUserClick(user)}
           >
-            <span>@{user.username}</span>
+            <div className="flex ml-2 mr-2">
+              <img
+                src={user.profileImage || defaultProfileImageUrl}
+                alt="Profile Image"
+                className="h-9 w-9 rounded-full bg-white cursor-pointer mr-2 my-auto"
+              />
+            </div>
+            <div className="flex flex-col justify-center w-full">
+              @{user.username}
+            </div>
           </div>
         ))}
       </div>
