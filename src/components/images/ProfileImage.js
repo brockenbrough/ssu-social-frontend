@@ -5,11 +5,8 @@ import axios from "axios";
 
 const ProfileImage = ({ username }) => {
     const { darkMode } = useDarkMode();
-    const [profileImageUrl, setProfileImageUrl] = useState(""); 
-
-    // Use the publicly available S3 URL for the default profile image
-    const defaultProfileImageUrl = "https://ssusocial.s3.amazonaws.com/profilepictures/ProfileIcon.png"; 
-
+    const [profileImageUrl, setProfileImageUrl] = useState("ProfileIcon.png"); // default image
+    
     useEffect(() => {
         // Fetch the user's profile image if available
         const fetchProfileImage = async () => {
@@ -17,26 +14,22 @@ const ProfileImage = ({ username }) => {
                 const response = await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_URI}/user/getProfileImage/${username}`);
                 if (response.data.imageUri) {
                     setProfileImageUrl(response.data.imageUri); // Use the fetched profile image URL
-                } else {
-                    setProfileImageUrl(defaultProfileImageUrl); // Set the default profile image if no custom image
                 }
             } catch (error) {
                 console.error("Error fetching profile image:", error);
-                setProfileImageUrl(defaultProfileImageUrl); // Set the default profile image on error
+                // If there is an error, default image will remain
             }
         };
 
         if (username) {
-            fetchProfileImage(); // Fetch the profile image only if the username exists
-        } else {
-            setProfileImageUrl(defaultProfileImageUrl); // Set the default image if no username is provided
+            fetchProfileImage(); // Fetch only if username exists
         }
     }, [username]);
 
     return (
         <Image
             roundedCircle
-            src={profileImageUrl || defaultProfileImageUrl}
+            src={profileImageUrl}
             alt="Profile Icon"
             style={{
                 background: darkMode ? '#181818' : 'white',
