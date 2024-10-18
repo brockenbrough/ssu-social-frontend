@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMessage as chatIcon } from "@fortawesome/free-regular-svg-icons";
+import { faPaperPlane as sendIcon } from "@fortawesome/free-solid-svg-icons";
 import getUserInfo from "../../utilities/decodeJwt";
 import ChatSearchTab from "./chatSearchTab";
 import ChatHistoryTab from "./chatHistoryTab";
@@ -122,6 +123,23 @@ const Chat = () => {
     handleRoomClick(room);
   };
 
+  const [messages, setMessages] = useState([
+    { id: 1, text: "Hello!", sender: "user1" },
+    { id: 2, text: "Hi there!", sender: "user2" },
+  ]);
+  const [newMessage, setNewMessage] = useState("");
+
+  const handleSendMessage = () => {
+    if (newMessage.trim() === "") return;
+
+    // Add the new message to the list
+    setMessages([
+      ...messages,
+      { id: messages.length + 1, text: newMessage, sender: "user1" },
+    ]);
+    setNewMessage("");
+  };
+
   return (
     <div className="fixed bottom-24 right-10">
       {/* Chat button */}
@@ -154,6 +172,48 @@ const Chat = () => {
                 chatRooms={chatRooms}
                 handleRoomClick={handleRoomClick}
               />
+            )}
+
+            {currentTab === TABS.chat && (
+              <div className="h-full">
+                <div className="h-full flex flex-col">
+                  {/* Chat Window */}
+                  <div className="flex-1 overflow-y-auto p-3 bg-lightBackground dark:bg-gray-900 space-y-2">
+                    {messages.map((message) => (
+                      <div
+                        key={message.id}
+                        className={`p-2 font-display text-sm rounded-lg break-words ${
+                          message.sender === "user1"
+                            ? "bg-orange-500 text-white self-end ml-40"
+                            : "bg-gray-300 text-gray-900 self-start mr-40"
+                        }`}
+                      >
+                        {message.text}
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Input Area */}
+                  <div className="p-2 flex items-center">
+                    <input
+                      type="text"
+                      value={newMessage}
+                      onChange={(e) => setNewMessage(e.target.value)}
+                      placeholder="Type a message..."
+                      className="flex-1 p-2 border rounded-lg outline-none font-display break-words text-gray-900 dark:text-white bg-transparent"
+                    />
+                    <button
+                      onClick={handleSendMessage}
+                      className="ml-2 p-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 font-menu"
+                    >
+                      <FontAwesomeIcon
+                        className="text-white-500 text-2xl"
+                        icon={sendIcon}
+                      />
+                    </button>
+                  </div>
+                </div>
+              </div>
             )}
 
             {/* Search Tab */}
