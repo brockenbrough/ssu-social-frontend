@@ -47,26 +47,33 @@ const PrivateUserProfile = () => {
 
   // Fetch user info
   const fetchUserInfo = async () => {
-  try {
-    const userInfo = await getUserInfoAsync();
-    if (userInfo) {
-      setUser(userInfo);
-      setUsername(userInfo.username);
-      // Fetch user data including biography
-      const res = await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_URI}/user/getUserByUsername/${userInfo.username}`);
-      setUserProfileImage(res.data.profileImage || "/defaultProfile.png");
-      // Ensure biography is part of the fetched user data
-      if (res.data.biography) {
-        setUser((prevUser) => ({
-          ...prevUser,
-          biography: res.data.biography,
-        }));
+    try {
+      const userInfo = await getUserInfoAsync();
+      if (userInfo) {
+        setUser(userInfo);
+        setUsername(userInfo.username);
+  
+        // Fetch user data including biography and profileImage
+        const res = await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_URI}/user/getUserByUsername/${userInfo.username}`);
+        
+        const defaultProfileImageUrl = "https://ssusocial.s3.amazonaws.com/profilepictures/ProfileIcon.png";
+        
+        // Use fetched profile image if available, otherwise use default
+        const fetchedProfileImage = res.data.profileImage ? res.data.profileImage : defaultProfileImageUrl;
+        setUserProfileImage(fetchedProfileImage);
+        
+        // Ensure biography is part of the fetched user data
+        if (res.data.biography) {
+          setUser((prevUser) => ({
+            ...prevUser,
+            biography: res.data.biography,
+          }));
+        }
       }
+    } catch (error) {
+      console.error("Error fetching user info:", error);
     }
-  } catch (error) {
-    console.error("Error fetching user info:", error);
-  }
-};
+  };  
 
   useEffect(() => {
     fetchUserInfo();
