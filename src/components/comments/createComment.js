@@ -338,22 +338,22 @@ function CreateComment({ post, setParentCommentCount, postCardHeight }) {
         //Spacing Between Comments is "mb-2", Comment Border is set to none
         <div className="w-full custom-comment-card mx-0 mb-2">
           <Stack style={{ border: "none" }}>
-            <div className="flex justify-between items-center">
-              <div className="flex items-start space-x-1">
-                {/* Profile Image */}
-                <img
-                  src={profileImages[comment.username] || defaultProfileImageUrl}
-                  alt="Profile"
-                  className="w-7 h-7 rounded-full ml-[-2] mr-1 bg-white cursor-pointer"
-                  onClick={() => {
-                    navigate(
-                      user.username === comment.username
-                        ? "/privateUserProfile"
-                        : `/publicProfilePage/${comment.username}`
-                    );
-                  }}
-                />
-                <div className="flex flex-col mt-[0.5px]">
+            <div className="flex space-x-1 items-start">
+              {/* Profile Image */}
+              <img
+                src={profileImages[comment.username] || defaultProfileImageUrl}
+                alt="Profile"
+                className="w-7 h-7 rounded-full ml-[-2] mr-1 bg-white cursor-pointer"
+                onClick={() => {
+                  navigate(
+                    user.username === comment.username
+                      ? "/privateUserProfile"
+                      : `/publicProfilePage/${comment.username}`
+                  );
+                }}
+              />
+              <div className="flex flex-col w-full">
+                <div className="flex justify-between items-center">
                   <div className="flex items-center">
                     <span style={{ fontWeight: "bold", fontSize: "1rem" }}>
                       <Link
@@ -372,25 +372,25 @@ function CreateComment({ post, setParentCommentCount, postCardHeight }) {
                       {timeAgo(comment.date)}
                     </span>
                   </div>
-                  <span className="ssu-comment-content">
-                    {comment.commentContent}
-                  </span>
-                </div>
-              </div>
-              {user.username === comment.username && (
-                <button
-                  className="custom-delete-button"
-                  onClick={async () => {
-                    const success = await deleteComment(comment._id);
-                    if (success) {
+                  {user.username === comment.username && (
+                    <button
+                      className="custom-delete-button"
+                      onClick={async () => {
+                        const success = await deleteComment(comment._id);
+                        if (success) {
                       setComments(comments.filter((el) => el._id !== comment._id));
-                      setParentCommentCount();
-                    }
-                  }}
-                >
-                  <FontAwesomeIcon icon={faTrash} className="text-base" />
-                </button>
-              )}
+                          setParentCommentCount();
+                        }
+                      }}
+                    >
+                      <FontAwesomeIcon icon={faTrash} className="text-base" />
+                    </button>
+                  )}
+                </div>
+                <span className="ssu-comment-content">
+                  {comment.commentContent}
+                </span>
+              </div>
             </div>
           </Stack>
         </div>
