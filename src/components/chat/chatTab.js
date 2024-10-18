@@ -2,13 +2,15 @@ import React, { useState, useEffect, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane as sendIcon } from "@fortawesome/free-solid-svg-icons";
 
+let scrollEffect = "smooth";
+
 const ChatTab = () => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const messagesEndRef = useRef(null);
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  const scrollToBottom = (effect) => {
+    messagesEndRef.current?.scrollIntoView({ behavior: effect });
   };
 
   const fetchMessages = () => {
@@ -30,11 +32,12 @@ const ChatTab = () => {
   };
 
   useEffect(() => {
+    scrollEffect = "instant";
     fetchMessages();
   }, []);
 
   useEffect(() => {
-    scrollToBottom();
+    scrollToBottom(scrollEffect);
   }, [messages]);
 
   const handleSendMessage = () => {
@@ -45,6 +48,7 @@ const ChatTab = () => {
       { id: messages.length + 1, text: newMessage, sender: "user1" },
     ]);
     setNewMessage("");
+    scrollEffect = "smooth";
   };
 
   const handleKeyDown = (event) => {
