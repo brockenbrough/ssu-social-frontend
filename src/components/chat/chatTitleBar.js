@@ -60,8 +60,8 @@ const ChatTitleBar = ({
           {/* Chat User Profile Image */}
           <img
             src={chatUser.profileImageUrl || defaultProfileImageUrl}
-            alt="Profile"
-            className="h-10 w-10 rounded-full bg-white cursor-pointer mr-2"
+            alt="Profile Image"
+            className="h-9 w-9 rounded-full bg-white cursor-pointer mr-2"
             onClick={() => {
               chatUser.username === user.username
                 ? navigate("/privateUserProfile")
@@ -80,13 +80,24 @@ const ChatTitleBar = ({
       {/* Chat History Title Bar*/}
       {currentTab === TABS.history && (
         <div className="flex justify-between items-center p-3 border-b border-gray-500 dark:border-white font-title">
-          {/* Username */}
-          <a
-            href={"/privateUserProfile"}
-            className="font-title font-bold text-lg no-underline text-gray-900 dark:text-white hover:text-orange-500"
-          >
-            @{user.username}
-          </a>
+          {/* Chat User Profile Image */}
+          <span className="flex items-center">
+            <img
+              src={user.profileImageUrl || defaultProfileImageUrl}
+              alt="Profile Image"
+              className="h-9 w-9 rounded-full bg-white cursor-pointer mr-2"
+              onClick={() => {
+                navigate("/privateUserProfile");
+              }}
+            />
+            {/* Username */}
+            <a
+              href={"/privateUserProfile"}
+              className="font-title font-bold text-lg no-underline text-gray-900 dark:text-white hover:text-orange-500"
+            >
+              @{user.username}
+            </a>
+          </span>
           <div className="flex justify-center">
             {/* Create Chat  */}
             <FontAwesomeIcon
