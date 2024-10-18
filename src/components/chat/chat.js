@@ -140,6 +140,13 @@ const Chat = () => {
     setNewMessage("");
   };
 
+  const handleKeyDown = (event) => {
+    if (event.ctrlKey && event.key === "Enter") {
+      event.preventDefault();
+      handleSendMessage();
+    }
+  };
+
   return (
     <div className="fixed bottom-24 right-10">
       {/* Chat button */}
@@ -202,6 +209,7 @@ const Chat = () => {
                       placeholder="Type a message..."
                       className="flex-1 p-2 border rounded-lg outline-none font-display w-30 text-gray-900 dark:text-white bg-transparent h-12"
                       autoFocus="true"
+                      onKeyDown={handleKeyDown}
                     />
                     <button
                       onClick={handleSendMessage}
