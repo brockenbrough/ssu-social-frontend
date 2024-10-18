@@ -54,7 +54,7 @@ const ChatTitleBar = ({
           </div>
           {/* Chat Username */}
           <a
-            href={"/privateUserProfile"}
+            href={`/publicProfilePage/${chatUser.username}`}
             className="font-title font-bold text-lg no-underline text-gray-900 dark:text-white hover:text-orange-500"
           >
             @{chatUser.username}
