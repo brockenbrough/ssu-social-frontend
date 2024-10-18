@@ -140,6 +140,17 @@ const Chat = () => {
     setNewMessage("");
   };
 
+  const handleKeyDown = (event) => {
+    if (event.ctrlKey && event.key === "Enter") {
+      event.preventDefault();
+      handleSendMessage();
+    }
+    if (event.key === "Tab") {
+      event.preventDefault();
+      setNewMessage(newMessage + "\t");
+    }
+  };
+
   return (
     <div className="fixed bottom-24 right-10">
       {/* Chat button */}
@@ -166,7 +177,7 @@ const Chat = () => {
           />
           {/* Tab Body */}
           <div className="h-full pb-16">
-            {/* Chat Tab */}
+            {/* Chat History Tab */}
             {currentTab === TABS.history && (
               <ChatHistoryTab
                 chatRooms={chatRooms}
@@ -174,6 +185,7 @@ const Chat = () => {
               />
             )}
 
+            {/* Chat Tab */}
             {currentTab === TABS.chat && (
               <div className="h-full">
                 <div className="h-full flex flex-col">
@@ -188,19 +200,36 @@ const Chat = () => {
                             : "bg-gray-300 text-gray-900 self-start mr-40"
                         }`}
                       >
-                        {message.text}
+                        {message.text.split("\n").map((line, lineIndex) => (
+                          <span key={lineIndex}>
+                            {line.split("\t").map((tabbedText, tabIndex) => (
+                              <span key={tabIndex}>
+                                {tabbedText}
+                                {tabIndex < line.split("\t").length - 1 && (
+                                  <span
+                                    className="inline-block"
+                                    style={{ width: "2ch" }}
+                                  />
+                                )}{" "}
+                              </span>
+                            ))}
+                            <br />
+                          </span>
+                        ))}
                       </div>
                     ))}
                   </div>
 
                   {/* Input Area */}
                   <div className="p-2 flex items-center">
-                    <input
+                    <textarea
                       type="text"
                       value={newMessage}
                       onChange={(e) => setNewMessage(e.target.value)}
                       placeholder="Type a message..."
-                      className="flex-1 p-2 border rounded-lg outline-none font-display break-words text-gray-900 dark:text-white bg-transparent"
+                      className="flex-1 p-2 border rounded-lg outline-none font-display w-30 text-gray-900 dark:text-white bg-transparent h-12"
+                      autoFocus="true"
+                      onKeyDown={handleKeyDown}
                     />
                     <button
                       onClick={handleSendMessage}
