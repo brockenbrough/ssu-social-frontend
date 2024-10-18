@@ -1,14 +1,13 @@
 import React, { useState, useCallback, useLayoutEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import getUserInfo from "../../utilities/decodeJwt";
 import FollowButton from "../following/followButton";
-import ProfileImage from "../images/ProfileImage.js";
 import Post from "../post/post.js";
 
 export default function PublicUserList() {
   const [user, setUser] = useState({});
   const [posts, setPosts] = useState([]);
+  const [profileImage, setProfileImage] = useState("/defaultProfile.png"); // Default image
   const { username } = useParams();
   const [followerCount, setFollowerCount] = useState(0);
   const [followingCount, setFollowingCount] = useState(0);
@@ -20,6 +19,11 @@ export default function PublicUserList() {
         `${process.env.REACT_APP_BACKEND_SERVER_URI}/user/getUserByUsername/${username}`
       );
       setUser(userResponse.data);
+      
+      // Fetch the profile image from the backend
+      if (userResponse.data.profileImage) {
+        setProfileImage(userResponse.data.profileImage);
+      }
 
       // Fetch user posts
       const postsResponse = await axios.get(
@@ -74,7 +78,7 @@ export default function PublicUserList() {
     <div className="ssu-page-container">
       <div className="profile-header">
         <div className="profile-image">
-          <ProfileImage />
+          <img src={profileImage} alt="Profile" />
         </div>
         <div className="profile-info">
           <div className="username">{user.username}</div>
