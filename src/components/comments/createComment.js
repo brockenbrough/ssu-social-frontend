@@ -17,6 +17,8 @@ import { deleteComment } from './deleteComment';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane as sendIcon } from "@fortawesome/free-solid-svg-icons";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from "react-router-dom";
+import { fetchProfileImage } from "../../components/post/fetchProfileImage";
 
 const CommentCountContext = createContext();
 
@@ -35,6 +37,7 @@ export function useCommentCount() {
 }
 
 function CreateComment({ post, setParentCommentCount, postCardHeight }) {
+  const navigate = useNavigate();
   const postId = post._id;
   const [comments, setComments] = useState([]);
   const [user, setUser] = useState(null);
@@ -49,6 +52,20 @@ function CreateComment({ post, setParentCommentCount, postCardHeight }) {
   });
   const [emojiSuggestions, setEmojiSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const defaultProfileImageUrl = "https://ssusocial.s3.amazonaws.com/profilepictures/ProfileIcon.png";
+  const [profileImages, setProfileImages] = useState({});
+
+  useEffect(() => {
+    if (comments.length > 0) {
+      comments.forEach(async (comment) => {
+        const imageUrl = await fetchProfileImage(comment.username);
+        setProfileImages((prevImages) => ({
+          ...prevImages,
+          [comment.username]: imageUrl,
+        }));
+      });
+    }
+  }, [comments]);
 
   const findEmojiSuggestions = (input) => {
     const emojis = Object.values(data.emojis);
@@ -322,25 +339,44 @@ function CreateComment({ post, setParentCommentCount, postCardHeight }) {
         <div className="w-full custom-comment-card mx-0 mb-2">
           <Stack style={{ border: "none" }}>
             <div className="flex justify-between items-center">
-              <div className="flex items-center space-x-2">
-                <span style={{ fontWeight: "bold", fontSize: "1rem" }}>
-                  <Link
-                    id="username"
-                    to={
+              <div className="flex items-start space-x-1">
+                {/* Profile Image */}
+                <img
+                  src={profileImages[comment.username] || defaultProfileImageUrl}
+                  alt="Profile"
+                  className="w-7 h-7 rounded-full ml-[-2] mr-1 bg-white cursor-pointer"
+                  onClick={() => {
+                    navigate(
                       user.username === comment.username
                         ? "/privateUserProfile"
                         : `/publicProfilePage/${comment.username}`
-                    }
-                    className="ssu-comment-username"
-                  >
-                    @{comment.username}
-                  </Link>
-                </span>
-                <span className="ssu-comment-timeago">
-                  {timeAgo(comment.date)}
-                </span>
+                    );
+                  }}
+                />
+                <div className="flex flex-col mt-[0.5px]">
+                  <div className="flex items-center">
+                    <span style={{ fontWeight: "bold", fontSize: "1rem" }}>
+                      <Link
+                        id="username"
+                        to={
+                          user.username === comment.username
+                            ? "/privateUserProfile"
+                            : `/publicProfilePage/${comment.username}`
+                        }
+                        className="ssu-comment-username"
+                      >
+                        @{comment.username}
+                      </Link>
+                    </span>
+                    <span className="ssu-comment-timeago">
+                      {timeAgo(comment.date)}
+                    </span>
+                  </div>
+                  <span className="ssu-comment-content">
+                    {comment.commentContent}
+                  </span>
+                </div>
               </div>
-
               {user.username === comment.username && (
                 <button
                   className="custom-delete-button"
@@ -355,11 +391,7 @@ function CreateComment({ post, setParentCommentCount, postCardHeight }) {
                   <FontAwesomeIcon icon={faTrash} className="text-base" />
                 </button>
               )}
-
             </div>
-            <span className="ssu-comment-content">
-              {comment.commentContent}
-            </span>
           </Stack>
         </div>
       );

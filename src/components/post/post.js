@@ -24,6 +24,7 @@ import timeAgo from "../../utilities/timeAgo";
 import CreateComment from "../comments/createComment";
 import { PostPageContext } from "../../App";
 import { useNavigate } from "react-router-dom";
+import { fetchProfileImage } from "../../components/post/fetchProfileImage";
 
 const Post = ({ posts: post }) => {
   const [youtubeThumbnail, setYoutubeThumbnail] = useState(null);
@@ -46,6 +47,15 @@ const Post = ({ posts: post }) => {
   const [isAnimationActive, setIsAnimationActive] = useState(false);
   const [isSlidingOut, setIsSlidingOut] = useState(false);
   const [profileImageUrl, setProfileImageUrl] = useState("");
+
+  useEffect(() => {
+    const fetchImage = async () => {
+      const imageUrl = await fetchProfileImage(post.username);
+      setProfileImageUrl(imageUrl);
+    };
+
+    fetchImage();
+  }, [post.username]);
 
   const defaultProfileImageUrl =
     "https://ssusocial.s3.amazonaws.com/profilepictures/ProfileIcon.png";
@@ -144,31 +154,6 @@ const Post = ({ posts: post }) => {
       setYoutubeThumbnail(thumbnailUrl || "");
     } catch (error) {
       console.error("Error fetching YouTube video data:", error);
-    }
-  };
-
-  const fetchProfileImage = async () => {
-    try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_BACKEND_SERVER_URI}/user/getProfileImage/${post.username}`
-      );
-
-      if (response.data.imageUri) {
-        const imageUri = response.data.imageUri;
-
-        // Only use the default profile image if S3 returns a 404 or the image is not valid
-        const imageExists = await axios
-          .get(imageUri)
-          .then(() => true)
-          .catch(() => false);
-
-        setProfileImageUrl(imageExists ? imageUri : defaultProfileImageUrl);
-      } else {
-        setProfileImageUrl(defaultProfileImageUrl); // Use default if no imageUri is found
-      }
-    } catch (error) {
-      console.error("Error fetching profile image:", error);
-      setProfileImageUrl(defaultProfileImageUrl); // Use default in case of error
     }
   };
 

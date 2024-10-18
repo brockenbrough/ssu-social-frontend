@@ -241,6 +241,7 @@
 
 .custom-delete-button {
   @apply text-red-500 hover:text-red-600 text-base ml-4;
+  @apply -mt-3; 
 }
 
 .ssu-comment-content {
