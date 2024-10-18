@@ -23,6 +23,7 @@ import { Form } from "react-bootstrap";
 import timeAgo from "../../utilities/timeAgo";
 import CreateComment from "../comments/createComment";
 import { PostPageContext } from "../../App";
+import { useNavigate } from "react-router-dom";
 
 const Post = ({ posts: post }) => {
   const [youtubeThumbnail, setYoutubeThumbnail] = useState(null);
@@ -32,6 +33,7 @@ const Post = ({ posts: post }) => {
   const [dataLoaded, setDataLoaded] = useState(false);
   const formattedDate = moment(post.date).format("h:mm A • M/D/YYYY");
   const { _id: postId } = post;
+  const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const { darkMode } = useDarkMode();
   const isCurrentUserPost = user && user.username === post.username;
@@ -330,6 +332,12 @@ const Post = ({ posts: post }) => {
                   borderRadius: "50%", // Circular image
                   marginRight: "8px",
                   backgroundColor: "white",
+                  cursor: "pointer",
+                }}
+                onClick={() => {
+                  isCurrentUserPost
+                    ? navigate("/privateUserProfile")
+                    : navigate(`/publicProfilePage/${post.username}`);
                 }}
               />
               <a
