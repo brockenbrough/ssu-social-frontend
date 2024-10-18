@@ -335,7 +335,7 @@ function CreateComment({ post, setParentCommentCount, postCardHeight }) {
                     @{comment.username}
                   </Link>
                 </span>
-              <span className="ssu-comment-timeago">
+                <span className="ssu-comment-timeago">
                   {timeAgo(comment.date)}
                 </span>
               </div>
@@ -347,6 +347,7 @@ function CreateComment({ post, setParentCommentCount, postCardHeight }) {
                     const success = await deleteComment(comment._id);
                     if (success) {
                       setComments(comments.filter((el) => el._id !== comment._id));
+                      setParentCommentCount((prevCount) => Math.max(prevCount - 1, 0)); 
                     }
                   }}
                 >
