@@ -6,6 +6,7 @@ import ChatSearchTab from "./chatSearchTab";
 import ChatHistoryTab from "./chatHistoryTab";
 import ChatTitleBar from "./chatTitleBar";
 import ChatTab from "./chatTab";
+import axios from "axios";
 
 const Chat = () => {
   const [chatOpen, setChatOpen] = useState(false);
@@ -58,8 +59,29 @@ const Chat = () => {
   const [currentTab, setCurrentTab] = useState(TABS.history);
   const [searchInput, setSearchInput] = useState("");
 
+  const fetchUser = async () => {
+    const tokenUser = getUserInfo();
+    const username = tokenUser.username;
+
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_BACKEND_SERVER_URI}/user/getUserByUsername/${username}`
+      );
+
+      if (response.data) {
+        setUser(response.data);
+      } else {
+        setUser(tokenUser);
+      }
+    } catch (error) {
+      console.error("Error fetching User:", error);
+      setUser(tokenUser);
+    }
+  };
+
   useEffect(() => {
-    setUser(getUserInfo());
+    fetchUser();
+    console.log("here", user);
   }, []);
 
   const toogleChat = () => {
@@ -148,6 +170,7 @@ const Chat = () => {
         <div className="fixed bottom-44 right-10 w-96 h-[65vh] bg-lightBackground dark:bg-gray-900 border-1 border-gray-500 dark:border-white rounded-lg shadow-xl">
           {/* Titlebar */}
           <ChatTitleBar
+            user={user}
             chatUser={chatUser}
             TABS={TABS}
             currentTab={currentTab}

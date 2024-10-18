@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const ChatTitleBar = ({
+  user,
   chatUser,
   currentTab,
   TABS,
@@ -17,14 +18,9 @@ const ChatTitleBar = ({
   handleChatBackClick,
   toogleChat,
 }) => {
-  const [user, setUser] = useState(getUserInfo());
   const defaultProfileImageUrl =
     "https://ssusocial.s3.amazonaws.com/profilepictures/ProfileIcon.png";
   const navigate = useNavigate();
-
-  useEffect(() => {
-    setUser(getUserInfo());
-  }, []);
 
   return (
     <div>
