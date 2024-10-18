@@ -43,6 +43,9 @@ const Post = ({ posts: post }) => {
   const [postPage, setPostPage] = useContext(PostPageContext);
   const [isAnimationActive, setIsAnimationActive] = useState(false);
   const [isSlidingOut, setIsSlidingOut] = useState(false);
+  const [profileImageUrl, setProfileImageUrl] = useState("");
+  
+  const defaultProfileImageUrl = "https://ssusocial.s3.amazonaws.com/profilepictures/ProfileIcon.png";
 
   const handleShowPostModal = () => {
     if (showCommentCard) {
@@ -95,7 +98,8 @@ const Post = ({ posts: post }) => {
     setUser(currentUser);
     fetchLikeCount();
     fetchCommentCount();
-  }, [post._id]);
+    fetchProfileImage();
+  }, [post._id]);  
 
   const fetchLikeCount = () => {
     fetch(
@@ -139,6 +143,28 @@ const Post = ({ posts: post }) => {
       console.error("Error fetching YouTube video data:", error);
     }
   };
+
+  const fetchProfileImage = async () => {
+    try {
+      const response = await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_URI}/user/getProfileImage/${post.username}`);
+      
+      if (response.data.imageUri) {
+        const imageUri = response.data.imageUri;
+  
+        // Only use the default profile image if S3 returns a 404 or the image is not valid
+        const imageExists = await axios.get(imageUri)
+          .then(() => true)
+          .catch(() => false);
+  
+        setProfileImageUrl(imageExists ? imageUri : defaultProfileImageUrl);
+      } else {
+        setProfileImageUrl(defaultProfileImageUrl); // Use default if no imageUri is found
+      }
+    } catch (error) {
+      console.error("Error fetching profile image:", error);
+      setProfileImageUrl(defaultProfileImageUrl); // Use default in case of error
+    }
+  };  
 
   useEffect(() => {
     if (post.content) {
@@ -289,17 +315,29 @@ const Post = ({ posts: post }) => {
           className="ssu-post-card"
         >
           <div>
-            {/*  author of post */}
-            <a
-              href={
-                isCurrentUserPost
-                  ? "/privateUserProfile"
-                  : `/publicProfilePage/${post.username}`
-              }
-              className="ssu-textlink-bold font-title text-gray-900 dark:text-white"
-            >
-              @{post.username}
-            </a>
+            {/*  author of post with profile picture */}
+            <div className="d-flex align-items-center">
+              <img
+                src={profileImageUrl}  // Profile image URL (already fetched)
+                alt="Profile"
+                style={{
+                  width: '40px',  // Adjust size as needed
+                  height: '40px',  // Adjust size as needed
+                  borderRadius: '50%',  // Circular image
+                  marginRight: '8px'
+                }}
+              />
+              <a
+                href={
+                  isCurrentUserPost
+                    ? "/privateUserProfile"
+                    : `/publicProfilePage/${post.username}`
+                }
+                className="ssu-textlink-bold font-title text-gray-900 dark:text-white"
+              >
+                @{post.username}
+              </a>
+            </div>
             {/* post text */}
             <p className="font-display mt-2 text-gray-900 dark:text-white">
               {displayContent}
@@ -312,7 +350,7 @@ const Post = ({ posts: post }) => {
                 className="ssu-post-img mt-4 mb-3"
               />
             )}
-
+  
             {/* YouTube Video Embed */}
             {youtubeThumbnail && (
               <div
@@ -368,7 +406,7 @@ const Post = ({ posts: post }) => {
               <span>{timeAgo(post.date)}</span>
             </p>
           </div>
-        </div>
+        </div>  
         {/* Comment Section */}
         {showCommentCard && (
           <div
