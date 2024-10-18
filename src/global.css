@@ -239,6 +239,10 @@
   margin-left: 5px;
 }
 
+.custom-delete-button {
+  @apply text-red-500 hover:text-red-600 text-base ml-4;
+}
+
 .ssu-comment-content {
   @apply text-base text-black dark:text-white;
   overflow-wrap: break-word;

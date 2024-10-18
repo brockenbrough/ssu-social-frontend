@@ -13,8 +13,10 @@ import { Link } from "react-router-dom";
 import getUserInfo from "../../utilities/decodeJwt";
 import Stack from "react-bootstrap/Stack";
 import timeAgo from "../../utilities/timeAgo";
+import { deleteComment } from './deleteComment';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane as sendIcon } from "@fortawesome/free-solid-svg-icons";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
 const CommentCountContext = createContext();
 
@@ -318,27 +320,43 @@ function CreateComment({ post, setParentCommentCount, postCardHeight }) {
         //Spacing Between Comments is "mb-2", Comment Border is set to none
         <div className="w-full custom-comment-card mx-0 mb-2">
           <Stack style={{ border: "none" }}>
-            <span>
-              <span style={{ fontWeight: "bold", fontSize: "1rem" }}>
-                <Link
-                  id="username"
-                  to={
-                    user.username === comment.username
-                      ? "/privateUserProfile"
-                      : `/publicProfilePage/${comment.username}`
-                  }
-                  className="ssu-comment-username"
-                >
-                  @{comment.username}
-                </Link>
-              </span>
+            <div className="flex justify-between items-center">
+              <div className="flex items-center space-x-2">
+                <span style={{ fontWeight: "bold", fontSize: "1rem" }}>
+                  <Link
+                    id="username"
+                    to={
+                      user.username === comment.username
+                        ? "/privateUserProfile"
+                        : `/publicProfilePage/${comment.username}`
+                    }
+                    className="ssu-comment-username"
+                  >
+                    @{comment.username}
+                  </Link>
+                </span>
               <span className="ssu-comment-timeago">
-                {timeAgo(comment.date)}
-              </span>
-              <br />
-              <span className="ssu-comment-content">
-                {comment.commentContent}
-              </span>
+                  {timeAgo(comment.date)}
+                </span>
+              </div>
+
+              {user.username === comment.username && (
+                <button
+                  className="custom-delete-button"
+                  onClick={async () => {
+                    const success = await deleteComment(comment._id);
+                    if (success) {
+                      setComments(comments.filter((el) => el._id !== comment._id));
+                    }
+                  }}
+                >
+                  <FontAwesomeIcon icon={faTrash} className="text-base" />
+                </button>
+              )}
+
+            </div>
+            <span className="ssu-comment-content">
+              {comment.commentContent}
             </span>
           </Stack>
         </div>
@@ -399,7 +417,7 @@ function CreateComment({ post, setParentCommentCount, postCardHeight }) {
               formData.commentContent.length === 0
                 ? "overflow-hidden"
                 : "overflow-y-auto"
-            }`}
+              }`}
             id="commentContent"
             name="commentContent"
             value={formData.commentContent}
