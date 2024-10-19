@@ -3,8 +3,6 @@ import { faSearch as searchIcon } from "@fortawesome/free-solid-svg-icons";
 import { faClose as closeIcon } from "@fortawesome/free-solid-svg-icons";
 import { faEdit as createMessageIcon } from "@fortawesome/free-solid-svg-icons";
 import { faAngleLeft as backIcon } from "@fortawesome/free-solid-svg-icons";
-import getUserInfo from "../../utilities/decodeJwt";
-import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const ChatTitleBar = ({

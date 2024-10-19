@@ -12,6 +12,7 @@ const Chat = () => {
   const [chatOpen, setChatOpen] = useState(false);
   const [user, setUser] = useState(getUserInfo());
   const [chatUser, setChatUser] = useState({});
+  const [unreadMessageCount, setUnreadMessageCount] = useState(10);
   const [chatRooms, setChatRooms] = useState([
     {
       _id: "1",
@@ -163,6 +164,12 @@ const Chat = () => {
         className="bg-orange-500 p-3 rounded-full flex justify-center cursor-pointer"
       >
         <FontAwesomeIcon className="z-10 h-7 text-white" icon={chatIcon} />
+        {/* Unread message count */}
+        {unreadMessageCount > 0 && (
+          <span className="absolute -top-1 -right-1 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+            {unreadMessageCount}
+          </span>
+        )}
       </div>
 
       {/* Chat pop up */}
