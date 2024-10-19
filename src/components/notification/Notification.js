@@ -112,10 +112,12 @@ export default function Notification({
   };
 
   return (
-    <div className="fixed left-40 top-40 w-80 rounded-md shadow-lg z-10 bg-white ">
+    <div className="fixed left-40 top-[37vh] w-80 rounded-md shadow-lg z-10 bg-white ">
       {/* Notification title */}
-      <div className="flex justify-between items-center rounded-t-md p-3 bg-orange-500">
-        <h3 className="text-white font-title">Notifications</h3>
+      <div className="flex justify-between items-center rounded-t-md px-3 py-[0.70rem] bg-orange-500">
+        <span className="pl-2 text-white font-title text-xl text-center">
+          Notifications
+        </span>
         <button
           onClick={() => handleHideNotificationPopup()}
           className="text-gray-600 hover:text-gray-800"

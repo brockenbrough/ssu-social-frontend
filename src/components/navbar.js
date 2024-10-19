@@ -89,17 +89,6 @@ export default function Navbar() {
           <span className="hidden md:inline">Discover</span>{" "}
           {/* Text hidden on small screens */}
         </a>
-        <a
-          href="/privateUserProfile"
-          className="ssu-nav-link group flex items-center"
-        >
-          <FontAwesomeIcon
-            className="mr-4 text-lightMainText dark:text-darkMainText group-hover:text-white"
-            icon={profileIcon}
-          />
-          <span className="hidden md:inline">Profile</span>{" "}
-          {/* Text hidden on small screens */}
-        </a>
 
         {/* Create Inbox Button */}
         <span
@@ -122,6 +111,18 @@ export default function Navbar() {
             <span className="hidden md:inline">Inbox</span>{" "}
           </span>
         </span>
+
+        <a
+          href="/privateUserProfile"
+          className="ssu-nav-link group flex items-center"
+        >
+          <FontAwesomeIcon
+            className="mr-4 text-lightMainText dark:text-darkMainText group-hover:text-white"
+            icon={profileIcon}
+          />
+          <span className="hidden md:inline">Profile</span>{" "}
+          {/* Text hidden on small screens */}
+        </a>
 
         {/* Dark Mode Button */}
         <div className="mt-auto p-6 hidden md:block">
