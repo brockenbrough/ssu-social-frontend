@@ -139,7 +139,11 @@ const Chat = () => {
         participants: [
           {
             _id: "111",
-            user: { _id: user._id, username: user.username },
+            user: {
+              _id: user._id,
+              username: user.username,
+              profileImage: user.profileImage,
+            },
             firstMessageId: "11",
           },
           {
