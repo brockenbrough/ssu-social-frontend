@@ -62,7 +62,7 @@ export default function Navbar() {
           <CreatePost popupShow={popupShow} setPopupShow={setPopupShow} />
           <span onClick={() => setPopupShow(true)}>
             <FontAwesomeIcon
-              className="mr-2 text-lightMainText dark:text-darkMainText group-hover:text-white"
+              className="mr-4 text-lightMainText dark:text-darkMainText group-hover:text-white"
               icon={createIcon}
             />
             <span className="hidden md:inline">Create Post</span>
@@ -75,7 +75,7 @@ export default function Navbar() {
           className="ssu-nav-link group flex items-center"
         >
           <FontAwesomeIcon
-            className="mr-2 text-lightMainText dark:text-darkMainText group-hover:text-white"
+            className="mr-4 text-lightMainText dark:text-darkMainText group-hover:text-white"
             icon={forYouIcon}
           />
           <span className="hidden md:inline">For You</span>{" "}
@@ -83,7 +83,7 @@ export default function Navbar() {
         </a>
         <a href="/getallpost" className="ssu-nav-link group flex items-center">
           <FontAwesomeIcon
-            className="mr-3 text-lightMainText dark:text-darkMainText group-hover:text-white"
+            className="mr-4 text-lightMainText dark:text-darkMainText group-hover:text-white"
             icon={discoverIcon}
           />
           <span className="hidden md:inline">Discover</span>{" "}
@@ -94,7 +94,7 @@ export default function Navbar() {
           className="ssu-nav-link group flex items-center"
         >
           <FontAwesomeIcon
-            className="mr-3 text-lightMainText dark:text-darkMainText group-hover:text-white"
+            className="mr-4 text-lightMainText dark:text-darkMainText group-hover:text-white"
             icon={profileIcon}
           />
           <span className="hidden md:inline">Profile</span>{" "}
@@ -107,17 +107,19 @@ export default function Navbar() {
           onClick={() => handleInboxClick()}
         >
           <span className="flex items-center">
-            <FontAwesomeIcon
-              className="mr-3 text-lightMainText dark:text-darkMainText group-hover:text-white"
-              icon={inboxIcon}
-            />
+            <div className="relative mr-1">
+              <FontAwesomeIcon
+                className="mr-3 text-lightMainText dark:text-darkMainText group-hover:text-white"
+                icon={inboxIcon}
+              />
+              {/* Notification count */}
+              {notifications.filter((n) => n.isRead === false).length > 0 && (
+                <span className="absolute -top-2 -right-0 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                  {notifications.filter((n) => n.isRead === false).length}
+                </span>
+              )}
+            </div>
             <span className="hidden md:inline">Inbox</span>{" "}
-            {/* Text hidden on small screens */}
-            {notifications.filter((n) => n.isRead === false).length > 0 && (
-              <span className="inline-flex items-center justify-center ml-6 text-xs font-medium text-center rounded-full bg-iconBorder text-lightMainText dark:text-darkMainText w-7 h-7 group-hover:bg-gray-800">
-                {notifications.filter((n) => n.isRead === false).length}
-              </span>
-            )}
           </span>
         </span>
 
