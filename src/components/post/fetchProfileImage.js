@@ -14,7 +14,6 @@ export const fetchProfileImage = async (username) => {
     if (response.data.imageUri) {
       const imageUri = response.data.imageUri;
 
-      // Only use the default profile image if S3 returns a 404 or the image is not valid
       const imageExists = await axios
         .get(imageUri)
         .then(() => true)
@@ -22,10 +21,9 @@ export const fetchProfileImage = async (username) => {
 
       return imageExists ? imageUri : defaultProfileImageUrl;
     } else {
-      return defaultProfileImageUrl; // Use default if no imageUri is found
+      return defaultProfileImageUrl;
     }
   } catch (error) {
-    console.error("Error fetching profile image:", error);
-    return defaultProfileImageUrl; // Use default in case of error
+    return defaultProfileImageUrl;
   }
 };
