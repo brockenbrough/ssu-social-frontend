@@ -32,6 +32,19 @@ export function CommentCountProvider({ children }) {
   );
 }
 
+const truncateUsername = (username = "", timeAgoString = "", maxLineLength = 26) => {
+  const totalCharLengthOfLine = username.length + 1 + timeAgoString.length; // +1 for '@' symbol
+
+  if (totalCharLengthOfLine > maxLineLength) {
+    // Subtract 1 for '@' symbol and timeAgo length
+    const allowedUsernameLength = maxLineLength - 1 - timeAgoString.length;
+    //Truncate and add ..
+    return username.slice(0, allowedUsernameLength) + "..";
+  }
+
+  return username;
+};
+
 export function useCommentCount() {
   return useContext(CommentCountContext);
 }
@@ -334,9 +347,12 @@ function CreateComment({ post, setParentCommentCount, postCardHeight }) {
       );
     }
     return comments.map((comment) => {
+      const timeAgoString = timeAgo(comment.date);
+      const truncatedUsername = truncateUsername(comment.username, timeAgoString);
+
       return (
         //Spacing Between Comments is "mb-2", Comment Border is set to none
-        <div className="w-full custom-comment-card mx-0 mb-2">
+        <div className="w-full custom-comment-card mx-0 mb-2 relative">
           <Stack style={{ border: "none" }}>
             <div className="flex space-x-1 items-start">
               {/* Profile Image */}
@@ -353,45 +369,43 @@ function CreateComment({ post, setParentCommentCount, postCardHeight }) {
                 }}
               />
               <div className="flex flex-col w-full">
-                <div className="flex justify-between items-center">
-                  <div className="flex items-center">
-                    <span style={{ fontWeight: "bold", fontSize: "1rem" }}>
-                      <Link
-                        id="username"
-                        to={
-                          user.username === comment.username
-                            ? "/privateUserProfile"
-                            : `/publicProfilePage/${comment.username}`
-                        }
-                        className="ssu-comment-username"
-                      >
-                        @{comment.username}
-                      </Link>
-                    </span>
-                    <span className="ssu-comment-timeago">
-                      {timeAgo(comment.date)}
-                    </span>
-                  </div>
-                  {user.username === comment.username && (
-                    <button
-                      className="custom-delete-button"
-                      onClick={async () => {
-                        const success = await deleteComment(comment._id);
-                        if (success) {
-                      setComments(comments.filter((el) => el._id !== comment._id));
-                          setParentCommentCount();
-                        }
-                      }}
+                <div className="flex items-center">
+                  <span style={{ fontWeight: "bold", fontSize: "1rem" }}>
+                    <Link
+                      id="username"
+                      to={
+                        user.username === comment.username
+                          ? "/privateUserProfile"
+                          : `/publicProfilePage/${comment.username}`
+                      }
+                      className="ssu-comment-username"
                     >
-                      <FontAwesomeIcon icon={faTrash} className="text-base" />
-                    </button>
-                  )}
+                      @{truncatedUsername}
+                    </Link>
+                  </span>
+                  <span className="ssu-comment-timeago">
+                    {timeAgoString}
+                  </span>
                 </div>
-                <span className="ssu-comment-content">
+                <span className="ssu-comment-content w-full break-words overflow-hidden text-ellipsis whitespace-pre-wrap">
                   {comment.commentContent}
                 </span>
               </div>
             </div>
+            {user.username === comment.username && (
+              <button
+                className="custom-delete-button absolute right-0 top-2"
+                onClick={async () => {
+                  const success = await deleteComment(comment._id);
+                  if (success) {
+                    setComments(comments.filter((el) => el._id !== comment._id));
+                    setParentCommentCount();
+                  }
+                }}
+              >
+                <FontAwesomeIcon icon={faTrash} className="text-base" />
+              </button>
+            )}
           </Stack>
         </div>
       );
