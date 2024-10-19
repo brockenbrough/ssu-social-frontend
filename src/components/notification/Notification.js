@@ -148,7 +148,7 @@ export default function Notification({
                 <div className="relative">
                   <span>Likes</span>
                   {likeNotifications.length > 0 && (
-                    <span className="absolute -top-3 -right-4 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                    <span className="absolute -top-3 -right-4 bg-red-600 text-white text-xs font-normal rounded-full w-5 h-5 flex items-center justify-center">
                       {likeNotifications.length}
                     </span>
                   )}
@@ -165,7 +165,7 @@ export default function Notification({
                 <div className="relative">
                   <span>Comments</span>
                   {commentNotifications.length > 0 && (
-                    <span className="absolute -top-3 -right-4 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                    <span className="absolute -top-3 -right-4 bg-red-600 text-white text-xs font-normal rounded-full w-5 h-5 flex items-center justify-center">
                       {commentNotifications.length}
                     </span>
                   )}
@@ -182,7 +182,7 @@ export default function Notification({
                 <div className="relative">
                   <span>Follows</span>
                   {followNotifications.length > 0 && (
-                    <span className="absolute -top-3 -right-4 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                    <span className="absolute -top-3 -right-4 bg-red-600 text-white text-xs font-normal rounded-full w-5 h-5 flex items-center justify-center">
                       {followNotifications.length}
                     </span>
                   )}
