@@ -82,7 +82,6 @@ const Chat = () => {
 
   useEffect(() => {
     fetchUser();
-    console.log("here", user);
   }, []);
 
   const toogleChat = () => {
