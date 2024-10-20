@@ -113,7 +113,14 @@ const Chat = () => {
       const response = await apiClient.post("/chatRoom", data);
 
       chatRoom = response.data.chatRoom;
-      setChatRooms([chatRoom, ...chatRooms]);
+      const isChatRoomExists = chatRooms.some((room) =>
+        room.participants.every((participant) =>
+          data.participants.some((p) => p.userId === participant.userId)
+        )
+      );
+      if (!isChatRoomExists) {
+        setChatRooms([chatRoom, ...chatRooms]);
+      }
       handleRoomClick(chatRoom);
     } catch (error) {
       console.error("Error creating chat room:", error);
