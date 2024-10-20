@@ -101,7 +101,7 @@ const ChatTab = () => {
           onChange={(e) => setNewMessage(e.target.value)}
           placeholder="Type a message..."
           className="flex-1 p-2 border rounded-lg outline-none font-display w-30 text-gray-900 dark:text-white bg-transparent h-12"
-          autoFocus="true"
+          autoFocus={true}
           onKeyDown={handleKeyDown}
         />
         <button

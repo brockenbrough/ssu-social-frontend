@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import getUserInfo from "../../utilities/decodeJwt";
 import axios from "axios";
 
-const ChatSearchTab = ({ searchInput, handleUserClick }) => {
+const ChatSearchTab = ({ searchInput, handleChatUserClick }) => {
   const [currentUser, setCurrentUser] = useState(getUserInfo());
   const defaultProfileImageUrl =
     "https://ssusocial.s3.amazonaws.com/profilepictures/ProfileIcon.png";
@@ -38,7 +38,7 @@ const ChatSearchTab = ({ searchInput, handleUserClick }) => {
           <div
             key={user._id}
             className="flex p-2 border-b border-gray-300 font-title hover:bg-orange-500 cursor-pointer hover:text-white"
-            onClick={() => handleUserClick(user)}
+            onClick={() => handleChatUserClick(user)}
           >
             <div className="flex ml-2 mr-2">
               <img
