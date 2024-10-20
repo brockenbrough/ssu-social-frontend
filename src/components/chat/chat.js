@@ -15,49 +15,7 @@ const Chat = () => {
   const [chatUser, setChatUser] = useState({});
   const [unreadMessageCount, setUnreadMessageCount] = useState(10);
   const [currentChatRoom, setCurrentChatRoom] = useState({});
-  const [chatRooms, setChatRooms] = useState([
-    {
-      _id: "1",
-      messages: [
-        {
-          _id: "10",
-          senderUser: { _id: "1", username: "user1" },
-          reciverUser: { _id: "2", username: "user2" },
-          text: "Hello",
-          date: "2021-10-10T10:00:00Z",
-        },
-        {
-          _id: "11",
-          senderUser: { _id: "2", username: "user2" },
-          reciverUser: { _id: "1", username: "user1" },
-          text: "last message placeholder  long very long very very long message",
-          date: "2021-10-10T10:01:00Z",
-        },
-      ],
-      participants: [
-        {
-          _id: "111",
-          user: {
-            _id: "1",
-            username: "username_placeHolder",
-            profileImage:
-              "https://ssusocial.s3.us-east-1.amazonaws.com/profilepictures/1729289675193_elephant.jpg",
-          },
-          firstMessageId: "11",
-        },
-        {
-          _id: "112",
-          user: {
-            _id: "2",
-            username: "user2",
-            profileImage:
-              "https://ssusocial.s3.us-east-1.amazonaws.com/profilepictures/1729289675193_elephant.jpg",
-          },
-          firstMessageId: "10",
-        },
-      ],
-    },
-  ]);
+  const [chatRooms, setChatRooms] = useState([]);
   const TABS = { history: "history", search: "search", chat: "chat" };
   const [currentTab, setCurrentTab] = useState(TABS.history);
   const [searchInput, setSearchInput] = useState("");
@@ -82,8 +40,28 @@ const Chat = () => {
     }
   };
 
+  const fetchChatRooms = async () => {
+    const user = getUserInfo();
+
+    if (!user.id) {
+      return;
+    }
+
+    try {
+      const response = await apiClient.get(`/chatRoom/getByUserId/${user.id}`);
+      const chatRooms = response.data.chatRooms;
+
+      if (chatRooms) {
+        setChatRooms(chatRooms);
+      }
+    } catch (error) {
+      console.error("Error fetching chat rooms:", error);
+    }
+  };
+
   useEffect(() => {
     fetchUser();
+    fetchChatRooms();
   }, []);
 
   const toogleChat = () => {
@@ -107,6 +85,8 @@ const Chat = () => {
   };
 
   const handleRoomClick = async (room) => {
+    console.log("Room clicked:", room);
+
     const chatUserId = room.participants.filter((p) => p.userId !== user._id)[0]
       .userId;
 
@@ -132,7 +112,12 @@ const Chat = () => {
     };
 
     try {
-      chatRoom = (await apiClient.post("/chatRoom", data)).data.chatRoom;
+      const response = await apiClient.post("/chatRoom", data);
+
+      chatRoom = response.data.chatRoom;
+      console.log("Chat room created Response:", response);
+      console.log("Chat room created data:", response.data);
+      console.log("Chat room created Room:", response.data.chatRoom);
       setChatRooms([chatRoom, ...chatRooms]);
       handleRoomClick(chatRoom);
     } catch (error) {
@@ -176,6 +161,7 @@ const Chat = () => {
             {/* Chat History Tab */}
             {currentTab === TABS.history && (
               <ChatHistoryTab
+                user={user}
                 chatRooms={chatRooms}
                 handleRoomClick={handleRoomClick}
               />
