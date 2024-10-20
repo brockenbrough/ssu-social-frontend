@@ -4,7 +4,7 @@ import { faPaperPlane as sendIcon } from "@fortawesome/free-solid-svg-icons";
 
 let scrollEffect = "smooth";
 
-const ChatTab = () => {
+const ChatTab = ({ chatRoom }) => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const messagesEndRef = useRef(null);
@@ -14,21 +14,7 @@ const ChatTab = () => {
   };
 
   const fetchMessages = () => {
-    setMessages([
-      { id: 1, text: "Hello!", sender: "user1" },
-      { id: 2, text: "Hi there!", sender: "user2" },
-      { id: 3, text: "How are you?", sender: "user1" },
-      { id: 4, text: "I'm fine, thank you.", sender: "user2" },
-      { id: 5, text: "What about you?", sender: "user2" },
-      { id: 6, text: "I'm good too.", sender: "user1" },
-      { id: 7, text: "Nice to hear that.", sender: "user2" },
-      { id: 8, text: "Have a nice day!", sender: "user1" },
-      { id: 9, text: "You too!", sender: "user2" },
-      { id: 10, text: "Goodbye!", sender: "user1" },
-      { id: 11, text: "Bye!", sender: "user2" },
-      { id: 12, text: "See you later!", sender: "user1" },
-      { id: 13, text: "See you!", sender: "user2" },
-    ]);
+    setMessages(chatRoom.messages);
   };
 
   useEffect(() => {

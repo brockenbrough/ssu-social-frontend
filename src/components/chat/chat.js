@@ -14,6 +14,7 @@ const Chat = () => {
   const [user, setUser] = useState(getUserInfo());
   const [chatUser, setChatUser] = useState({});
   const [unreadMessageCount, setUnreadMessageCount] = useState(10);
+  const [currentChatRoom, setCurrentChatRoom] = useState({});
   const [chatRooms, setChatRooms] = useState([
     {
       _id: "1",
@@ -116,6 +117,7 @@ const Chat = () => {
       const chatUser = response.data;
 
       setChatUser(chatUser);
+      setCurrentChatRoom(room);
       setCurrentTab(TABS.chat);
     } catch (error) {
       console.error("Error fetching chat user:", error);
@@ -182,7 +184,7 @@ const Chat = () => {
             {/* Chat Tab */}
             {currentTab === TABS.chat && (
               <div className="h-full">
-                <ChatTab />
+                <ChatTab chatRoom={currentChatRoom} />
               </div>
             )}
 
