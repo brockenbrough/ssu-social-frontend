@@ -80,8 +80,8 @@ const Post = ({ posts: post }) => {
     if (!content) return content;
 
     const urlRegex = /(https?:\/\/[^\s]+)/g;
-    const youtubeRegex =
-      /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})(?:[^\s]*)?/;
+    const youtubeRegex = 
+    /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})(?:[^\s]*)?/;
     const filteredContent = content.replace(youtubeRegex, "");
 
     return filteredContent.split(urlRegex).map((part, index) => {
@@ -160,15 +160,15 @@ const Post = ({ posts: post }) => {
   useEffect(() => {
     if (post.content) {
       const youtubeRegex =
-        /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+        /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/|youtube\.com\/shorts\/)([a-zA-Z0-9_-]{11})/;
       const youtubeMatch = post.content.match(youtubeRegex);
-
+  
       if (youtubeMatch) {
         const videoId = youtubeMatch[1];
         fetchYouTubeThumbnail(videoId);
       }
     }
-  }, [post.content]);
+  }, [post.content]);  
 
   const [isLoading, setIsLoading] = useState(false);
 
