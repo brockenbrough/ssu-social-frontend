@@ -7,6 +7,7 @@ import ChatHistoryTab from "./chatHistoryTab";
 import ChatTitleBar from "./chatTitleBar";
 import ChatTab from "./chatTab";
 import axios from "axios";
+import apiClient from "../../utilities/apiClient";
 
 const Chat = () => {
   const [chatOpen, setChatOpen] = useState(false);
@@ -104,61 +105,35 @@ const Chat = () => {
     setCurrentTab(TABS.history);
   };
 
-  const handleRoomClick = (room) => {
-    const chatUser = room.participants.filter((p) => p.user._id !== user._id)[0]
-      .user;
-    setChatUser(chatUser);
-    setCurrentTab(TABS.chat);
+  const handleRoomClick = async (room) => {
+    const chatUserId = room.participants.filter((p) => p.userId !== user._id)[0]
+      .userId;
+
+    try {
+      const chatUser = await axios.get(
+        `${process.env.REACT_APP_BACKEND_SERVER_URI}/user/getUserById/${chatUserId}`
+      );
+      setChatUser(chatUser);
+      setCurrentTab(TABS.chat);
+    } catch (error) {
+      console.error("Error fetching chat user:", error);
+    }
   };
 
-  const handleUserClick = (user) => {
-    let room = chatRooms.find((room) =>
-      room.participants.some((participant) => participant.user._id === user._id)
-    );
+  const handleChatUserClick = async (chatUser) => {
+    let chatRoom = null;
 
-    if (!room) {
-      room = {
-        _id: `room-id-${chatRooms.length + 1}`,
-        messages: [
-          {
-            _id: "10",
-            senderUser: { _id: "1", username: "user1" },
-            reciverUser: { _id: "2", username: "user2" },
-            text: "Hello",
-            date: "2021-10-10T10:00:00Z",
-          },
-          {
-            _id: "11",
-            senderUser: { _id: "2", username: "user2" },
-            reciverUser: { _id: "1", username: "user1" },
-            text: "What's up?",
-            date: "2021-10-10T10:01:00Z",
-          },
-        ],
-        participants: [
-          {
-            _id: "111",
-            user: {
-              _id: user._id,
-              username: user.username,
-              email: user.email,
-              profileImage: user.profileImage,
-              bio: user.bio,
-            },
-            firstMessageId: "11",
-          },
-          {
-            _id: "112",
-            user: { _id: "2", username: "user2" },
-            firstMessageId: "10",
-          },
-        ],
-      };
+    const data = {
+      participants: [{ userId: user._id }, { userId: chatUser._id }],
+    };
 
-      setChatRooms([room, ...chatRooms]);
+    try {
+      chatRoom = (await apiClient.post("/chatRoom", data)).data.chatRoom;
+      setChatRooms([chatRoom, ...chatRooms]);
+      handleRoomClick(chatRoom);
+    } catch (error) {
+      console.error("Error creating chat room:", error);
     }
-
-    handleRoomClick(room);
   };
 
   return (
@@ -214,7 +189,7 @@ const Chat = () => {
               <div className="h-full pb-1">
                 <ChatSearchTab
                   searchInput={searchInput}
-                  handleUserClick={handleUserClick}
+                  handleChatUserClick={handleChatUserClick}
                 />
               </div>
             )}
