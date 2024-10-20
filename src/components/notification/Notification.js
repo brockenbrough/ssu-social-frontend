@@ -112,10 +112,12 @@ export default function Notification({
   };
 
   return (
-    <div className="fixed left-40 top-40 w-80 rounded-md shadow-lg z-10 bg-white ">
+    <div className="fixed left-40 top-[37vh] w-80 rounded-md shadow-lg z-10 bg-white ">
       {/* Notification title */}
-      <div className="flex justify-between items-center rounded-t-md p-3 bg-orange-500">
-        <h3 className="text-white font-title">Notifications</h3>
+      <div className="flex justify-between items-center rounded-t-md px-3 py-[0.70rem] bg-orange-500">
+        <span className="pl-2 text-white font-title text-xl text-center">
+          Notifications
+        </span>
         <button
           onClick={() => handleHideNotificationPopup()}
           className="text-gray-600 hover:text-gray-800"
@@ -134,7 +136,7 @@ export default function Notification({
         ) : (
           <>
             {/* Filter buttons (Likes, Comments, Follows) */}
-            <div className="flex justify-around p-2 ">
+            <div className="flex justify-around p-2 mt-1">
               <button
                 onClick={() => toggleFilter("like")}
                 className={`${
@@ -143,12 +145,14 @@ export default function Notification({
                     : "ssu-nav-filter-btn mr-2"
                 }`}
               >
-                Likes
-                {likeNotifications.length > 0 && (
-                  <span className="ssu-nav-filter-count">
-                    {likeNotifications.length}
-                  </span>
-                )}
+                <div className="relative">
+                  <span>Likes</span>
+                  {likeNotifications.length > 0 && (
+                    <span className="absolute -top-3 -right-4 bg-red-600 text-white text-xs font-normal rounded-full w-5 h-5 flex items-center justify-center">
+                      {likeNotifications.length}
+                    </span>
+                  )}
+                </div>
               </button>
               <button
                 onClick={() => toggleFilter("comment")}
@@ -158,12 +162,14 @@ export default function Notification({
                     : "ssu-nav-filter-btn mr-2"
                 }`}
               >
-                Comments
-                {commentNotifications.length > 0 && (
-                  <span className="ssu-nav-filter-count">
-                    {commentNotifications.length}
-                  </span>
-                )}
+                <div className="relative">
+                  <span>Comments</span>
+                  {commentNotifications.length > 0 && (
+                    <span className="absolute -top-3 -right-4 bg-red-600 text-white text-xs font-normal rounded-full w-5 h-5 flex items-center justify-center">
+                      {commentNotifications.length}
+                    </span>
+                  )}
+                </div>
               </button>
               <button
                 onClick={() => toggleFilter("follow")}
@@ -173,12 +179,14 @@ export default function Notification({
                     : "ssu-nav-filter-btn"
                 }`}
               >
-                Follows
-                {followNotifications.length > 0 && (
-                  <span className="ssu-nav-filter-count">
-                    {followNotifications.length}
-                  </span>
-                )}
+                <div className="relative">
+                  <span>Follows</span>
+                  {followNotifications.length > 0 && (
+                    <span className="absolute -top-3 -right-4 bg-red-600 text-white text-xs font-normal rounded-full w-5 h-5 flex items-center justify-center">
+                      {followNotifications.length}
+                    </span>
+                  )}
+                </div>
               </button>
             </div>
 

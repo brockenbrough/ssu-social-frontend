@@ -23,6 +23,8 @@ import { Form } from "react-bootstrap";
 import timeAgo from "../../utilities/timeAgo";
 import CreateComment from "../comments/createComment";
 import { PostPageContext } from "../../App";
+import { useNavigate } from "react-router-dom";
+import { fetchProfileImage } from "../../components/post/fetchProfileImage";
 
 const Post = ({ posts: post }) => {
   const [youtubeThumbnail, setYoutubeThumbnail] = useState(null);
@@ -32,6 +34,7 @@ const Post = ({ posts: post }) => {
   const [dataLoaded, setDataLoaded] = useState(false);
   const formattedDate = moment(post.date).format("h:mm A • M/D/YYYY");
   const { _id: postId } = post;
+  const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const { darkMode } = useDarkMode();
   const isCurrentUserPost = user && user.username === post.username;
@@ -43,6 +46,19 @@ const Post = ({ posts: post }) => {
   const [postPage, setPostPage] = useContext(PostPageContext);
   const [isAnimationActive, setIsAnimationActive] = useState(false);
   const [isSlidingOut, setIsSlidingOut] = useState(false);
+  const [profileImageUrl, setProfileImageUrl] = useState("");
+
+  useEffect(() => {
+    const fetchImage = async () => {
+      const imageUrl = await fetchProfileImage(post.username);
+      setProfileImageUrl(imageUrl);
+    };
+
+    fetchImage();
+  }, [post.username]);
+
+  const defaultProfileImageUrl =
+    "https://ssusocial.s3.amazonaws.com/profilepictures/ProfileIcon.png";
 
   const handleShowPostModal = () => {
     if (showCommentCard) {
@@ -95,6 +111,7 @@ const Post = ({ posts: post }) => {
     setUser(currentUser);
     fetchLikeCount();
     fetchCommentCount();
+    fetchProfileImage();
   }, [post._id]);
 
   const fetchLikeCount = () => {
@@ -289,17 +306,36 @@ const Post = ({ posts: post }) => {
           className="ssu-post-card"
         >
           <div>
-            {/*  author of post */}
-            <a
-              href={
-                isCurrentUserPost
-                  ? "/privateUserProfile"
-                  : `/publicProfilePage/${post.username}`
-              }
-              className="ssu-textlink-bold font-title text-gray-900 dark:text-white"
-            >
-              @{post.username}
-            </a>
+            {/*  author of post with profile picture */}
+            <div className="d-flex align-items-center mb-3">
+              <img
+                src={profileImageUrl} // Profile image URL (already fetched)
+                alt="Profile"
+                style={{
+                  width: "40px", // Adjust size as needed
+                  height: "40px", // Adjust size as needed
+                  borderRadius: "50%", // Circular image
+                  marginRight: "8px",
+                  backgroundColor: "white",
+                  cursor: "pointer",
+                }}
+                onClick={() => {
+                  isCurrentUserPost
+                    ? navigate("/privateUserProfile")
+                    : navigate(`/publicProfilePage/${post.username}`);
+                }}
+              />
+              <a
+                href={
+                  isCurrentUserPost
+                    ? "/privateUserProfile"
+                    : `/publicProfilePage/${post.username}`
+                }
+                className="ssu-textlink-bold font-title text-gray-900 dark:text-white"
+              >
+                @{post.username}
+              </a>
+            </div>
             {/* post text */}
             <p className="font-display mt-2 text-gray-900 dark:text-white">
               {displayContent}
@@ -390,7 +426,7 @@ const Post = ({ posts: post }) => {
               <Card.Body>
                 <CreateComment
                   post={post}
-                  setParentCommentCount={setCommentCount}
+                  setParentCommentCount={fetchCommentCount}
                   postCardHeight={postCardHeight}
                   hasMedia={hasMedia}
                 />

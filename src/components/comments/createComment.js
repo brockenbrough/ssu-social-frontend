@@ -13,8 +13,12 @@ import { Link } from "react-router-dom";
 import getUserInfo from "../../utilities/decodeJwt";
 import Stack from "react-bootstrap/Stack";
 import timeAgo from "../../utilities/timeAgo";
+import { deleteComment } from './deleteComment';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane as sendIcon } from "@fortawesome/free-solid-svg-icons";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from "react-router-dom";
+import { fetchProfileImage } from "../../components/post/fetchProfileImage";
 
 const CommentCountContext = createContext();
 
@@ -28,11 +32,25 @@ export function CommentCountProvider({ children }) {
   );
 }
 
+const truncateUsername = (username = "", timeAgoString = "", maxLineLength = 26) => {
+  const totalCharLengthOfLine = username.length + 1 + timeAgoString.length; // +1 for '@' symbol
+
+  if (totalCharLengthOfLine > maxLineLength) {
+    // Subtract 1 for '@' symbol and timeAgo length
+    const allowedUsernameLength = maxLineLength - 1 - timeAgoString.length;
+    //Truncate and add ..
+    return username.slice(0, allowedUsernameLength) + "..";
+  }
+
+  return username;
+};
+
 export function useCommentCount() {
   return useContext(CommentCountContext);
 }
 
 function CreateComment({ post, setParentCommentCount, postCardHeight }) {
+  const navigate = useNavigate();
   const postId = post._id;
   const [comments, setComments] = useState([]);
   const [user, setUser] = useState(null);
@@ -47,6 +65,20 @@ function CreateComment({ post, setParentCommentCount, postCardHeight }) {
   });
   const [emojiSuggestions, setEmojiSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const defaultProfileImageUrl = "https://ssusocial.s3.amazonaws.com/profilepictures/ProfileIcon.png";
+  const [profileImages, setProfileImages] = useState({});
+
+  useEffect(() => {
+    if (comments.length > 0) {
+      comments.forEach(async (comment) => {
+        const imageUrl = await fetchProfileImage(comment.username);
+        setProfileImages((prevImages) => ({
+          ...prevImages,
+          [comment.username]: imageUrl,
+        }));
+      });
+    }
+  }, [comments]);
 
   const findEmojiSuggestions = (input) => {
     const emojis = Object.values(data.emojis);
@@ -290,6 +322,7 @@ function CreateComment({ post, setParentCommentCount, postCardHeight }) {
         fetchCommentCount();
         fetchComments();
         saveCommentNotification(post);
+        setParentCommentCount();
       } else {
         // Handle errors if needed
         console.error("Error:", response.status);
@@ -314,32 +347,65 @@ function CreateComment({ post, setParentCommentCount, postCardHeight }) {
       );
     }
     return comments.map((comment) => {
+      const timeAgoString = timeAgo(comment.date);
+      const truncatedUsername = truncateUsername(comment.username, timeAgoString);
+
       return (
         //Spacing Between Comments is "mb-2", Comment Border is set to none
-        <div className="w-full custom-comment-card mx-0 mb-2">
+        <div className="w-full custom-comment-card mx-0 mb-2 relative">
           <Stack style={{ border: "none" }}>
-            <span>
-              <span style={{ fontWeight: "bold", fontSize: "1rem" }}>
-                <Link
-                  id="username"
-                  to={
+            <div className="flex space-x-1 items-start">
+              {/* Profile Image */}
+              <img
+                src={profileImages[comment.username] || defaultProfileImageUrl}
+                alt="Profile"
+                className="w-7 h-7 rounded-full ml-[-2] mr-1 bg-white cursor-pointer"
+                onClick={() => {
+                  navigate(
                     user.username === comment.username
                       ? "/privateUserProfile"
                       : `/publicProfilePage/${comment.username}`
+                  );
+                }}
+              />
+              <div className="flex flex-col w-full">
+                <div className="flex items-center">
+                  <span style={{ fontWeight: "bold", fontSize: "1rem" }}>
+                    <Link
+                      id="username"
+                      to={
+                        user.username === comment.username
+                          ? "/privateUserProfile"
+                          : `/publicProfilePage/${comment.username}`
+                      }
+                      className="ssu-comment-username"
+                    >
+                      @{truncatedUsername}
+                    </Link>
+                  </span>
+                  <span className="ssu-comment-timeago">
+                    {timeAgoString}
+                  </span>
+                </div>
+                <span className="ssu-comment-content w-full break-words overflow-hidden text-ellipsis whitespace-pre-wrap">
+                  {comment.commentContent}
+                </span>
+              </div>
+            </div>
+            {user.username === comment.username && (
+              <button
+                className="custom-delete-button absolute right-0 top-2"
+                onClick={async () => {
+                  const success = await deleteComment(comment._id);
+                  if (success) {
+                    setComments(comments.filter((el) => el._id !== comment._id));
+                    setParentCommentCount();
                   }
-                  className="ssu-comment-username"
-                >
-                  @{comment.username}
-                </Link>
-              </span>
-              <span className="ssu-comment-timeago">
-                {timeAgo(comment.date)}
-              </span>
-              <br />
-              <span className="ssu-comment-content">
-                {comment.commentContent}
-              </span>
-            </span>
+                }}
+              >
+                <FontAwesomeIcon icon={faTrash} className="text-base" />
+              </button>
+            )}
           </Stack>
         </div>
       );
@@ -399,7 +465,7 @@ function CreateComment({ post, setParentCommentCount, postCardHeight }) {
               formData.commentContent.length === 0
                 ? "overflow-hidden"
                 : "overflow-y-auto"
-            }`}
+              }`}
             id="commentContent"
             name="commentContent"
             value={formData.commentContent}

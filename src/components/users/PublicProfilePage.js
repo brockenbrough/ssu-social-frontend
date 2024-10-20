@@ -1,17 +1,19 @@
 import React, { useState, useCallback, useLayoutEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import getUserInfo from "../../utilities/decodeJwt";
 import FollowButton from "../following/followButton";
-import ProfileImage from "../images/ProfileImage.js";
 import Post from "../post/post.js";
 
 export default function PublicUserList() {
   const [user, setUser] = useState({});
   const [posts, setPosts] = useState([]);
+  const [profileImage, setProfileImage] = useState(""); // State for profile image
   const { username } = useParams();
   const [followerCount, setFollowerCount] = useState(0);
   const [followingCount, setFollowingCount] = useState(0);
+
+  // Default Profile Image URL
+  const defaultProfileImageUrl = "https://ssusocial.s3.amazonaws.com/profilepictures/ProfileIcon.png"; // S3 default image URL
 
   const fetchUserInfoAndPosts = useCallback(async () => {
     try {
@@ -20,7 +22,13 @@ export default function PublicUserList() {
         `${process.env.REACT_APP_BACKEND_SERVER_URI}/user/getUserByUsername/${username}`
       );
       setUser(userResponse.data);
-
+      
+      const defaultProfileImageUrl = "https://ssusocial.s3.amazonaws.com/profilepictures/ProfileIcon.png";
+      
+      // Set profile image or default if none exists
+      const fetchedProfileImage = userResponse.data.profileImage ? userResponse.data.profileImage : defaultProfileImageUrl;
+      setProfileImage(fetchedProfileImage);
+  
       // Fetch user posts
       const postsResponse = await axios.get(
         `${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getAllByUsername/${username}`
@@ -29,23 +37,22 @@ export default function PublicUserList() {
         (a, b) => new Date(b.date) - new Date(a.date)
       );
       setPosts(sortedPosts);
-
-      // Fetch follower count
+  
+      // Fetch follower and following count
       const followerResponse = await axios.get(
         `${process.env.REACT_APP_BACKEND_SERVER_URI}/followers/${username}`
       );
       setFollowerCount(followerResponse.data.length > 0 ? followerResponse.data[0].followers.length : 0);
-
-      // Fetch following count
+  
       const followingResponse = await axios.get(
         `${process.env.REACT_APP_BACKEND_SERVER_URI}/following/${username}`
       );
       setFollowingCount(followingResponse.data.length > 0 ? followingResponse.data[0].following.length : 0);
-
+  
     } catch (error) {
       console.error(`Error fetching data: ${error.message}`);
     }
-  }, [username]);
+  }, [username]);  
 
   const updateFollowerCount = (newFollowerCount) => {
     setFollowerCount(newFollowerCount);
@@ -74,7 +81,7 @@ export default function PublicUserList() {
     <div className="ssu-page-container">
       <div className="profile-header">
         <div className="profile-image">
-          <ProfileImage />
+          <img src={profileImage} alt="Profile" />
         </div>
         <div className="profile-info">
           <div className="username">{user.username}</div>

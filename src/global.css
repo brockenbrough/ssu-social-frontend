@@ -99,7 +99,7 @@
 
 
 .ssu-nav-link {
-  @apply py-2 pl-4 mb-4 text-lg no-underline transition duration-200 rounded-lg cursor-pointer text-lightMainText dark:text-darkMainText font-menu hover:bg-orange-600 hover:text-white;}
+  @apply py-2 pl-4 mb-4 text-lg no-underline transition duration-200 rounded-lg cursor-pointer text-lightMainText dark:text-darkMainText font-menu hover:bg-orange-500 hover:text-white;}
 
 .ssu-nav-filter-btn {
   @apply pb-2 text-sm font-bold text-gray-500 dark:text-white font-menu hover:border-b-2 hover:border-orange-500;
@@ -237,6 +237,11 @@
 .ssu-comment-timeago {
   @apply text-sm text-lightMainText dark:text-darkMainText;
   margin-left: 5px;
+}
+
+.custom-delete-button {
+  @apply text-red-500 hover:text-red-600 text-base ml-4;
+  @apply mt-0.5; 
 }
 
 .ssu-comment-content {

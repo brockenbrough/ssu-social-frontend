@@ -23,6 +23,8 @@ const CreatePost = ({ popupShow, setPopupShow }) => {
   const { darkMode } = useDarkMode();
   const [posts, setPosts] = useContext(PostContext);
   const [postPage, setPostPage] = useContext(PostPageContext);
+  const [error, setError] = useState("");
+
   const fileInputRef = useRef(null);
 
   const resetState = () => {
@@ -151,15 +153,42 @@ const CreatePost = ({ popupShow, setPopupShow }) => {
         username: user.username,
         imageUri: post.imageUri,
       };
-      await apiClient.post(`/posts/createPost`, post);
-    } catch (error) {
-      console.error("Error creating post:", error);
+      const response = await apiClient.post(`/posts/createPost`, post);
+
+      // Check if the content was censored
+      if (response.data.censored) {
+        setDescription(response.data.content);
+        setError("Your post contained disallowed content which has been censored.");
+      }
+
+      return true; // Indicate success
+    } catch (err) {
+      if (err.response && err.response.data) {
+        const { error: errMsg, categories, flaggedWords } = err.response.data;
+        if (categories) {
+          setError(
+            `${errMsg} Categories: ${Object.keys(categories)
+              .filter((cat) => categories[cat])
+              .join(", ")}`
+          );
+        } else if (flaggedWords) {
+          setError(`${errMsg} Flagged Words: ${flaggedWords.join(", ")}`);
+        } else {
+          setError(errMsg);
+        }
+      } else {
+        setError("An unexpected error occurred.");
+      }
+      return false; // Indicate failure
     }
   };
+
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (isSubmitting) return;
+    setError("");
     let post = {
       description: description,
       thumbnail: thumbnail,
@@ -182,14 +211,18 @@ const CreatePost = ({ popupShow, setPopupShow }) => {
       }
     }
 
-    setPosts([...posts, post]);
-
-    await savePost(post);
+    const success = await savePost(post);
     setIsSubmitting(false);
-    resetState();
-    setPostPage(0);
-    setPopupShow(false);
+
+    if (success) {
+      // Update the posts state only if the post was successfully saved
+      setPosts([...posts, { ...post, content: description }]);
+      resetState();
+      setPostPage(0);
+      setPopupShow(false);
+    }
   };
+
 
   const removeImage = () => {
     setImage(null);
