@@ -85,8 +85,6 @@ const Chat = () => {
   };
 
   const handleRoomClick = async (room) => {
-    console.log("Room clicked:", room);
-
     const chatUserId = room.participants.filter((p) => p.userId !== user._id)[0]
       .userId;
 
@@ -115,9 +113,6 @@ const Chat = () => {
       const response = await apiClient.post("/chatRoom", data);
 
       chatRoom = response.data.chatRoom;
-      console.log("Chat room created Response:", response);
-      console.log("Chat room created data:", response.data);
-      console.log("Chat room created Room:", response.data.chatRoom);
       setChatRooms([chatRoom, ...chatRooms]);
       handleRoomClick(chatRoom);
     } catch (error) {
