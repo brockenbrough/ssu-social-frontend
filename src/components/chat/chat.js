@@ -110,9 +110,11 @@ const Chat = () => {
       .userId;
 
     try {
-      const chatUser = await axios.get(
+      const response = await axios.get(
         `${process.env.REACT_APP_BACKEND_SERVER_URI}/user/getUserById/${chatUserId}`
       );
+      const chatUser = response.data;
+
       setChatUser(chatUser);
       setCurrentTab(TABS.chat);
     } catch (error) {
