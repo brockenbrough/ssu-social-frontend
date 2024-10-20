@@ -359,7 +359,7 @@ const Post = ({ posts: post }) => {
                   height="350"
                   src={`https://www.youtube.com/embed/${
                     post.content.match(/(?:v=|\/)([a-zA-Z0-9_-]{11})/)[1]
-                  }`}
+                    }`}
                   title="YouTube video player"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
@@ -369,23 +369,23 @@ const Post = ({ posts: post }) => {
             {/* Like and comment buttons */}
             <button
               onClick={handleLikeClick}
-              className="ml-1 mr-4 mt-2 font-menu text-gray-900 dark:text-white"
+              className="ml-1 mr-4 mt-2 font-menu text-gray-900 dark:text-white hover-outline-heart"
             >
               <FontAwesomeIcon
                 icon={isLiked ? solidHeartIcon : regularHeartIcon}
-                className={isLiked ? "text-red-500" : ""}
+                className={`hover:scale-125 transition-transform duration-300 ${isLiked ? "text-red-500" : ""}`}
               />
-              <span>{` ${likeCount}`}</span>
+              <span className="ml-0.5">{` ${likeCount}`}</span>
             </button>
             <button
               onClick={handleShowPostModal}
-              className="mr-4 mt-2 font-menu text-gray-900 dark:text-white"
+              className="mr-4 mt-2 font-menu text-gray-900 dark:text-white hover-outline-comment"
             >
               <FontAwesomeIcon
-                className={showCommentCard ? "mr-1 text-blue-500" : "mr-1"}
+                className={`hover:scale-125 transition-transform duration-300 ${showCommentCard ? "text-blue-500" : ""}`}
                 icon={showCommentCard ? solidCommentIcon : regularCommentIcon}
               />
-              {commentCount > 0 ? commentCount : "0"}
+              <span className="ml-1.5">{commentCount > 0 ? commentCount : "0"}</span>
             </button>
             {/* Edit button */}
             {isCurrentUserPost && (

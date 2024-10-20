@@ -72,6 +72,25 @@
   @apply w-[520px] max-w-sm py-5 px-2 m-0 bg-white dark:bg-gray-800 border-b-2 mt-3 border-gray-200 dark:border-gray-700;
 }
 
+/* Heart and Comment button hover */
+.hover-outline-heart .fa-heart {
+  transition: transform 0.3s ease, color 0.3s ease; 
+}
+
+.hover-outline-heart:hover .fa-heart {
+  color: red; 
+  -webkit-text-stroke: 1px red; 
+}
+
+.hover-outline-comment .fa-comment {
+  transition: transform 0.3s ease, color 0.3s ease; 
+}
+
+.hover-outline-comment:hover .fa-comment {
+  color: #2563eb; 
+  -webkit-text-stroke: 1px #2563eb; 
+}
+
 .ssu-post-img {
   @apply rounded-lg;
 }
