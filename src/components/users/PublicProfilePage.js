@@ -84,7 +84,7 @@ export default function PublicUserList() {
           <img src={profileImage} alt="Profile" />
         </div>
         <div className="profile-info">
-          <div className="username">{user.username}</div>
+          <div className="username">{"@" + user.username}</div>
           <FollowButton
             className="ssu-button-bold"
             username={user.username}

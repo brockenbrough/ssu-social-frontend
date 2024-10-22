@@ -52,7 +52,7 @@ export default function FollowingList() {
           className={`text-${darkMode ? 'white' : 'black'} text-xl`}
           style={{ textDecoration: 'none' }}
         >
-          {record}
+          @{record}
         </Link>
 
         <div className="flex items-center justify-center space-x-2">
