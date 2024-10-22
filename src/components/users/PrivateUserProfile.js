@@ -244,7 +244,7 @@ const PrivateUserProfile = () => {
               <Button onClick={handleShowUploadModal}>Upload Profile Image</Button>
             </div>
             <div className="profile-info">
-              <div className="username">{user.username}</div>
+              <div className="username">{"@" + user.username}</div>
               <button className="edit-profile-btn" onClick={showUserModal}>edit profile</button>
               <div className="profile-stats">
                 <div className="stat-item">
