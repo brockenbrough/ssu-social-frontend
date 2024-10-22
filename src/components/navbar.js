@@ -7,6 +7,7 @@ import { faCirclePlus as createIcon } from "@fortawesome/free-solid-svg-icons";
 import { faStar as forYouIcon } from "@fortawesome/free-solid-svg-icons";
 import { faCompass as discoverIcon } from "@fortawesome/free-solid-svg-icons";
 import { faUser as profileIcon } from "@fortawesome/free-solid-svg-icons";
+import { faMagnifyingGlass as searchButton } from "@fortawesome/free-solid-svg-icons";
 import apiClient from "./../utilities/apiClient";
 import CreatePost from "./post/createPost";
 import DarkModeButton from "./DarkModeButton";
@@ -70,6 +71,17 @@ export default function Navbar() {
         </span>
 
         {/* Direct Links Instead of Dropdown */}
+        <a
+          href="/searchPage"
+          className="ssu-nav-link group flex items-cente"
+        >
+          <FontAwesomeIcon
+          className="mr-3 text-lightMainText dark:text-darkMainText group-hover:text-white"
+          icon={searchButton}
+          />
+          <span className="hidden md:inline">Search</span>{" "}
+          
+        </a>
         <a
           href="/feed-algorithm"
           className="ssu-nav-link group flex items-center"
