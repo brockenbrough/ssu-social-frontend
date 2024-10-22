@@ -89,9 +89,9 @@ const ChatTab = ({ chatRoom, currentUser, chatUser }) => {
       <div className="flex-1 overflow-y-auto p-3 bg-lightBackground dark:bg-gray-900 space-y-2">
         {messages.map((message) => (
           <div
-            key={message.id}
+            key={message._id}
             className={`p-2 font-display text-sm rounded-lg break-words ${
-              message.sender === "user1"
+              message.senderId === currentUser._id
                 ? "bg-orange-500 text-white self-end ml-40"
                 : "bg-gray-300 text-gray-900 self-start mr-40"
             }`}
