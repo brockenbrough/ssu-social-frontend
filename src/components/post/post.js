@@ -308,7 +308,6 @@ const Post = ({ posts: post }) => {
           className="ssu-post-card"
         >
           <div>
-           
     <div className="d-flex align-items-center mb-3">
       <img
         src={profileImageUrl} // Profile image URL (already fetched)
@@ -338,14 +337,15 @@ const Post = ({ posts: post }) => {
         >
           @{post.username}
         </a>
-        {/* Tooltip with Followers and Following count */}
-        <div className="absolute hidden group-hover:block bottom-full mb-2 w-48 bg-white dark:bg-gray-800 text-gray-900 dark:text-white shadow-lg p-2 rounded-lg z-10">
-          <p className="text-sm">
-            Followers: <FollowerCount username={post.username} />
-          </p>
-          <p className="text-sm">
-            Following: <FollowingCount username={post.username} />
-          </p>
+       {/* Tooltip with Followers and Following count */}
+<div className="absolute hidden group-hover:block bottom-full mb-2 w-56 bg-orange-600 dark:bg-gray-800 text-gray-900 dark:text-white shadow-lg p-4 rounded-lg z-10 border border-gray-300 dark:border-gray-700 transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-2xl">
+  <p className="text-lg font-large mb-1 decoration-8">
+    Followers: <span className="text-cyan-950"><FollowerCount username={post.username} /></span>
+  </p>
+  <p className="text-lg font-large decoration-8">
+    Following: <span className="text-cyan-950"><FollowingCount username={post.username} /></span>
+  </p>
+
         </div>
       </div>
     </div>
