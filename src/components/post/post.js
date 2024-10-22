@@ -306,49 +306,54 @@ const Post = ({ posts: post }) => {
           className="ssu-post-card"
         >
           <div>
-            {/*  author of post with profile picture */}
-            <div className="d-flex align-items-center mb-3">
-              <img
-                src={profileImageUrl} // Profile image URL (already fetched)
-                alt="Profile"
-                style={{
-                  width: "40px", // Adjust size as needed
-                  height: "40px", // Adjust size as needed
-                  borderRadius: "50%", // Circular image
-                  marginRight: "8px",
-                  backgroundColor: "white",
-                  cursor: "pointer",
-                }}
-                onClick={() => {
-                  isCurrentUserPost
-                    ? navigate("/privateUserProfile")
-                    : navigate(`/publicProfilePage/${post.username}`);
-                }}
-              />
-              <a
-                href={
-                  isCurrentUserPost
-                    ? "/privateUserProfile"
-                    : `/publicProfilePage/${post.username}`
-                }
-                className="ssu-textlink-bold font-title text-gray-900 dark:text-white"
-              >
-                @{post.username}
-              </a>
-            </div>
-            {/* post text */}
-            <p className="font-display mt-2 text-gray-900 dark:text-white">
-              {displayContent}
-            </p>
-            {/*  image */}
-            {post.imageUri && (
-              <img
-                src={post.imageUri}
-                alt="Post"
-                className="ssu-post-img mt-4 mb-3"
-              />
-            )}
-
+  {/* Author of post with profile picture */}
+  <div className="d-flex align-items-center mb-3">
+    <img
+      src={profileImageUrl} // Profile image URL (already fetched)
+      alt="Profile"
+      style={{
+        width: "40px", // Adjust size as needed
+        height: "40px", // Adjust size as needed
+        borderRadius: "50%", // Circular image
+        marginRight: "8px",
+        backgroundColor: "white",
+        cursor: "pointer",
+      }}
+      onClick={() => {
+        isCurrentUserPost
+          ? navigate("/privateUserProfile")
+          : navigate(`/publicProfilePage/${post.username}`);
+      }}
+    />
+    <div className="relative group">
+      <a
+        href={
+          isCurrentUserPost
+            ? "/privateUserProfile"
+            : `/publicProfilePage/${post.username}`
+        }
+        className="ssu-textlink-bold font-title text-gray-900 dark:text-white"
+      >
+        @{post.username}
+      </a>
+      <div className="absolute hidden group-hover:block bottom-full mb-2 w-48 bg-white dark:bg-gray-800 text-gray-900 dark:text-white shadow-lg p-2 rounded-lg z-10">
+        <p className="text-sm">Followers: {post.followersCount}</p>
+        <p className="text-sm">Following: {post.followingCount}</p>
+      </div>
+    </div>
+  </div>
+  {/* Post text */}
+  <p className="font-display mt-2 text-gray-900 dark:text-white">
+    {displayContent}
+  </p>
+  {/* Image */}
+        {post.imageUri && (
+        <img
+           src={post.imageUri}
+           alt="Post"
+          className="ssu-post-img mt-4 mb-3"
+        />
+          )}
             {/* YouTube Video Embed */}
             {youtubeThumbnail && (
               <div
