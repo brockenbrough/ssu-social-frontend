@@ -20,6 +20,7 @@ const ChatTab = ({ chatRoom, currentUser, chatUser }) => {
         `/message/getByChatRoomId/${chatRoom._id}`
       );
       const messages = response.data.data;
+      messages.sort((a, b) => new Date(a.date) - new Date(b.date));
       setMessages(messages);
     } catch (error) {
       console.error("Error saving message:", error);
