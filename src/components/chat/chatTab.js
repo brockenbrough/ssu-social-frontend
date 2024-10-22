@@ -17,9 +17,9 @@ const ChatTab = ({ chatRoom, currentUser, chatUser }) => {
   const fetchMessages = async () => {
     try {
       const response = await apiClient.get(
-        `/message/getByChatRoomId/:${chatRoom._id}`
+        `/message/getByChatRoomId/${chatRoom._id}`
       );
-      const messages = response.data;
+      const messages = response.data.data;
       setMessages(messages);
     } catch (error) {
       console.error("Error saving message:", error);
@@ -44,8 +44,6 @@ const ChatTab = ({ chatRoom, currentUser, chatUser }) => {
       text: message,
     };
 
-    console.log("data", data);
-
     try {
       const response = await apiClient.post("/message", data);
       return response.data;
@@ -55,13 +53,15 @@ const ChatTab = ({ chatRoom, currentUser, chatUser }) => {
     }
   };
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     const message = newMessage.trim();
     setNewMessage("");
 
     if (message === "") return;
 
-    const savedMessage = saveMessage(message);
+    const response = await saveMessage(message);
+    const savedMessage = response.data;
+
     if (!savedMessage) {
       setNewMessage(message);
       return;
