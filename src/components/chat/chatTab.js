@@ -29,6 +29,9 @@ const ChatTab = ({ chatRoom, currentUser, chatUser }) => {
 
   useEffect(() => {
     scrollEffect = "instant";
+    console.log("currentUser", currentUser);
+    console.log("chatUser", chatUser);
+
     fetchMessages();
   }, []);
 
