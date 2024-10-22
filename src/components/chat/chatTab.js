@@ -17,7 +17,7 @@ const ChatTab = ({ chatRoom, currentUser, chatUser }) => {
   const fetchMessages = async () => {
     try {
       const response = await apiClient.get(
-        `/message/byChatRoomId/:${chatRoom._id}`
+        `/message/getByChatRoomId/:${chatRoom._id}`
       );
       const messages = response.data;
       setMessages(messages);
