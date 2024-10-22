@@ -32,17 +32,32 @@ export function CommentCountProvider({ children }) {
   );
 }
 
-const truncateUsername = (username = "", timeAgoString = "", maxLineLength = 26) => {
-  const totalCharLengthOfLine = username.length + 1 + timeAgoString.length; // +1 for '@' symbol
+//Truncating username based on width of entire line so nothing goes outside the comment box
+const truncateUsername = (username = "", timeAgoString = "", maxWidth = 227) => {
+  const canvas = document.createElement("canvas");
+  const context = canvas.getContext("2d");
 
-  if (totalCharLengthOfLine > maxLineLength) {
-    // Subtract 1 for '@' symbol and timeAgo length
-    const allowedUsernameLength = maxLineLength - 1 - timeAgoString.length;
-    //Truncate and add ..
-    return username.slice(0, allowedUsernameLength) + "..";
+  const fontElement = document.querySelector("#username"); 
+  if (fontElement) {
+    const computedStyle = getComputedStyle(fontElement);
+    context.font = computedStyle.font; 
+  } else {
+    context.font = "bold 1rem sans-serif";
   }
 
-  return username;
+  const totalText = `@${username} ${timeAgoString}`;
+  const totalTextWidth = context.measureText(totalText).width;
+
+  if (totalTextWidth <= maxWidth) {
+    return username;
+  }
+
+  let truncatedUsername = username;
+  while (context.measureText(`@${truncatedUsername}.. ${timeAgoString}`).width > maxWidth) {
+    truncatedUsername = truncatedUsername.slice(0, -1); 
+  }
+
+  return truncatedUsername + "...";
 };
 
 export function useCommentCount() {

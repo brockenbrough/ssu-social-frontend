@@ -25,6 +25,8 @@ import CreateComment from "../comments/createComment";
 import { PostPageContext } from "../../App";
 import { useNavigate } from "react-router-dom";
 import { fetchProfileImage } from "../../components/post/fetchProfileImage";
+import FollowerCount from '../following/getFollowerCount';  // Correct relative path
+import FollowingCount from '../following/getFollowingCount';  // Correct relative path
 
 const Post = ({ posts: post }) => {
   const [youtubeThumbnail, setYoutubeThumbnail] = useState(null);
@@ -306,42 +308,47 @@ const Post = ({ posts: post }) => {
           className="ssu-post-card"
         >
           <div>
-  {/* Author of post with profile picture */}
-  <div className="d-flex align-items-center mb-3">
-    <img
-      src={profileImageUrl} // Profile image URL (already fetched)
-      alt="Profile"
-      style={{
-        width: "40px", // Adjust size as needed
-        height: "40px", // Adjust size as needed
-        borderRadius: "50%", // Circular image
-        marginRight: "8px",
-        backgroundColor: "white",
-        cursor: "pointer",
-      }}
-      onClick={() => {
-        isCurrentUserPost
-          ? navigate("/privateUserProfile")
-          : navigate(`/publicProfilePage/${post.username}`);
-      }}
-    />
-    <div className="relative group">
-      <a
-        href={
+    <div className="d-flex align-items-center mb-3">
+      <img
+        src={profileImageUrl} // Profile image URL (already fetched)
+        alt="Profile"
+        style={{
+          width: "40px",
+          height: "40px",
+          borderRadius: "50%",
+          marginRight: "8px",
+          backgroundColor: "white",
+          cursor: "pointer",
+        }}
+        onClick={() => {
           isCurrentUserPost
-            ? "/privateUserProfile"
-            : `/publicProfilePage/${post.username}`
-        }
-        className="ssu-textlink-bold font-title text-gray-900 dark:text-white"
-      >
-        @{post.username}
-      </a>
-      <div className="absolute hidden group-hover:block bottom-full mb-2 w-48 bg-white dark:bg-gray-800 text-gray-900 dark:text-white shadow-lg p-2 rounded-lg z-10">
-        <p className="text-sm">Followers: {post.followersCount}</p>
-        <p className="text-sm">Following: {post.followingCount}</p>
+            ? navigate("/privateUserProfile")
+            : navigate(`/publicProfilePage/${post.username}`);
+        }}
+      />
+      <div className="relative group">
+        <a
+          href={
+            isCurrentUserPost
+              ? "/privateUserProfile"
+              : `/publicProfilePage/${post.username}`
+          }
+          className="ssu-textlink-bold font-title text-gray-900 dark:text-white"
+        >
+          @{post.username}
+        </a>
+       {/* Tooltip with Followers and Following count */}
+<div className="absolute hidden group-hover:block bottom-full mb-2 w-56 bg-orange-600 dark:bg-gray-800 text-gray-900 dark:text-white shadow-lg p-4 rounded-lg z-10 border border-gray-300 dark:border-gray-700 transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-2xl">
+  <p className="text-lg font-large mb-1 decoration-8">
+    Followers: <span className="text-cyan-950"><FollowerCount username={post.username} /></span>
+  </p>
+  <p className="text-lg font-large decoration-8">
+    Following: <span className="text-cyan-950"><FollowingCount username={post.username} /></span>
+  </p>
+
+        </div>
       </div>
     </div>
-  </div>
   {/* Post text */}
   <p className="font-display mt-2 text-gray-900 dark:text-white">
     {displayContent}
