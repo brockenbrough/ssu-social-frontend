@@ -115,7 +115,15 @@ const PrivateUserProfile = () => {
 
   // Profile image upload
   const onFileChange = (event) => {
-    setSelectedFile(event.target.files[0]);
+    const file = event.target.files[0];
+    const validImageTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'];
+  
+    if (file && validImageTypes.includes(file.type)) {
+      setSelectedFile(file);
+    } else {
+      alert('Please select a valid image file (PNG, JPG, or GIF).');
+      event.target.value = ''; // Clear the invalid file selection
+    }
   };
 
   const deleteConfirm = async () => {
