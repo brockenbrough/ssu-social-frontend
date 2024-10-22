@@ -308,7 +308,7 @@ const Post = ({ posts: post }) => {
           className="ssu-post-card"
         >
           <div>
-          return (
+           
     <div className="d-flex align-items-center mb-3">
       <img
         src={profileImageUrl} // Profile image URL (already fetched)
