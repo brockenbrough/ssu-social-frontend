@@ -377,7 +377,8 @@
 }
 
 .profile-image img {
-  @apply object-cover w-40 h-40 border rounded-full border-iconBorder;
+  @apply object-cover w-40 h-40 rounded-full;
+  border: 2px solid black;
 }
 
 .profile-info {
