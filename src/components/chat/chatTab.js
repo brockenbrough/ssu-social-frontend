@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane as sendIcon } from "@fortawesome/free-solid-svg-icons";
+import apiClient from "../../utilities/apiClient";
 
 let scrollEffect = "smooth";
 
-const ChatTab = ({ chatRoom }) => {
+const ChatTab = ({ chatRoom, currentUser, chatUser }) => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const messagesEndRef = useRef(null);
@@ -13,8 +14,17 @@ const ChatTab = ({ chatRoom }) => {
     messagesEndRef.current?.scrollIntoView({ behavior: effect });
   };
 
-  const fetchMessages = () => {
-    setMessages(chatRoom.messages);
+  const fetchMessages = async () => {
+    try {
+      const response = await apiClient.get(
+        `/message/byChatRoomId/:${chatRoom._id}`
+      );
+      const messages = response.data;
+      setMessages(messages);
+    } catch (error) {
+      console.error("Error saving message:", error);
+      return null;
+    }
   };
 
   useEffect(() => {
@@ -26,14 +36,39 @@ const ChatTab = ({ chatRoom }) => {
     scrollToBottom(scrollEffect);
   }, [messages]);
 
-  const handleSendMessage = () => {
-    if (newMessage.trim() === "") return;
+  const saveMessage = async (message) => {
+    const data = {
+      chatRoomId: chatRoom._id,
+      senderId: currentUser._id,
+      receiverId: chatUser._id,
+      text: message,
+    };
 
-    setMessages([
-      ...messages,
-      { id: messages.length + 1, text: newMessage, sender: "user1" },
-    ]);
+    console.log("data", data);
+
+    try {
+      const response = await apiClient.post("/message", data);
+      return response.data;
+    } catch (error) {
+      console.error("Error saving message:", error);
+      return null;
+    }
+  };
+
+  const handleSendMessage = () => {
+    const message = newMessage.trim();
     setNewMessage("");
+
+    if (message === "") return;
+
+    const savedMessage = saveMessage(message);
+    if (!savedMessage) {
+      setNewMessage(message);
+      return;
+    }
+
+    setMessages([...messages, savedMessage]);
+
     scrollEffect = "smooth";
   };
 

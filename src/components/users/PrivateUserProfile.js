@@ -240,8 +240,12 @@ const PrivateUserProfile = () => {
         <>
           <div className="profile-header">
             <div className="profile-image">
-              <img src={userProfileImage} alt="Profile" />
-              <Button onClick={handleShowUploadModal}>Upload Profile Image</Button>
+              <img
+                src={userProfileImage}
+                alt="Profile"
+                onClick={handleShowUploadModal}
+                className="object-cover w-40 h-40 rounded-full border-2 border-black cursor-pointer"
+              />
             </div>
             <div className="profile-info">
               <div className="username">{"@" + user.username}</div>
@@ -249,7 +253,9 @@ const PrivateUserProfile = () => {
               <div className="profile-stats">
                 <div className="stat-item">
                   <span className="stat-number">{posts.length}</span>
-                  <span className="stat-label">posts</span>
+                  <span className="stat-label">
+                    {posts.length === 1 ? "post" : "posts"}
+                  </span>
                 </div>
                 <div className="stat-item" onClick={followerRouteChange} style={{ cursor: 'pointer' }}>
                   <span className="stat-number">{followerCount}</span>
