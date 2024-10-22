@@ -52,7 +52,7 @@ const PrivateUserProfile = () => {
       if (userInfo) {
         setUser(userInfo);
         setUsername(userInfo.username);
-  
+
         // Fetch user data including biography and profileImage
         const res = await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_URI}/user/getUserByUsername/${userInfo.username}`);
         
@@ -116,12 +116,12 @@ const PrivateUserProfile = () => {
   // Profile image upload
   const onFileChange = (event) => {
     const file = event.target.files[0];
-    const validImageTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'];
+    const validImageTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif', 'image/webp'];
   
     if (file && validImageTypes.includes(file.type)) {
       setSelectedFile(file);
     } else {
-      alert('Please select a valid image file (PNG, JPG, or GIF).');
+      alert('Please select a valid image file.');
       event.target.value = ''; // Clear the invalid file selection
     }
   };
@@ -176,6 +176,12 @@ const PrivateUserProfile = () => {
     } else {
       alert("Please select a file to upload.");
     }
+  };
+
+  // Profile image removal
+  const removeImage = () => {
+    setSelectedFile(null);
+    fileInputRef.current.value = "";
   };
 
   // Modal to show a selected post
@@ -293,18 +299,68 @@ const PrivateUserProfile = () => {
           </Modal>
 
           {/* Profile Image Upload Modal */}
-          <Modal show={showUploadModal} onHide={handleCloseUploadModal}>
-            <Modal.Header closeButton>
-              <Modal.Title>Change Profile Picture</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <input type="file" onChange={onFileChange} ref={fileInputRef} />
-              {selectedFile && <img src={URL.createObjectURL(selectedFile)} alt="Selected Profile" style={{ width: '100%', marginTop: '10px' }} />}
-            </Modal.Body>
-            <Modal.Footer>
-              <Button variant="secondary" onClick={handleCloseUploadModal}>Close</Button>
-              <Button onClick={onUpload}>Upload Profile Image</Button>
-            </Modal.Footer>
+          <Modal show={showUploadModal} onHide={handleCloseUploadModal} centered>
+            <div
+              className="popup"
+              style={{
+                backgroundColor: darkMode ? "#181818" : "#fff",
+                color: darkMode ? "#fff" : "#000",
+              }}
+            >
+              <Modal.Header closeButton closeVariant={darkMode ? "white" : "black"}>
+                <Modal.Title>Change Profile Picture</Modal.Title>
+              </Modal.Header>
+              <Modal.Body style={{ paddingBottom: "0" }}> {/* Adjusted padding to remove white line */}
+                <div onClick={() => fileInputRef.current.click()} style={{ marginBottom: "15px", textAlign: "center" }}>
+                  <img
+                    src={darkMode ? "/addImageLight.png" : "/add-img-icon.png"}
+                    alt="Add Image Icon"
+                    style={{
+                      width: "50px",
+                      height: "50px",
+                      cursor: "pointer",
+                    }}
+                  />
+                </div>
+
+                <input
+                  type="file"
+                  id="profileImage"
+                  name="profileImage"
+                  ref={fileInputRef}
+                  accept="image/*"
+                  onChange={onFileChange}
+                  style={{ display: "none" }}
+                />
+
+                {selectedFile && (
+                  <div className="image-preview-container">
+                    <img
+                      id="imagePreview"
+                      alt="Selected Profile"
+                      className="image-preview"
+                      src={URL.createObjectURL(selectedFile)}
+                    />
+                    <button
+                      type="button"
+                      className="delete-image-button"
+                      onClick={removeImage}
+                    >
+                      &times;
+                    </button>
+                  </div>
+                )}
+              </Modal.Body>
+              <Modal.Footer style={{ borderTop: "none" }}>
+                <Button
+                  onClick={onUpload}
+                  disabled={!selectedFile}
+                  className="w-full bg-orange-600 p-2 rounded-md text-white"
+                >
+                  Upload Profile Image
+                </Button>
+              </Modal.Footer>
+            </div>
           </Modal>
 
           {/* Delete Post Confirmation Modal */}
