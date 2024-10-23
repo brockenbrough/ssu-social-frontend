@@ -150,7 +150,6 @@ const Login = () => {
                     {fieldErrors.username && (
                       <Form.Text className="text-danger">{fieldErrors.username}</Form.Text>
                     )}
-                    <Form.Text className="text-muted">We just might sell your data</Form.Text>
                   </Form.Group>
                   <Form.Group className="mb-3" controlId="formBasicPassword">
                     <Form.Label style={labelStyling}>Password</Form.Label>
@@ -186,8 +185,6 @@ const Login = () => {
                       <span>
                         <Link to="/signup" style={labelStyling}> Sign up</Link>
                       </span>
-                      <br></br>
-                      This site is hosted on free services. There may be a 2-3 minute delay in the response if the site has not been used recently.
                     </Form.Text>
                   </Form.Group>
 
