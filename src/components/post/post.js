@@ -11,6 +11,7 @@ import { faHeart as regularHeartIcon } from "@fortawesome/free-regular-svg-icons
 import { faComment as solidCommentIcon } from "@fortawesome/free-solid-svg-icons";
 import { faComment as regularCommentIcon } from "@fortawesome/free-regular-svg-icons";
 import { faEdit as editIcon } from "@fortawesome/free-solid-svg-icons";
+import { faFlag } from "@fortawesome/free-solid-svg-icons"; 
 import getUserInfoAsync from "../../utilities/decodeJwt";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
@@ -28,7 +29,7 @@ import { fetchProfileImage } from "../../components/post/fetchProfileImage";
 import FollowerCount from '../following/getFollowerCount';  // Correct relative path
 import FollowingCount from '../following/getFollowingCount';  // Correct relative path
 
-const Post = ({ posts: post }) => {
+const Post = ({ posts: post, isBlurred, toggleBlur, isDiscover }) => {
   const [youtubeThumbnail, setYoutubeThumbnail] = useState(null);
   const [likeCount, setLikeCount] = useState(0);
   const [commentCount, setCommentCount] = useState(0);
@@ -296,6 +297,43 @@ const Post = ({ posts: post }) => {
       });
   };
 
+  const handleFlagToggle = async () => {
+    try {
+      // Retrieve the access token from localStorage
+      const token = localStorage.getItem('accessToken');
+  
+      if (!token) {
+        console.error("No access token found. Please log in.");
+        return;
+      }
+  
+      // Send a PUT request to update the imageFlag field
+      const response = await axios.put(
+        `${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/updatePost/${post._id}`,
+        { imageFlag: !post.imageFlag }, // Toggle the current flag state
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`, // Include the token here
+          },
+        }
+      );
+  
+      if (response.status === 200) {
+        // Update the local flag status and blur state
+        post.imageFlag = !post.imageFlag;
+        toggleBlur(); // Adjust the blur state immediately
+      }
+    } catch (error) {
+      console.error('Error flagging/unflagging post:', error);
+    }
+  };
+  
+  
+  
+  
+  
+
   return (
     <div className="position-relative" style={{ width: "100%" }}>
       <div
@@ -338,29 +376,57 @@ const Post = ({ posts: post }) => {
           @{post.username}
         </a>
        {/* Tooltip with Followers and Following count */}
-<div className="absolute hidden group-hover:block bottom-full mb-2 w-56 bg-orange-600 dark:bg-gray-800 text-gray-900 dark:text-white shadow-lg p-4 rounded-lg z-10 border border-gray-300 dark:border-gray-700 transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-2xl">
-  <p className="text-lg font-large mb-1 decoration-8">
-    Followers: <span className="text-cyan-950"><FollowerCount username={post.username} /></span>
-  </p>
-  <p className="text-lg font-large decoration-8">
-    Following: <span className="text-cyan-950"><FollowingCount username={post.username} /></span>
-  </p>
+        <div className="absolute hidden group-hover:block bottom-full mb-2 w-56 bg-orange-600 dark:bg-gray-800 text-gray-900 dark:text-white shadow-lg p-4 rounded-lg z-10 border border-gray-300 dark:border-gray-700 transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-2xl">
+          <p className="text-lg font-large mb-1 decoration-8">
+            Followers: <span className="text-cyan-950"><FollowerCount username={post.username} /></span>
+          </p>
+          <p className="text-lg font-large decoration-8">
+            Following: <span className="text-cyan-950"><FollowingCount username={post.username} /></span>
+          </p>
 
-        </div>
-      </div>
-    </div>
-  {/* Post text */}
-  <p className="font-display mt-2 text-gray-900 dark:text-white">
-    {displayContent}
-  </p>
-  {/* Image */}
-        {post.imageUri && (
-        <img
-           src={post.imageUri}
-           alt="Post"
-          className="ssu-post-img mt-4 mb-3"
-        />
-          )}
+                </div>
+              </div>
+            </div>
+          {/* Post text */}
+          <p className="font-display mt-2 text-gray-900 dark:text-white">
+            {displayContent}
+          </p>
+          {/* Image */}
+          {post.imageUri && (
+          <div className="relative">
+            <img
+              src={post.imageUri}
+              alt="Post"
+              className={`ssu-post-img mt-4 mb-3 ${
+                post.imageFlag && isBlurred ? "blur-md" : ""
+              } transition-all duration-300`}
+            />
+            {/* Overlay with sensitive content message */}
+            {isDiscover && post.imageFlag && isBlurred && (
+              <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/50 text-white">
+                <p className="mb-2 text-center font-medium">
+                  Post could contain sensitive content
+                </p>
+                <button
+                  onClick={toggleBlur}
+                  className="bg-white/80 px-4 py-2 rounded-md text-sm font-medium text-black"
+                >
+                  View Image
+                </button>
+              </div>
+            )}
+            {/* Hide Image Button */}
+            {isDiscover && !isBlurred && post.imageFlag && (
+              <button
+                onClick={toggleBlur}
+                className=" bg-white/80 px-3 py-1 rounded-md text-sm font-medium text-black z-10"
+              >
+                Hide Image
+              </button>
+            )}
+          </div>
+        )}
+
             {/* YouTube Video Embed */}
             {youtubeThumbnail && (
               <div
@@ -410,6 +476,15 @@ const Post = ({ posts: post }) => {
                 <FontAwesomeIcon icon={editIcon} />
               </button>
             )}
+            {/* Flag button */}
+            <button
+              onClick={handleFlagToggle}
+              className="ml-3 mt-3 font-menu text-gray-900 dark:text-white hover:text-red-500"
+              title={post.imageFlag ? "Unflag as sensitive" : "Flag as sensitive"}
+            >
+              <FontAwesomeIcon icon={faFlag} />
+            </button>
+
             {/* Post date */}
             <p className="ssu-text-tinyright font-menu mt-3 text-gray-900 dark:text-white">
               <span className="mr-4">{formattedDate}</span>

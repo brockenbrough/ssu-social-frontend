@@ -21,8 +21,10 @@ function PostList({ type, profileUsername }) {
   const [isLoading, setIsLoading] = useState(true);
   const [page, setPage] = useContext(PostPageContext);
   const [hasMore, setHasMore] = useState(true);
+  const [blurStates, setBlurStates] = useState({});
   const observer = useRef();
 
+  // Fetch user info
   const fetchUser = async () => {
     try {
       const user = await getUserInfoAsync();
@@ -44,9 +46,9 @@ function PostList({ type, profileUsername }) {
     }
   }, [user, page]);
 
+  // Fetch posts
   async function getPosts() {
     let url;
-
     if (type === "feed") {
       url = user
         ? `${process.env.REACT_APP_BACKEND_SERVER_URI}/feed/${user.username}`
@@ -61,32 +63,9 @@ function PostList({ type, profileUsername }) {
 
     try {
       const response = await axios.get(url);
-      if (type === "feed") {
-        const feed = response.data.feed;
-        const postsPromises = feed.map((postId) =>
-          axios
-            .get(
-              `${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getPostById/${postId}`
-            )
-            .then((res) => res.data)
-            .catch((error) =>
-              console.error(`Failed to fetch post with ID ${postId}:`, error)
-            )
-        );
-        const postData = await Promise.all(postsPromises);
-        setPosts(postData.filter((post) => post));
-      } else {
-        const newPosts = response.data;
-
-        if (page <= 1) {
-          setPosts(newPosts);
-          setPage(1); // handles case where page=0 from create post forced refress
-        } else {
-          setPosts((prevPosts) => [...prevPosts, ...newPosts]);
-        }
-
-        setHasMore(newPosts.length > 0);
-      }
+      const newPosts = type === "feed" ? await fetchFeedPosts(response.data.feed) : response.data;
+      setPosts((prev) => (page <= 1 ? newPosts : [...prev, ...newPosts]));
+      setHasMore(newPosts.length > 0);
     } catch (error) {
       console.error("Failed to fetch posts:", error.message);
     } finally {
@@ -94,13 +73,23 @@ function PostList({ type, profileUsername }) {
     }
   }
 
+  const fetchFeedPosts = async (feed) => {
+    const postsPromises = feed.map((postId) =>
+      axios
+        .get(`${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getPostById/${postId}`)
+        .then((res) => res.data)
+        .catch((error) => console.error(`Failed to fetch post ID ${postId}:`, error))
+    );
+    return await Promise.all(postsPromises);
+  };
+
   const lastPostRef = useCallback(
     (node) => {
       if (isLoading) return;
       if (observer.current) observer.current.disconnect();
       observer.current = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting && hasMore) {
-          setPage((prevPage) => prevPage + 1);
+          setPage((prev) => prev + 1);
         }
       });
       if (node) observer.current.observe(node);
@@ -108,30 +97,31 @@ function PostList({ type, profileUsername }) {
     [isLoading, hasMore]
   );
 
+  // Toggle blur for a specific post
+  const toggleBlur = (postId) => {
+    setBlurStates((prev) => ({
+      ...prev,
+      [postId]: !prev[postId],
+    }));
+  };
+
   return (
     <>
       {isLoading && page === 1 ? (
         <div className="text-center pt-4">
-          <img
-            src="/loading.gif"
-            alt="Loading..."
-            className="w-12 h-12 inline-block"
-          />
+          <img src="/loading.gif" alt="Loading..." className="w-12 h-12 inline-block" />
         </div>
       ) : posts.length === 0 ? (
         <div className="ssu-text-titlesmall">
           {type === "feed" ? (
             <p>
-              <strong>{user.username}</strong>, your{" "}
-              <strong>for you page </strong>is empty.<br></br> Visit the{" "}
+              <strong>{user?.username}</strong>, your{" "}
+              <strong>for you page </strong>is empty.<br />
+              Visit the{" "}
               <Link to={"/getallpost"}>
                 <a href="#">Discover</a>
               </Link>{" "}
               to discover posts from other users.
-            </p>
-          ) : type === "privateuserprofile" ? (
-            <p>
-              <strong>{user.username}</strong>, you haven't made any posts yet.
             </p>
           ) : (
             <p>No posts available.</p>
@@ -142,24 +132,31 @@ function PostList({ type, profileUsername }) {
           {["all", "privateuserprofile", "publicuserprofile"].includes(type) ? (
             <div className="ssu-post-list">
               {posts.map((post, index) => {
-                if (posts.length === index + 1) {
-                  return (
-                    <div ref={lastPostRef} key={post._id}>
-                      <Post key={post._id} posts={post} />
-                    </div>
-                  );
-                } else {
-                  return <Post key={post._id} posts={post} />;
-                }
+                const isLastPost = posts.length === index + 1;
+                const isPostBlurred = blurStates[post._id] ?? (type === "all"); // Default blur for Discover
+
+                return (
+                  <div ref={isLastPost ? lastPostRef : null} key={post._id}>
+                    <Post
+                      posts={post}
+                      isBlurred={isPostBlurred}
+                      toggleBlur={() => toggleBlur(post._id)}
+                      isDiscover={type === "all"}
+                    />
+                  </div>
+                );
               })}
             </div>
           ) : (
             <div className="d-flex flex-column align-items-center">
-              {posts.map((post) => {
-                return (
-                  <Post key={post._id} posts={post} className="cards m-2" />
-                );
-              })}
+              {posts.map((post) => (
+                <Post
+                  key={post._id}
+                  posts={post}
+                  isBlurred={blurStates[post._id] ?? false}
+                  toggleBlur={() => toggleBlur(post._id)}
+                />
+              ))}
             </div>
           )}
           <ScrollToTop />
