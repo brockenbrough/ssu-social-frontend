@@ -8,19 +8,29 @@ const ChatHistoryTab = ({ user, chatRooms, handleRoomClick }) => {
 
   const fetchChatRoomUsers = async () => {
     try {
-      const newRooms = await Promise.all(
-        chatRooms.map(async (room) => {
-          const updatedParticipants = await Promise.all(
-            room.participants.map(async (participant) => {
-              const response = await axios.get(
-                `${process.env.REACT_APP_BACKEND_SERVER_URI}/user/getUserById/${participant.userId}`
-              );
-              return { ...participant, user: response.data };
-            })
-          );
-          return { ...room, participants: updatedParticipants };
-        })
+      const userIds = [
+        ...new Set(
+          chatRooms.flatMap((room) => room.participants.map((p) => p.userId))
+        ),
+      ];
+
+      const response = await axios.post(
+        `${process.env.REACT_APP_BACKEND_SERVER_URI}/user/getUsersByIds`,
+        { userIds }
       );
+
+      const userMap = response.data.reduce((map, user) => {
+        map[user._id] = user;
+        return map;
+      }, {});
+
+      const newRooms = chatRooms.map((room) => {
+        const updatedParticipants = room.participants.map((participant) => ({
+          ...participant,
+          user: userMap[participant.userId] || null,
+        }));
+        return { ...room, participants: updatedParticipants };
+      });
 
       setNewRooms(newRooms);
     } catch (error) {

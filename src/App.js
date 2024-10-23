@@ -29,6 +29,8 @@ import UploadImages from "./components/images/uploadImages";
 import ViewImages from "./components/images/viewImages";
 import GetToken from "./components/getToken";
 import useRefreshTokenOnActivity from "./components/hooks/refreshTokenOnActivity";
+import SearchPage from "./components/search/SearchPage";
+import SearchResultsPosts from "./components/search/SearchResultsPosts";
 
 import Test from "./Test";
 
@@ -84,6 +86,8 @@ const App = () => {
             <Route path="/uploadImages" element={<UploadImages />} />
             <Route path="/viewImages" element={<ViewImages />} />
             <Route path="/get-token" element={<GetToken />} />
+            <Route path="/searchPage" element={<SearchPage />}/>
+            <Route path="/searchResultsPosts/:searchInput" element={<SearchResultsPosts/>}/>
           </Routes>
         </UserContext.Provider>
       </PostPageContext.Provider>

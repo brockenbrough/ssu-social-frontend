@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane as sendIcon } from "@fortawesome/free-solid-svg-icons";
+import apiClient from "../../utilities/apiClient";
 
 let scrollEffect = "smooth";
 
-const ChatTab = ({ chatRoom }) => {
+const ChatTab = ({ chatRoom, currentUser, chatUser }) => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const messagesEndRef = useRef(null);
@@ -13,12 +14,25 @@ const ChatTab = ({ chatRoom }) => {
     messagesEndRef.current?.scrollIntoView({ behavior: effect });
   };
 
-  const fetchMessages = () => {
-    setMessages(chatRoom.messages);
+  const fetchMessages = async () => {
+    try {
+      const response = await apiClient.get(
+        `/message/getByChatRoomId/${chatRoom._id}`
+      );
+      const messages = response.data.data;
+      messages.sort((a, b) => new Date(a.date) - new Date(b.date));
+      setMessages(messages);
+    } catch (error) {
+      console.error("Error saving message:", error);
+      return null;
+    }
   };
 
   useEffect(() => {
     scrollEffect = "instant";
+    console.log("currentUser", currentUser);
+    console.log("chatUser", chatUser);
+
     fetchMessages();
   }, []);
 
@@ -26,14 +40,39 @@ const ChatTab = ({ chatRoom }) => {
     scrollToBottom(scrollEffect);
   }, [messages]);
 
-  const handleSendMessage = () => {
-    if (newMessage.trim() === "") return;
+  const saveMessage = async (message) => {
+    const data = {
+      chatRoomId: chatRoom._id,
+      senderId: currentUser._id,
+      receiverId: chatUser._id,
+      text: message,
+    };
 
-    setMessages([
-      ...messages,
-      { id: messages.length + 1, text: newMessage, sender: "user1" },
-    ]);
+    try {
+      const response = await apiClient.post("/message", data);
+      return response.data;
+    } catch (error) {
+      console.error("Error saving message:", error);
+      return null;
+    }
+  };
+
+  const handleSendMessage = async () => {
+    const message = newMessage.trim();
     setNewMessage("");
+
+    if (message === "") return;
+
+    const response = await saveMessage(message);
+    const savedMessage = response.data;
+
+    if (!savedMessage) {
+      setNewMessage(message);
+      return;
+    }
+
+    setMessages([...messages, savedMessage]);
+
     scrollEffect = "smooth";
   };
 
@@ -54,9 +93,9 @@ const ChatTab = ({ chatRoom }) => {
       <div className="flex-1 overflow-y-auto p-3 bg-lightBackground dark:bg-gray-900 space-y-2">
         {messages.map((message) => (
           <div
-            key={message.id}
+            key={message._id}
             className={`p-2 font-display text-sm rounded-lg break-words ${
-              message.sender === "user1"
+              message.senderId === currentUser._id
                 ? "bg-orange-500 text-white self-end ml-40"
                 : "bg-gray-300 text-gray-900 self-start mr-40"
             }`}

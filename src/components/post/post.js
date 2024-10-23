@@ -25,6 +25,8 @@ import CreateComment from "../comments/createComment";
 import { PostPageContext } from "../../App";
 import { useNavigate } from "react-router-dom";
 import { fetchProfileImage } from "../../components/post/fetchProfileImage";
+import FollowerCount from '../following/getFollowerCount';  // Correct relative path
+import FollowingCount from '../following/getFollowingCount';  // Correct relative path
 
 const Post = ({ posts: post }) => {
   const [youtubeThumbnail, setYoutubeThumbnail] = useState(null);
@@ -80,8 +82,8 @@ const Post = ({ posts: post }) => {
     if (!content) return content;
 
     const urlRegex = /(https?:\/\/[^\s]+)/g;
-    const youtubeRegex =
-      /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})(?:[^\s]*)?/;
+    const youtubeRegex = 
+    /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})(?:[^\s]*)?/;
     const filteredContent = content.replace(youtubeRegex, "");
 
     return filteredContent.split(urlRegex).map((part, index) => {
@@ -160,15 +162,15 @@ const Post = ({ posts: post }) => {
   useEffect(() => {
     if (post.content) {
       const youtubeRegex =
-        /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+        /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/|youtube\.com\/shorts\/)([a-zA-Z0-9_-]{11})/;
       const youtubeMatch = post.content.match(youtubeRegex);
-
+  
       if (youtubeMatch) {
         const videoId = youtubeMatch[1];
         fetchYouTubeThumbnail(videoId);
       }
     }
-  }, [post.content]);
+  }, [post.content]);  
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -306,49 +308,59 @@ const Post = ({ posts: post }) => {
           className="ssu-post-card"
         >
           <div>
-            {/*  author of post with profile picture */}
-            <div className="d-flex align-items-center mb-3">
-              <img
-                src={profileImageUrl} // Profile image URL (already fetched)
-                alt="Profile"
-                style={{
-                  width: "40px", // Adjust size as needed
-                  height: "40px", // Adjust size as needed
-                  borderRadius: "50%", // Circular image
-                  marginRight: "8px",
-                  backgroundColor: "white",
-                  cursor: "pointer",
-                }}
-                onClick={() => {
-                  isCurrentUserPost
-                    ? navigate("/privateUserProfile")
-                    : navigate(`/publicProfilePage/${post.username}`);
-                }}
-              />
-              <a
-                href={
-                  isCurrentUserPost
-                    ? "/privateUserProfile"
-                    : `/publicProfilePage/${post.username}`
-                }
-                className="ssu-textlink-bold font-title text-gray-900 dark:text-white"
-              >
-                @{post.username}
-              </a>
-            </div>
-            {/* post text */}
-            <p className="font-display mt-2 text-gray-900 dark:text-white">
-              {displayContent}
-            </p>
-            {/*  image */}
-            {post.imageUri && (
-              <img
-                src={post.imageUri}
-                alt="Post"
-                className="ssu-post-img mt-4 mb-3"
-              />
-            )}
+    <div className="d-flex align-items-center mb-3">
+      <img
+        src={profileImageUrl} // Profile image URL (already fetched)
+        alt="Profile"
+        style={{
+          width: "40px",
+          height: "40px",
+          borderRadius: "50%",
+          marginRight: "8px",
+          backgroundColor: "white",
+          cursor: "pointer",
+        }}
+        onClick={() => {
+          isCurrentUserPost
+            ? navigate("/privateUserProfile")
+            : navigate(`/publicProfilePage/${post.username}`);
+        }}
+      />
+      <div className="relative group">
+        <a
+          href={
+            isCurrentUserPost
+              ? "/privateUserProfile"
+              : `/publicProfilePage/${post.username}`
+          }
+          className="ssu-textlink-bold font-title text-gray-900 dark:text-white"
+        >
+          @{post.username}
+        </a>
+       {/* Tooltip with Followers and Following count */}
+<div className="absolute hidden group-hover:block bottom-full mb-2 w-56 bg-orange-600 dark:bg-gray-800 text-gray-900 dark:text-white shadow-lg p-4 rounded-lg z-10 border border-gray-300 dark:border-gray-700 transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-2xl">
+  <p className="text-lg font-large mb-1 decoration-8">
+    Followers: <span className="text-cyan-950"><FollowerCount username={post.username} /></span>
+  </p>
+  <p className="text-lg font-large decoration-8">
+    Following: <span className="text-cyan-950"><FollowingCount username={post.username} /></span>
+  </p>
 
+        </div>
+      </div>
+    </div>
+  {/* Post text */}
+  <p className="font-display mt-2 text-gray-900 dark:text-white">
+    {displayContent}
+  </p>
+  {/* Image */}
+        {post.imageUri && (
+        <img
+           src={post.imageUri}
+           alt="Post"
+          className="ssu-post-img mt-4 mb-3"
+        />
+          )}
             {/* YouTube Video Embed */}
             {youtubeThumbnail && (
               <div
@@ -359,7 +371,7 @@ const Post = ({ posts: post }) => {
                   height="350"
                   src={`https://www.youtube.com/embed/${
                     post.content.match(/(?:v=|\/)([a-zA-Z0-9_-]{11})/)[1]
-                  }`}
+                    }`}
                   title="YouTube video player"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
@@ -369,23 +381,23 @@ const Post = ({ posts: post }) => {
             {/* Like and comment buttons */}
             <button
               onClick={handleLikeClick}
-              className="ml-1 mr-4 mt-2 font-menu text-gray-900 dark:text-white"
+              className="ml-1 mr-4 mt-2 font-menu text-gray-900 dark:text-white hover-outline-heart"
             >
               <FontAwesomeIcon
                 icon={isLiked ? solidHeartIcon : regularHeartIcon}
-                className={isLiked ? "text-red-500" : ""}
+                className={`hover:scale-125 transition-transform duration-300 ${isLiked ? "text-red-500" : ""}`}
               />
-              <span>{` ${likeCount}`}</span>
+              <span className="ml-0.5">{` ${likeCount}`}</span>
             </button>
             <button
               onClick={handleShowPostModal}
-              className="mr-4 mt-2 font-menu text-gray-900 dark:text-white"
+              className="mr-4 mt-2 font-menu text-gray-900 dark:text-white hover-outline-comment"
             >
               <FontAwesomeIcon
-                className={showCommentCard ? "mr-1 text-blue-500" : "mr-1"}
+                className={`hover:scale-125 transition-transform duration-300 ${showCommentCard ? "text-blue-500" : ""}`}
                 icon={showCommentCard ? solidCommentIcon : regularCommentIcon}
               />
-              {commentCount > 0 ? commentCount : "0"}
+              <span className="ml-1.5">{commentCount > 0 ? commentCount : "0"}</span>
             </button>
             {/* Edit button */}
             {isCurrentUserPost && (

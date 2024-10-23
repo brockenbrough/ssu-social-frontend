@@ -172,7 +172,11 @@ const Chat = () => {
             {/* Chat Tab */}
             {currentTab === TABS.chat && (
               <div className="h-full">
-                <ChatTab chatRoom={currentChatRoom} />
+                <ChatTab
+                  chatRoom={currentChatRoom}
+                  currentUser={user}
+                  chatUser={chatUser}
+                />
               </div>
             )}
 

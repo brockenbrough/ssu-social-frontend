@@ -107,7 +107,7 @@ export default function FollowerList() {
     return followers.map((record) => {
       return (
         <Follower
-          record={record}
+          record={"@"+record}
           deletePerson={() => deleteFollower(record, params.id.toString())}
           key={record}
           user={user}
