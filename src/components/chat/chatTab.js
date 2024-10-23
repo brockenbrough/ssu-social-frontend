@@ -2,7 +2,9 @@ import React, { useState, useEffect, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane as sendIcon } from "@fortawesome/free-solid-svg-icons";
 import apiClient from "../../utilities/apiClient";
+import { io } from "socket.io-client";
 
+const socket = io(process.env.REACT_APP_BACKEND_SERVER_URI);
 let scrollEffect = "smooth";
 
 const ChatTab = ({ chatRoom, currentUser, chatUser }) => {
@@ -30,10 +32,18 @@ const ChatTab = ({ chatRoom, currentUser, chatUser }) => {
 
   useEffect(() => {
     scrollEffect = "instant";
-    console.log("currentUser", currentUser);
-    console.log("chatUser", chatUser);
 
     fetchMessages();
+
+    socket.on("message", (data) => {
+      if (data.chatRoomId === chatRoom._id) {
+        setMessages((prevMessages) => [...prevMessages, data]);
+      }
+    });
+
+    return () => {
+      socket.off("message");
+    };
   }, []);
 
   useEffect(() => {
@@ -71,7 +81,7 @@ const ChatTab = ({ chatRoom, currentUser, chatUser }) => {
       return;
     }
 
-    setMessages([...messages, savedMessage]);
+    socket.emit("message", savedMessage);
 
     scrollEffect = "smooth";
   };
