@@ -63,7 +63,10 @@ function PostList({ type, profileUsername }) {
 
     try {
       const response = await axios.get(url);
-      const newPosts = type === "feed" ? await fetchFeedPosts(response.data.feed) : response.data;
+      const newPosts =
+        type === "feed"
+          ? await fetchFeedPosts(response.data.feed)
+          : response.data;
       setPosts((prev) => (page <= 1 ? newPosts : [...prev, ...newPosts]));
       setHasMore(newPosts.length > 0);
     } catch (error) {
@@ -76,9 +79,13 @@ function PostList({ type, profileUsername }) {
   const fetchFeedPosts = async (feed) => {
     const postsPromises = feed.map((postId) =>
       axios
-        .get(`${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getPostById/${postId}`)
+        .get(
+          `${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getPostById/${postId}`
+        )
         .then((res) => res.data)
-        .catch((error) => console.error(`Failed to fetch post ID ${postId}:`, error))
+        .catch((error) =>
+          console.error(`Failed to fetch post ID ${postId}:`, error)
+        )
     );
     return await Promise.all(postsPromises);
   };
@@ -109,14 +116,19 @@ function PostList({ type, profileUsername }) {
     <>
       {isLoading && page === 1 ? (
         <div className="text-center pt-4">
-          <img src="/loading.gif" alt="Loading..." className="w-12 h-12 inline-block" />
+          <img
+            src="/loading.gif"
+            alt="Loading..."
+            className="w-12 h-12 inline-block"
+          />
         </div>
       ) : posts.length === 0 ? (
         <div className="ssu-text-titlesmall">
           {type === "feed" ? (
             <p>
               <strong>{user?.username}</strong>, your{" "}
-              <strong>for you page </strong>is empty.<br />
+              <strong>for you page </strong>is empty.
+              <br />
               Visit the{" "}
               <Link to={"/getallpost"}>
                 <a href="#">Discover</a>
@@ -133,7 +145,7 @@ function PostList({ type, profileUsername }) {
             <div className="ssu-post-list">
               {posts.map((post, index) => {
                 const isLastPost = posts.length === index + 1;
-                const isPostBlurred = blurStates[post._id] ?? (type === "all"); // Default blur for Discover
+                const isPostBlurred = blurStates[post._id] ?? type === "all"; // Default blur for Discover
 
                 return (
                   <div ref={isLastPost ? lastPostRef : null} key={post._id}>
@@ -159,8 +171,8 @@ function PostList({ type, profileUsername }) {
               ))}
             </div>
           )}
-          <ScrollToTop />
           <Chat />
+          <ScrollToTop />
         </div>
       )}
     </>
