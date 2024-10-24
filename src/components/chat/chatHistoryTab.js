@@ -72,7 +72,7 @@ const ChatHistoryTab = ({ user, chatRooms, handleRoomClick }) => {
                     )[0].user.profileImage || defaultProfileImageUrl
                   }
                   alt="Profile Image"
-                  className="h-9 w-9 rounded-full bg-white cursor-pointer mr-1 my-auto"
+                  className="h-9 w-10 rounded-full bg-white cursor-pointer mr-1 my-auto"
                 />
               </div>
               <div className="flex-col w-full">
