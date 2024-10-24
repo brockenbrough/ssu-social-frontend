@@ -8,6 +8,7 @@ import ChatTitleBar from "./chatTitleBar";
 import ChatTab from "./chatTab";
 import axios from "axios";
 import apiClient from "../../utilities/apiClient";
+import socket from "../../utilities/socket";
 
 const Chat = () => {
   const [chatOpen, setChatOpen] = useState(false);
@@ -72,8 +73,6 @@ const Chat = () => {
       );
       const unreadMessages = response.data.data;
 
-      console.log("unreadMessages", unreadMessages);
-
       if (unreadMessages) {
         setUnreadMessages(unreadMessages);
       }
@@ -86,6 +85,21 @@ const Chat = () => {
     fetchUser();
     fetchChatRooms();
     fetchUnreadMessageCount();
+
+    const user = getUserInfo();
+
+    socket.on("message", (data) => {
+      if (data.receiverId === user.id) {
+        setUnreadMessages((prevUnreadMessages) => [
+          ...prevUnreadMessages,
+          data,
+        ]);
+      }
+    });
+
+    return () => {
+      socket.off("message");
+    };
   }, []);
 
   const toogleChat = () => {
