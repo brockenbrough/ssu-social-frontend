@@ -13,7 +13,7 @@ const Chat = () => {
   const [chatOpen, setChatOpen] = useState(false);
   const [user, setUser] = useState(getUserInfo());
   const [chatUser, setChatUser] = useState({});
-  const [unreadMessageCount, setUnreadMessageCount] = useState(10);
+  const [unreadMessages, setUnreadMessages] = useState([]);
   const [currentChatRoom, setCurrentChatRoom] = useState({});
   const [chatRooms, setChatRooms] = useState([]);
   const TABS = { history: "history", search: "search", chat: "chat" };
@@ -59,9 +59,33 @@ const Chat = () => {
     }
   };
 
+  const fetchUnreadMessageCount = async () => {
+    const user = getUserInfo();
+
+    if (!user.id) {
+      return;
+    }
+
+    try {
+      const response = await apiClient.get(
+        `/message/unreadMessage/getByUserId/${user.id}`
+      );
+      const unreadMessages = response.data.data;
+
+      console.log("unreadMessages", unreadMessages);
+
+      if (unreadMessages) {
+        setUnreadMessages(unreadMessages);
+      }
+    } catch (error) {
+      console.error("Error fetching unread message count:", error);
+    }
+  };
+
   useEffect(() => {
     fetchUser();
     fetchChatRooms();
+    fetchUnreadMessageCount();
   }, []);
 
   const toogleChat = () => {
@@ -136,9 +160,9 @@ const Chat = () => {
       >
         <FontAwesomeIcon className="z-10 h-7 text-white" icon={chatIcon} />
         {/* Unread message count */}
-        {unreadMessageCount > 0 && (
+        {unreadMessages.length > 0 && (
           <span className="absolute -top-1 -right-1 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-            {unreadMessageCount}
+            {unreadMessages.length}
           </span>
         )}
       </div>
