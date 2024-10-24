@@ -2,9 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane as sendIcon } from "@fortawesome/free-solid-svg-icons";
 import apiClient from "../../utilities/apiClient";
-import { io } from "socket.io-client";
+import socket from "../../utilities/socket";
 
-const socket = io(process.env.REACT_APP_BACKEND_SERVER_URI);
 let scrollEffect = "smooth";
 
 const ChatTab = ({ chatRoom, currentUser, chatUser }) => {
