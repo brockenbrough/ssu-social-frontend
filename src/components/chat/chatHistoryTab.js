@@ -4,7 +4,15 @@ import axios from "axios";
 const ChatHistoryTab = ({ user, chatRooms, handleRoomClick }) => {
   const defaultProfileImageUrl =
     "https://ssusocial.s3.amazonaws.com/profilepictures/ProfileIcon.png";
-  const [newRooms, setNewRooms] = useState([]);
+  const [chatRoomsWithUserInfo, setChatRoomsWithUserInfo] = useState([]);
+  const [lastMessages, setLastMessages] = useState([]);
+
+  const getLastMessage = (chatRoomId) => {
+    const lastMessage =
+      "This is very long message that might take more space than expectedThis is very long message that might take more space than expectedThis is very long message that might take more space than expectedThis is very long message that might take more space than expectedThis is very long message that might take more space than expected";
+
+    return lastMessage;
+  };
 
   const fetchChatRoomUsers = async () => {
     try {
@@ -32,7 +40,7 @@ const ChatHistoryTab = ({ user, chatRooms, handleRoomClick }) => {
         return { ...room, participants: updatedParticipants };
       });
 
-      setNewRooms(newRooms);
+      setChatRoomsWithUserInfo(newRooms);
     } catch (error) {
       console.error("Error fetching chat room users:", error);
     }
@@ -44,23 +52,24 @@ const ChatHistoryTab = ({ user, chatRooms, handleRoomClick }) => {
 
   return (
     <div>
-      {newRooms.length === 0 ? (
+      {chatRoomsWithUserInfo.length === 0 ? (
         <p className="text-center font-display mt-4 text-gray-800 dark:text-white">
           No messages yet
         </p>
       ) : (
         <div className="w-full h-full overflow-y-auto overflow-x-none">
-          {newRooms.map((room) => (
+          {chatRoomsWithUserInfo.map((chatRoom) => (
             <div
-              key={room._id}
+              key={chatRoom._id}
               className="flex p-2 border-b border-gray-300 font-title hover:bg-orange-500 cursor-pointer hover:text-white"
-              onClick={() => handleRoomClick(room)}
+              onClick={() => handleRoomClick(chatRoom)}
             >
               <div className="flex ml-2 mr-2">
                 <img
                   src={
-                    room.participants.filter((p) => p.userId !== user._id)[0]
-                      .user.profileImage || defaultProfileImageUrl
+                    chatRoom.participants.filter(
+                      (p) => p.userId !== user._id
+                    )[0].user.profileImage || defaultProfileImageUrl
                   }
                   alt="Profile Image"
                   className="h-9 w-9 rounded-full bg-white cursor-pointer mr-1 my-auto"
@@ -70,15 +79,13 @@ const ChatHistoryTab = ({ user, chatRooms, handleRoomClick }) => {
                 <div className="flex-1 font-title font-bold mb-1 w-56 truncate overflow-hidden whitespace-nowrap">
                   @
                   {
-                    room.participants.filter((p) => p.userId !== user._id)[0]
-                      .user.username
+                    chatRoom.participants.filter(
+                      (p) => p.userId !== user._id
+                    )[0].user.username
                   }
                 </div>
-                <div className="flex-1 font-display text-xs ml-1 text-gray-500 dark:text-gray-300">
-                  {/* {room.messages[room.messages.length - 1].text.slice(0, 40)}
-                  {room.messages[room.messages.length - 1].text.length > 40
-                    ? "..."
-                    : ""} */}
+                <div className="flex-1 font-display text-xs ml-1 text-gray-500 dark:text-gray-300 w-64 truncate overflow-hidden whitespace-nowrap">
+                  {getLastMessage(chatRoom._id)}
                 </div>
               </div>
             </div>
