@@ -5,7 +5,7 @@ const ChatHistoryTab = ({
   user,
   chatRooms,
   unreadMessages,
-  handleRoomClick,
+  handleChatRoomClick,
 }) => {
   const defaultProfileImageUrl =
     "https://ssusocial.s3.amazonaws.com/profilepictures/ProfileIcon.png";
@@ -75,7 +75,7 @@ const ChatHistoryTab = ({
             <div
               key={chatRoom._id}
               className="flex p-2 mt-1 font-title group hover:bg-orange-500 cursor-pointer hover:text-white"
-              onClick={() => handleRoomClick(chatRoom)}
+              onClick={() => handleChatRoomClick(chatRoom)}
             >
               <div className="flex ml-2 w-60">
                 <img

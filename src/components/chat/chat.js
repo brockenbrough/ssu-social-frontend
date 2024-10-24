@@ -122,9 +122,30 @@ const Chat = () => {
     setCurrentTab(TABS.history);
   };
 
-  const handleRoomClick = async (room) => {
-    const chatUserId = room.participants.filter((p) => p.userId !== user._id)[0]
-      .userId;
+  const markMessagesAsRead = async (chatRoomId) => {
+    const chatRoomUnreadMessages = unreadMessages
+      .filter((m) => m.chatRoomId === chatRoomId)
+      .map((m) => m._id);
+
+    try {
+      await apiClient.put("/message/markAsRead", {
+        messageIds: chatRoomUnreadMessages,
+      });
+
+      setUnreadMessages((prevUnreadMessages) =>
+        prevUnreadMessages.filter(
+          (m) => !chatRoomUnreadMessages.includes(m._id)
+        )
+      );
+    } catch (error) {
+      console.error("Error marking messages as read:", error);
+    }
+  };
+
+  const handleChatRoomClick = async (chatRoom) => {
+    const chatUserId = chatRoom.participants.filter(
+      (p) => p.userId !== user._id
+    )[0].userId;
 
     try {
       const response = await axios.get(
@@ -133,8 +154,9 @@ const Chat = () => {
       const chatUser = response.data;
 
       setChatUser(chatUser);
-      setCurrentChatRoom(room);
+      setCurrentChatRoom(chatRoom);
       setCurrentTab(TABS.chat);
+      markMessagesAsRead(chatRoom._id);
     } catch (error) {
       console.error("Error fetching chat user:", error);
     }
@@ -151,15 +173,15 @@ const Chat = () => {
       const response = await apiClient.post("/chatRoom", data);
 
       chatRoom = response.data.chatRoom;
-      const isChatRoomExists = chatRooms.some((room) =>
-        room.participants.every((participant) =>
+      const isChatRoomExists = chatRooms.some((chatRoom) =>
+        chatRoom.participants.every((participant) =>
           data.participants.some((p) => p.userId === participant.userId)
         )
       );
       if (!isChatRoomExists) {
         setChatRooms([chatRoom, ...chatRooms]);
       }
-      handleRoomClick(chatRoom);
+      handleChatRoomClick(chatRoom);
     } catch (error) {
       console.error("Error creating chat room:", error);
     }
@@ -204,7 +226,7 @@ const Chat = () => {
                 user={user}
                 chatRooms={chatRooms}
                 unreadMessages={unreadMessages}
-                handleRoomClick={handleRoomClick}
+                handleChatRoomClick={handleChatRoomClick}
               />
             )}
 
