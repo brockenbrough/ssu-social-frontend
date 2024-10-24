@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import timeAgo from "../../utilities/timeAgo";
 
 const ChatHistoryTab = ({
   user,
@@ -16,7 +17,7 @@ const ChatHistoryTab = ({
     const lastMessage =
       "This is very long message that might take more space than expectedThis is very long message that might take more space than expectedThis is very long message that might take more space than expectedThis is very long message that might take more space than expectedThis is very long message that might take more space than expected";
 
-    return lastMessage;
+    return { text: lastMessage, date: new Date() };
   };
 
   const getUnreadMessageCount = (chatRoomId) => {
@@ -91,18 +92,18 @@ const ChatHistoryTab = ({
                   @{getChatUser(chatRoom).username}
                 </div>
                 <div className="flex-1 font-display text-xs ml-1 text-gray-500 dark:text-gray-300 w-60 truncate overflow-hidden whitespace-nowrap">
-                  {getLastMessage(chatRoom._id)}
+                  {getLastMessage(chatRoom._id).text}
                 </div>
               </div>
               <div className="flex-col w-full">
                 <div
-                  className={`flex-1 font-title text-xs truncate overflow-hidden whitespace-nowrap w-full text-end ${
+                  className={`flex-1 font-title text-xs w-16 truncate overflow-hidden whitespace-nowrap text-end ${
                     getUnreadMessageCount(chatRoom._id) > 0
                       ? "font-bold text-orange-500 group-hover:text-white"
                       : ""
                   }`}
                 >
-                  yesterday
+                  {timeAgo(getLastMessage(chatRoom._id).date)}
                 </div>
                 <div className="flex-1 font-display text-xs text-gray-500 dark:text-gray-300 truncate overflow-hidden whitespace-nowrap w-full text-end">
                   {getUnreadMessageCount(chatRoom._id) > 0 && (
