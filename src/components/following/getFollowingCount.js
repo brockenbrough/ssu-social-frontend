@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import './followingSheet.css'
-
+import "./followingSheet.css";
 
 // The FollowerCount component.  This is the main component in this file.
 
@@ -9,11 +8,11 @@ export default function FollowingCount(props) {
   const [error, setError] = useState([]);
 
   useEffect(() => {
-
     // Gets the following count of the user.
     async function getFollowingCount() {
-
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_SERVER_URI}/following/${props.username}`);
+      const response = await fetch(
+        `${process.env.REACT_APP_BACKEND_SERVER_URI}/following/${props.username}`
+      );
 
       if (!response.ok) {
         const message = `An error occurred: ${response.statusText}`;
@@ -21,36 +20,36 @@ export default function FollowingCount(props) {
         return;
       }
 
-      try{
-      const fetchedFollowers = await response.json();
+      try {
+        const fetchedFollowers = await response.json();
 
-      setFollowCount(fetchedFollowers[0].following);  // Sets the fetched followings of the user.
-      console.log(fetchedFollowers[0].following);
-      }catch(error){
-        setError(error)
+        setFollowCount(fetchedFollowers[0].following); // Sets the fetched followings of the user.
+      } catch (error) {
+        setError(error);
       }
-
     }
 
-    getFollowingCount();   
+    getFollowingCount();
 
-    return; 
-  }, [followState.length]);  
+    return;
+  }, [followState.length]);
 
   // This function is very important, it returns the following count.
 
-   function FollowCount() {
-    if (followState.length > 0){            
+  function FollowCount() {
+    if (followState.length > 0) {
       return followState.length;
-    }
-    else{
+    } else {
       return 0;
     }
   }
 
-
   //if (!user) return (<div><h3>You are not authorized to view this page, Please Login in <Link to={'/login'}><a href='#'>here</a></Link></h3></div>)
 
   // Returns the Follow count of the user.
-  return (<div><FollowCount/> Following</div>);
+  return (
+    <div>
+      <FollowCount /> Following
+    </div>
+  );
 }
