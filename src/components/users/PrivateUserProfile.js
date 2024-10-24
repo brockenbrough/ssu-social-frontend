@@ -244,7 +244,11 @@ const PrivateUserProfile = () => {
                 src={userProfileImage}
                 alt="Profile"
                 onClick={handleShowUploadModal}
-                className="object-cover w-40 h-40 rounded-full border-2 border-black cursor-pointer"
+                className="object-cover w-40 h-40 rounded-full cursor-pointer"
+                style={{
+                  boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+                  border: "1px solid rgba(0, 0, 0, 0.1)",
+                }}
               />
             </div>
             <div className="profile-info">

@@ -21,7 +21,6 @@ function PostList({ type, profileUsername }) {
   const [isLoading, setIsLoading] = useState(true);
   const [page, setPage] = useContext(PostPageContext);
   const [hasMore, setHasMore] = useState(true);
-  const [blurStates, setBlurStates] = useState({});
   const observer = useRef();
 
   // Fetch user info
@@ -104,14 +103,6 @@ function PostList({ type, profileUsername }) {
     [isLoading, hasMore]
   );
 
-  // Toggle blur for a specific post
-  const toggleBlur = (postId) => {
-    setBlurStates((prev) => ({
-      ...prev,
-      [postId]: !prev[postId],
-    }));
-  };
-
   return (
     <>
       {isLoading && page === 1 ? (
@@ -145,14 +136,11 @@ function PostList({ type, profileUsername }) {
             <div className="ssu-post-list">
               {posts.map((post, index) => {
                 const isLastPost = posts.length === index + 1;
-                const isPostBlurred = blurStates[post._id] ?? type === "all"; // Default blur for Discover
 
                 return (
                   <div ref={isLastPost ? lastPostRef : null} key={post._id}>
                     <Post
                       posts={post}
-                      isBlurred={isPostBlurred}
-                      toggleBlur={() => toggleBlur(post._id)}
                       isDiscover={type === "all"}
                     />
                   </div>
@@ -165,8 +153,6 @@ function PostList({ type, profileUsername }) {
                 <Post
                   key={post._id}
                   posts={post}
-                  isBlurred={blurStates[post._id] ?? false}
-                  toggleBlur={() => toggleBlur(post._id)}
                 />
               ))}
             </div>

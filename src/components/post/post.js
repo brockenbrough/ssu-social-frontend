@@ -29,7 +29,7 @@ import { fetchProfileImage } from "../../components/post/fetchProfileImage";
 import FollowerCount from '../following/getFollowerCount';  // Correct relative path
 import FollowingCount from '../following/getFollowingCount';  // Correct relative path
 
-const Post = ({ posts: post, isBlurred, toggleBlur, isDiscover }) => {
+const Post = ({ posts: post, isDiscover }) => {
   const [youtubeThumbnail, setYoutubeThumbnail] = useState(null);
   const [likeCount, setLikeCount] = useState(0);
   const [commentCount, setCommentCount] = useState(0);
@@ -50,6 +50,7 @@ const Post = ({ posts: post, isBlurred, toggleBlur, isDiscover }) => {
   const [isAnimationActive, setIsAnimationActive] = useState(false);
   const [isSlidingOut, setIsSlidingOut] = useState(false);
   const [profileImageUrl, setProfileImageUrl] = useState("");
+  const [isBlurred, setIsBlurred] = useState(post.imageFlag); // Manage blur state
 
   useEffect(() => {
     const fetchImage = async () => {
@@ -297,9 +298,12 @@ const Post = ({ posts: post, isBlurred, toggleBlur, isDiscover }) => {
       });
   };
 
+  const toggleBlur = () => {
+    setIsBlurred(!isBlurred);
+  };
+
   const handleFlagToggle = async () => {
     try {
-      // Retrieve the access token from localStorage
       const token = localStorage.getItem('accessToken');
   
       if (!token) {
@@ -307,10 +311,9 @@ const Post = ({ posts: post, isBlurred, toggleBlur, isDiscover }) => {
         return;
       }
   
-      // Send a PUT request to update the imageFlag field
       const response = await axios.put(
         `${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/updatePost/${post._id}`,
-        { imageFlag: !post.imageFlag }, // Toggle the current flag state
+        { imageFlag: !post.imageFlag },
         {
           headers: {
             'Content-Type': 'application/json',
@@ -320,18 +323,13 @@ const Post = ({ posts: post, isBlurred, toggleBlur, isDiscover }) => {
       );
   
       if (response.status === 200) {
-        // Update the local flag status and blur state
         post.imageFlag = !post.imageFlag;
-        toggleBlur(); // Adjust the blur state immediately
+        setIsBlurred(post.imageFlag); // Update local blur state based on the flag
       }
     } catch (error) {
       console.error('Error flagging/unflagging post:', error);
     }
   };
-  
-  
-  
-  
   
 
   return (
