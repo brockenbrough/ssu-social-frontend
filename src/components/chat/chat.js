@@ -219,15 +219,17 @@ const Chat = () => {
             toogleChat={toogleChat}
           />
           {/* Tab Body */}
-          <div className="h-full pb-16">
+          <div className="h-full pb-20">
             {/* Chat History Tab */}
             {currentTab === TABS.history && (
-              <ChatHistoryTab
-                user={user}
-                chatRooms={chatRooms}
-                unreadMessages={unreadMessages}
-                handleChatRoomClick={handleChatRoomClick}
-              />
+              <div className="h-full pb-1 overflow-y-auto">
+                <ChatHistoryTab
+                  user={user}
+                  chatRooms={chatRooms}
+                  unreadMessages={unreadMessages}
+                  handleChatRoomClick={handleChatRoomClick}
+                />
+              </div>
             )}
 
             {/* Chat Tab */}
