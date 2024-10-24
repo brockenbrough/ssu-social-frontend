@@ -12,17 +12,11 @@ const timeAgo = (date) => {
   if (diffInSeconds < secondsInMinute) {
     return "Just now";
   } else if (diffInSeconds < secondsInHour) {
-    return `${Math.floor(diffInSeconds / secondsInMinute)} minute${
-      Math.floor(diffInSeconds / secondsInMinute) !== 1 ? "s" : ""
-    } ago`;
+    return `${Math.floor(diffInSeconds / secondsInMinute)}m ago`;
   } else if (diffInSeconds < secondsInDay) {
-    return `${Math.floor(diffInSeconds / secondsInHour)} hour${
-      Math.floor(diffInSeconds / secondsInHour) !== 1 ? "s" : ""
-    } ago`;
+    return `${Math.floor(diffInSeconds / secondsInHour)}h ago`;
   } else if (diffInSeconds < secondsInMonth) {
-    return `${Math.floor(diffInSeconds / secondsInDay)} day${
-      Math.floor(diffInSeconds / secondsInDay) !== 1 ? "s" : ""
-    } ago`;
+    return `${Math.floor(diffInSeconds / secondsInDay)}d ago`;
   } else if (diffInSeconds < secondsInYear) {
     return `${Math.floor(diffInSeconds / secondsInMonth)} month${
       Math.floor(diffInSeconds / secondsInMonth) !== 1 ? "s" : ""
