@@ -556,3 +556,7 @@
   outline: 2px solid #ff0000;
   background-color: darkred;
 }
+
+.chat-unread-chat-count {
+  @apply inline-flex items-center justify-center text-xs text-center rounded-full bg-orange-500 text-white w-6 h-6 mt-1 group-hover:bg-white group-hover:text-orange-500
+}

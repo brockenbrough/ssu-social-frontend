@@ -1,7 +1,12 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-const ChatHistoryTab = ({ user, chatRooms, handleRoomClick }) => {
+const ChatHistoryTab = ({
+  user,
+  chatRooms,
+  unreadMessages,
+  handleRoomClick,
+}) => {
   const defaultProfileImageUrl =
     "https://ssusocial.s3.amazonaws.com/profilepictures/ProfileIcon.png";
   const [chatRoomsWithUserInfo, setChatRoomsWithUserInfo] = useState([]);
@@ -12,6 +17,14 @@ const ChatHistoryTab = ({ user, chatRooms, handleRoomClick }) => {
       "This is very long message that might take more space than expectedThis is very long message that might take more space than expectedThis is very long message that might take more space than expectedThis is very long message that might take more space than expectedThis is very long message that might take more space than expected";
 
     return lastMessage;
+  };
+
+  const getUnreadMessageCount = (chatRoomId) => {
+    return unreadMessages.filter((m) => m.chatRoomId === chatRoomId).length;
+  };
+
+  const getChatUser = (chatRoom) => {
+    return chatRoom.participants.filter((p) => p.userId !== user._id)[0].user;
   };
 
   const fetchChatRoomUsers = async () => {
@@ -61,31 +74,42 @@ const ChatHistoryTab = ({ user, chatRooms, handleRoomClick }) => {
           {chatRoomsWithUserInfo.map((chatRoom) => (
             <div
               key={chatRoom._id}
-              className="flex p-2 mt-1 font-title hover:bg-orange-500 cursor-pointer hover:text-white"
+              className="flex p-2 mt-1 font-title group hover:bg-orange-500 cursor-pointer hover:text-white"
               onClick={() => handleRoomClick(chatRoom)}
             >
-              <div className="flex ml-2 mr-2">
+              <div className="flex ml-2 w-60">
                 <img
                   src={
-                    chatRoom.participants.filter(
-                      (p) => p.userId !== user._id
-                    )[0].user.profileImage || defaultProfileImageUrl
+                    getChatUser(chatRoom).profileImage || defaultProfileImageUrl
                   }
                   alt="Profile Image"
-                  className="h-9 w-10 rounded-full bg-white cursor-pointer mr-1 my-auto"
+                  className="h-9 w-9 rounded-full bg-white cursor-pointer my-auto"
                 />
               </div>
               <div className="flex-col w-full">
                 <div className="flex-1 font-title font-bold mb-1 w-56 truncate overflow-hidden whitespace-nowrap">
-                  @
-                  {
-                    chatRoom.participants.filter(
-                      (p) => p.userId !== user._id
-                    )[0].user.username
-                  }
+                  @{getChatUser(chatRoom).username}
                 </div>
-                <div className="flex-1 font-display text-xs ml-1 text-gray-500 dark:text-gray-300 w-64 truncate overflow-hidden whitespace-nowrap">
+                <div className="flex-1 font-display text-xs ml-1 text-gray-500 dark:text-gray-300 w-60 truncate overflow-hidden whitespace-nowrap">
                   {getLastMessage(chatRoom._id)}
+                </div>
+              </div>
+              <div className="flex-col w-full">
+                <div
+                  className={`flex-1 font-title text-xs truncate overflow-hidden whitespace-nowrap w-full text-end ${
+                    getUnreadMessageCount(chatRoom._id) > 0
+                      ? "font-bold text-orange-500 group-hover:text-white"
+                      : ""
+                  }`}
+                >
+                  yesterday
+                </div>
+                <div className="flex-1 font-display text-xs text-gray-500 dark:text-gray-300 truncate overflow-hidden whitespace-nowrap w-full text-end">
+                  {getUnreadMessageCount(chatRoom._id) > 0 && (
+                    <span className="chat-unread-chat-count">
+                      {getUnreadMessageCount(chatRoom._id)}
+                    </span>
+                  )}
                 </div>
               </div>
             </div>

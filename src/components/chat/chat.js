@@ -203,6 +203,7 @@ const Chat = () => {
               <ChatHistoryTab
                 user={user}
                 chatRooms={chatRooms}
+                unreadMessages={unreadMessages}
                 handleRoomClick={handleRoomClick}
               />
             )}
