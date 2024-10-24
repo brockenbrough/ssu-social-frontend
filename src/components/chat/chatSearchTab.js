@@ -48,7 +48,9 @@ const ChatSearchTab = ({ searchInput, handleChatUserClick }) => {
               />
             </div>
             <div className="flex flex-col justify-center w-full">
-              @{user.username}
+              <span className="w-64 truncate overflow-hidden whitespace-nowrap">
+                @{user.username}
+              </span>
             </div>
           </div>
         ))}

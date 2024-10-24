@@ -67,7 +67,7 @@ const ChatHistoryTab = ({ user, chatRooms, handleRoomClick }) => {
                 />
               </div>
               <div className="flex-col w-full">
-                <div className="flex-1 font-title font-bold mb-1">
+                <div className="flex-1 font-title font-bold mb-1 w-56 truncate overflow-hidden whitespace-nowrap">
                   @
                   {
                     room.participants.filter((p) => p.userId !== user._id)[0]

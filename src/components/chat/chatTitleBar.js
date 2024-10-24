@@ -65,7 +65,7 @@ const ChatTitleBar = ({
           {/* Chat Username */}
           <a
             href={`/publicProfilePage/${chatUser.username}`}
-            className="font-title font-bold text-lg no-underline text-gray-900 dark:text-white hover:text-orange-500"
+            className="font-title font-bold text-lg no-underline text-gray-900 dark:text-white hover:text-orange-500 w-60 truncate overflow-hidden whitespace-nowrap"
           >
             @{chatUser.username}
           </a>
@@ -87,7 +87,7 @@ const ChatTitleBar = ({
             {/* Username */}
             <a
               href={"/privateUserProfile"}
-              className="font-title font-bold text-lg no-underline text-gray-900 dark:text-white hover:text-orange-500"
+              className="font-title font-bold text-lg no-underline text-gray-900 dark:text-white hover:text-orange-500 w-48 truncate overflow-hidden whitespace-nowrap"
             >
               @{user.username}
             </a>
