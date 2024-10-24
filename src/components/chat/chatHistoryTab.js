@@ -61,7 +61,7 @@ const ChatHistoryTab = ({ user, chatRooms, handleRoomClick }) => {
           {chatRoomsWithUserInfo.map((chatRoom) => (
             <div
               key={chatRoom._id}
-              className="flex p-2 border-b border-gray-300 font-title hover:bg-orange-500 cursor-pointer hover:text-white"
+              className="flex p-2 mt-1 font-title hover:bg-orange-500 cursor-pointer hover:text-white"
               onClick={() => handleRoomClick(chatRoom)}
             >
               <div className="flex ml-2 mr-2">

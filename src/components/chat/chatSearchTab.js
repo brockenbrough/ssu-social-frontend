@@ -37,7 +37,7 @@ const ChatSearchTab = ({ searchInput, handleChatUserClick }) => {
         {searchUsers.map((user) => (
           <div
             key={user._id}
-            className="flex p-2 border-b border-gray-300 font-title hover:bg-orange-500 cursor-pointer hover:text-white"
+            className="flex p-2 mt-1 font-title hover:bg-orange-500 cursor-pointer hover:text-white"
             onClick={() => handleChatUserClick(user)}
           >
             <div className="flex ml-2 mr-2">
