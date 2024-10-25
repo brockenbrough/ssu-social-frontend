@@ -116,7 +116,12 @@ const Chat = () => {
 
   const markMessagesAsRead = async (chatRoomId) => {
     const chatRoomUnreadMessages = messages
-      .filter((m) => m.chatRoomId === chatRoomId)
+      .filter(
+        (m) =>
+          m.receiverId === user._id &&
+          m.chatRoomId === chatRoomId &&
+          m.isRead === false
+      )
       .map((m) => m._id);
 
     try {
@@ -180,7 +185,9 @@ const Chat = () => {
   };
 
   const getUnreadMessages = () => {
-    return messages.filter((m) => m.isRead === false);
+    return messages.filter(
+      (m) => m.receiverId === user._id && m.isRead === false
+    );
   };
 
   const getLastMessages = () => {
