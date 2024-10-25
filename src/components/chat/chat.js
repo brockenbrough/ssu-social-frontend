@@ -103,7 +103,7 @@ const Chat = () => {
           currentTabRef.current === TABS.chat
         ) {
           newMessage.isRead = true;
-          markMessagesAsRead(newMessage.chatRoomId);
+          markMessagesAsRead(newMessage.chatRoomId, [newMessage._id]);
         }
 
         setMessages((prevMessages) => [...prevMessages, newMessage]);
@@ -142,26 +142,34 @@ const Chat = () => {
     markMessagesAsRead(currentChatRoom._id);
   };
 
-  const markMessagesAsRead = async (chatRoomId) => {
-    const chatRoomUnreadMessages = messages
-      .filter(
-        (m) =>
-          m.receiverId === user._id &&
-          m.chatRoomId === chatRoomId &&
-          m.isRead === false
-      )
-      .map((m) => m._id);
+  const markMessagesAsRead = async (chatRoomId, messageIds) => {
+    let chatRoomUnreadMessages = [];
+
+    if (messageIds && messageIds.length !== 0) {
+      chatRoomUnreadMessages = messageIds;
+    } else {
+      chatRoomUnreadMessages = messages
+        .filter(
+          (m) =>
+            m.receiverId === user._id &&
+            m.chatRoomId === chatRoomId &&
+            m.isRead === false
+        )
+        .map((m) => m._id);
+    }
 
     try {
       await apiClient.put("/message/markAsRead", {
         messageIds: chatRoomUnreadMessages,
       });
 
-      setMessages((prevMessages) =>
-        prevMessages.map((m) =>
-          m.chatRoomId === chatRoomId ? { ...m, isRead: true } : m
-        )
-      );
+      if (!messageIds || messageIds.length === 0) {
+        setMessages((prevMessages) =>
+          prevMessages.map((m) =>
+            m.chatRoomId === chatRoomId ? { ...m, isRead: true } : m
+          )
+        );
+      }
     } catch (error) {
       console.error("Error marking messages as read:", error);
     }
