@@ -28,9 +28,9 @@ const Chat = () => {
 
   const [user, setUser] = useState(getUserInfo());
   const [chatUser, setChatUser] = useState({});
-  const [messages, setMessages] = useState([]);
-  const [currentChatRoom, setCurrentChatRoom] = useState({});
   const [chatRooms, setChatRooms] = useState([]);
+  const [currentChatRoom, setCurrentChatRoom] = useState({});
+  const [messages, setMessages] = useState([]);
 
   const fetchUser = async () => {
     const tokenUser = getUserInfo();
@@ -94,7 +94,8 @@ const Chat = () => {
     const user = getUserInfo();
 
     socket.on("message", (data) => {
-      if (data.receiverId === user.id) {
+      const isUserRecivedMessage = data.receiverId === user.id;
+      if (isUserRecivedMessage) {
         const chatRoomExists = chatRooms.some(
           (chatRoom) => chatRoom._id === data.chatRoomId
         );
@@ -104,16 +105,19 @@ const Chat = () => {
         }
       }
 
-      if (data.receiverId === user.id || data.senderId === user.id) {
+      const isUserSendOrRecivedMessage =
+        data.receiverId === user.id || data.senderId === user.id;
+      if (isUserSendOrRecivedMessage) {
         const newMessage = data;
 
-        if (
+        const isUserRecivedMessageAndChatWindowOpenInChatTab =
           data.receiverId === user.id &&
           chatOpenRef.current &&
-          currentTabRef.current === TABS.chat
-        ) {
+          currentTabRef.current === TABS.chat;
+
+        if (isUserRecivedMessageAndChatWindowOpenInChatTab) {
           newMessage.isRead = true;
-          markMessagesAsRead(newMessage.chatRoomId, [newMessage._id]);
+          markMessagesAsReadInDb([newMessage._id]);
         }
 
         setMessages((prevMessages) => [...prevMessages, newMessage]);
@@ -131,7 +135,7 @@ const Chat = () => {
     const isChatOpen = !chatOpenRef.current;
     const isChatTab = currentTabRef.current === TABS.chat;
     if (isChatOpen && isChatTab) {
-      markMessagesAsRead(currentChatRoom._id);
+      markMessagesAsReadByChatRoomId(currentChatRoom._id);
     }
   };
 
@@ -149,37 +153,37 @@ const Chat = () => {
 
   const handleChatBackClick = () => {
     setCurrentTab(TABS.history);
-    markMessagesAsRead(currentChatRoom._id);
+    markMessagesAsReadByChatRoomId(currentChatRoom._id);
   };
 
-  const markMessagesAsRead = async (chatRoomId, messageIds) => {
-    let chatRoomUnreadMessages = [];
-
-    if (messageIds && messageIds.length !== 0) {
-      chatRoomUnreadMessages = messageIds;
-    } else {
-      chatRoomUnreadMessages = messages
-        .filter(
-          (m) =>
-            m.receiverId === user._id &&
-            m.chatRoomId === chatRoomId &&
-            m.isRead === false
-        )
-        .map((m) => m._id);
-    }
-
+  const markMessagesAsReadInDb = async (messageIds) => {
     try {
       await apiClient.put("/message/markAsRead", {
-        messageIds: chatRoomUnreadMessages,
+        messageIds: messageIds,
       });
+    } catch (error) {
+      console.error("Error marking messages as read:", error);
+    }
+  };
 
-      if (!messageIds || messageIds.length === 0) {
-        setMessages((prevMessages) =>
-          prevMessages.map((m) =>
-            m.chatRoomId === chatRoomId ? { ...m, isRead: true } : m
-          )
-        );
-      }
+  const markMessagesAsReadByChatRoomId = async (chatRoomId) => {
+    const chatRoomUnreadMessageIds = messages
+      .filter(
+        (m) =>
+          m.receiverId === user._id &&
+          m.chatRoomId === chatRoomId &&
+          m.isRead === false
+      )
+      .map((m) => m._id);
+
+    try {
+      markMessagesAsReadInDb(chatRoomUnreadMessageIds);
+
+      setMessages((prevMessages) =>
+        prevMessages.map((m) =>
+          m.chatRoomId === chatRoomId ? { ...m, isRead: true } : m
+        )
+      );
     } catch (error) {
       console.error("Error marking messages as read:", error);
     }
@@ -199,23 +203,21 @@ const Chat = () => {
       setChatUser(chatUser);
       setCurrentChatRoom(chatRoom);
       setCurrentTab(TABS.chat);
-      markMessagesAsRead(chatRoom._id);
+      markMessagesAsReadByChatRoomId(chatRoom._id);
     } catch (error) {
       console.error("Error fetching chat user:", error);
     }
   };
 
-  const handleChatUserClick = async (chatUser) => {
-    let chatRoom = null;
-
+  const handleSearchChatUserClick = async (chatUser) => {
     const data = {
       participants: [{ userId: user._id }, { userId: chatUser._id }],
     };
 
     try {
       const response = await apiClient.post("/chatRoom", data);
+      const chatRoom = response.data.chatRoom;
 
-      chatRoom = response.data.chatRoom;
       const isChatRoomExists = chatRooms.some((chatRoom) =>
         chatRoom.participants.every((participant) =>
           data.participants.some((p) => p.userId === participant.userId)
@@ -224,6 +226,7 @@ const Chat = () => {
       if (!isChatRoomExists) {
         setChatRooms([chatRoom, ...chatRooms]);
       }
+
       handleChatRoomClick(chatRoom);
     } catch (error) {
       console.error("Error creating chat room:", error);
@@ -321,7 +324,7 @@ const Chat = () => {
                 <ChatSearchTab
                   currentUser={user}
                   searchInput={searchInput}
-                  handleChatUserClick={handleChatUserClick}
+                  handleSearchChatUserClick={handleSearchChatUserClick}
                 />
               </div>
             )}

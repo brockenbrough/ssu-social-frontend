@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-const ChatSearchTab = ({ currentUser, searchInput, handleChatUserClick }) => {
+const ChatSearchTab = ({
+  currentUser,
+  searchInput,
+  handleSearchChatUserClick,
+}) => {
   const defaultProfileImageUrl =
     "https://ssusocial.s3.amazonaws.com/profilepictures/ProfileIcon.png";
   const [searchUsers, setSearchUsers] = useState([]);
@@ -35,7 +39,7 @@ const ChatSearchTab = ({ currentUser, searchInput, handleChatUserClick }) => {
           <div
             key={user._id}
             className="flex p-2 mt-1 font-title hover:bg-orange-500 cursor-pointer hover:text-white"
-            onClick={() => handleChatUserClick(user)}
+            onClick={() => handleSearchChatUserClick(user)}
           >
             <div className="flex ml-2 mr-2">
               <img
