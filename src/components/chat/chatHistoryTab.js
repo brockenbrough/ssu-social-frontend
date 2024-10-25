@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import timeAgo from "../../utilities/timeAgo";
+import chatTimeFormat from "../../utilities/chatTimeFormat";
 
 const ChatHistoryTab = ({
   user,
@@ -105,7 +105,7 @@ const ChatHistoryTab = ({
                   }`}
                 >
                   {getLastMessage(chatRoom._id).date &&
-                    timeAgo(getLastMessage(chatRoom._id).date)}
+                    chatTimeFormat(getLastMessage(chatRoom._id).date)}
                 </div>
                 <div className="flex-1 font-display text-xs text-gray-500 dark:text-gray-300 truncate overflow-hidden whitespace-nowrap w-full text-end">
                   {getUnreadMessageCount(chatRoom._id) > 0 && (
