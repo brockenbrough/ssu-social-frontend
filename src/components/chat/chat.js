@@ -117,6 +117,12 @@ const Chat = () => {
 
   const toogleChat = () => {
     setChatOpen(!chatOpen);
+
+    const isChatOpen = !chatOpenRef.current;
+    const isChatTab = currentTabRef.current === TABS.chat;
+    if (isChatOpen && isChatTab) {
+      markMessagesAsRead(currentChatRoom._id);
+    }
   };
 
   const handleChatClick = () => {
