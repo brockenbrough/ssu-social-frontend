@@ -59,7 +59,13 @@ const ChatTab = ({ chatRoom, chatRoomMessages, currentUser, chatUser }) => {
   };
 
   const handleKeyDown = (event) => {
-    if (event.ctrlKey && event.key === "Enter") {
+    if (
+      (event.ctrlKey && event.key === "Enter") ||
+      (event.shiftKey && event.key === "Enter")
+    ) {
+      event.preventDefault();
+      setNewMessage(newMessage + "\n");
+    } else if (event.key === "Enter") {
       event.preventDefault();
       handleSendMessage();
     }
@@ -111,6 +117,7 @@ const ChatTab = ({ chatRoom, chatRoomMessages, currentUser, chatUser }) => {
           autoFocus={true}
           onKeyDown={handleKeyDown}
         />
+        {/* Send button */}
         <button
           onClick={handleSendMessage}
           className="ml-2 p-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 font-menu"

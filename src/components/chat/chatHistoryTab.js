@@ -7,28 +7,12 @@ const ChatHistoryTab = ({
   chatRooms,
   lastMessages,
   unreadMessages,
+  defaultProfileImageUrl,
   handleChatRoomClick,
 }) => {
-  const defaultProfileImageUrl =
-    "https://ssusocial.s3.amazonaws.com/profilepictures/ProfileIcon.png";
   const [chatRoomsWithUserInfo, setChatRoomsWithUserInfo] = useState([]);
 
-  const getLastMessage = (chatRoomId) => {
-    const message = lastMessages.find(
-      (message) => message.chatRoomId === chatRoomId
-    );
-    return message || { chatRoomId, text: null, date: null };
-  };
-
-  const getUnreadMessageCount = (chatRoomId) => {
-    return unreadMessages.filter((m) => m.chatRoomId === chatRoomId).length;
-  };
-
-  const getChatUser = (chatRoom) => {
-    return chatRoom.participants.filter((p) => p.userId !== user._id)[0].user;
-  };
-
-  const fetchChatRoomUsers = async () => {
+  const fetchChatRoomWithUserInfo = async () => {
     try {
       const userIds = [
         ...new Set(
@@ -48,7 +32,7 @@ const ChatHistoryTab = ({
         return map;
       }, {});
 
-      const newRooms = chatRooms.map((room) => {
+      const newRoomsWIthUserInfo = chatRooms.map((room) => {
         const updatedParticipants = room.participants.map((participant) => ({
           ...participant,
           user: userMap[participant.userId] || null,
@@ -56,15 +40,30 @@ const ChatHistoryTab = ({
         return { ...room, participants: updatedParticipants };
       });
 
-      setChatRoomsWithUserInfo(newRooms);
+      setChatRoomsWithUserInfo(newRoomsWIthUserInfo);
     } catch (error) {
       console.error("Error fetching chat room users:", error);
     }
   };
 
   useEffect(() => {
-    fetchChatRoomUsers();
+    fetchChatRoomWithUserInfo();
   }, [chatRooms]);
+
+  const getLastMessage = (chatRoomId) => {
+    const message = lastMessages.find(
+      (message) => message.chatRoomId === chatRoomId
+    );
+    return message || { chatRoomId, text: null, date: null };
+  };
+
+  const getUnreadMessageCount = (chatRoomId) => {
+    return unreadMessages.filter((m) => m.chatRoomId === chatRoomId).length;
+  };
+
+  const getChatUser = (chatRoom) => {
+    return chatRoom.participants.filter((p) => p.userId !== user._id)[0].user;
+  };
 
   return (
     <div>

@@ -4,10 +4,9 @@ import axios from "axios";
 const ChatSearchTab = ({
   currentUser,
   searchInput,
+  defaultProfileImageUrl,
   handleSearchChatUserClick,
 }) => {
-  const defaultProfileImageUrl =
-    "https://ssusocial.s3.amazonaws.com/profilepictures/ProfileIcon.png";
   const [searchUsers, setSearchUsers] = useState([]);
 
   const fetchSearchUsers = async () => {

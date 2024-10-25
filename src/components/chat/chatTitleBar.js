@@ -15,9 +15,8 @@ const ChatTitleBar = ({
   handleSearchUser,
   handleChatBackClick,
   toogleChat,
+  defaultProfileImageUrl,
 }) => {
-  const defaultProfileImageUrl =
-    "https://ssusocial.s3.amazonaws.com/profilepictures/ProfileIcon.png";
   const navigate = useNavigate();
 
   return (

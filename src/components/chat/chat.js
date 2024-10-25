@@ -11,6 +11,8 @@ import apiClient from "../../utilities/apiClient";
 import socket from "../../utilities/socket";
 
 const Chat = () => {
+  const defaultProfileImageUrl =
+    "https://ssusocial.s3.amazonaws.com/profilepictures/ProfileIcon.png";
   const TABS = { history: "history", search: "search", chat: "chat" };
   const [currentTab, setCurrentTab] = useState(TABS.history);
   const [chatOpen, setChatOpen] = useState(false);
@@ -290,6 +292,7 @@ const Chat = () => {
             handleChatBackClick={handleChatBackClick}
             setSearchInput={setSearchInput}
             toogleChat={toogleChat}
+            defaultProfileImageUrl={defaultProfileImageUrl}
           />
           {/* Tab Body */}
           <div className="h-full pb-20">
@@ -301,6 +304,7 @@ const Chat = () => {
                   chatRooms={chatRooms}
                   lastMessages={getLastMessages()}
                   unreadMessages={getUnreadMessages()}
+                  defaultProfileImageUrl={defaultProfileImageUrl}
                   handleChatRoomClick={handleChatRoomClick}
                 />
               </div>
@@ -324,6 +328,7 @@ const Chat = () => {
                 <ChatSearchTab
                   currentUser={user}
                   searchInput={searchInput}
+                  defaultProfileImageUrl={defaultProfileImageUrl}
                   handleSearchChatUserClick={handleSearchChatUserClick}
                 />
               </div>
