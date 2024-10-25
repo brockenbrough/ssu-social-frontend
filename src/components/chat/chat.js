@@ -94,6 +94,16 @@ const Chat = () => {
     const user = getUserInfo();
 
     socket.on("message", (data) => {
+      if (data.receiverId === user.id) {
+        const chatRoomExists = chatRooms.some(
+          (chatRoom) => chatRoom._id === data.chatRoomId
+        );
+
+        if (!chatRoomExists) {
+          fetchChatRooms();
+        }
+      }
+
       if (data.receiverId === user.id || data.senderId === user.id) {
         const newMessage = data;
 
