@@ -6,8 +6,7 @@ import socket from "../../utilities/socket";
 
 let scrollEffect = "smooth";
 
-const ChatTab = ({ chatRoom, currentUser, chatUser }) => {
-  const [messages, setMessages] = useState([]);
+const ChatTab = ({ chatRoom, chatRoomMessages, currentUser, chatUser }) => {
   const [newMessage, setNewMessage] = useState("");
   const messagesEndRef = useRef(null);
 
@@ -15,39 +14,13 @@ const ChatTab = ({ chatRoom, currentUser, chatUser }) => {
     messagesEndRef.current?.scrollIntoView({ behavior: effect });
   };
 
-  const fetchMessages = async () => {
-    try {
-      const response = await apiClient.get(
-        `/message/getByChatRoomId/${chatRoom._id}`
-      );
-      const messages = response.data.data;
-      messages.sort((a, b) => new Date(a.date) - new Date(b.date));
-      setMessages(messages);
-    } catch (error) {
-      console.error("Error saving message:", error);
-      return null;
-    }
-  };
-
   useEffect(() => {
     scrollEffect = "instant";
-
-    fetchMessages();
-
-    socket.on("message", (data) => {
-      if (data.chatRoomId === chatRoom._id) {
-        setMessages((prevMessages) => [...prevMessages, data]);
-      }
-    });
-
-    return () => {
-      socket.off("message");
-    };
   }, []);
 
   useEffect(() => {
     scrollToBottom(scrollEffect);
-  }, [messages]);
+  }, [chatRoomMessages]);
 
   const saveMessage = async (message) => {
     const data = {
@@ -100,7 +73,7 @@ const ChatTab = ({ chatRoom, currentUser, chatUser }) => {
     <div className="h-full flex flex-col">
       {/* Chat Window */}
       <div className="flex-1 overflow-y-auto p-3 bg-lightBackground dark:bg-gray-900 space-y-2">
-        {messages.map((message) => (
+        {chatRoomMessages.map((message) => (
           <div
             key={message._id}
             className={`p-2 font-display text-sm rounded-lg break-words ${

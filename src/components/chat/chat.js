@@ -195,6 +195,15 @@ const Chat = () => {
     });
   };
 
+  const getChatRoomMessages = (chatRoomId) => {
+    const chatRoomMessages = messages.filter(
+      (m) => m.chatRoomId === chatRoomId
+    );
+    chatRoomMessages.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+    return chatRoomMessages;
+  };
+
   return (
     <div className="fixed bottom-24 right-10">
       {/* Chat button */}
@@ -246,6 +255,7 @@ const Chat = () => {
               <div className="h-full">
                 <ChatTab
                   chatRoom={currentChatRoom}
+                  chatRoomMessages={getChatRoomMessages(currentChatRoom._id)}
                   currentUser={user}
                   chatUser={chatUser}
                 />
