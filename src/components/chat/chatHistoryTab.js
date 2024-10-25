@@ -36,6 +36,8 @@ const ChatHistoryTab = ({
         ),
       ];
 
+      if (userIds.length === 0) return;
+
       const response = await axios.post(
         `${process.env.REACT_APP_BACKEND_SERVER_URI}/user/getUsersByIds`,
         { userIds }
