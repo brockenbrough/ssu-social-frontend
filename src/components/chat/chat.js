@@ -32,7 +32,12 @@ const Chat = () => {
   const [chatUser, setChatUser] = useState({});
   const [chatRooms, setChatRooms] = useState([]);
   const [currentChatRoom, setCurrentChatRoom] = useState({});
+  const currentChatRoomRef = useRef(currentChatRoom);
   const [messages, setMessages] = useState([]);
+
+  useEffect(() => {
+    currentChatRoomRef.current = currentChatRoom;
+  }, [currentChatRoom]);
 
   const fetchUser = async () => {
     const tokenUser = getUserInfo();
@@ -112,12 +117,13 @@ const Chat = () => {
       if (isUserSendOrRecivedMessage) {
         const newMessage = data;
 
-        const isUserRecivedMessageAndChatWindowOpenInChatTab =
+        const isUserRecivedMessageAndChatWindowOpenInChatTabWithSameChatRoomId =
           data.receiverId === user.id &&
+          data.chatRoomId === currentChatRoomRef.current._id &&
           chatOpenRef.current &&
           currentTabRef.current === TABS.chat;
 
-        if (isUserRecivedMessageAndChatWindowOpenInChatTab) {
+        if (isUserRecivedMessageAndChatWindowOpenInChatTabWithSameChatRoomId) {
           newMessage.isRead = true;
           markMessagesAsReadInDb([newMessage._id]);
         }
