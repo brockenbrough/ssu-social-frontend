@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
-import getUserInfo from "../../utilities/decodeJwt";
 import axios from "axios";
 
-const ChatSearchTab = ({ searchInput, handleChatUserClick }) => {
-  const [currentUser, setCurrentUser] = useState(getUserInfo());
+const ChatSearchTab = ({ currentUser, searchInput, handleChatUserClick }) => {
   const defaultProfileImageUrl =
     "https://ssusocial.s3.amazonaws.com/profilepictures/ProfileIcon.png";
   const [searchUsers, setSearchUsers] = useState([]);
@@ -27,7 +25,6 @@ const ChatSearchTab = ({ searchInput, handleChatUserClick }) => {
   };
 
   useEffect(() => {
-    setCurrentUser(getUserInfo());
     fetchSearchUsers();
   }, [searchInput]);
 

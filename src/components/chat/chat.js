@@ -256,6 +256,7 @@ const Chat = () => {
             {currentTab === TABS.search && (
               <div className="h-full pb-1">
                 <ChatSearchTab
+                  currentUser={user}
                   searchInput={searchInput}
                   handleChatUserClick={handleChatUserClick}
                 />
