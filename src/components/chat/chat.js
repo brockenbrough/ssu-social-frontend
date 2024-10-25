@@ -139,6 +139,7 @@ const Chat = () => {
 
   const handleChatBackClick = () => {
     setCurrentTab(TABS.history);
+    markMessagesAsRead(currentChatRoom._id);
   };
 
   const markMessagesAsRead = async (chatRoomId) => {
