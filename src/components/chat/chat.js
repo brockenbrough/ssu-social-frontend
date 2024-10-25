@@ -15,6 +15,16 @@ const Chat = () => {
   const [currentTab, setCurrentTab] = useState(TABS.history);
   const [chatOpen, setChatOpen] = useState(false);
   const [searchInput, setSearchInput] = useState("");
+  const chatOpenRef = useRef(chatOpen);
+  const currentTabRef = useRef(currentTab);
+
+  useEffect(() => {
+    chatOpenRef.current = chatOpen;
+  }, [chatOpen]);
+
+  useEffect(() => {
+    currentTabRef.current = currentTab;
+  }, [currentTab]);
 
   const [user, setUser] = useState(getUserInfo());
   const [chatUser, setChatUser] = useState({});
@@ -85,7 +95,18 @@ const Chat = () => {
 
     socket.on("message", (data) => {
       if (data.receiverId === user.id || data.senderId === user.id) {
-        setMessages((prevMessages) => [...prevMessages, data]);
+        const newMessage = data;
+
+        if (
+          data.receiverId === user.id &&
+          chatOpenRef.current &&
+          currentTabRef.current === TABS.chat
+        ) {
+          newMessage.isRead = true;
+          markMessagesAsRead(newMessage.chatRoomId);
+        }
+
+        setMessages((prevMessages) => [...prevMessages, newMessage]);
       }
     });
 
