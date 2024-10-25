@@ -11,15 +11,16 @@ import apiClient from "../../utilities/apiClient";
 import socket from "../../utilities/socket";
 
 const Chat = () => {
-  const [chatOpen, setChatOpen] = useState(false);
-  const [user, setUser] = useState(getUserInfo());
-  const [chatUser, setChatUser] = useState({});
-  const [unreadMessages, setUnreadMessages] = useState([]);
-  const [currentChatRoom, setCurrentChatRoom] = useState({});
-  const [chatRooms, setChatRooms] = useState([]);
   const TABS = { history: "history", search: "search", chat: "chat" };
   const [currentTab, setCurrentTab] = useState(TABS.history);
+  const [chatOpen, setChatOpen] = useState(false);
   const [searchInput, setSearchInput] = useState("");
+
+  const [user, setUser] = useState(getUserInfo());
+  const [chatUser, setChatUser] = useState({});
+  const [messages, setMessages] = useState([]);
+  const [currentChatRoom, setCurrentChatRoom] = useState({});
+  const [chatRooms, setChatRooms] = useState([]);
 
   const fetchUser = async () => {
     const tokenUser = getUserInfo();
@@ -42,8 +43,6 @@ const Chat = () => {
   };
 
   const fetchChatRooms = async () => {
-    const user = getUserInfo();
-
     if (!user.id) {
       return;
     }
@@ -60,21 +59,17 @@ const Chat = () => {
     }
   };
 
-  const fetchUnreadMessageCount = async () => {
-    const user = getUserInfo();
-
+  const fetchMessages = async () => {
     if (!user.id) {
       return;
     }
 
     try {
-      const response = await apiClient.get(
-        `/message/unreadMessage/getByUserId/${user.id}`
-      );
-      const unreadMessages = response.data.data;
+      const response = await apiClient.get(`/message/getByUserId/${user.id}`);
+      const messages = response.data.data;
 
-      if (unreadMessages) {
-        setUnreadMessages(unreadMessages);
+      if (messages) {
+        setMessages(messages);
       }
     } catch (error) {
       console.error("Error fetching unread message count:", error);
@@ -84,16 +79,13 @@ const Chat = () => {
   useEffect(() => {
     fetchUser();
     fetchChatRooms();
-    fetchUnreadMessageCount();
+    fetchMessages();
 
     const user = getUserInfo();
 
     socket.on("message", (data) => {
-      if (data.receiverId === user.id) {
-        setUnreadMessages((prevUnreadMessages) => [
-          ...prevUnreadMessages,
-          data,
-        ]);
+      if (data.receiverId === user.id || data.senderId === user.id) {
+        setMessages((prevMessages) => [...prevMessages, data]);
       }
     });
 
@@ -123,7 +115,7 @@ const Chat = () => {
   };
 
   const markMessagesAsRead = async (chatRoomId) => {
-    const chatRoomUnreadMessages = unreadMessages
+    const chatRoomUnreadMessages = messages
       .filter((m) => m.chatRoomId === chatRoomId)
       .map((m) => m._id);
 
@@ -132,9 +124,9 @@ const Chat = () => {
         messageIds: chatRoomUnreadMessages,
       });
 
-      setUnreadMessages((prevUnreadMessages) =>
-        prevUnreadMessages.filter(
-          (m) => !chatRoomUnreadMessages.includes(m._id)
+      setMessages((prevMessages) =>
+        prevMessages.map((m) =>
+          m.chatRoomId === chatRoomId ? { ...m, isRead: true } : m
         )
       );
     } catch (error) {
@@ -187,6 +179,22 @@ const Chat = () => {
     }
   };
 
+  const getUnreadMessages = () => {
+    return messages.filter((m) => m.isRead === false);
+  };
+
+  const getLastMessages = () => {
+    return chatRooms.map((chatRoom) => {
+      const lastMessage = messages
+        .filter((m) => m.chatRoomId === chatRoom._id)
+        .sort((a, b) => new Date(b.date) - new Date(a.date))[0];
+
+      return (
+        lastMessage || { chatRoomId: chatRoom._id, text: null, date: null }
+      );
+    });
+  };
+
   return (
     <div className="fixed bottom-24 right-10">
       {/* Chat button */}
@@ -196,9 +204,9 @@ const Chat = () => {
       >
         <FontAwesomeIcon className="z-10 h-7 text-white" icon={chatIcon} />
         {/* Unread message count */}
-        {unreadMessages.length > 0 && (
+        {getUnreadMessages().length > 0 && (
           <span className="absolute -top-1 -right-1 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-            {unreadMessages.length}
+            {getUnreadMessages().length}
           </span>
         )}
       </div>
@@ -226,7 +234,8 @@ const Chat = () => {
                 <ChatHistoryTab
                   user={user}
                   chatRooms={chatRooms}
-                  unreadMessages={unreadMessages}
+                  lastMessages={getLastMessages()}
+                  unreadMessages={getUnreadMessages()}
                   handleChatRoomClick={handleChatRoomClick}
                 />
               </div>

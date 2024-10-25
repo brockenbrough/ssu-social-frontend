@@ -1,20 +1,17 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import apiClient from "../../utilities/apiClient";
-import getUserInfo from "../../utilities/decodeJwt";
 import timeAgo from "../../utilities/timeAgo";
-import socket from "../../utilities/socket";
 
 const ChatHistoryTab = ({
   user,
   chatRooms,
+  lastMessages,
   unreadMessages,
   handleChatRoomClick,
 }) => {
   const defaultProfileImageUrl =
     "https://ssusocial.s3.amazonaws.com/profilepictures/ProfileIcon.png";
   const [chatRoomsWithUserInfo, setChatRoomsWithUserInfo] = useState([]);
-  const [lastMessages, setLastMessages] = useState([]);
 
   const getLastMessage = (chatRoomId) => {
     const message = lastMessages.find(
@@ -63,36 +60,8 @@ const ChatHistoryTab = ({
     }
   };
 
-  const fetchLastMessages = async () => {
-    const chatRoomIds = chatRooms.map((chatRoom) => chatRoom._id);
-
-    try {
-      const response = await apiClient.post("/message/lastMessage", {
-        chatRoomIds,
-      });
-
-      const lastMessages = response.data.data;
-      setLastMessages(lastMessages);
-    } catch (error) {
-      console.error("Error fetching last messages:", error);
-    }
-  };
-
   useEffect(() => {
     fetchChatRoomUsers();
-    fetchLastMessages();
-
-    const user = getUserInfo();
-
-    socket.on("message", (data) => {
-      if (data.receiverId === user.id) {
-        setLastMessages([...lastMessages, data]);
-      }
-    });
-
-    return () => {
-      socket.off("message");
-    };
   }, [chatRooms]);
 
   return (
