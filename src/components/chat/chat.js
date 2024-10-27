@@ -9,10 +9,13 @@ import ChatTab from "./chatTab";
 import axios from "axios";
 import apiClient from "../../utilities/apiClient";
 import socket from "../../utilities/socket";
+const ChatNotificationSound = "/ChatNotificationSound.mp3";
 
 const Chat = () => {
   const defaultProfileImageUrl =
     "https://ssusocial.s3.amazonaws.com/profilepictures/ProfileIcon.png";
+  const chatNotificationAudioRef = useRef(null);
+
   const TABS = { history: "history", search: "search", chat: "chat" };
   const [currentTab, setCurrentTab] = useState(TABS.history);
   const [chatOpen, setChatOpen] = useState(false);
@@ -93,12 +96,25 @@ const Chat = () => {
     }
   };
 
+  const playChatNotificationSound = () => {
+    if (chatNotificationAudioRef.current) {
+      chatNotificationAudioRef.current.currentTime = 0;
+      chatNotificationAudioRef.current
+        .play()
+        .catch((error) =>
+          console.error("Error playing notification sound:", error)
+        );
+    }
+  };
+
   useEffect(() => {
     fetchUser();
     fetchChatRooms();
     fetchMessages();
 
     const user = getUserInfo();
+    chatNotificationAudioRef.current = new Audio(ChatNotificationSound);
+    chatNotificationAudioRef.current.preload = "auto";
 
     socket.on("message", (data) => {
       const isUserRecivedMessage = data.receiverId === user.id;
@@ -126,6 +142,15 @@ const Chat = () => {
         if (isUserRecivedMessageAndChatWindowOpenInChatTabWithSameChatRoomId) {
           newMessage.isRead = true;
           markMessagesAsReadInDb([newMessage._id]);
+        }
+
+        if (
+          data.receiverId === user.id ||
+          data.chatRoomId !== currentChatRoomRef.current._id ||
+          chatOpenRef.current === false ||
+          currentTabRef.current !== TABS.chat
+        ) {
+          playChatNotificationSound();
         }
 
         setMessages((prevMessages) => [...prevMessages, newMessage]);
