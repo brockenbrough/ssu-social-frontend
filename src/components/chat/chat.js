@@ -144,12 +144,8 @@ const Chat = () => {
           markMessagesAsReadInDb([newMessage._id]);
         }
 
-        if (
-          data.receiverId === user.id ||
-          data.chatRoomId !== currentChatRoomRef.current._id ||
-          chatOpenRef.current === false ||
-          currentTabRef.current !== TABS.chat
-        ) {
+        const isUserRecivedMessage = data.receiverId === user.id;
+        if (isUserRecivedMessage) {
           playChatNotificationSound();
         }
 
