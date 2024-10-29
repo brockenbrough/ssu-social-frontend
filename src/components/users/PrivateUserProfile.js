@@ -395,7 +395,7 @@ const PrivateUserProfile = () => {
             <Modal.Header closeButton>
               <Modal.Title>Log Out</Modal.Title>
             </Modal.Header>
-            <Modal.Body>Are you sure you want to log out?</Modal.Body>
+            <Modal.Body style={{ color: darkMode ? "#000" : "inherit" }}>Are you sure you want to log out?</Modal.Body>
             <Modal.Footer>
               <Button variant="secondary" onClick={handleCloseLogoutConfirmation}>No</Button>
               <Button variant="primary" onClick={handleLogout}>Yes</Button>
