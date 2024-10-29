@@ -374,7 +374,7 @@ const Post = ({ posts: post, isDiscover }) => {
           @{post.username}
         </a>
        {/* Tooltip with Followers and Following count */}
-        <div className="absolute hidden group-hover:block bottom-full mb-2 w-56 bg-orange-600 dark:bg-gray-800 text-gray-900 dark:text-white shadow-lg p-4 rounded-lg z-10 border border-gray-300 dark:border-gray-700 transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-2xl">
+        <div className="absolute hidden group-hover:block bottom-full mb-2 w-56 bg-orange-500 dark:bg-gray-800 text-gray-900 dark:text-white shadow-lg p-4 rounded-lg z-10 border border-gray-300 dark:border-gray-700 transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-2xl">
           <p className="text-lg font-large mb-1 decoration-8">
             <span className="text-cyan-950"><FollowerCount username={post.username} /></span>
           </p>
