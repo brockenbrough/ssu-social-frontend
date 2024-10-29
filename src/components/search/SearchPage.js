@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import getUserInfoAsync from "../../utilities/decodeJwt";
 import axios from "axios";
 
@@ -7,6 +7,7 @@ function SearchPage() {
   const [user, setUser] = useState(null);
   const [searchInput, setSearchInput] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -24,6 +25,7 @@ function SearchPage() {
     }
 
     try {
+      // Fetch users matching the search
       const response = await axios.get(
         `${process.env.REACT_APP_BACKEND_SERVER_URI}/user/search/${searchInput}`
       );
@@ -53,6 +55,10 @@ function SearchPage() {
     );
   }
 
+  const handleSearch = () => {
+    navigate("/searchResultsPosts", { state: { searchInput } });
+  };
+
   return (
     <div className="dark:bg-gray-800 text-gray-900 dark:text-white min-h-screen pl-40">
       <div className="pt-4">
@@ -67,10 +73,11 @@ function SearchPage() {
       <div className="pt-4">
         {searchInput && (
           <div className="w-full max-w-md mx-auto mb-4">
-            <div className="p-3 border-b border-gray-300 hover:bg-orange-500 cursor-pointer hover:text-white">
-              <Link to={`/searchResultsPosts/${searchInput}`}>
-                <span>Search For: {searchInput}</span>
-              </Link>
+            <div
+              className="p-3 border-b border-gray-300 hover:bg-orange-500 cursor-pointer hover:text-white"
+              onClick={handleSearch}
+            >
+              <span>Search For: {searchInput}</span>
             </div>
           </div>
         )}
@@ -84,7 +91,7 @@ function SearchPage() {
                 <Link
                   to={
                     result.username === user.username
-                      ? `/privateProfilePage`
+                      ? `/privateUserProfile`
                       : `/publicProfilePage/${result.username}`
                   }
                 >

@@ -1,51 +1,110 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useParams } from "react-router-dom";
-import PostList from "../post/postlist";
+import getUserInfoAsync from "../../utilities/decodeJwt";
 
 function SearchResultsPosts() {
-  const { searchInput } = useParams(); // Get the search input from URL parameters
+  const location = useLocation();
+  const initialSearchInput = location.state?.searchInput || ""; // Get the initial search input
+  const [searchInput, setSearchInput] = useState(initialSearchInput); // State for user input
+  const [user, setUser] = useState(null);
   const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
+    const fetchUser = async () => {
+      const currentUser = await getUserInfoAsync();
+      setUser(currentUser);
+    };
+
+    fetchUser();
+  }, []);
+
+  // Fetch posts matching the search input
+  useEffect(() => {
     const fetchPosts = async () => {
+      if (!searchInput) {
+        setPosts([]); // Clear posts if no search input
+        return;
+      }
+
       try {
-        setLoading(true);
-        const response = await axios.get(
-          `${process.env.REACT_APP_BACKEND_SERVER_URI}/post/search/${searchInput}`
-        );
+        const url = `${process.env.REACT_APP_BACKEND_SERVER_URI}/post/search/${encodeURIComponent(searchInput)}`;
+        const response = await axios.get(url);
         setPosts(response.data);
-      } catch (err) {
-        setError("Error fetching search results");
-        console.error("Error fetching search results:", err);
-      } finally {
-        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching posts:", error);
       }
     };
 
     fetchPosts();
   }, [searchInput]);
 
+  // Handle enter key press for search
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      // Do nothing if Enter is pressed, as fetchPosts is already handled in useEffect
+      // This is to keep the current input as it is without resetting it
+      event.preventDefault(); // Prevent default form submission
+    }
+  };
+
+  // Handle input change to update the search input state
+  const handleInputChange = (event) => {
+    setSearchInput(event.target.value); // Update the search input
+  };
+
   return (
     <div className="pl-40 dark:bg-gray-800 min-h-screen">
-      <div className="pt-4 mb-3 font-bold text-3xl text-center text-gray-900 dark:text-white">
-        Search Results for "{searchInput}"
+      <div className="flex items-center justify-center py-4 space-x-2">
+        <Link to={`/searchResultsPosts`} state={{ searchInput }}>
+          <button className="ssu-button-disabled" style={{ padding: '9px 15px', fontSize: '1.15rem' }}>Posts</button>
+        </Link>
+        <Link to={`/searchResultsProfiles`} state={{ searchInput }}>
+          <button className="ssu-button-primary"  style={{ padding: '9px 15px', fontSize: '1.15rem' }}>Profiles</button>
+        </Link>
       </div>
-      {loading ? (
-        <div className="text-center text-gray-900 dark:text-white">
-          Loading...
-        </div>
-      ) : error ? (
-        <div className="text-center text-red-500">{error}</div>
-      ) : posts.length === 0 ? (
-        <div className="text-center text-gray-900 dark:text-white">
-          No posts found for "{searchInput}"
-        </div>
-      ) : (
-        <PostList posts={posts} />
-      )}
+      {/* Search input field */}
+      <div className="pt-4">
+        <input
+          type="text"
+          placeholder="Search for posts..."
+          className="w-full max-w-md mx-auto block p-2 text-gray-900 dark:text-gray-800 dark:bg-gray-300 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+          value={searchInput}
+          onChange={handleInputChange} // Handle input changes
+          onKeyDown={handleKeyDown} // Handle enter key press
+        />
+      </div>
+      <h2 className="text-2xl font-bold pt-4">Results for "{searchInput}"</h2>
+      <div className="pt-4">
+        {posts.length > 0 ? (
+          posts.map((post) => (
+            <div
+              key={post._id}
+              className="p-3 border-b border-gray-300 hover:bg-orange-500 cursor-pointer hover:text-white"
+            >
+              <Link
+                to={
+                  user && post.username === user.username
+                    ? `/privateUserProfile`
+                    : `/publicProfilePage/${post.username}`
+                }
+              >
+                <p className="font-bold">@{post.username}</p>
+              </Link>
+              <p>{post.content}</p>
+              {post.imageUri && (
+                <img
+                  src={post.imageUri}
+                  alt="Post content"
+                  className="w-full h-auto mt-2 rounded-lg"
+                />
+              )}
+            </div>
+          ))
+        ) : (
+          <p>No posts found.</p>
+        )}
+      </div>
     </div>
   );
 }
