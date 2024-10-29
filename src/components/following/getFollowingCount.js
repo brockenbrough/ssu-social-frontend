@@ -49,7 +49,7 @@ export default function FollowingCount(props) {
   // Returns the Follow count of the user.
   return (
     <div>
-      <FollowCount /> Following
+       Following <FollowCount />
     </div>
   );
 }

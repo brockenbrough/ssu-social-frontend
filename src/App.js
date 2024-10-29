@@ -90,6 +90,7 @@ const App = () => {
             <Route path="/searchPage" element={<SearchPage />}/>
             <Route path="/searchResultsPosts" element={<SearchResultsPosts />} />
             <Route path="/searchResultsProfiles" element={<SearchResultsProfiles/>}/>
+            <Route path="/removeProfileImage" element={<PrivateUserProfile />} />
           </Routes>
         </UserContext.Provider>
       </PostPageContext.Provider>
