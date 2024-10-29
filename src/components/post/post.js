@@ -371,22 +371,23 @@ const Post = ({ posts: post, isDiscover }) => {
           }
           className="ssu-textlink-bold font-title text-gray-900 dark:text-white"
         >
-           @{post.username}
-        </a>
-              {/* Tooltip with Followers and Following count */}
-              <div className="absolute hidden group-hover:block bottom-full mb-2 w-40 bg-gray-700 text-gray-100 shadow-lg p-2 rounded-md z-10 border border-gray-300 dark:border-gray-700 transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-xl">
-                <p className="text-sm font-medium mb-1">
-                  <span className="text-cyan-300">
-                    <FollowerCount username={post.username} />
-                  </span>
-                </p>
-                <p className="text-sm font-medium">
-                  <span className="text-cyan-300">
-                    <FollowingCount username={post.username} />
-                  </span>
-                </p>
-
-                </div>
+          @{post.username}
+</a>
+{/* Tooltip with Followers and Following count */}
+<div className="absolute hidden group-hover:block bottom-full mb-2 w-fit h-fit bg-white bg-opacity-90 text-gray-900 shadow-lg p-3 rounded-md z-10 border border-gray-300 dark:bg-gray-800 dark:text-white dark:border-gray-700 transition-all duration-200 ease-in-out transform hover:scale-105 hover:shadow-xl">
+  {/* Tooltip Arrow */}
+  <div className="absolute w-3 h-3 -top-1 left-1/2 transform -translate-x-1/2 rotate-45 bg-white border border-gray-300 dark:bg-gray-800 dark:border-gray-700"></div>
+  <p className="text-sm font-medium mb-1">
+    <span className="font-semibold text-gray-900 dark:text-black">
+      <FollowerCount username={post.username} />
+    </span>
+  </p>
+  <p className="text-sm font-medium">
+    <span className="font-semibold text-gray-900 dark:text-black">
+      <FollowingCount username={post.username} />
+    </span>
+  </p>
+</div>
               </div>
             </div>
           {/* Post text */}
