@@ -73,15 +73,15 @@ export default function Navbar() {
         {/* Direct Links Instead of Dropdown */}
         <a
           href="/searchPage"
-          className="ssu-nav-link group flex items-cente"
+          className="ssu-nav-link group flex items-center justify-start"
         >
           <FontAwesomeIcon
-          className="mr-3 text-lightMainText dark:text-darkMainText group-hover:text-white"
-          icon={searchButton}
+            className="mr-4 text-lightMainText dark:text-darkMainText group-hover:text-white"
+            icon={searchButton}
           />
-          <span className="hidden md:inline">Search</span>{" "}
-          
+          <span className="hidden md:inline">Search</span>
         </a>
+
         <a
           href="/feed-algorithm"
           className="ssu-nav-link group flex items-center"
