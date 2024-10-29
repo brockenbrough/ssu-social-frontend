@@ -7,7 +7,7 @@ import Button from "react-bootstrap/Button";
 import Stack from "react-bootstrap/Stack";
 
 import getUserInfo from "../../utilities/decodeJwt";
-import Comment from "./comment";
+import socket from "../../utilities/socket";
 
 // The ContributorList component.  This is the main component in this file.
 export default function CommentList() {
@@ -42,8 +42,23 @@ export default function CommentList() {
     getRecords(); // Now that we defined it, call the function.
     setUser(getUserInfo());
 
-    return;
-  }, [comments?.length]); // If record length ever changes, this useEffect() is automatically called.
+    socket.on("comment", (data) => {
+      if (data.postId === location.state && data.type === "new") {
+        setComments((prevComments) => [...prevComments, data.comment]);
+      }
+    });
+  
+    socket.on("deleteComment", (data) => {
+      if (data.postId === location.state) {
+        setComments((prevComments) => prevComments.filter((c) => c._id !== data.commentId));
+      }
+    });
+
+    return () => {
+      socket.off("comment");
+      socket.off("deleteComment");
+    };
+  }, [location.state]);
 
   // A method to delete a contributor
   async function deleteComment(id) {
@@ -54,6 +69,8 @@ export default function CommentList() {
     // We're going to patch up our state by removing the records corresponding to id in our current state.
     const newRecords = comments.filter((el) => el._id !== id);
     setComments(newRecords); // This causes a re-render because we change state.
+
+    socket.emit("deleteComment", { postId: location.state, commentId: id });
   }
 
   // This method will map out the records onthe table.
