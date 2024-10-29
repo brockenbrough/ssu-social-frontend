@@ -412,21 +412,36 @@ const PrivateUserProfile = () => {
           </Modal>
 
           {/* Logout Confirmation Modal */}
-          <Modal
-            show={showLogoutConfirmation}
-            onHide={handleCloseLogoutConfirmation}
-            backdrop="static"
-            keyboard={false}
-          >
-            <Modal.Header closeButton>
-              <Modal.Title>Log Out</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>Are you sure you want to log out?</Modal.Body>
-            <Modal.Footer>
-              <Button variant="secondary" onClick={handleCloseLogoutConfirmation}>No</Button>
-              <Button variant="primary" onClick={handleLogout}>Yes</Button>
-            </Modal.Footer>
-          </Modal>
+          <Modal show={showLogoutConfirmation} onHide={handleCloseLogoutConfirmation} centered>
+        <div
+        className="popup"
+        style={{
+        backgroundColor: darkMode ? "#181818" : "#fff",
+        color: darkMode ? "#fff" : "#000",
+        }}
+  >
+    <Modal.Header closeButton closeVariant={darkMode ? "white" : "black"}>
+      <Modal.Title>Log Out</Modal.Title>
+    </Modal.Header>
+    <Modal.Body>
+      <p>Are you sure you want to log out?</p>
+    </Modal.Body>
+    <Modal.Footer>
+      <Button
+        variant={darkMode ? "light" : "dark"}
+        onClick={handleCloseLogoutConfirmation}
+      >
+        No
+      </Button>
+      <Button
+        variant={darkMode ? "light" : "dark"}
+        onClick={handleLogout}
+      >
+        Yes
+      </Button>
+    </Modal.Footer>
+  </div>
+</Modal>
         </>
       ) : (
         <div className="text-center col-md-12">
