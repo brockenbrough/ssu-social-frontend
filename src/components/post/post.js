@@ -374,17 +374,18 @@ const Post = ({ posts: post, isDiscover }) => {
           @{post.username}
 </a>
 {/* Tooltip with Followers and Following count */}
-<div className="absolute hidden group-hover:block bottom-full mb-2 w-fit h-fit bg-white bg-opacity-90 text-gray-900 shadow-lg p-3 rounded-md z-10 border border-gray-300 dark:bg-gray-800 dark:text-white dark:border-gray-700 transition-all duration-200 ease-in-out transform hover:scale-105 hover:shadow-xl">
+<div className="absolute hidden group-hover:translate-x-3 group-hover:shadow-xl group-hover:border-{orange} group-hover:relative group-hover:block bottom-half mb-2 w-fit h-fit bg-white bg-opacity-90 text-gray-900 shadow-lg p-4 rounded-md z-10 border border-gray-300 dark:bg-gray-800 dark:text-white dark:border-gray-700 transition-all duration-200 ease-in-out transform hover:scale-105 hover:shadow-xl">
   {/* Tooltip Arrow */}
-  <div className="absolute w-3 h-3 -top-1 left-1/2 transform -translate-x-1/2 rotate-45 bg-white border border-gray-300 dark:bg-gray-800 dark:border-gray-700"></div>
+  <div className="absolute w-3 h-3 -top-2 left-1/2 transform -translate-x-1/2 rotate-45 bg-white border border-gray-300 dark:bg-gray-800 dark:border-gray-700"></div>
+  
   <p className="text-sm font-medium mb-1">
-    <span className="font-semibold text-gray-900 dark:text-black">
-      <FollowerCount username={post.username} />
+    <span className="font-semibold">
+      <span className="text-gray-900 dark:text-black"><FollowerCount username={post.username} /></span>
     </span>
   </p>
   <p className="text-sm font-medium">
-    <span className="font-semibold text-gray-900 dark:text-black">
-      <FollowingCount username={post.username} />
+    <span className="font-semibold">
+      <span className="text-gray-900 dark:text-black"><FollowingCount username={post.username} /></span>
     </span>
   </p>
 </div>
