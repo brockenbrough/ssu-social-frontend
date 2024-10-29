@@ -184,6 +184,25 @@ const PrivateUserProfile = () => {
     fileInputRef.current.value = "";
   };
 
+  // New function to remove profile image
+  const removeProfileImage = async () => {
+    try {
+      const response = await axios.post(`${process.env.REACT_APP_BACKEND_SERVER_URI}/profile/remove`, {
+        name: username,
+      });
+
+      if (response.status === 200) {
+        setUserProfileImage(response.data.profileImage);  // Set the default profile picture
+        setShowUploadModal(false);  // Close the modal after removal
+      } else {
+        alert('Failed to remove profile image.');
+      }
+    } catch (error) {
+      console.error('Error removing profile image:', error);
+      alert('An error occurred while removing the profile picture.');
+    }
+  };
+
   // Modal to show a selected post
   const openPostModal = (post) => {
     setSelectedPost(post);
@@ -369,6 +388,13 @@ const PrivateUserProfile = () => {
                 >
                   Upload Profile Image
                 </Button>
+                <Button
+                  variant="danger"
+                  onClick={removeProfileImage}  // Call the remove function here
+                  className="w-full mt-2 p-2 rounded-md text-white"
+                >
+                  Remove Current Picture
+                </Button>
               </Modal.Footer>
             </div>
           </Modal>
@@ -395,7 +421,7 @@ const PrivateUserProfile = () => {
             <Modal.Header closeButton>
               <Modal.Title>Log Out</Modal.Title>
             </Modal.Header>
-            <Modal.Body style={{ color: darkMode ? "#000" : "inherit" }}>Are you sure you want to log out?</Modal.Body>
+            <Modal.Body>Are you sure you want to log out?</Modal.Body>
             <Modal.Footer>
               <Button variant="secondary" onClick={handleCloseLogoutConfirmation}>No</Button>
               <Button variant="primary" onClick={handleLogout}>Yes</Button>
