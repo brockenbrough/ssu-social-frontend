@@ -26,18 +26,22 @@ function SearchResultsPosts() {
         setPosts([]); // Clear posts if no search input
         return;
       }
-
+  
       try {
         const url = `${process.env.REACT_APP_BACKEND_SERVER_URI}/post/search/${encodeURIComponent(searchInput)}`;
         const response = await axios.get(url);
-        setPosts(response.data);
+  
+        // Sort posts from newest to oldest by default
+        const sortedPosts = response.data.sort((a, b) => new Date(b.date) - new Date(a.date));
+        setPosts(sortedPosts);
       } catch (error) {
         console.error("Error fetching posts:", error);
       }
     };
-
+  
     fetchPosts();
   }, [searchInput]);
+  
 
   // Handle enter key press for search
   const handleKeyDown = (event) => {
