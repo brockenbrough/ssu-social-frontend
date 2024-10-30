@@ -300,7 +300,7 @@ function CreateComment({ post, setParentCommentCount, postCardHeight }) {
 
       return (
         //Spacing Between Comments is "mb-2", Comment Border is set to none
-        <div className="w-full custom-comment-card mx-0 mb-2 relative">
+        <div className="w-full custom-comment-card mx-0 mb-2 relative group">
           <Stack style={{ border: "none" }}>
             <div className="flex space-x-1 items-start">
               {/* Profile Image */}
@@ -342,7 +342,7 @@ function CreateComment({ post, setParentCommentCount, postCardHeight }) {
             </div>
             {user.username === comment.username && (
               <button
-                className="custom-delete-button absolute right-0 top-2"
+               className="custom-delete-button absolute right-0 top-2 hidden group-hover:flex"
                 onClick={async () => {
                   const success = await deleteComment(comment._id);
                   if (success) {

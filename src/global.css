@@ -250,7 +250,7 @@
 
 /* Individual Comment Component Styling */
 .ssu-comment-username {
-  @apply font-bold no-underline text-lightMainText dark:text-darkMainText;
+  @apply font-bold no-underline text-lightMainText dark:text-darkMainText hover:text-orange-500;
 }
 
 .ssu-comment-timeago {
@@ -260,7 +260,7 @@
 
 .custom-delete-button {
   @apply text-red-500 hover:text-red-600 text-base ml-4;
-  @apply mt-0.5; 
+  @apply mt-1.5; 
 }
 
 .ssu-comment-content {
