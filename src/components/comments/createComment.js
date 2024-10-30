@@ -6,9 +6,9 @@ import React, {
   useContext,
   useRef,
 } from "react";
-import Picker from "@emoji-mart/react";
-import data from "@emoji-mart/data";
 import apiClient from "../../utilities/apiClient";
+import data from "@emoji-mart/data";
+import EmojiPickerButton from './EmojiPickerButton';
 import { Link } from "react-router-dom";
 import getUserInfo from "../../utilities/decodeJwt";
 import Stack from "react-bootstrap/Stack";
@@ -37,10 +37,10 @@ const truncateUsername = (username = "", timeAgoString = "", maxWidth = 227) => 
   const canvas = document.createElement("canvas");
   const context = canvas.getContext("2d");
 
-  const fontElement = document.querySelector("#username"); 
+  const fontElement = document.querySelector("#username");
   if (fontElement) {
     const computedStyle = getComputedStyle(fontElement);
-    context.font = computedStyle.font; 
+    context.font = computedStyle.font;
   } else {
     context.font = "bold 1rem sans-serif";
   }
@@ -54,7 +54,7 @@ const truncateUsername = (username = "", timeAgoString = "", maxWidth = 227) => 
 
   let truncatedUsername = username;
   while (context.measureText(`@${truncatedUsername}.. ${timeAgoString}`).width > maxWidth) {
-    truncatedUsername = truncatedUsername.slice(0, -1); 
+    truncatedUsername = truncatedUsername.slice(0, -1);
   }
 
   return truncatedUsername + "...";
@@ -72,9 +72,6 @@ function CreateComment({ post, setParentCommentCount, postCardHeight }) {
   const [commentCount, setCommentCount] = useState(0);
   const commentsEndRef = useRef(null);
   const textareaRef = useRef(null);
-  const emojiPickerRef = useRef(null);
-  const emojiButtonRef = useRef(null);
-  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [formData, setFormData] = useState({
     commentContent: "",
   });
@@ -82,6 +79,12 @@ function CreateComment({ post, setParentCommentCount, postCardHeight }) {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const defaultProfileImageUrl = "https://ssusocial.s3.amazonaws.com/profilepictures/ProfileIcon.png";
   const [profileImages, setProfileImages] = useState({});
+
+  const handleEmojiPickerToggle = (isPickerOpen) => {
+    if (isPickerOpen) {
+      setShowSuggestions(false);
+    }
+  };
 
   useEffect(() => {
     if (comments.length > 0) {
@@ -100,14 +103,6 @@ function CreateComment({ post, setParentCommentCount, postCardHeight }) {
     const regex = new RegExp(`^${input}`, "i");
     return emojis.filter((emoji) => emoji.id.match(regex));
   };
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setRandomEmoji(getRandomEmoji());
-    }, 3000);
-
-    return () => clearInterval(interval);
-  }, []);
 
   useLayoutEffect(() => {
     if (commentsEndRef.current) {
@@ -211,67 +206,6 @@ function CreateComment({ post, setParentCommentCount, postCardHeight }) {
     });
   };
 
-  //Random emoji for mostly face expressions
-  const getRandomEmoji = () => {
-    const faceEmojis = Object.values(data.emojis).filter(
-      (emoji) =>
-        emoji.keywords &&
-        emoji.keywords.some((keyword) =>
-          [
-            "face",
-            "smile",
-            "happy",
-            "sad",
-            "angry",
-            "expression",
-            "dog",
-          ].includes(keyword)
-        )
-    );
-
-    const randomIndex = Math.floor(Math.random() * faceEmojis.length);
-    return faceEmojis[randomIndex].skins[0].native;
-  };
-
-  const [randomEmoji, setRandomEmoji] = useState(getRandomEmoji());
-
-  // Once an emoji is clicked its added to the textarea
-  const handleEmojiClick = (emojiObject) => {
-    const emoji = emojiObject.native;
-    const newContentLength = formData.commentContent.length + emoji.length;
-
-    if (newContentLength <= 255) {
-      setFormData((prevState) => ({
-        ...prevState,
-        commentContent: prevState.commentContent + emoji,
-      }));
-      setShowEmojiPicker(false);
-    }
-  };
-
-  // Emoji Box listener to close the box after clicked outside of the box
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      // Check if the click is outside the emoji picker, emoji button, and textarea
-      if (
-        emojiPickerRef.current &&
-        !emojiPickerRef.current.contains(event.target) &&
-        emojiButtonRef.current &&
-        !emojiButtonRef.current.contains(event.target) &&
-        textareaRef.current &&
-        !textareaRef.current.contains(event.target) // Don't close if textarea is clicked
-      ) {
-        setShowEmojiPicker(false); // Close emoji picker
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
   const saveCommentNotification = async (post) => {
     const data = {
       type: "comment",
@@ -328,7 +262,6 @@ function CreateComment({ post, setParentCommentCount, postCardHeight }) {
       if (response.ok) {
         // Reset Form
         setFormData({ commentContent: "" });
-        setShowEmojiPicker(false);
 
         // Update comments
         setComments([...comments, newComment]);
@@ -496,9 +429,6 @@ function CreateComment({ post, setParentCommentCount, postCardHeight }) {
                 setEmojiSuggestions(suggestions);
                 setShowSuggestions(suggestions.length > 0);
 
-                if (suggestions.length > 0) {
-                  setShowEmojiPicker(false);
-                }
               } else {
                 setShowSuggestions(false);
               }
@@ -514,7 +444,6 @@ function CreateComment({ post, setParentCommentCount, postCardHeight }) {
               if (e.key === "Enter" && !e.shiftKey) {
                 e.preventDefault();
                 handleSubmit(e);
-                setShowEmojiPicker(false);
               }
             }}
             required
@@ -524,6 +453,21 @@ function CreateComment({ post, setParentCommentCount, postCardHeight }) {
               position: "relative",
               zIndex: 10,
             }}
+          />
+          <EmojiPickerButton
+            onEmojiSelect={(emoji) => {
+              setFormData((prevState) => ({
+                ...prevState,
+                commentContent: prevState.commentContent + emoji,
+              }));
+              setShowSuggestions(false);
+            }}
+            pickerPosition="-258px"
+            onPickerToggle={handleEmojiPickerToggle}
+            textareaRef={textareaRef}
+            size="2xl" 
+            margin="ml-1" 
+            padding="p-0"
           />
           {showSuggestions && (
             <div className="ssu-suggestions-dropdown">
@@ -547,39 +491,7 @@ function CreateComment({ post, setParentCommentCount, postCardHeight }) {
             </div>
           )}
 
-          {/* Emoji Picker Button */}
-          <div className="relative">
-            <button
-              ref={emojiButtonRef}
-              type="button"
-              onClick={() => {
-                if (!showEmojiPicker) {
-                  setShowSuggestions(false);
-                }
-                setShowEmojiPicker(!showEmojiPicker);
-              }}
-              className="text-2xl bg-transparent cursor-pointer mr-1 ml-1 relative z-10 -mt-1"
-            >
-              {randomEmoji}
-            </button>
 
-            {/* Emoji Picker */}
-            {showEmojiPicker && (
-              <div
-                ref={emojiPickerRef}
-                className="absolute bottom-12 left-[-254px] z-50"
-              >
-                <Picker
-                  onEmojiSelect={handleEmojiClick}
-                  theme={
-                    document.documentElement.classList.contains("dark")
-                      ? "dark"
-                      : "light"
-                  }
-                />
-              </div>
-            )}
-          </div>
           <button type="submit" className="ml-2 " style={{ zIndex: 10 }}>
             <FontAwesomeIcon
               className="text-orange-500 text-2xl "
