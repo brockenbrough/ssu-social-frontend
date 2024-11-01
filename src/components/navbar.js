@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import getUserInfo from "../utilities/decodeJwt";
 import Image from "react-bootstrap/Image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faInbox as inboxIcon } from "@fortawesome/free-solid-svg-icons";
+import { faBell as notificationIcon } from "@fortawesome/free-solid-svg-icons";
 import { faCirclePlus as createIcon } from "@fortawesome/free-solid-svg-icons";
 import { faStar as forYouIcon } from "@fortawesome/free-solid-svg-icons";
 import { faCompass as discoverIcon } from "@fortawesome/free-solid-svg-icons";
@@ -111,7 +111,7 @@ export default function Navbar() {
             <div className="relative mr-1">
               <FontAwesomeIcon
                 className="mr-3 text-lightMainText dark:text-darkMainText group-hover:text-white"
-                icon={inboxIcon}
+                icon={notificationIcon}
               />
               {/* Notification count */}
               {notifications.filter((n) => n.isRead === false).length > 0 && (
@@ -120,7 +120,7 @@ export default function Navbar() {
                 </span>
               )}
             </div>
-            <span className="hidden md:inline">Inbox</span>{" "}
+            <span className="hidden md:inline">Notifications</span>{" "}
           </span>
         </span>
 
