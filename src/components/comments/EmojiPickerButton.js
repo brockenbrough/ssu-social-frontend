@@ -13,6 +13,7 @@ function EmojiPickerButton({
 }) {
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [randomEmoji, setRandomEmoji] = useState(getRandomEmoji());
+  const [theme, setTheme] = useState(document.documentElement.classList.contains('dark') ? 'dark' : 'light');
   const emojiPickerRef = useRef(null);
   const emojiButtonRef = useRef(null);
 
@@ -58,11 +59,11 @@ function EmojiPickerButton({
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
-        emojiPickerRef.current &&
+        emojiPickerRef?.current &&
         !emojiPickerRef.current.contains(event.target) &&
-        emojiButtonRef.current &&
+        emojiButtonRef?.current &&
         !emojiButtonRef.current.contains(event.target) &&
-        textareaRef.current &&
+        textareaRef?.current &&  
         !textareaRef.current.contains(event.target)
       ) {
         setShowEmojiPicker(false);
@@ -77,6 +78,17 @@ function EmojiPickerButton({
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [textareaRef]);
+  
+  useEffect(() => {
+    const updateTheme = () => {
+      setTheme(document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+    };
+
+    const observer = new MutationObserver(updateTheme);
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <div className="relative">
@@ -101,7 +113,7 @@ function EmojiPickerButton({
               onEmojiSelect(emoji.native);
               setShowEmojiPicker(false);
             }}
-            theme={document.documentElement.classList.contains('dark') ? 'dark' : 'light'}
+            theme={theme}
           />
         </div>
       )}
