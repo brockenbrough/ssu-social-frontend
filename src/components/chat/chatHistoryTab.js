@@ -92,7 +92,7 @@ const ChatHistoryTab = ({
                 <div className="flex-1 font-title font-bold mb-1 w-56 truncate overflow-hidden whitespace-nowrap">
                   @{getChatUser(chatRoom).username}
                 </div>
-                <div className="flex-1 font-display text-xs ml-1 text-gray-500 dark:text-gray-300 w-60 truncate overflow-hidden whitespace-nowrap">
+                <div className="flex-1 font-display text-xs ml-1 text-gray-500 dark:text-gray-300 w-60 truncate overflow-hidden whitespace-nowrap group-hover:text-white">
                   {getLastMessage(chatRoom._id).text &&
                     getLastMessage(chatRoom._id).text}
                 </div>
