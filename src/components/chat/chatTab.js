@@ -4,6 +4,7 @@ import { faPaperPlane as sendIcon } from "@fortawesome/free-solid-svg-icons";
 import apiClient from "../../utilities/apiClient";
 import socket from "../../utilities/socket";
 import chatTimeFormat from "../../utilities/chatTimeFormat";
+import EmojiPicker from "../comments/EmojiPickerButton";
 
 let scrollEffect = "smooth";
 
@@ -64,6 +65,10 @@ const ChatTab = ({ chatRoom, chatRoomMessages, currentUser, chatUser }) => {
     const messageDay = chatTimeFormat(date);
     messageDayRef.current = messageDay;
     return messageDay;
+  };
+
+  const onEmojiSelect = (emoji) => {
+    setNewMessage(newMessage + emoji);
   };
 
   const handleKeyDown = (event) => {
@@ -134,6 +139,14 @@ const ChatTab = ({ chatRoom, chatRoomMessages, currentUser, chatUser }) => {
           autoFocus={true}
           onKeyDown={handleKeyDown}
         />
+        {/* Emoji Picker button */}
+        <div className="ml-2">
+          <EmojiPicker
+            onEmojiSelect={onEmojiSelect}
+            pickerPosition="-285px"
+            size="2xl"
+          />
+        </div>
         {/* Send button */}
         <button
           onClick={handleSendMessage}
