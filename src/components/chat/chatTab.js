@@ -3,12 +3,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane as sendIcon } from "@fortawesome/free-solid-svg-icons";
 import apiClient from "../../utilities/apiClient";
 import socket from "../../utilities/socket";
+import chatTimeFormat from "../../utilities/chatTimeFormat";
 
 let scrollEffect = "smooth";
 
 const ChatTab = ({ chatRoom, chatRoomMessages, currentUser, chatUser }) => {
   const [newMessage, setNewMessage] = useState("");
   const messagesEndRef = useRef(null);
+  const messageDayRef = useRef(null);
 
   const scrollToBottom = (effect) => {
     messagesEndRef.current?.scrollIntoView({ behavior: effect });
@@ -58,6 +60,12 @@ const ChatTab = ({ chatRoom, chatRoomMessages, currentUser, chatUser }) => {
     scrollEffect = "smooth";
   };
 
+  const getAndUpdateMessageDay = (date) => {
+    const messageDay = chatTimeFormat(date);
+    messageDayRef.current = messageDay;
+    return messageDay;
+  };
+
   const handleKeyDown = (event) => {
     if (
       (event.ctrlKey && event.key === "Enter") ||
@@ -80,28 +88,37 @@ const ChatTab = ({ chatRoom, chatRoomMessages, currentUser, chatUser }) => {
       {/* Chat Window */}
       <div className="flex-1 overflow-y-auto p-3 bg-lightBackground dark:bg-gray-900 space-y-2">
         {chatRoomMessages.map((message) => (
-          <div
-            key={message._id}
-            className={`p-2 font-display text-sm rounded-lg break-words ${
-              message.senderId === currentUser._id
-                ? "bg-orange-500 text-white self-end ml-40"
-                : "bg-gray-300 text-gray-900 self-start mr-40"
-            }`}
-          >
-            {message.text.split("\n").map((line, lineIndex) => (
-              <span key={lineIndex}>
-                {line.split("\t").map((tabbedText, tabIndex) => (
-                  <span key={tabIndex}>
-                    {tabbedText}
-                    {tabIndex < line.split("\t").length - 1 && (
-                      <span className="inline-block" style={{ width: "2ch" }} />
-                    )}{" "}
-                  </span>
-                ))}
-                <br />
-              </span>
-            ))}
-          </div>
+          <>
+            <div className="text-center text-sm font-display my-3">
+              {chatTimeFormat(message.date) !== messageDayRef.current &&
+                getAndUpdateMessageDay(message.date)}
+            </div>
+            <div
+              key={message._id}
+              className={`p-2 font-display text-sm rounded-lg break-words ${
+                message.senderId === currentUser._id
+                  ? "bg-orange-500 text-white self-end ml-40"
+                  : "bg-gray-300 text-gray-900 self-start mr-40"
+              }`}
+            >
+              {message.text.split("\n").map((line, lineIndex) => (
+                <span key={lineIndex}>
+                  {line.split("\t").map((tabbedText, tabIndex) => (
+                    <span key={tabIndex}>
+                      {tabbedText}
+                      {tabIndex < line.split("\t").length - 1 && (
+                        <span
+                          className="inline-block"
+                          style={{ width: "2ch" }}
+                        />
+                      )}{" "}
+                    </span>
+                  ))}
+                  <br />
+                </span>
+              ))}
+            </div>
+          </>
         ))}
         <div ref={messagesEndRef} />
       </div>
