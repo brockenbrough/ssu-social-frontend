@@ -406,7 +406,7 @@ const Post = ({ posts: post, isDiscover }) => {
               } transition-all duration-300`}
             />
             {/* Overlay with sensitive content message */}
-            {isDiscover && post.imageFlag && isBlurred && (
+            {post.imageFlag && isBlurred && (
               <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/50 text-white">
                 <p className="mb-2 text-center font-medium">
                   Post could contain sensitive content
@@ -420,7 +420,7 @@ const Post = ({ posts: post, isDiscover }) => {
               </div>
             )}
             {/* Hide Image Button */}
-            {isDiscover && !isBlurred && post.imageFlag && (
+            {!isBlurred && post.imageFlag && (
               <button
                 onClick={toggleBlur}
                 className=" bg-white/80 px-3 py-1 rounded-md text-sm font-medium text-black z-10"

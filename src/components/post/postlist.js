@@ -153,6 +153,7 @@ function PostList({ type, profileUsername }) {
                 <Post
                   key={post._id}
                   posts={post}
+                  isDiscover={type === "all"}
                 />
               ))}
             </div>
