@@ -10,6 +10,13 @@ import { useDarkMode } from "../DarkModeContext.js";
 import PostList from "../post/postlist";
 import EditUser from './editUserPage.js';
 import ProfileImage from "../images/ProfileImage.js";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHeart as solidHeartIcon, faComment as solidCommentIcon } from "@fortawesome/free-solid-svg-icons";
+import { faPhotoVideo, faAlignLeft } from "@fortawesome/free-solid-svg-icons"
+import { faTwitter } from "@fortawesome/free-brands-svg-icons"; // Twitter bird icon
+import { faTh } from "@fortawesome/free-solid-svg-icons"; // Grid icon (9 small squares)
+import { faCamera } from "@fortawesome/free-solid-svg-icons";
+import Post from "../post/post.js"
 
 const PrivateUserProfile = () => {
   const { darkMode } = useDarkMode();
@@ -44,6 +51,10 @@ const PrivateUserProfile = () => {
   const [selectedPost, setSelectedPost] = useState(null);
   const fileInputRef = useRef(null);
   const [postToDelete, setPostToDelete] = useState(null);
+  const [selectedPostIndex, setSelectedPostIndex] = useState(null);
+  const [filter, setFilter] = useState("upload");
+
+
 
   // Fetch user info
   const fetchUserInfo = async () => {
@@ -244,6 +255,40 @@ const PrivateUserProfile = () => {
     setUserModal(false);
   };
 
+  const filteredPosts = posts.filter(post => {
+    if (filter === 'text') {
+      return !post.imageUri && !post.videoUri && !post.link;
+    }
+     return post.imageUri || post.videoUri || post.link;
+   });
+   
+  // Function to handle post click
+const handlePostClick = (index) => { 
+  setSelectedPostIndex(index);       
+  setShowPostModal(true);            
+  };  
+  
+const mediaPosts = posts.filter(post => post.imageUri || post.videoUri);
+const textPosts = posts.filter(post => !post.imageUri && !post.videoUri  && !post.link);
+
+
+const filterButtons = (
+ <div className="filter-buttons">
+   <button
+     className={filter === 'upload' ? 'active' : ''}
+     onClick={() => setFilter('upload')}
+   >
+     <FontAwesomeIcon icon={faCamera} /> Media
+   </button>
+   <button
+     className={filter === 'text' ? 'active' : ''}
+     onClick={() => setFilter('text')}
+   >
+     <FontAwesomeIcon icon={faAlignLeft} /> Text
+   </button>
+ </div>
+);
+
   return (
     <div className="ssu-profilePage-container">
       <button onClick={toggleMenu} className="toggle-button">&#x22EE;</button>
@@ -294,28 +339,61 @@ const PrivateUserProfile = () => {
           </div>
 
           {/* Post List */}
-          <div className="profile-posts">
-            <PostList type="privateuserprofile" openPostModal={openPostModal} />
-          </div>
+       <div className="filter-buttons">
+       <button
+            className={filter === 'upload' ? 'active' : ''}
+            onClick={() => setFilter('upload')} >
+            <FontAwesomeIcon icon={faCamera} />
+        </button>
+        <button
+          className={filter === 'text' ? 'active' : ''} onClick={() => setFilter('text')} > <FontAwesomeIcon icon={faTwitter} />
+        </button>
+        </div>
+
+
+      {/* Media Posts Grid */}
+     {filter === "upload" && (
+     <div className="profile-posts">
+     {mediaPosts.map((post, index) => (
+       <div key={post.id} className="profile-post-item" onClick={() => openPostModal(index)} >
+       {post.imageUri && <img src={post.imageUri} alt="Post" />}
+       {post.videoUri && <video src={post.videoUri} controls />}
+     </div>
+     ))}
+     </div>
+     )}
+
+
+   {/* Text Posts List */}
+   {filter === "text" && (
+   <div className="text-posts-list">
+   {textPosts.map(post => (
+     <div key={post.id} >
+       <Post posts={post}  />
+     </div>
+     ))}
+   </div>
+ )}
+
 
           {/* Post Modal */}
-          <Modal show={showPostModal} onHide={closePostModal}>
-            <Modal.Header closeButton>
-              <Modal.Title>Post</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              {selectedPost && (
-                <div>
-                  <p>Username: {selectedPost.username}</p>
-                  <p>{selectedPost.content}</p>
-                  <p>{moment(selectedPost.date).format("MMMM Do YYYY, h:mm A")}</p>
-                </div>
-              )}
-            </Modal.Body>
-            <Modal.Footer>
-              <Button variant="secondary" onClick={closePostModal}>Close</Button>
-            </Modal.Footer>
-          </Modal>
+      {/* Modal to display posts starting from the clicked one */}
+      <Modal show={showPostModal} onHide={closePostModal}> 
+      <Modal.Header closeButton>                  
+      <Modal.Title>Posts</Modal.Title>           
+      </Modal.Header>                              
+      <Modal.Body>                                 
+      {mediaPosts.slice(selectedPostIndex).map((post, index) => ( 
+      <div key={post.id} className="modal-post-item">   
+      <Post posts={post}  />
+      <hr />                                               
+    </div>
+  ))}
+</Modal.Body>                                             
+<Modal.Footer>                                            
+  <Button variant="secondary" onClick={closePostModal}>Close</Button>
+</Modal.Footer>                                            
+</Modal>
 
           {/* Edit Profile Modal */}
           <Modal show={userModal} onHide={closeUserModal}>
@@ -384,14 +462,14 @@ const PrivateUserProfile = () => {
                 <Button
                   onClick={onUpload}
                   disabled={!selectedFile}
-                  className="w-full bg-orange-600 p-2 rounded-md text-white"
+                  className="w-full p-2 text-white bg-orange-600 rounded-md"
                 >
                   Upload Profile Image
                 </Button>
                 <Button
                   variant="danger"
                   onClick={removeProfileImage}  // Call the remove function here
-                  className="w-full mt-2 p-2 rounded-md text-white"
+                  className="w-full p-2 mt-2 text-white rounded-md"
                 >
                   Remove Current Picture
                 </Button>

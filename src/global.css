@@ -25,10 +25,10 @@
 }
 
 .ssu-button-disabled {
-  @apply font-menu bg-orange-500 dark:bg-orange-500 text-white font-bold py-1 px-2 rounded mr-1 ml-1 mt-1 mb-1 opacity-50 cursor-not-allowed;
+  @apply px-2 py-1 mt-1 mb-1 ml-1 mr-1 font-bold text-white bg-orange-500 rounded opacity-50 cursor-not-allowed font-menu dark:bg-orange-500;
 }
 .ssu-button-caution {
-  @apply font-menu bg-red-500 dark:bg-red-500 text-white font-bold py-1 px-2 rounded hover:bg-red-600 mr-1 ml-1 mt-1 mb-1;
+  @apply px-2 py-1 mt-1 mb-1 ml-1 mr-1 font-bold text-white bg-red-500 rounded font-menu dark:bg-red-500 hover:bg-red-600;
 }
 
 .ssu-button-info-clickable {
@@ -259,7 +259,7 @@
 }
 
 .custom-delete-button {
-  @apply text-red-500 hover:text-red-600 text-base ml-4;
+  @apply ml-4 text-base text-red-500 hover:text-red-600;
   @apply mt-1.5; 
 }
 
@@ -313,7 +313,7 @@
 }
 
 .ssu-suggestion-item {
-  @apply p-2 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 dark:text-white text-black text-sm border border-gray-300 dark:border-gray-600 rounded-md; 
+  @apply p-2 text-sm text-black border border-gray-300 rounded-md cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 dark:text-white dark:border-gray-600; 
 }
 
 /* Comment Card Animation Sliding */
@@ -334,7 +334,6 @@
 .animate-slide-out-left {
   animation: slide-out-left 0.3s ease-out forwards;
 }
-
 
 /* Custom scrollbar styling */
 ::-webkit-scrollbar {
@@ -435,6 +434,62 @@
 
 .profile-post-item .post-details {
   @apply p-4 text-sm text-lightUserText dark:text-darkUserText; /* Style for post details such as description */
+}
+
+/* Filter Buttons Styling */
+.filter-buttons {
+  @apply flex w-full py-2 mb-5 border bg-lightBackground dark:bg-darkBackground justify-evenly;
+}
+
+.filter-buttons button {
+  @apply flex-grow py-2 text-lg text-center transition-colors duration-300 cursor-pointer;
+}
+
+.filter-buttons button:hover {
+  @apply bg-lightHover;
+}
+
+.filter-buttons button.active {
+  @apply border-b-2 border-iconBorder text-lightMainText dark:text-darkMainText;
+}
+
+/* Media Posts Grid Layout */
+.media-posts {
+  @apply grid grid-cols-3 gap-5;
+}
+
+/* Media post styling */
+.profile-post-item img,
+.profile-post-item video {
+  @apply object-cover w-full h-full transition-transform duration-300;
+}
+
+.profile-post-item:hover img,
+.profile-post-item:hover video {
+  @apply transform scale-110;
+}
+
+/* Hover effect for media posts */
+.profile-post-item:hover img,
+.profile-post-item:hover video {
+  transform: scale(1.1);
+}
+
+/* Media post styling */
+.profile-post-item img,
+.profile-post-item video {
+  @apply object-cover w-full h-full transition-transform duration-300;
+}
+
+.profile-post-item:hover img,
+.profile-post-item:hover video {
+  @apply transform scale-110;
+}
+
+/* Hover effect for media posts */
+.profile-post-item:hover img,
+.profile-post-item:hover video {
+  transform: scale(1.1);
 }
 
 .modal-header, .modal-footer {
