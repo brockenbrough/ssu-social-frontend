@@ -8,7 +8,7 @@ import moment from "moment";
 import { getUserInfoAsync } from "../../utilities/decodeJwtAsync";
 import { useDarkMode } from "../DarkModeContext.js";
 import PostList from "../post/postlist";
-import EditUser from './editUserPage.js';
+import EditUserBio from './editUserBio.js';
 import ProfileImage from "../images/ProfileImage.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as solidHeartIcon, faComment as solidCommentIcon } from "@fortawesome/free-solid-svg-icons";
@@ -317,7 +317,7 @@ const filterButtons = (
             </div>
             <div className="profile-info">
               <div className="username">{"@" + user.username}</div>
-              <button className="edit-profile-btn" onClick={showUserModal}>edit profile</button>
+              <button className="edit-profile-btn" onClick={showUserModal}>edit Bio </button>
               <div className="profile-stats">
                 <div className="stat-item">
                   <span className="stat-number">{posts.length}</span>
@@ -395,13 +395,13 @@ const filterButtons = (
 </Modal.Footer>                                            
 </Modal>
 
-          {/* Edit Profile Modal */}
+          {/* Edit Bio Modal */}
           <Modal show={userModal} onHide={closeUserModal}>
             <Modal.Header closeButton>
-              <Modal.Title>Edit Profile</Modal.Title>
+              <Modal.Title>Edit Bio</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <EditUser />
+              <EditUserBio />
             </Modal.Body>
           </Modal>
 

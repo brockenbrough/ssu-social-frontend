@@ -11,6 +11,7 @@ import Signup from "./components/register/Register";
 import ForYouPage from "./components/post/forYouPage";
 import PublicFeedPage from "./components/post/publicFeedPage";
 import EditUserPage from "./components/users/editUserPage";
+import EditUserBio from "./components/users/editUserBio";
 import PublicProfilePage from "./components/users/PublicProfilePage";
 import PublicUser from "./components/users/PublicUser";
 import PrivateUserProfile from "./components/users/PrivateUserProfile";
@@ -63,6 +64,7 @@ const App = () => {
             <Route exact path="/" element={<Login />} />
             <Route exact path="/signup" element={<Signup />} />
             <Route exact path="/editUserPage" element={<EditUserPage />} />
+            <Route exact path ="/editUserBio" element={<EditUserBio />}/>
             <Route path="/privateUserProfile" element={<PrivateUserProfile />} />
             <Route path="/privateUserLikeList" element={<PrivateUserLikeList />} />
             <Route path="/postLikedByPage" element={<postLikedByPage />} />
