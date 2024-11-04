@@ -317,7 +317,7 @@ const filterButtons = (
             </div>
             <div className="profile-info">
               <div className="username">{"@" + user.username}</div>
-              <button className="edit-profile-btn" onClick={showUserModal}>edit Bio </button>
+              <button className="edit-profile-btn" onClick={showUserModal}>edit bio </button>
               <div className="profile-stats">
                 <div className="stat-item">
                   <span className="stat-number">{posts.length}</span>
