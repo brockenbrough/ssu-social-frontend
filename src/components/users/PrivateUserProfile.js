@@ -13,7 +13,7 @@ import ProfileImage from "../images/ProfileImage.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as solidHeartIcon, faComment as solidCommentIcon } from "@fortawesome/free-solid-svg-icons";
 import { faPhotoVideo, faAlignLeft } from "@fortawesome/free-solid-svg-icons"
-import { faTwitter } from "@fortawesome/free-brands-svg-icons"; // Twitter bird icon
+import { faLightbulb } from "@fortawesome/free-solid-svg-icons";
 import { faTh } from "@fortawesome/free-solid-svg-icons"; // Grid icon (9 small squares)
 import { faCamera } from "@fortawesome/free-solid-svg-icons";
 import Post from "../post/post.js"
@@ -346,7 +346,7 @@ const filterButtons = (
             <FontAwesomeIcon icon={faCamera} />
         </button>
         <button
-          className={filter === 'text' ? 'active' : ''} onClick={() => setFilter('text')} > <FontAwesomeIcon icon={faTwitter} />
+          className={filter === 'text' ? 'active' : ''} onClick={() => setFilter('text')} > <FontAwesomeIcon icon={faLightbulb} />
         </button>
         </div>
 
