@@ -34,6 +34,8 @@ const Post = ({ posts: post, isDiscover }) => {
   const [likeCount, setLikeCount] = useState(0);
   const [commentCount, setCommentCount] = useState(0);
   const [isLiked, setIsLiked] = useState(false);
+  const [likesList, setLikesList] = useState([]); // List of users who liked the post
+  const [showLikesModal, setShowLikesModal] = useState(false); // Modal state for likes
   const [dataLoaded, setDataLoaded] = useState(false);
   const formattedDate = moment(post.date).format("h:mm A • M/D/YYYY");
   const { _id: postId } = post;
@@ -131,6 +133,39 @@ const Post = ({ posts: post, isDiscover }) => {
         console.error("Error fetching like count:", error);
         setDataLoaded(true);
       });
+  };
+
+  const fetchLikesList = async () => {
+    if (!postId) {
+        console.error("Invalid postId: Cannot fetch likes without a valid postId");
+        return; // Early exit if postId is invalid
+    }
+
+    try {
+        console.log("Fetching likes for post ID:", postId);
+        const response = await axios.get(
+            `${process.env.REACT_APP_BACKEND_SERVER_URI}/likes/view-likes/${postId}`
+        );
+
+        // Log likes data structure
+        console.log("Likes data received:", response.data); 
+        response.data.forEach((like, index) => {
+            console.log(`Like ${index + 1}:`, like);
+        });
+
+        if (Array.isArray(response.data) && response.data.length === 0) {
+            console.log("No likes found for this post.");
+        }
+
+        setLikesList(response.data);
+        setShowLikesModal(true);
+    } catch (error) {
+        console.error("Error fetching likes list:", error.response ? error.response.data : error.message);
+    }};
+
+  // Like count click handler
+  const handleLikeCountClick = () => {
+    fetchLikesList(); // Fetch and display likes when like count is clicked
   };
 
   const fetchCommentCount = () => {
@@ -480,6 +515,16 @@ const Post = ({ posts: post, isDiscover }) => {
                 <FontAwesomeIcon icon={editIcon} />
               </button>
             )}
+
+        {/* New button to view likes */}
+        <button
+          onClick={fetchLikesList}
+          className="ml-3 mt-2 font-menu text-gray-900 dark:text-white hover:text-blue-500"
+          title="View who liked this post"
+        >
+          <FontAwesomeIcon icon={solidHeartIcon} />
+        </button>
+
             {/* Flag button */}
             <button
               onClick={handleFlagToggle}
@@ -526,6 +571,35 @@ const Post = ({ posts: post, isDiscover }) => {
           </div>
         )}
       </div>
+
+      <Modal show={showLikesModal} onHide={() => setShowLikesModal(false)}>
+    <Modal.Header closeButton>
+        <Modal.Title>People who liked this post</Modal.Title>
+    </Modal.Header>
+    <Modal.Body>
+        {likesList.length > 0 ? (
+            likesList.map((like) => (
+                <div key={like._id} className="d-flex align-items-center mb-2">
+                    <img
+                        src={like.userId?.profileImage || defaultProfileImageUrl} // Accessing the populated user
+                        alt={like.userId?.username || 'User'}
+                        style={{
+                            width: "30px",
+                            height: "30px",
+                            borderRadius: "50%",
+                            marginRight: "8px",
+                        }}
+                    />
+                    <span style={{color:'black'}}>{like.userId?.username || 'Unknown User'}</span>
+                </div>
+            ))
+        ) : (
+            <p>No likes yet.</p>
+        )}
+    </Modal.Body>
+</Modal>
+
+
       {/* Edit Modal */}
       <Modal show={showEditModal} onHide={handleCloseEditModal}>
         <Modal.Header
@@ -590,6 +664,9 @@ const Post = ({ posts: post, isDiscover }) => {
         </Modal.Footer>
       </Modal>
     </div>
+    
   );
 };
+
+
 export default Post;
