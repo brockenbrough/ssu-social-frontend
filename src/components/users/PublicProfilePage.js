@@ -98,7 +98,15 @@ export default function PublicUserList() {
     <div className="ssu-page-container">
       <div className="profile-header">
         <div className="profile-image">
-          <img src={profileImage} alt="Profile" />
+          <img
+            src={profileImage}
+            alt="Profile"
+            className="object-cover w-40 h-40 rounded-full cursor-pointer"
+            style={{
+              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+              border: "1px solid rgba(0, 0, 0, 0.1)",
+            }}
+          />
         </div>
         <div className="profile-info">
           <div className="username">{"@" + user.username}</div>
@@ -184,4 +192,3 @@ export default function PublicUserList() {
     </div>
   );
 }
-
