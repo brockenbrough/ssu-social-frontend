@@ -138,7 +138,7 @@ const Post = ({ posts: post, isDiscover }) => {
   const fetchLikesList = async () => {
     if (!postId) {
         console.error("Invalid postId: Cannot fetch likes without a valid postId");
-        return; // Early exit if postId is invalid
+        return;
     }
 
     try {
@@ -147,21 +147,17 @@ const Post = ({ posts: post, isDiscover }) => {
             `${process.env.REACT_APP_BACKEND_SERVER_URI}/likes/view-likes/${postId}`
         );
 
-        // Log likes data structure
-        console.log("Likes data received:", response.data); 
+        console.log("Likes data received:", response.data); // Log entire response
         response.data.forEach((like, index) => {
-            console.log(`Like ${index + 1}:`, like);
+            console.log(`Like ${index + 1}:`, like); // Log each like individually
         });
-
-        if (Array.isArray(response.data) && response.data.length === 0) {
-            console.log("No likes found for this post.");
-        }
 
         setLikesList(response.data);
         setShowLikesModal(true);
     } catch (error) {
         console.error("Error fetching likes list:", error.response ? error.response.data : error.message);
-    }};
+    }
+};
 
   // Like count click handler
   const handleLikeCountClick = () => {
@@ -577,12 +573,12 @@ const Post = ({ posts: post, isDiscover }) => {
         <Modal.Title>People who liked this post</Modal.Title>
     </Modal.Header>
     <Modal.Body>
-        {likesList.length > 0 ? (
+        {likesList && likesList.length > 0 ? (
             likesList.map((like) => (
                 <div key={like._id} className="d-flex align-items-center mb-2">
                     <img
-                        src={like.userId?.profileImage || defaultProfileImageUrl} // Accessing the populated user
-                        alt={like.userId?.username || 'User'}
+                        src={like.profileImage || defaultProfileImageUrl}
+                        alt={like.username || 'User'}
                         style={{
                             width: "30px",
                             height: "30px",
@@ -590,7 +586,9 @@ const Post = ({ posts: post, isDiscover }) => {
                             marginRight: "8px",
                         }}
                     />
-                    <span style={{color:'black'}}>{like.userId?.username || 'Unknown User'}</span>
+                    <span style={{ color: 'black' }}>
+                        {like.username || 'Unknown User'}
+                    </span>
                 </div>
             ))
         ) : (
@@ -598,7 +596,6 @@ const Post = ({ posts: post, isDiscover }) => {
         )}
     </Modal.Body>
 </Modal>
-
 
       {/* Edit Modal */}
       <Modal show={showEditModal} onHide={handleCloseEditModal}>
