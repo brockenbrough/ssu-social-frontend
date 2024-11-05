@@ -7,13 +7,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCamera, faLightbulb } from '@fortawesome/free-solid-svg-icons';
 import Modal from 'react-bootstrap/Modal'; // Ensure you have this package installed for modal functionality
 
+
 export default function PublicUserList() {
   const [user, setUser] = useState({});
   const [posts, setPosts] = useState([]);
-  const [profileImage, setProfileImage] = useState("");
+  const [profileImage, setProfileImage] = useState(""); // State for profile image
   const { username } = useParams();
   const [followerCount, setFollowerCount] = useState(0);
   const [followingCount, setFollowingCount] = useState(0);
+  const [loading, setLoading] = useState(true); // New loading state
   const [filter, setFilter] = useState('upload'); // State for post filter
   const [mediaPosts, setMediaPosts] = useState([]); // State for media posts
   const [textPosts, setTextPosts] = useState([]); // State for text posts
@@ -28,7 +30,7 @@ export default function PublicUserList() {
         `${process.env.REACT_APP_BACKEND_SERVER_URI}/user/getUserByUsername/${username}`
       );
       setUser(userResponse.data);
-      
+
       const fetchedProfileImage = userResponse.data.profileImage || defaultProfileImageUrl;
       setProfileImage(fetchedProfileImage);
 
@@ -52,10 +54,13 @@ export default function PublicUserList() {
         `${process.env.REACT_APP_BACKEND_SERVER_URI}/following/${username}`
       );
       setFollowingCount(followingResponse.data.length > 0 ? followingResponse.data[0].following.length : 0);
+
     } catch (error) {
       console.error(`Error fetching data: ${error.message}`);
+    } finally {
+      setLoading(false); // Set loading to false after data fetching completes
     }
-  }, [username]);  
+  }, [username]);
 
   const updateFollowerCount = (newFollowerCount) => {
     setFollowerCount(newFollowerCount);
@@ -78,7 +83,7 @@ export default function PublicUserList() {
     setShowPostModal(false);
   };
 
-  if (!user || !user.username) {
+  if (!loading && (!user || !user.username)) { // Show message only if loading is false and user data is missing
     return (
       <div style={{ textAlign: "center" }}>
         <h4>
@@ -117,7 +122,9 @@ export default function PublicUserList() {
               <span className="stat-label">following</span>
             </div>
           </div>
-          <div className="profile-bio">{user.biography}</div>
+          <div className="profile-bio">
+            {user.biography}
+          </div>
         </div>
       </div>
 
@@ -177,3 +184,4 @@ export default function PublicUserList() {
     </div>
   );
 }
+
