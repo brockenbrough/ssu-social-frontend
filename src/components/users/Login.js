@@ -172,7 +172,7 @@ const Login = () => {
                           color: PRIMARY_COLOR,
                         }}
                       >
-                        <FontAwesomeIcon icon={passwordVisible ? faEyeSlash : faEye} />
+                        <FontAwesomeIcon icon={passwordVisible ? faEye : faEyeSlash} />
                       </button>
                     </div>
                     {fieldErrors.password && (
