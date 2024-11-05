@@ -384,7 +384,7 @@ const Post = ({ posts: post, isDiscover }) => {
           height: "40px",
           borderRadius: "50%",
           marginRight: "8px",
-          backgroundColor: "white",
+          backgroundColor: profileImageUrl.includes("ProfileIcon.png") ? "white" : "transparent", // White background only if default profile image
           cursor: "pointer",
         }}
         onClick={() => {
