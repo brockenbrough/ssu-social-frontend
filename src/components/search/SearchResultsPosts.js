@@ -46,8 +46,6 @@ function SearchResultsPosts() {
   // Handle enter key press for search
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
-      // Do nothing if Enter is pressed, as fetchPosts is already handled in useEffect
-      // This is to keep the current input as it is without resetting it
       event.preventDefault(); // Prevent default form submission
     }
   };
@@ -61,10 +59,14 @@ function SearchResultsPosts() {
     <div className="pl-40 dark:bg-gray-800 min-h-screen">
       <div className="flex items-center justify-center py-4 space-x-2">
         <Link to={`/searchResultsPosts`} state={{ searchInput }}>
-          <button className="ssu-button-disabled" style={{ padding: '9px 15px', fontSize: '1.15rem' }}>Posts</button>
+          <button className={`ssu-nav-filter-btn ${searchInput ? "ssu-nav-filter-btn-selected" : ""}`} style={{ padding: '9px 15px', fontSize: '1.15rem' }}>
+            Posts
+          </button>
         </Link>
         <Link to={`/searchResultsProfiles`} state={{ searchInput }}>
-          <button className="ssu-button-primary"  style={{ padding: '9px 15px', fontSize: '1.15rem' }}>Profiles</button>
+          <button className={`ssu-nav-filter-btn`} style={{ padding: '9px 15px', fontSize: '1.15rem' }}>
+            Profiles
+          </button>
         </Link>
       </div>
       {/* Search input field */}

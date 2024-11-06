@@ -12,12 +12,14 @@ import apiClient from "./../utilities/apiClient";
 import CreatePost from "./post/createPost";
 import DarkModeButton from "./DarkModeButton";
 import Notification from "./notification/Notification";
+import { useNavigate } from "react-router-dom";
 
 export default function Navbar() {
   const [user, setUser] = useState(getUserInfo());
   const [popupShow, setPopupShow] = useState(false);
   const [inboxPopupShow, setInboxPopupShow] = useState(false);
   const [notifications, setNotifications] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const userInfo = getUserInfo();
@@ -38,6 +40,11 @@ export default function Navbar() {
 
   const handleInboxClick = () => {
     setInboxPopupShow(!inboxPopupShow);
+  };
+
+  const handleSearchClick = (event) => {
+    event.preventDefault();
+    navigate("/searchPage", { state: { searchInput: "" } });
   };
 
   return (
@@ -73,6 +80,7 @@ export default function Navbar() {
         {/* Direct Links Instead of Dropdown */}
         <a
           href="/searchPage"
+          onClick={handleSearchClick}
           className="ssu-nav-link group flex items-center justify-start"
         >
           <FontAwesomeIcon
