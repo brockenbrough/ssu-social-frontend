@@ -30,10 +30,6 @@ function SearchResultsPosts() {
       try {
         const url = `${process.env.REACT_APP_BACKEND_SERVER_URI}/post/search/${encodeURIComponent(searchInput)}`;
         const response = await axios.get(url);
-  
-        // Sort posts from newest to oldest by default
-        const sortedPosts = response.data.sort((a, b) => new Date(b.date) - new Date(a.date));
-        setPosts(sortedPosts);
       } catch (error) {
         console.error("Error fetching posts:", error);
       }
