@@ -229,6 +229,9 @@ function CreateComment({ post, setParentCommentCount, postCardHeight }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!formData.commentContent.trim()) return; 
+
     setCommentCount(commentCount + 1);
     setParentCommentCount(commentCount + 1);
 
