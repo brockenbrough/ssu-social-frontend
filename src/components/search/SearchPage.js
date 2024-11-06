@@ -1,13 +1,17 @@
-import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import getUserInfoAsync from "../../utilities/decodeJwt";
+import React, { useEffect, useState } from "react";
+import { useLocation, useNavigate, Link } from "react-router-dom"; // Import Link here
 import axios from "axios";
+import getUserInfoAsync from "../../utilities/decodeJwt";
 
 function SearchPage() {
-  const [user, setUser] = useState(null);
-  const [searchInput, setSearchInput] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
+  const location = useLocation();
   const navigate = useNavigate();
+  const initialSearchInput = location.state?.searchInput || ""; // Get the initial search input
+  const [searchInput, setSearchInput] = useState(initialSearchInput); // State for user input
+  const [user, setUser] = useState(null);
+  const [posts, setPosts] = useState([]);
+  const [profiles, setProfiles] = useState([]);
+  const [isPostsVisible, setIsPostsVisible] = useState(true); // Toggle state for posts and profiles
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -18,88 +22,137 @@ function SearchPage() {
     fetchUser();
   }, []);
 
-  const fetchSearchResults = async () => {
-    if (!searchInput) {
-      setSearchResults([]);
-      return;
-    }
-
-    try {
-      // Fetch users matching the search
-      const response = await axios.get(
-        `${process.env.REACT_APP_BACKEND_SERVER_URI}/user/search/${searchInput}`
-      );
-      setSearchResults(response.data);
-    } catch (error) {
-      console.error("Error fetching search results:", error);
-    }
-  };
-
+  // Fetch posts matching the search input
   useEffect(() => {
-    fetchSearchResults();
+    const fetchPosts = async () => {
+      if (!searchInput) {
+        setPosts([]); // Clear posts if no search input
+        return;
+      }
+
+      try {
+        const url = `${process.env.REACT_APP_BACKEND_SERVER_URI}/post/search/${encodeURIComponent(searchInput)}`;
+        const response = await axios.get(url);
+        const sortedPosts = response.data.sort((a, b) => new Date(b.date) - new Date(a.date));
+        setPosts(sortedPosts);
+      } catch (error) {
+        console.error("Error fetching posts:", error);
+      }
+    };
+
+    fetchPosts();
   }, [searchInput]);
 
-  if (!user) {
-    return (
-      <div className="dark:bg-gray-800 text-gray-900 dark:text-white min-h-screen pl-40">
-        <h3>
-          You are not authorized to view this page. Please Login{" "}
-          <Link
-            to="/login"
-            className="text-gray-800 dark:text-white no-underline hover:text-orange-500"
-          >
-            here
-          </Link>
-        </h3>
-      </div>
-    );
-  }
+  // Fetch profiles based on search input
+  useEffect(() => {
+    const fetchProfiles = async () => {
+      if (!searchInput) {
+        setProfiles([]);
+        return;
+      }
 
-  const handleSearch = () => {
-    navigate("/searchResultsPosts", { state: { searchInput } });
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_BACKEND_SERVER_URI}/user/search/${searchInput}`
+        );
+        setProfiles(response.data);
+      } catch (err) {
+        console.error("Error fetching profiles:", err);
+      }
+    };
+
+    fetchProfiles();
+  }, [searchInput]);
+
+  // Handle input change to update the search input state
+  const handleInputChange = (event) => {
+    setSearchInput(event.target.value); // Update the search input
+  };
+
+  // Handle navigation to user profile
+  const handleUsernameClick = (username) => {
+    if (username === user?.username) {
+      navigate(`/privateUserProfile`);
+    } else {
+      navigate(`/publicProfilePage/${username}`);
+    }
   };
 
   return (
-    <div className="dark:bg-gray-800 text-gray-900 dark:text-white min-h-screen pl-40">
+    <div className="pl-40 dark:bg-gray-800 min-h-screen">
+      <div className="flex items-center justify-center py-4 space-x-2">
+        <button
+          onClick={() => setIsPostsVisible(true)}
+          className={`ssu-nav-filter-btn ${isPostsVisible ? "ssu-nav-filter-btn-selected" : ""}`}
+          style={{ padding: '9px 15px', fontSize: '1.15rem' }}
+        >
+          Posts
+        </button>
+        <button
+          onClick={() => setIsPostsVisible(false)}
+          className={`ssu-nav-filter-btn ${!isPostsVisible ? "ssu-nav-filter-btn-selected" : ""}`}
+          style={{ padding: '9px 15px', fontSize: '1.15rem' }}
+        >
+          Profiles
+        </button>
+      </div>
+      {/* Search input field */}
       <div className="pt-4">
         <input
           type="text"
-          placeholder="What are you looking for?"
+          placeholder="Search for posts or profiles..."
           className="w-full max-w-md mx-auto block p-2 text-gray-900 dark:text-gray-800 dark:bg-gray-300 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
           value={searchInput}
-          onChange={(e) => setSearchInput(e.target.value)}
+          onChange={handleInputChange} // Handle input changes
         />
       </div>
+      <h2 className="text-2xl font-bold pt-4 text-center">Results for "{searchInput}"</h2>
       <div className="pt-4">
-        {searchInput && (
-          <div className="w-full max-w-md mx-auto mb-4">
-            <div
-              className="p-3 border-b border-gray-300 hover:bg-orange-500 cursor-pointer hover:text-white"
-              onClick={handleSearch}
-            >
-              <span>Search For: {searchInput}</span>
-            </div>
-          </div>
-        )}
-        {searchResults.length > 0 && (
-          <div className="w-full max-w-md mx-auto">
-            {searchResults.map((result) => (
+        {isPostsVisible ? (
+          posts.length > 0 ? (
+            posts.map((post) => (
               <div
-                key={result._id}
+                key={post._id}
                 className="p-3 border-b border-gray-300 hover:bg-orange-500 cursor-pointer hover:text-white"
               >
                 <Link
                   to={
-                    result.username === user.username
+                    user && post.username === user.username
                       ? `/privateUserProfile`
-                      : `/publicProfilePage/${result.username}`
+                      : `/publicProfilePage/${post.username}`
                   }
                 >
-                  <span>@{result.username}</span>
+                  <p className="font-bold">@{post.username}</p>
                 </Link>
+                <p>{post.content}</p>
+                {post.imageUri && (
+                  <img
+                    src={post.imageUri}
+                    alt="Post content"
+                    className="w-full h-auto mt-2 rounded-lg"
+                  />
+                )}
               </div>
-            ))}
-          </div>
+            ))
+          ) : (
+            <p>No posts found.</p>
+          )
+        ) : (
+          profiles.length > 0 ? (
+            profiles.map((profile) => (
+              <div
+                key={profile._id}
+                className="p-3 border-b border-gray-300 hover:bg-orange-500 cursor-pointer hover:text-white"
+                onClick={() => handleUsernameClick(profile.username)}
+              >
+                <span className="text-gray-900 dark:text-white no-underline">
+                  @{profile.username}
+                </span>
+              </div>
+            ))
+          ) : (
+            <p>No profiles found.</p>
+          )
         )}
       </div>
     </div>
