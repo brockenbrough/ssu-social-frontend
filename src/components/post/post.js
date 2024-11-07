@@ -404,29 +404,31 @@ const Post = ({ posts: post, isDiscover }) => {
           className="ssu-textlink-bold font-title text-gray-900 dark:text-white"
         >
           @{post.username}
-</a>
+  </a>
+
+
 {/* Tooltip with Followers and Following count */}
 <div className="absolute hidden group-hover:flex group-hover:translate-y-2 translate-x-2 group-hover:shadow-xl bottom-0 left-full transform w-45 h-20 
-bg-white bg-opacity-90 text-gray-900 shadow-lg p-4 rounded-md z-25 border border-gray-300 dark:bg-gray-800 dark:text-white dark:border-gray-700">  
+bg-white bg-opacity-90 text-gray-900 shadow-lg p-4 rounded-md z-25 border border-gray-300 dark:bg-gray-800 dark:text-white dark:border-gray-700">
   {/* Tooltip Arrow */}
   <div className="absolute w-3 h-3 top-1/2 right-full transform translate-x-1/2 translate-y-4 rotate-45 bg-white border border-gray-300 dark:bg-gray-800 dark:border-gray-700"></div>  
   <div className="flex items-center space-x-2">
     <p className="text-sm font-medium mb-1">
       <span className="font-semibold">
-        <span className="text-gray-900 dark:text-black"><FollowerCount username={post.username} /></span>
+        <span className="text-gray-900 dark:text-black"><FollowerCount username={post?.username} /></span>
       </span>
     </p>
     <span className="text-gray-900 dark:text-gray-900">|</span> 
     <p className="text-sm font-medium mb-1">
       <span className="font-semibold">
-        <span className="text-gray-900 dark:text-black"><FollowingCount username={post.username} /></span>
+        <span className="text-gray-900 dark:text-black"><FollowingCount username={post?.username} /></span>
       </span>
     </p>
     
-    {/* Here you add the FollowButton component */}
+    {/* Add the FollowButton component */}
     <FollowButton
-      username={user.username}        // Pass the current user's username
-      targetUserId={post.userId}      // Pass the target user's ID (from the post object)
+      username={user?.username}        // Ensure user is not null/undefined
+      targetUserId={post?.userId}      // Ensure post is not null/undefined
     />
   </div>
 </div>
