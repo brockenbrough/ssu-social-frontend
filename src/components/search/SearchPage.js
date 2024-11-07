@@ -1,24 +1,24 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate, Link } from "react-router-dom"; // Import Link here
+import { useLocation, useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import getUserInfoAsync from "../../utilities/decodeJwt";
+import PostList from "../post/postlist";
 
 function SearchPage() {
   const location = useLocation();
   const navigate = useNavigate();
-  const initialSearchInput = location.state?.searchInput || ""; // Get the initial search input
-  const [searchInput, setSearchInput] = useState(initialSearchInput); // State for user input
+  const initialSearchInput = location.state?.searchInput || ""; 
+  const [searchInput, setSearchInput] = useState(initialSearchInput); 
   const [user, setUser] = useState(null);
   const [posts, setPosts] = useState([]);
   const [profiles, setProfiles] = useState([]);
-  const [isPostsVisible, setIsPostsVisible] = useState(true); // Toggle state for posts and profiles
+  const [isPostsVisible, setIsPostsVisible] = useState(true);
 
   useEffect(() => {
     const fetchUser = async () => {
       const currentUser = await getUserInfoAsync();
       setUser(currentUser);
     };
-
     fetchUser();
   }, []);
 
@@ -26,10 +26,9 @@ function SearchPage() {
   useEffect(() => {
     const fetchPosts = async () => {
       if (!searchInput) {
-        setPosts([]); // Clear posts if no search input
+        setPosts([]);
         return;
       }
-
       try {
         const url = `${process.env.REACT_APP_BACKEND_SERVER_URI}/post/search/${encodeURIComponent(searchInput)}`;
         const response = await axios.get(url);
@@ -39,7 +38,6 @@ function SearchPage() {
         console.error("Error fetching posts:", error);
       }
     };
-
     fetchPosts();
   }, [searchInput]);
 
@@ -50,7 +48,6 @@ function SearchPage() {
         setProfiles([]);
         return;
       }
-
       try {
         const response = await axios.get(
           `${process.env.REACT_APP_BACKEND_SERVER_URI}/user/search/${searchInput}`
@@ -60,16 +57,13 @@ function SearchPage() {
         console.error("Error fetching profiles:", err);
       }
     };
-
     fetchProfiles();
   }, [searchInput]);
 
-  // Handle input change to update the search input state
   const handleInputChange = (event) => {
-    setSearchInput(event.target.value); // Update the search input
+    setSearchInput(event.target.value);
   };
 
-  // Handle navigation to user profile
   const handleUsernameClick = (username) => {
     if (username === user?.username) {
       navigate(`/privateUserProfile`);
@@ -96,44 +90,21 @@ function SearchPage() {
           Profiles
         </button>
       </div>
-      {/* Search input field */}
       <div className="pt-4">
         <input
           type="text"
-          placeholder="Search for posts or profiles..."
+          placeholder="Search for ..."
           className="w-full max-w-md mx-auto block p-2 text-gray-900 dark:text-gray-800 dark:bg-gray-300 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
           value={searchInput}
-          onChange={handleInputChange} // Handle input changes
+          onChange={handleInputChange}
         />
       </div>
       <h2 className="text-2xl font-bold pt-4 text-center">Results for "{searchInput}"</h2>
       <div className="pt-4">
         {isPostsVisible ? (
           posts.length > 0 ? (
-            posts.map((post) => (
-              <div
-                key={post._id}
-                className="p-3 border-b border-gray-300 hover:bg-orange-500 cursor-pointer hover:text-white"
-              >
-                <Link
-                  to={
-                    user && post.username === user.username
-                      ? `/privateUserProfile`
-                      : `/publicProfilePage/${post.username}`
-                  }
-                >
-                  <p className="font-bold">@{post.username}</p>
-                </Link>
-                <p>{post.content}</p>
-                {post.imageUri && (
-                  <img
-                    src={post.imageUri}
-                    alt="Post content"
-                    className="w-full h-auto mt-2 rounded-lg"
-                  />
-                )}
-              </div>
-            ))
+            // Use PostList to display posts
+            <PostList type="search" initialPosts={posts} />
           ) : (
             <p>No posts found.</p>
           )
@@ -145,7 +116,7 @@ function SearchPage() {
                 className="p-3 border-b border-gray-300 hover:bg-orange-500 cursor-pointer hover:text-white"
                 onClick={() => handleUsernameClick(profile.username)}
               >
-                <span className="text-gray-900 dark:text-white no-underline">
+                <span className="ssu-textlink-bold font-title text-gray-900 dark:text-white">
                   @{profile.username}
                 </span>
               </div>
