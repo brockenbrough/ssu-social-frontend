@@ -436,7 +436,7 @@ bg-white bg-opacity-90 text-gray-900 shadow-lg p-4 rounded-md z-25 border border
               src={post.imageUri}
               alt="Post"
               className={`ssu-post-img mt-4 mb-3 ${
-                post.imageFlag && isBlurred ? "blur-md" : ""
+                post.imageFlag && isBlurred ? "blur-lg" : ""
               } transition-all duration-300`}
             />
             {/* Overlay with sensitive content message */}
