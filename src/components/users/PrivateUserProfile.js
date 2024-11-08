@@ -316,7 +316,7 @@ const filterButtons = (
               />
             </div>
             <div className="profile-info">
-              <div className="username">{"@" + user.username}</div>
+              <div className="username">{"@" + user.username}{user.role === "admin" && <span className="user-role"> (Admin)</span>}</div>
               <button className="edit-profile-btn" onClick={showUserModal}>edit bio </button>
               <div className="profile-stats">
                 <div className="stat-item">
@@ -335,7 +335,6 @@ const filterButtons = (
                 </div>
               </div>
               <div className="profile-bio">{user.biography}</div>
-              <div className="user-role">{user.role === "admin" ? user.role : ""}</div>
             </div>
           </div>
 
