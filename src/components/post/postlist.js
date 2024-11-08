@@ -14,7 +14,7 @@ import ScrollToTop from "./ScrollToTop";
 import Chat from "../chat/chat";
 import { PostContext, PostPageContext } from "../../App";
 
-function PostList({ type, profileUsername, initialPosts = [] }) {
+function PostList({ type, profileUsername }) {
   const POST_PER_PAGE = 10;
   const [user, setUser] = useState(null);
   const [posts, setPosts] = useContext(PostContext);
@@ -22,16 +22,6 @@ function PostList({ type, profileUsername, initialPosts = [] }) {
   const [page, setPage] = useContext(PostPageContext);
   const [hasMore, setHasMore] = useState(true);
   const observer = useRef();
-
-  useEffect(() => {
-    if (initialPosts.length > 0) {
-      setPosts(initialPosts); // Set the posts from search results
-      setIsLoading(false);
-      setHasMore(initialPosts.length === POST_PER_PAGE);
-    } else {
-      getPosts(); // Fetch normally if initialPosts is empty
-    }
-  }, [initialPosts, type]);
 
   // Fetch user info
   const fetchUser = async () => {
