@@ -28,7 +28,6 @@ import { useNavigate } from "react-router-dom";
 import { fetchProfileImage } from "../../components/post/fetchProfileImage";
 import FollowerCount from '../following/getFollowerCount';  // Correct relative path
 import FollowingCount from '../following/getFollowingCount';  // Correct relative path
-import FollowButton from "../following/followButton";  // Correct path for lowercase file
 
 const Post = ({ posts: post, isDiscover }) => {
   const [youtubeThumbnail, setYoutubeThumbnail] = useState(null);
@@ -417,9 +416,12 @@ bg-white bg-opacity-90 text-gray-900 shadow-lg p-4 rounded-md z-25 border border
       </span>
     </p>
     <span className="text-gray-900 dark:text-gray-900">|</span> 
+    <p className="text-sm font-medium mb-1">
       <span className="font-semibold">
         <span className="text-gray-900 dark:text-black"><FollowingCount username={post?.username} /></span>
       </span>
+    </p>
+    
     
   </div>
 </div>
@@ -436,7 +438,7 @@ bg-white bg-opacity-90 text-gray-900 shadow-lg p-4 rounded-md z-25 border border
               src={post.imageUri}
               alt="Post"
               className={`ssu-post-img mt-4 mb-3 ${
-                post.imageFlag && isBlurred ? "blur-md" : ""
+                post.imageFlag && isBlurred ? "blur-lg" : ""
               } transition-all duration-300`}
             />
             {/* Overlay with sensitive content message */}
