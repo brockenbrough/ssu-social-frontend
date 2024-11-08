@@ -335,6 +335,7 @@ const filterButtons = (
                 </div>
               </div>
               <div className="profile-bio">{user.biography}</div>
+              <div className="user-role">{user.role === "admin" ? user.role : ""}</div>
             </div>
           </div>
 
