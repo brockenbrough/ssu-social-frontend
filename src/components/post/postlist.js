@@ -114,17 +114,20 @@ function PostList({ type, profileUsername }) {
           />
         </div>
       ) : posts.length === 0 ? (
-        <div className="ssu-text-titlesmall">
+        <div className="flex flex-col items-center justify-center h-screen text-center text-xl text-white -translate-y-1/3">
           {type === "feed" ? (
             <p>
-              <strong>{user?.username}</strong>, your{" "}
-              <strong>for you page </strong>is empty.
+              <strong className="font-semibold">{user?.username}</strong>, your{" "}
+              <strong className="font-semibold">For You Page</strong> is empty.
               <br />
               Visit the{" "}
-              <Link to={"/getallpost"}>
-                <a href="#">Discover</a>
+              <Link
+                to="/getallpost"
+                className="text-blue-500 underline font-medium hover:text-blue-700"
+              >
+                Discover
               </Link>{" "}
-              to discover posts from other users.
+              to explore posts from other users.
             </p>
           ) : (
             <p>No posts available.</p>
