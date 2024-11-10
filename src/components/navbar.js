@@ -13,6 +13,7 @@ import CreatePost from "./post/createPost";
 import DarkModeButton from "./DarkModeButton";
 import Notification from "./notification/Notification";
 import { useNavigate, Link } from "react-router-dom";
+import { useHoverButton } from "./useHoverButton";
 
 export default function Navbar() {
   const [user, setUser] = useState(getUserInfo());
@@ -20,6 +21,7 @@ export default function Navbar() {
   const [inboxPopupShow, setInboxPopupShow] = useState(false);
   const [notifications, setNotifications] = useState([]);
   const navigate = useNavigate();
+  const hoverRef = useHoverButton();
 
   useEffect(() => {
     const userInfo = getUserInfo();
@@ -49,15 +51,14 @@ export default function Navbar() {
 
   return (
     <>
-      <div className="sidebar-navbar sm:w-18 md:w-18 lg:w-34">
+      <div className="sidebar-navbar sm:w-18 md:w-18 lg:w-34 pt-6 ">
         <div className="flex flex-col items-start md:items-center">
-          {" "}
-          {/* Changed items-center to items-start for small screens */}
           <Link to="/feed-algorithm">
-            <Image
+            <img
+              ref={hoverRef}
               src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXPnHm79GDZXZjpifapjAOWRsJcA_C3FgxWQLlbto&s"
-              rounded
-              className="mr-1 w-12 mt-6 lg:w-18 ml-[10px] mb-3 transition-transform duration-300 hover:scale-110"
+              alt="SSUSocial Logo"
+              className="rounded-full border-2 border-black w-16 h-16 mb-2 object-cover cursor-pointer"
             />
           </Link>
           <div className="mt-2 mb-5 text-center hidden md:block">
