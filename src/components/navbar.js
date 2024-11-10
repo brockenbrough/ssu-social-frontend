@@ -64,7 +64,8 @@ export default function Navbar() {
             <Link to="/feed-algorithm" className="ssu-social-word">
               SSUSocial
             </Link>
-          </div></div>
+          </div>
+        </div>
 
         {/* Create Post Button */}
         <span className="ssu-nav-link group">
