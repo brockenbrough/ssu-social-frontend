@@ -12,7 +12,7 @@ import apiClient from "./../utilities/apiClient";
 import CreatePost from "./post/createPost";
 import DarkModeButton from "./DarkModeButton";
 import Notification from "./notification/Notification";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 export default function Navbar() {
   const [user, setUser] = useState(getUserInfo());
@@ -53,17 +53,18 @@ export default function Navbar() {
         <div className="flex flex-col items-start md:items-center">
           {" "}
           {/* Changed items-center to items-start for small screens */}
-          <Image
-            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXPnHm79GDZXZjpifapjAOWRsJcA_C3FgxWQLlbto&s"
-            rounded
-            className="mr-1 w-12 mt-6 lg:w-18 ml-[10px] mb-3" // Remove ml-0 and mr-auto for small screens
-          />
-          <div className="mt-2 mb-5 text-xl font-bold text-center text-iconBorder font-title hidden md:block">
-            {" "}
-            {/* Hidden on small screens */}
-            SSUSocial
-          </div>
-        </div>
+          <Link to="/feed-algorithm">
+            <Image
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXPnHm79GDZXZjpifapjAOWRsJcA_C3FgxWQLlbto&s"
+              rounded
+              className="mr-1 w-12 mt-6 lg:w-18 ml-[10px] mb-3 transition-transform duration-300 hover:scale-110"
+            />
+          </Link>
+          <div className="mt-2 mb-5 text-center hidden md:block">
+            <Link to="/feed-algorithm" className="ssu-social-word">
+              SSUSocial
+            </Link>
+          </div></div>
 
         {/* Create Post Button */}
         <span className="ssu-nav-link group">

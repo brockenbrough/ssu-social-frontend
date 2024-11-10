@@ -63,6 +63,32 @@
   @apply text-sm font-semibold no-underline text-lightMainText dark:text-darkMainText hover:text-orange-500;
 }
 
+/* SSU Social word Logo hover effects */
+.ssu-social-word {
+  @apply relative font-bold tracking-wide cursor-pointer transition-all duration-300 no-underline text-orange-500;
+  font-size: 24px;
+  text-transform: none;
+  line-height: 1.1em;
+  padding-bottom: calc(2.1 * 0.15em);
+  background:
+    conic-gradient(from 135deg at top, #f97316 90deg, #0000 0) left 0 bottom 0.15em/calc(2 * 0.15em) 0.15em repeat-x,
+    conic-gradient(from -45deg at bottom, #f97316 90deg, #0000 0) left 0.15em bottom 0/calc(2 * 0.15em) 0.15em repeat-x;
+  -webkit-mask: linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0) 0/var(--_p, 0%) padding-box no-repeat;
+  mask: linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0) 0/var(--_p, 0%) padding-box no-repeat;
+  transition: 0.5s;
+
+}
+
+.dark .ssu-social-word:hover {
+  @apply text-white;
+}
+
+.ssu-social-word:hover {
+  @apply text-lightMainText dark:text-white;
+  --_p: 100%;
+}
 
 .ssu-post-list {
   @apply min-h-screen p-0 m-0 bg-white dark:bg-gray-800;
