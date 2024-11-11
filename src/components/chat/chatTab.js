@@ -11,6 +11,7 @@ let scrollEffect = "smooth";
 
 const ChatTab = ({ chatRoom, chatRoomMessages, currentUser, chatUser }) => {
   const [newMessage, setNewMessage] = useState("");
+  const newMessageRef = useRef(null);
   const messagesEndRef = useRef(null);
   const messageDayRef = useRef(null);
 
@@ -62,8 +63,40 @@ const ChatTab = ({ chatRoom, chatRoomMessages, currentUser, chatUser }) => {
     scrollEffect = "smooth";
   };
 
+  const getChatHistoryStr = () => {
+    let chatHistory = "";
+    const lastTenMessages = chatRoomMessages.slice(-10);
+
+    lastTenMessages.forEach((message) => {
+      const sender =
+        message.senderId === currentUser._id ? "You" : chatUser.username;
+      const msg = message.text.replace("\n", " ").replace("\t", " ");
+
+      chatHistory += `${sender}: ${msg}\n`;
+    });
+
+    return chatHistory;
+  };
+
+  const generateMessage = async (chatHistoryStr) => {
+    try {
+      const response = await apiClient.post("/message/generate", {
+        chatHistoryStr,
+      });
+      return response.data.message;
+    } catch (error) {
+      console.error("Error generating message:", error);
+      return "";
+    }
+  };
+
   const handleAIButtonClick = async () => {
-    console.log("AI button clicked");
+    const chatHistoryStr = getChatHistoryStr();
+    const generatedMessage = await generateMessage(chatHistoryStr);
+
+    if (generatedMessage) setNewMessage(generatedMessage);
+
+    if (newMessageRef.current) newMessageRef.current.focus();
   };
 
   const getAndUpdateMessageDay = (date) => {
@@ -145,6 +178,7 @@ const ChatTab = ({ chatRoom, chatRoomMessages, currentUser, chatUser }) => {
         <textarea
           type="text"
           value={newMessage}
+          ref={newMessageRef}
           onChange={(e) => setNewMessage(e.target.value)}
           placeholder="Type a message..."
           className="flex-1 p-2 border rounded-lg outline-none font-display w-30 text-gray-900 dark:text-white bg-transparent h-12 max-h-80 min-h-12"
