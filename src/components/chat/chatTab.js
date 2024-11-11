@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane as sendIcon } from "@fortawesome/free-solid-svg-icons";
+import { faWandMagicSparkles as AIIcon } from "@fortawesome/free-solid-svg-icons";
 import apiClient from "../../utilities/apiClient";
 import socket from "../../utilities/socket";
 import chatTimeFormat from "../../utilities/chatTimeFormat";
@@ -59,6 +60,10 @@ const ChatTab = ({ chatRoom, chatRoomMessages, currentUser, chatUser }) => {
     socket.emit("message", savedMessage);
 
     scrollEffect = "smooth";
+  };
+
+  const handleAIButtonClick = async () => {
+    console.log("AI button clicked");
   };
 
   const getAndUpdateMessageDay = (date) => {
@@ -146,6 +151,16 @@ const ChatTab = ({ chatRoom, chatRoomMessages, currentUser, chatUser }) => {
           autoFocus={true}
           onKeyDown={handleKeyDown}
         />
+        {/* AI button */}
+        <button
+          onClick={handleAIButtonClick}
+          className="ml-3 text-white rounded-full font-menu"
+        >
+          <FontAwesomeIcon
+            className="text-white-500 text-lg hover:text-orange-500"
+            icon={AIIcon}
+          />
+        </button>
         {/* Emoji Picker button */}
         <div className="ml-2">
           <EmojiPicker
