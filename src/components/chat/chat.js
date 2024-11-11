@@ -154,8 +154,6 @@ const Chat = () => {
     });
 
     socket.on("messageRead", (readMessageIds) => {
-      console.log("readMessageIds", readMessageIds);
-
       setMessages((prevMessages) =>
         prevMessages.map((m) =>
           readMessageIds.includes(m._id) ? { ...m, isRead: true } : m
