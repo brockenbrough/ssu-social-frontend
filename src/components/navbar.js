@@ -115,13 +115,13 @@ export default function Navbar() {
 
         {/* Create Inbox Button */}
         <span
-          className="ssu-nav-link group flex items-center"
+          className="ssu-nav-link group flex items-center shake-on-hover"
           onClick={() => handleInboxClick()}
         >
           <span className="flex items-center">
             <div className="relative mr-1">
               <FontAwesomeIcon
-                className="mr-3 text-lightMainText dark:text-darkMainText group-hover:text-white"
+                className="bell mr-3 text-lightMainText dark:text-darkMainText group-hover:text-white"
                 icon={notificationIcon}
               />
               {/* Notification count */}
@@ -134,7 +134,6 @@ export default function Navbar() {
             <span className="hidden md:inline">Notifications</span>{" "}
           </span>
         </span>
-
         <a
           href="/privateUserProfile"
           className="ssu-nav-link group flex items-center"
