@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane as sendIcon } from "@fortawesome/free-solid-svg-icons";
+import { faWandMagicSparkles as AIIcon } from "@fortawesome/free-solid-svg-icons";
 import apiClient from "../../utilities/apiClient";
 import socket from "../../utilities/socket";
 import chatTimeFormat from "../../utilities/chatTimeFormat";
@@ -10,6 +11,7 @@ let scrollEffect = "smooth";
 
 const ChatTab = ({ chatRoom, chatRoomMessages, currentUser, chatUser }) => {
   const [newMessage, setNewMessage] = useState("");
+  const newMessageRef = useRef(null);
   const messagesEndRef = useRef(null);
   const messageDayRef = useRef(null);
 
@@ -59,6 +61,42 @@ const ChatTab = ({ chatRoom, chatRoomMessages, currentUser, chatUser }) => {
     socket.emit("message", savedMessage);
 
     scrollEffect = "smooth";
+  };
+
+  const getChatHistoryStr = () => {
+    let chatHistory = "";
+    const lastTenMessages = chatRoomMessages.slice(-10);
+
+    lastTenMessages.forEach((message) => {
+      const sender =
+        message.senderId === currentUser._id ? "You" : chatUser.username;
+      const msg = message.text.replace("\n", " ").replace("\t", " ");
+
+      chatHistory += `${sender}: ${msg}\n`;
+    });
+
+    return chatHistory;
+  };
+
+  const generateMessage = async (chatHistoryStr) => {
+    try {
+      const response = await apiClient.post("/message/generate", {
+        chatHistoryStr,
+      });
+      return response.data.message;
+    } catch (error) {
+      console.error("Error generating message:", error);
+      return "";
+    }
+  };
+
+  const handleAIButtonClick = async () => {
+    const chatHistoryStr = getChatHistoryStr();
+    const generatedMessage = await generateMessage(chatHistoryStr);
+
+    if (generatedMessage) setNewMessage(generatedMessage);
+
+    if (newMessageRef.current) newMessageRef.current.focus();
   };
 
   const getAndUpdateMessageDay = (date) => {
@@ -140,12 +178,23 @@ const ChatTab = ({ chatRoom, chatRoomMessages, currentUser, chatUser }) => {
         <textarea
           type="text"
           value={newMessage}
+          ref={newMessageRef}
           onChange={(e) => setNewMessage(e.target.value)}
           placeholder="Type a message..."
           className="flex-1 p-2 border rounded-lg outline-none font-display w-30 text-gray-900 dark:text-white bg-transparent h-12 max-h-80 min-h-12"
           autoFocus={true}
           onKeyDown={handleKeyDown}
         />
+        {/* AI button */}
+        <button
+          onClick={handleAIButtonClick}
+          className="ml-3 text-white rounded-full font-menu"
+        >
+          <FontAwesomeIcon
+            className="text-white-500 text-lg hover:text-orange-500"
+            icon={AIIcon}
+          />
+        </button>
         {/* Emoji Picker button */}
         <div className="ml-2">
           <EmojiPicker
