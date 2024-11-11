@@ -69,7 +69,7 @@ const ChatTab = ({ chatRoom, chatRoomMessages, currentUser, chatUser }) => {
 
     lastTenMessages.forEach((message) => {
       const sender =
-        message.senderId === currentUser._id ? "You" : chatUser.username;
+        message.senderId === currentUser._id ? "Me" : chatUser.username;
       const msg = message.text.replace("\n", " ").replace("\t", " ");
 
       chatHistory += `${sender}: ${msg}\n`;
