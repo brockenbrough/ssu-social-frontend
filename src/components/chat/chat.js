@@ -210,7 +210,9 @@ const Chat = () => {
 
       setMessages((prevMessages) =>
         prevMessages.map((m) =>
-          m.chatRoomId === chatRoomId ? { ...m, isRead: true } : m
+          m.receiverId === user._id && m.chatRoomId === chatRoomId
+            ? { ...m, isRead: true }
+            : m
         )
       );
     } catch (error) {
