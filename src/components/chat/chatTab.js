@@ -100,28 +100,35 @@ const ChatTab = ({ chatRoom, chatRoomMessages, currentUser, chatUser }) => {
             </div>
             <div
               key={message._id}
-              className={`p-2 font-display text-sm rounded-lg break-words ${
+              className={`flex p-2 font-display text-sm rounded-lg break-words ${
                 message.senderId === currentUser._id
                   ? "bg-orange-500 text-white self-end ml-40"
                   : "bg-gray-300 text-gray-900 self-start mr-40"
               }`}
             >
-              {message.text.split("\n").map((line, lineIndex) => (
-                <span key={lineIndex}>
-                  {line.split("\t").map((tabbedText, tabIndex) => (
-                    <span key={tabIndex}>
-                      {tabbedText}
-                      {tabIndex < line.split("\t").length - 1 && (
-                        <span
-                          className="inline-block"
-                          style={{ width: "2ch" }}
-                        />
-                      )}{" "}
-                    </span>
-                  ))}
-                  <br />
-                </span>
-              ))}
+              <div className="w-40">
+                {message.text.split("\n").map((line, lineIndex) => (
+                  <span key={lineIndex}>
+                    {line.split("\t").map((tabbedText, tabIndex) => (
+                      <span key={tabIndex}>
+                        {tabbedText}
+                        {tabIndex < line.split("\t").length - 1 && (
+                          <span
+                            className="inline-block"
+                            style={{ width: "2ch" }}
+                          />
+                        )}
+                      </span>
+                    ))}
+                    <br />
+                  </span>
+                ))}
+              </div>
+              <div className="flex justify-end items-end w-3">
+                {message.isRead && (
+                  <div className="text-xs font-bold">{"✔"}</div>
+                )}
+              </div>
             </div>
           </>
         ))}
