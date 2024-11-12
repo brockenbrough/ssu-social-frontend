@@ -28,6 +28,7 @@ import { useNavigate } from "react-router-dom";
 import { fetchProfileImage } from "../../components/post/fetchProfileImage";
 import FollowerCount from '../following/getFollowerCount';  // Correct relative path
 import FollowingCount from '../following/getFollowingCount';  // Correct relative path
+import FollowButton from "../following/followButton";// correct path for follow button
 
 const Post = ({ posts: post, isDiscover }) => {
   const [youtubeThumbnail, setYoutubeThumbnail] = useState(null);
@@ -421,8 +422,11 @@ bg-white bg-opacity-90 text-gray-900 shadow-lg p-4 rounded-md z-25 border border
         <span className="text-gray-900 dark:text-black"><FollowingCount username={post?.username} /></span>
       </span>
     </p>
-    
-    
+     {/* Here you add the FollowButton component */}
+     <FollowButton
+      username={user.username}        // Pass the current user's username
+      targetUserId={post.userId}      // Pass the target user's ID (from the post object)
+    />
   </div>
 </div>
               </div>
