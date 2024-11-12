@@ -420,7 +420,6 @@ const Post = ({ posts: post, isDiscover }) => {
       </span>
     </p>
     <span className="text-gray-900 dark:text-gray-900">|</span>
-
     <p className="text-sm font-medium mb-1">
       <span className="font-semibold">
         <span className="text-gray-900 dark:text-black">
@@ -432,8 +431,10 @@ const Post = ({ posts: post, isDiscover }) => {
 
     {/* FollowButton with safeguards */}
     <FollowButton
-      username={user?.username || ""}
-      targetUserId={post?.userId} // Ensure post is not null here too
+      className="ssu-button-bold"
+      username={post?.username || ""}
+      targetUserId={user?.username} // Ensure post is not null here too
+
     />
   </div>
 </div>
