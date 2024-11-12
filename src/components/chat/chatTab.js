@@ -188,7 +188,7 @@ const ChatTab = ({ chatRoom, chatRoomMessages, currentUser, chatUser }) => {
         {/* AI button */}
         <button
           onClick={handleAIButtonClick}
-          className="ml-3 text-white rounded-full font-menu"
+          className="ml-3 text-gray-800 dark:text-white rounded-full font-menu"
         >
           <FontAwesomeIcon
             className="text-white-500 text-lg hover:text-orange-500"
