@@ -13,11 +13,11 @@ import EditUser from "./editUserPage.js";
 import ProfileImage from "../images/ProfileImage.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as solidHeartIcon, faComment as solidCommentIcon } from "@fortawesome/free-solid-svg-icons";
-import { faPhotoVideo, faAlignLeft } from "@fortawesome/free-solid-svg-icons"
+import { faPhotoVideo, faAlignLeft } from "@fortawesome/free-solid-svg-icons";
 import { faLightbulb } from "@fortawesome/free-solid-svg-icons";
 import { faTh } from "@fortawesome/free-solid-svg-icons"; // Grid icon (9 small squares)
 import { faCamera } from "@fortawesome/free-solid-svg-icons";
-import Post from "../post/post.js"
+import Post from "../post/post.js";
 
 const PrivateUserProfile = () => {
   const { darkMode } = useDarkMode();
@@ -55,8 +55,6 @@ const PrivateUserProfile = () => {
   const [selectedPostIndex, setSelectedPostIndex] = useState(null);
   const [filter, setFilter] = useState("upload");
 
-
-
   // Fetch user info
   const fetchUserInfo = async () => {
     try {
@@ -85,7 +83,7 @@ const PrivateUserProfile = () => {
     } catch (error) {
       console.error("Error fetching user info:", error);
     }
-  };  
+  };
 
   useEffect(() => {
     fetchUserInfo();
@@ -265,41 +263,38 @@ const PrivateUserProfile = () => {
     setAccountSettingModal(false);
   };
 
-
-
   const filteredPosts = posts.filter(post => {
     if (filter === 'text') {
       return !post.imageUri && !post.videoUri && !post.link;
     }
-     return post.imageUri || post.videoUri || post.link;
-   });
-   
+    return post.imageUri || post.videoUri || post.link;
+  });
+
   // Function to handle post click
-const handlePostClick = (index) => { 
-  setSelectedPostIndex(index);       
-  setShowPostModal(true);            
+  const handlePostClick = (index) => { 
+    setSelectedPostIndex(index);       
+    setShowPostModal(true);            
   };  
   
-const mediaPosts = posts.filter(post => post.imageUri || post.videoUri);
-const textPosts = posts.filter(post => !post.imageUri && !post.videoUri  && !post.link);
+  const mediaPosts = posts.filter(post => post.imageUri || post.videoUri);
+  const textPosts = posts.filter(post => !post.imageUri && !post.videoUri && !post.link);
 
-
-const filterButtons = (
- <div className="filter-buttons">
-   <button
-     className={filter === 'upload' ? 'active' : ''}
-     onClick={() => setFilter('upload')}
-   >
-     <FontAwesomeIcon icon={faCamera} /> Media
-   </button>
-   <button
-     className={filter === 'text' ? 'active' : ''}
-     onClick={() => setFilter('text')}
-   >
-     <FontAwesomeIcon icon={faAlignLeft} /> Text
-   </button>
- </div>
-);
+  const filterButtons = (
+    <div className="filter-buttons">
+      <button
+        className={filter === 'upload' ? 'active' : ''}
+        onClick={() => setFilter('upload')}
+      >
+        <FontAwesomeIcon icon={faCamera} /> Media
+      </button>
+      <button
+        className={filter === 'text' ? 'active' : ''}
+        onClick={() => setFilter('text')}
+      >
+        <FontAwesomeIcon icon={faAlignLeft} /> Text
+      </button>
+    </div>
+  );
 
   return (
     <div className="ssu-profilePage-container">
@@ -351,68 +346,69 @@ const filterButtons = (
           </div>
 
           {/* Post List */}
-       <div className="filter-buttons">
-       <button
-            className={filter === 'upload' ? 'active' : ''}
-            onClick={() => setFilter('upload')} >
-            <FontAwesomeIcon icon={faCamera} />
-        </button>
-        <button
-          className={filter === 'text' ? 'active' : ''} onClick={() => setFilter('text')} > <FontAwesomeIcon icon={faLightbulb} />
-        </button>
-        </div>
+          <div className="filter-buttons">
+            <button
+              className={filter === 'upload' ? 'active' : ''}
+              onClick={() => setFilter('upload')}
+            >
+              <FontAwesomeIcon icon={faCamera} />
+            </button>
+            <button
+              className={filter === 'text' ? 'active' : ''}
+              onClick={() => setFilter('text')}
+            >
+              <FontAwesomeIcon icon={faLightbulb} />
+            </button>
+          </div>
 
+          {/* Media Posts Grid */}
+          {filter === "upload" && (
+            <div className="profile-posts">
+              {mediaPosts.map((post, index) => (
+                <div key={post.id} className="profile-post-item" onClick={() => openPostModal(index)}>
+                  {post.imageUri && <img src={post.imageUri} alt="Post" />}
+                  {post.videoUri && <video src={post.videoUri} controls />}
+                </div>
+              ))}
+            </div>
+          )}
 
-      {/* Media Posts Grid */}
-     {filter === "upload" && (
-     <div className="profile-posts">
-     {mediaPosts.map((post, index) => (
-       <div key={post.id} className="profile-post-item" onClick={() => openPostModal(index)} >
-       {post.imageUri && <img src={post.imageUri} alt="Post" />}
-       {post.videoUri && <video src={post.videoUri} controls />}
-     </div>
-     ))}
-     </div>
-     )}
-
-
-   {/* Text Posts List */}
-   {filter === "text" && (
-   <div className="text-posts-list">
-   {textPosts.map(post => (
-     <div key={post.id} >
-       <Post posts={post}  />
-     </div>
-     ))}
-   </div>
- )}
-
+          {/* Text Posts List */}
+          {filter === "text" && (
+            <div className="text-posts-list">
+              {textPosts.map(post => (
+                <div key={post.id}>
+                  <Post posts={post} />
+                </div>
+              ))}
+            </div>
+          )}
 
           {/* Post Modal */}
-      {/* Modal to display posts starting from the clicked one */}
-      <Modal show={showPostModal} onHide={closePostModal}> 
-      <Modal.Header closeButton>                  
-      <Modal.Title>Posts</Modal.Title>           
-      </Modal.Header>                              
-      <Modal.Body>                                 
-      {mediaPosts.slice(selectedPostIndex).map((post, index) => ( 
-      <div key={post.id} className="modal-post-item">   
-      <Post posts={post}  />
-      <hr />                                               
-    </div>
-  ))}
-</Modal.Body>                                             
-<Modal.Footer>                                            
-  <Button variant="secondary" onClick={closePostModal}>Close</Button>
-</Modal.Footer>                                            
-</Modal>
+          {/* Modal to display posts starting from the clicked one */}
+          <Modal show={showPostModal} onHide={closePostModal}>
+            <Modal.Header closeButton>
+              <Modal.Title>Posts</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              {mediaPosts.slice(selectedPostIndex).map((post, index) => (
+                <div key={post.id} className="modal-post-item">
+                  <Post posts={post} />
+                  <hr />
+                </div>
+              ))}
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={closePostModal}>Close</Button>
+            </Modal.Footer>
+          </Modal>
 
           <Modal show={accountSettingModal} onHide={closeSettings}>
             <Modal.Header closeButton>
               <Modal.Title>Account Settings</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <EditUser /> 
+              <EditUser />
             </Modal.Body>
           </Modal>
 
@@ -512,35 +508,35 @@ const filterButtons = (
 
           {/* Logout Confirmation Modal */}
           <Modal show={showLogoutConfirmation} onHide={handleCloseLogoutConfirmation} centered>
-        <div
-        className="popup"
-        style={{
-        backgroundColor: darkMode ? "#181818" : "#fff",
-        color: darkMode ? "#fff" : "#000",
-        }}
-  >
-    <Modal.Header closeButton closeVariant={darkMode ? "white" : "black"}>
-      <Modal.Title>Log Out</Modal.Title>
-    </Modal.Header>
-    <Modal.Body>
-      <p>Are you sure you want to log out?</p>
-    </Modal.Body>
-    <Modal.Footer>
-      <Button
-        variant={darkMode ? "light" : "dark"}
-        onClick={handleCloseLogoutConfirmation}
-      >
-        No
-      </Button>
-      <Button
-        variant={darkMode ? "light" : "dark"}
-        onClick={handleLogout}
-      >
-        Yes
-      </Button>
-    </Modal.Footer>
-  </div>
-</Modal>
+            <div
+              className="popup"
+              style={{
+                backgroundColor: darkMode ? "#181818" : "#fff",
+                color: darkMode ? "#fff" : "#000",
+              }}
+            >
+              <Modal.Header closeButton closeVariant={darkMode ? "white" : "black"}>
+                <Modal.Title>Log Out</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <p>Are you sure you want to log out?</p>
+              </Modal.Body>
+              <Modal.Footer>
+                <Button
+                  variant={darkMode ? "light" : "dark"}
+                  onClick={handleCloseLogoutConfirmation}
+                >
+                  No
+                </Button>
+                <Button
+                  variant={darkMode ? "light" : "dark"}
+                  onClick={handleLogout}
+                >
+                  Yes
+                </Button>
+              </Modal.Footer>
+            </div>
+          </Modal>
         </>
       ) : (
         <div className="text-center col-md-12">
