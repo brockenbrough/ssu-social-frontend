@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useLayoutEffect } from "react";
+import React, { useState, useCallback, useLayoutEffect, useEffect  } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import FollowButton from "../following/followButton";
@@ -6,9 +6,11 @@ import Post from "../post/post.js";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCamera, faLightbulb } from '@fortawesome/free-solid-svg-icons';
 import Modal from 'react-bootstrap/Modal'; // Ensure you have this package installed for modal functionality
+import { getUserInfoAsync } from "../../utilities/decodeJwtAsync";
 
 
 export default function PublicUserList() {
+  const [loggedInUsername, setLoggedInUsername] = useState({});
   const [user, setUser] = useState({});
   const [posts, setPosts] = useState([]);
   const [profileImage, setProfileImage] = useState(""); // State for profile image
@@ -21,11 +23,27 @@ export default function PublicUserList() {
   const [textPosts, setTextPosts] = useState([]); // State for text posts
   const [showPostModal, setShowPostModal] = useState(false); // Modal visibility
   const [selectedPostIndex, setSelectedPostIndex] = useState(0); // Index for modal post
-
+  const [shouldRenderFollowButton, setShouldRenderFollowButton] = useState(false);
   const defaultProfileImageUrl = "https://ssusocial.s3.amazonaws.com/profilepictures/ProfileIcon.png";
 
-  const fetchUserInfoAndPosts = useCallback(async () => {
+  const fetchUserInfo = async () => {
     try {
+      const userInfo = await getUserInfoAsync();
+      if (userInfo) {
+        setLoggedInUsername(userInfo.username);
+      }
+    } catch (error) {
+      console.error("Error fetching user info:", error);
+    }
+  };  
+
+  const fetchUserInfoAndPosts = useCallback(async () => {
+      try {
+        const userInfo = await getUserInfoAsync();
+        if (userInfo) {
+          setLoggedInUsername(userInfo.username);
+        }
+
       const userResponse = await axios.get(
         `${process.env.REACT_APP_BACKEND_SERVER_URI}/user/getUserByUsername/${username}`
       );
@@ -62,6 +80,12 @@ export default function PublicUserList() {
     }
   }, [username]);
 
+  useEffect(() => {
+    if (loggedInUsername && user.username) {
+      setShouldRenderFollowButton(true);
+    }
+  }, [loggedInUsername, user.username]);
+  
   const updateFollowerCount = (newFollowerCount) => {
     setFollowerCount(newFollowerCount);
   };
@@ -110,12 +134,15 @@ export default function PublicUserList() {
         </div>
         <div className="profile-info">
           <div className="username">{"@" + user.username}</div>
-          <FollowButton
-            className="ssu-button-bold"
-            username={user.username}
-            targetUserId={user._id}
-            onUpdateFollowerCount={updateFollowerCount}
-          />
+          {shouldRenderFollowButton && (
+            <FollowButton
+              className="ssu-button-bold"
+              username={loggedInUsername}
+              targetUserId={user.username}
+              onUpdateFollowerCount={updateFollowerCount}
+            />
+          )}
+
           <div className="profile-stats">
             <div className="stat-item">
               <span className="stat-number">{posts.length}</span>
