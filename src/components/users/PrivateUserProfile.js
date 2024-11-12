@@ -9,6 +9,7 @@ import { getUserInfoAsync } from "../../utilities/decodeJwtAsync";
 import { useDarkMode } from "../DarkModeContext.js";
 import PostList from "../post/postlist";
 import EditUserBio from './editUserBio.js';
+import EditUser from "./editUserPage.js";
 import ProfileImage from "../images/ProfileImage.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as solidHeartIcon, faComment as solidCommentIcon } from "@fortawesome/free-solid-svg-icons";
@@ -255,6 +256,17 @@ const PrivateUserProfile = () => {
     setUserModal(false);
   };
 
+  const [accountSettingModal, setAccountSettingModal] = useState(false);
+  const showAccountSettings = () => {
+    setAccountSettingModal(true);
+  };
+
+  const closeSettings = () => {
+    setAccountSettingModal(false);
+  };
+
+
+
   const filteredPosts = posts.filter(post => {
     if (filter === 'text') {
       return !post.imageUri && !post.videoUri && !post.link;
@@ -294,7 +306,7 @@ const filterButtons = (
       <button onClick={toggleMenu} className="toggle-button">&#x22EE;</button>
       {showMenu && (
         <div className={`side-menu ${showMenu ? "open" : ""}`}>
-          <button className="menu-item" onClick={showUserModal}>Account Settings</button>
+          <button className="menu-item" onClick={showAccountSettings}>Account Settings</button>
           <button className="menu-item">Personal Information</button>
           <button onClick={handleShowLogoutConfirmation} className="ssu-button-primary">log out</button>
         </div>
@@ -394,6 +406,15 @@ const filterButtons = (
   <Button variant="secondary" onClick={closePostModal}>Close</Button>
 </Modal.Footer>                                            
 </Modal>
+
+          <Modal show={accountSettingModal} onHide={closeSettings}>
+            <Modal.Header closeButton>
+              <Modal.Title>Account Settings</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <EditUser /> 
+            </Modal.Body>
+          </Modal>
 
           {/* Edit Bio Modal */}
           <Modal show={userModal} onHide={closeUserModal}>
