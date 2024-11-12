@@ -186,34 +186,30 @@
   @apply w-6 h-6 mr-2;
 }
 
-/* Bell Animation */
-.shake-on-hover:hover .bell {
-  animation: bellShake 0.6s cubic-bezier(0.36, 0.07, 0.19, 0.97) infinite;
+/* Search Animation */
+@keyframes searchAnimation {
+  0% { transform: translate(0, 0) scale(1) rotate(0deg); }
+  10% { transform: translate(-10px, -10px) scale(1) rotate(0deg); }
+  20% { transform: translate(10px, -10px) scale(1) rotate(0deg); }
+  30% { transform: translate(-10px, 10px) scale(1) rotate(0deg); }
+  40% { transform: translate(10px, 10px) scale(1) rotate(0deg); }
+  50% { transform: translate(0, 0) scale(1) rotate(0deg); }
+  75% { transform: translate(0, 0) scale(1.4) rotate(0deg); }
+  80% { transform: translate(0, 0) scale(1.4) rotate(-60deg); } 
+  87% { transform: translate(0, 0) scale(1.4) rotate(-60deg); } 
+  92% { transform: translate(0, 0) scale(1.4) rotate(30deg); } 
+  97% { transform: translate(0, 0) scale(1.4) rotate(30deg); } 
+  100% { transform: translate(0, 0) scale(1.4) rotate(0deg); }
+}
+
+.group:hover .rotate-in-circle {
+  animation: searchAnimation 5.5s ease-in-out forwards;
   backface-visibility: hidden;
-  transform-origin: center center;
+  transform-origin: center;
 }
 
-@keyframes bellShake {
-  0%, 100% { transform: rotate(10deg) scale(1.25); }
-  25% { transform: rotate(-10deg) scale(1.25); }
-  50% { transform: rotate(8deg) scale(1.25); }
-  75% { transform: rotate(-8deg) scale(1.25); }
-}
-
-/* Spin Animation */
-.ssu-nav-link:hover .spin-icon {
-  animation: spinAndScale 1.2s linear infinite;
-  backface-visibility: hidden;
-  transform-origin: center center;
-}
-
-@keyframes spinAndScale {
-  0% { transform: rotate(0deg) scale(1.25); }
-  100% { transform: rotate(360deg) scale(1.25); }
-}
-
-/* Star Animation */
-@keyframes shootingStar {
+/* For You Animation */
+@keyframes forYouAnimation {
   0% { transform: translate(0, 0) scale(1) rotate(0deg); opacity: 1; filter: brightness(1); }
   5% { transform: translate(10px, -10px) scale(1.05) rotate(18deg); opacity: 0.8; filter: brightness(1.2); }
   10% { transform: translate(20px, -25px) scale(1.1) rotate(36deg); opacity: 1; filter: brightness(1.5); }
@@ -230,7 +226,7 @@
 }
 
 body .ssu-nav-link:hover .shoot-icon {
-  animation: shootingStar 1.8s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+  animation: forYouAnimation 1.8s cubic-bezier(0.25, 1, 0.5, 1) infinite;
   color: black;
   backface-visibility: hidden;
   transform-origin: center center;
@@ -238,6 +234,32 @@ body .ssu-nav-link:hover .shoot-icon {
 
 .dark .ssu-nav-link:hover .shoot-icon {
   color: yellow;
+}
+
+/* Discover Animation */
+@keyframes discoverAnimation {
+  0% { transform: rotate(0deg) scale(1.25); }
+  100% { transform: rotate(360deg) scale(1.25); }
+}
+
+.ssu-nav-link:hover .spin-icon {
+  animation: discoverAnimation 2.3s linear infinite;
+  backface-visibility: hidden;
+  transform-origin: center center;
+}
+
+/* Notifications Animation */
+@keyframes notificationAnimation {
+  0%, 100% { transform: rotate(10deg) scale(1.25); }
+  25% { transform: rotate(-10deg) scale(1.25); }
+  50% { transform: rotate(8deg) scale(1.25); }
+  75% { transform: rotate(-8deg) scale(1.25); }
+}
+
+.shake-on-hover:hover .bell {
+  animation: notificationAnimation 1.0s cubic-bezier(0.36, 0.07, 0.19, 0.97) infinite;
+  backface-visibility: hidden;
+  transform-origin: center center;
 }
 
 /* Feed Section */

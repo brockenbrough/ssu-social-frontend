@@ -87,7 +87,7 @@ export default function Navbar() {
           className="ssu-nav-link group flex items-center justify-start"
         >
           <FontAwesomeIcon
-            className="mr-4 text-lightMainText dark:text-darkMainText group-hover:text-white"
+            className="mr-4 text-lightMainText dark:text-darkMainText group-hover:text-white rotate-in-circle"
             icon={searchButton}
           />
           <span className="hidden md:inline">Search</span>
