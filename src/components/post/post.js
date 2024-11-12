@@ -53,7 +53,9 @@ const Post = ({ posts: post, isDiscover }) => {
   const [isAnimationActive, setIsAnimationActive] = useState(false);
   const [isSlidingOut, setIsSlidingOut] = useState(false);
   const [profileImageUrl, setProfileImageUrl] = useState("");
-  const [isBlurred, setIsBlurred] = useState(post.imageFlag); // Manage blur state
+  const [isBlurred, setIsBlurred] = useState(post.imageFlag); 
+  const [showMenu, setShowMenu] = useState(false);
+
 
   useEffect(() => {
     const fetchImage = async () => {
@@ -101,6 +103,10 @@ const Post = ({ posts: post, isDiscover }) => {
       }
       return part;
     });
+  };
+
+  const toggleMenu = () => {
+    setShowMenu(!showMenu);
   };
 
   useLayoutEffect(() => {
@@ -379,111 +385,122 @@ const Post = ({ posts: post, isDiscover }) => {
           id={`post-${post._id}`}
           className="ssu-post-card"
         >
-          <div>
-            <div className="d-flex align-items-center mb-3">
-              <img
-                src={profileImageUrl} // Profile image URL (already fetched)
-                alt="Profile"
-                style={{
-                  width: "40px",
-                  height: "40px",
-                  borderRadius: "50%",
-                  marginRight: "8px",
-                  backgroundColor: profileImageUrl.includes("ProfileIcon.png")
-                    ? "white"
-                    : "transparent", // White background only if default profile image
-                  cursor: "pointer",
-                }}
-                onClick={() => {
-                  isCurrentUserPost
-                    ? navigate("/privateUserProfile")
-                    : navigate(`/publicProfilePage/${post.username}`);
-                }}
-              />
-              <div className="relative group">
-                <a
-                  href={
-                    isCurrentUserPost
-                      ? "/privateUserProfile"
-                      : `/publicProfilePage/${post.username}`
-                  }
-                  className="ssu-textlink-bold font-title text-gray-900 dark:text-white"
-                >
-                  @{post.username}
-                </a>
-                {/* Tooltip with Followers and Following count */}
-                <div className="absolute hidden group-hover:flex group-hover:translate-y-2 translate-x-2 group-hover:shadow-xl bottom-0 left-full transform w-45 h-20  bg-white bg-opacity-90 text-gray-900 shadow-lg p-4 rounded-md z-25 border border-gray-300 dark:bg-gray-800 dark:text-white dark:border-gray-700">
-                  {/* Tooltip Arrow */}
-                  <div className="absolute w-3 h-3 top-1/2 right-full transform translate-x-1/2 translate-y-4 rotate-45 bg-white border border-gray-300 dark:bg-gray-800 dark:border-gray-700"></div>
-
-                  <div className="flex items-center space-x-2">
-                    <p className="text-sm font-medium mb-1">
-                      <span className="font-semibold">
-                        <span className="text-gray-900 dark:text-black">
-                          {/* Safeguard for null or undefined post */}
-                          <FollowerCount username={post?.username || ""} />
-                        </span>
-                      </span>
-                    </p>
-                    <span className="text-gray-900 dark:text-gray-900">|</span>
-                    <p className="text-sm font-medium mb-1">
-                      <span className="font-semibold">
-                        <span className="text-gray-900 dark:text-black">
-                          {/* Safeguard for null or undefined post */}
-                          <FollowingCount username={post?.username || ""} />
-                        </span>
-                      </span>
-                    </p>
-
-                    {/* FollowButton with safeguards */}
-                    <FollowButton
-                      className="ssu-button-bold"
-                      targetUserId={post?.username || ""}
-                      username={user?.username}
-                    />
-                  </div>
+      {/* This is the dropdown menu ":" on the top right corner of one's own post */}
+        {isCurrentUserPost && (
+            <div className="absolute top-2 right-2">
+              <button
+                onClick={toggleMenu}
+                className="absolute text-xl p-2 hover:bg-gray-700 dark:hover:bg-gray-700 rounded-full"
+              >
+                &#x22EE;
+              </button>
+              {/*Edit post button under dropdown menu*/}
+              {showMenu && (
+                <div className="absolute right-0 mt-2 w-28 bg-gray-700 rounded-md shadow-lg z-10">
+                  <button
+                    onClick={handleShowEditModal}
+                    className="ssu-button-info-clickable"
+                  >
+                    Edit Post <FontAwesomeIcon icon={editIcon} />
+                  </button>
                 </div>
+              )}
+            </div>
+          )}
+          <div>
+    <div className="d-flex align-items-center mb-3">
+    
+      <img
+        src={profileImageUrl} // Profile image URL (already fetched)
+        alt="Profile"
+        style={{
+          width: "40px",
+          height: "40px",
+          borderRadius: "50%",
+          marginRight: "8px",
+          backgroundColor: profileImageUrl.includes("ProfileIcon.png") ? "white" : "transparent", // White background only if default profile image
+          cursor: "pointer",
+        }}
+        onClick={() => {
+          isCurrentUserPost
+            ? navigate("/privateUserProfile")
+            : navigate(`/publicProfilePage/${post.username}`);
+        }}
+      />
+      <div className="relative group">
+        <a
+          href={
+            isCurrentUserPost
+              ? "/privateUserProfile"
+              : `/publicProfilePage/${post.username}`
+          }
+          className="ssu-textlink-bold font-title text-gray-900 dark:text-white"
+        >
+          @{post.username}
+  </a>
+{/* Tooltip with Followers and Following count */}
+<div className="absolute hidden group-hover:flex group-hover:translate-y-2 translate-x-2 group-hover:shadow-xl bottom-0 left-full transform w-45 h-20 
+bg-white bg-opacity-90 text-gray-900 shadow-lg p-4 rounded-md z-25 border border-gray-300 dark:bg-gray-800 dark:text-white dark:border-gray-700">
+  {/* Tooltip Arrow */}
+  <div className="absolute w-3 h-3 top-1/2 right-full transform translate-x-1/2 translate-y-4 rotate-45 bg-white border border-gray-300 dark:bg-gray-800 dark:border-gray-700"></div>  
+  <div className="flex items-center space-x-2">
+    <p className="text-sm font-medium mb-1">
+      <span className="font-semibold">
+        <span className="text-gray-900 dark:text-black"><FollowerCount username={post?.username} /></span>
+      </span>
+    </p>
+    <span className="text-gray-900 dark:text-gray-900">|</span> 
+    <p className="text-sm font-medium mb-1">
+      <span className="font-semibold">
+        <span className="text-gray-900 dark:text-black"><FollowingCount username={post?.username} /></span>
+      </span>
+    </p>
+    
+    
+  </div>
+</div>
               </div>
             </div>
-            {/* Post text */}
-            <p className="font-display mt-2 text-gray-900 dark:text-white">
-              {displayContent}
-            </p>
-            {/* Image */}
-            {post.imageUri && (
-              <div className="relative">
-                <img
-                  src={post.imageUri}
-                  alt="Post"
-                  className={`ssu-post-img mt-4 mb-3 ${
-                    post.imageFlag && isBlurred ? "blur-lg" : ""
-                  } transition-all duration-300`}
-                />
-                {/* Overlay with sensitive content message */}
-                {post.imageFlag && isBlurred && (
-                  <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/50 text-white">
-                    <p className="mb-2 text-center font-medium">
-                      Post could contain sensitive content
-                    </p>
-                    <button
-                      onClick={toggleBlur}
-                      className="bg-white/80 px-4 py-2 rounded-md text-sm font-medium text-black"
-                    >
-                      View Image
-                    </button>
-                  </div>
-                )}
-                {/* Hide Image Button */}
-                {!isBlurred && post.imageFlag && (
-                  <button
-                    onClick={toggleBlur}
-                    className=" bg-white/80 px-3 py-1 rounded-md text-sm font-medium text-black z-10"
-                  >
-                    Hide Image
-                  </button>
-                )}
+            
+          {/* Post text */}
+          <p className="font-display mt-2 text-gray-900 dark:text-white">
+            {displayContent}
+          </p>
+          {/* Image */}
+          {post.imageUri && (
+          <div className="relative">
+            <img
+              src={post.imageUri}
+              alt="Post"
+              className={`ssu-post-img mt-4 mb-3 ${
+                post.imageFlag && isBlurred ? "blur-lg" : ""
+              } transition-all duration-300`}
+            />
+            {/* Overlay with sensitive content message */}
+            {post.imageFlag && isBlurred && (
+              <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/50 text-white">
+                <p className="mb-2 text-center font-medium">
+                  Post could contain sensitive content
+                </p>
+                <button
+                  onClick={toggleBlur}
+                  className="bg-white/80 px-4 py-2 rounded-md text-sm font-medium text-black"
+                >
+                  View Image
+                </button>
               </div>
             )}
+            {/* Hide Image Button */}
+            {!isBlurred && post.imageFlag && (
+              <button
+                onClick={toggleBlur}
+                className=" bg-white/80 px-3 py-1 rounded-md text-sm font-medium text-black z-10"
+              >
+                Hide Image
+              </button>
+            )}
+          </div>
+        )}
 
             {/* YouTube Video Embed */}
             {youtubeThumbnail && (
@@ -529,17 +546,6 @@ const Post = ({ posts: post, isDiscover }) => {
                 {commentCount > 0 ? commentCount : "0"}
               </span>
             </button>
-            {/* Edit button */}
-            {isCurrentUserPost && (
-              <button
-                onClick={(e) => {
-                  e.stopPropagation(); // Stop the click event from reaching the parent Card
-                  handleShowEditModal();
-                }}
-              >
-                <FontAwesomeIcon icon={editIcon} />
-              </button>
-            )}
 
             {/* New button to view likes */}
             <button
