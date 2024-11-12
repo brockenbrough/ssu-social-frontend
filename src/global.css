@@ -69,16 +69,13 @@
   font-size: 24px;
   text-transform: none;
   line-height: 1.1em;
-  padding-bottom: calc(2.1 * 0.15em);
+  padding-bottom: 0.1em;
   background:
-    conic-gradient(from 135deg at top, #f97316 90deg, #0000 0) left 0 bottom 0.15em/calc(2 * 0.15em) 0.15em repeat-x,
-    conic-gradient(from -45deg at bottom, #f97316 90deg, #0000 0) left 0.15em bottom 0/calc(2 * 0.15em) 0.15em repeat-x;
-  -webkit-mask: linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0) 0/var(--_p, 0%) padding-box no-repeat;
-  mask: linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0) 0/var(--_p, 0%) padding-box no-repeat;
-  transition: 0.5s;
-
+    linear-gradient(#f97316 50%, #000 0) 0% calc(100% - var(--_p, 0%)) / 100% 200%,
+    linear-gradient(#f97316 0 0) 0% var(--_p, 0%) / var(--_p, 0%) 0.1em no-repeat;
+  -webkit-background-clip: text, padding-box;
+  background-clip: text, padding-box;
+  transition: 0.3s var(--_s, 0s) linear, background-size 0.3s calc(0.3s - var(--_s, 0s));
 }
 
 .dark .ssu-social-word:hover {
@@ -88,6 +85,7 @@
 .ssu-social-word:hover {
   @apply text-lightMainText dark:text-white;
   --_p: 100%;
+  --_s: 0.3s;
 }
 
 .ssu-post-list {
