@@ -106,7 +106,7 @@ export default function Navbar() {
         </a>
         <a href="/getallpost" className="ssu-nav-link group flex items-center">
           <FontAwesomeIcon
-            className="mr-4 text-lightMainText dark:text-darkMainText group-hover:text-white"
+            className="spin-icon mr-4 text-lightMainText dark:text-darkMainText group-hover:text-white"
             icon={discoverIcon}
           />
           <span className="hidden md:inline">Discover</span>{" "}

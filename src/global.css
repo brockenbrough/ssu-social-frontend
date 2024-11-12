@@ -202,6 +202,18 @@
   75% { transform: rotate(-8deg) scale(1.25); }
 }
 
+/* Spin Animation */
+.ssu-nav-link:hover .spin-icon {
+  animation: spinAndScale 1.2s linear infinite;
+  backface-visibility: hidden;
+  transform-origin: center center;
+}
+
+@keyframes spinAndScale {
+  0% { transform: rotate(0deg) scale(1.25); }
+  100% { transform: rotate(360deg) scale(1.25); }
+}
+
 /* Feed Section */
 .feed {
   @apply w-full max-w-2xl pt-20 mx-auto mb-20;
