@@ -21,7 +21,8 @@ const EditUser = () => {
     if (!password || password === '') newErrors.password = 'Input a valid password'
     else if (password.length < 8) newErrors.password = 'Password must be at least 8 characters'
     // biography character limit check
-    if (biography.length > 200) newErrors.biography = 'Your bio is too long!'
+    if (biography && biography.length > 200) newErrors.biography = 'Your bio is too long!';
+
     return newErrors
   }
 
@@ -144,24 +145,7 @@ const EditUser = () => {
         )}
       </div>
   
-      <div className="mb-4">
-        <label className="block text-gray-700 dark:text-white font-bold mb-2" htmlFor="biography">
-          Biography
-        </label>
-        <textarea
-          id="biography"
-          placeholder="Enter your bio"
-          rows="4"
-          value={form.biography}
-          onChange={handleChange}
-          className={`w-full bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white border ${errors.biography ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'} rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400`}
-        ></textarea>
-        {errors.biography && (
-          <p className="text-red-500 text-sm mt-1">
-            {errors.biography}
-          </p>
-        )}
-      </div>
+     
   
       <div className="flex justify-end">
         <button

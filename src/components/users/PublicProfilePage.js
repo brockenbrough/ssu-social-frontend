@@ -143,6 +143,9 @@ export default function PublicUserList() {
             />
           )}
 
+
+       
+
           <div className="profile-stats">
             <div className="stat-item">
               <span className="stat-number">{posts.length}</span>
