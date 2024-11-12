@@ -63,6 +63,32 @@
   @apply text-sm font-semibold no-underline text-lightMainText dark:text-darkMainText hover:text-orange-500;
 }
 
+/* SSU Social word Logo hover effects */
+.ssu-social-word {
+  @apply relative font-bold tracking-wide cursor-pointer transition-all duration-300 no-underline text-orange-500;
+  font-size: 24px;
+  text-transform: none;
+  line-height: 1.1em;
+  padding-bottom: calc(2.1 * 0.15em);
+  background:
+    conic-gradient(from 135deg at top, #f97316 90deg, #0000 0) left 0 bottom 0.15em/calc(2 * 0.15em) 0.15em repeat-x,
+    conic-gradient(from -45deg at bottom, #f97316 90deg, #0000 0) left 0.15em bottom 0/calc(2 * 0.15em) 0.15em repeat-x;
+  -webkit-mask: linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0) 0/var(--_p, 0%) padding-box no-repeat;
+  mask: linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0) 0/var(--_p, 0%) padding-box no-repeat;
+  transition: 0.5s;
+
+}
+
+.dark .ssu-social-word:hover {
+  @apply text-white;
+}
+
+.ssu-social-word:hover {
+  @apply text-lightMainText dark:text-white;
+  --_p: 100%;
+}
 
 .ssu-post-list {
   @apply min-h-screen p-0 m-0 bg-white dark:bg-gray-800;
@@ -70,6 +96,9 @@
 
 .ssu-post-card {
   @apply w-[520px] max-w-sm py-5 px-2 m-0 bg-white dark:bg-gray-800 border-b-2 mt-3 border-gray-200 dark:border-gray-700;
+  word-wrap: break-word; 
+  overflow-wrap: break-word; 
+  white-space: pre-wrap;
 }
 
 /* Heart and Comment button hover */
@@ -157,6 +186,32 @@
 
 .sidebar-item svg {
   @apply w-6 h-6 mr-2;
+}
+
+/* Bell Animation */
+.shake-on-hover:hover .bell {
+  animation: bellShake 0.6s cubic-bezier(0.36, 0.07, 0.19, 0.97) infinite;
+  backface-visibility: hidden;
+  transform-origin: center center;
+}
+
+@keyframes bellShake {
+  0%, 100% { transform: rotate(10deg) scale(1.25); }
+  25% { transform: rotate(-10deg) scale(1.25); }
+  50% { transform: rotate(8deg) scale(1.25); }
+  75% { transform: rotate(-8deg) scale(1.25); }
+}
+
+/* Spin Animation */
+.ssu-nav-link:hover .spin-icon {
+  animation: spinAndScale 1.2s linear infinite;
+  backface-visibility: hidden;
+  transform-origin: center center;
+}
+
+@keyframes spinAndScale {
+  0% { transform: rotate(0deg) scale(1.25); }
+  100% { transform: rotate(360deg) scale(1.25); }
 }
 
 /* Feed Section */

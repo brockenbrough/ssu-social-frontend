@@ -106,7 +106,7 @@ function SearchPage() {
             // Use PostList to display posts
             <PostList type="search" initialPosts={posts} />
           ) : (
-            <p>No posts found.</p>
+            <p className="text-center">No posts found.</p>
           )
         ) : (
           profiles.length > 0 ? (
@@ -122,7 +122,7 @@ function SearchPage() {
               </div>
             ))
           ) : (
-            <p>No profiles found.</p>
+            <p className="text-center">No profiles found.</p>
           )
         )}
       </div>

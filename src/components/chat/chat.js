@@ -153,6 +153,14 @@ const Chat = () => {
       }
     });
 
+    socket.on("messageRead", (readMessageIds) => {
+      setMessages((prevMessages) =>
+        prevMessages.map((m) =>
+          readMessageIds.includes(m._id) ? { ...m, isRead: true } : m
+        )
+      );
+    });
+
     return () => {
       socket.off("message");
     };
@@ -190,6 +198,8 @@ const Chat = () => {
       await apiClient.put("/message/markAsRead", {
         messageIds: messageIds,
       });
+
+      socket.emit("messageRead", messageIds);
     } catch (error) {
       console.error("Error marking messages as read:", error);
     }
@@ -207,12 +217,6 @@ const Chat = () => {
 
     try {
       markMessagesAsReadInDb(chatRoomUnreadMessageIds);
-
-      setMessages((prevMessages) =>
-        prevMessages.map((m) =>
-          m.chatRoomId === chatRoomId ? { ...m, isRead: true } : m
-        )
-      );
     } catch (error) {
       console.error("Error marking messages as read:", error);
     }

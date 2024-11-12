@@ -92,9 +92,16 @@ const ChatHistoryTab = ({
                 <div className="flex-1 font-title font-bold mb-1 w-56 truncate overflow-hidden whitespace-nowrap">
                   @{getChatUser(chatRoom).username}
                 </div>
-                <div className="flex-1 font-display text-xs ml-1 text-gray-500 dark:text-gray-300 w-60 truncate overflow-hidden whitespace-nowrap group-hover:text-white">
-                  {getLastMessage(chatRoom._id).text &&
-                    getLastMessage(chatRoom._id).text}
+                <div className="flex-1 flex font-display text-xs ml-1 text-gray-500 dark:text-gray-300 w-60  group-hover:text-white">
+                  <div className="w-fit truncate overflow-hidden whitespace-nowrap">
+                    {getLastMessage(chatRoom._id).text &&
+                      getLastMessage(chatRoom._id).text}
+                  </div>
+                  <div className="ml-2 w-3">
+                    {getLastMessage(chatRoom._id) &&
+                      getLastMessage(chatRoom._id).isRead &&
+                      "✔"}
+                  </div>
                 </div>
               </div>
               <div className="flex-col w-full">
