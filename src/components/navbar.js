@@ -98,7 +98,7 @@ export default function Navbar() {
           className="ssu-nav-link group flex items-center"
         >
           <FontAwesomeIcon
-            className="mr-4 text-lightMainText dark:text-darkMainText group-hover:text-white"
+            className="shoot-icon mr-4 text-lightMainText dark:text-darkMainText group-hover:text-white"
             icon={forYouIcon}
           />
           <span className="hidden md:inline">For You</span>{" "}
