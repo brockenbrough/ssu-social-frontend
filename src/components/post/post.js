@@ -11,7 +11,7 @@ import { faHeart as regularHeartIcon } from "@fortawesome/free-regular-svg-icons
 import { faComment as solidCommentIcon } from "@fortawesome/free-solid-svg-icons";
 import { faComment as regularCommentIcon } from "@fortawesome/free-regular-svg-icons";
 import { faEdit as editIcon } from "@fortawesome/free-solid-svg-icons";
-import { faFlag } from "@fortawesome/free-solid-svg-icons"; 
+import { faFlag } from "@fortawesome/free-solid-svg-icons";
 import getUserInfoAsync from "../../utilities/decodeJwt";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
@@ -26,9 +26,9 @@ import CreateComment from "../comments/createComment";
 import { PostPageContext } from "../../App";
 import { useNavigate } from "react-router-dom";
 import { fetchProfileImage } from "../../components/post/fetchProfileImage";
-import FollowerCount from '../following/getFollowerCount';  // Correct relative path
-import FollowingCount from '../following/getFollowingCount';  // Correct relative path
-import FollowButton from "../following/followButton";// correct path for follow button
+import FollowerCount from "../following/getFollowerCount"; // Correct relative path
+import FollowingCount from "../following/getFollowingCount"; // Correct relative path
+import FollowButton from "../following/followButton"; // correct path for follow button
 
 const Post = ({ posts: post, isDiscover }) => {
   const [youtubeThumbnail, setYoutubeThumbnail] = useState(null);
@@ -87,8 +87,8 @@ const Post = ({ posts: post, isDiscover }) => {
     if (!content) return content;
 
     const urlRegex = /(https?:\/\/[^\s]+)/g;
-    const youtubeRegex = 
-    /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})(?:[^\s]*)?/;
+    const youtubeRegex =
+      /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})(?:[^\s]*)?/;
     const filteredContent = content.replace(youtubeRegex, "");
 
     return filteredContent.split(urlRegex).map((part, index) => {
@@ -138,27 +138,32 @@ const Post = ({ posts: post, isDiscover }) => {
 
   const fetchLikesList = async () => {
     if (!postId) {
-        console.error("Invalid postId: Cannot fetch likes without a valid postId");
-        return;
+      console.error(
+        "Invalid postId: Cannot fetch likes without a valid postId"
+      );
+      return;
     }
 
     try {
-        console.log("Fetching likes for post ID:", postId);
-        const response = await axios.get(
-            `${process.env.REACT_APP_BACKEND_SERVER_URI}/likes/view-likes/${postId}`
-        );
+      console.log("Fetching likes for post ID:", postId);
+      const response = await axios.get(
+        `${process.env.REACT_APP_BACKEND_SERVER_URI}/likes/view-likes/${postId}`
+      );
 
-        console.log("Likes data received:", response.data); // Log entire response
-        response.data.forEach((like, index) => {
-            console.log(`Like ${index + 1}:`, like); // Log each like individually
-        });
+      console.log("Likes data received:", response.data); // Log entire response
+      response.data.forEach((like, index) => {
+        console.log(`Like ${index + 1}:`, like); // Log each like individually
+      });
 
-        setLikesList(response.data);
-        setShowLikesModal(true);
+      setLikesList(response.data);
+      setShowLikesModal(true);
     } catch (error) {
-        console.error("Error fetching likes list:", error.response ? error.response.data : error.message);
+      console.error(
+        "Error fetching likes list:",
+        error.response ? error.response.data : error.message
+      );
     }
-};
+  };
 
   // Like count click handler
   const handleLikeCountClick = () => {
@@ -198,13 +203,13 @@ const Post = ({ posts: post, isDiscover }) => {
       const youtubeRegex =
         /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/|youtube\.com\/shorts\/)([a-zA-Z0-9_-]{11})/;
       const youtubeMatch = post.content.match(youtubeRegex);
-  
+
       if (youtubeMatch) {
         const videoId = youtubeMatch[1];
         fetchYouTubeThumbnail(videoId);
       }
     }
-  }, [post.content]);  
+  }, [post.content]);
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -336,33 +341,32 @@ const Post = ({ posts: post, isDiscover }) => {
 
   const handleFlagToggle = async () => {
     try {
-      const token = localStorage.getItem('accessToken');
-  
+      const token = localStorage.getItem("accessToken");
+
       if (!token) {
         console.error("No access token found. Please log in.");
         return;
       }
-  
+
       const response = await axios.put(
         `${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/updatePost/${post._id}`,
         { imageFlag: !post.imageFlag },
         {
           headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`, // Include the token here
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`, // Include the token here
           },
         }
       );
-  
+
       if (response.status === 200) {
         post.imageFlag = !post.imageFlag;
         setIsBlurred(post.imageFlag); // Update local blur state based on the flag
       }
     } catch (error) {
-      console.error('Error flagging/unflagging post:', error);
+      console.error("Error flagging/unflagging post:", error);
     }
   };
-  
 
   return (
     <div className="position-relative" style={{ width: "100%" }}>
@@ -376,109 +380,110 @@ const Post = ({ posts: post, isDiscover }) => {
           className="ssu-post-card"
         >
           <div>
-    <div className="d-flex align-items-center mb-3">
-      <img
-        src={profileImageUrl} // Profile image URL (already fetched)
-        alt="Profile"
-        style={{
-          width: "40px",
-          height: "40px",
-          borderRadius: "50%",
-          marginRight: "8px",
-          backgroundColor: profileImageUrl.includes("ProfileIcon.png") ? "white" : "transparent", // White background only if default profile image
-          cursor: "pointer",
-        }}
-        onClick={() => {
-          isCurrentUserPost
-            ? navigate("/privateUserProfile")
-            : navigate(`/publicProfilePage/${post.username}`);
-        }}
-      />
-      <div className="relative group">
-        <a
-          href={
-            isCurrentUserPost
-              ? "/privateUserProfile"
-              : `/publicProfilePage/${post.username}`
-          }
-          className="ssu-textlink-bold font-title text-gray-900 dark:text-white"
-        >
-          @{post.username}
-  </a>
-{/* Tooltip with Followers and Following count */}
-<div className="absolute hidden group-hover:flex group-hover:translate-y-2 translate-x-2 group-hover:shadow-xl bottom-0 left-full transform w-45 h-20  bg-white bg-opacity-90 text-gray-900 shadow-lg p-4 rounded-md z-25 border border-gray-300 dark:bg-gray-800 dark:text-white dark:border-gray-700">
-  {/* Tooltip Arrow */}
-  <div className="absolute w-3 h-3 top-1/2 right-full transform translate-x-1/2 translate-y-4 rotate-45 bg-white border border-gray-300 dark:bg-gray-800 dark:border-gray-700"></div>
+            <div className="d-flex align-items-center mb-3">
+              <img
+                src={profileImageUrl} // Profile image URL (already fetched)
+                alt="Profile"
+                style={{
+                  width: "40px",
+                  height: "40px",
+                  borderRadius: "50%",
+                  marginRight: "8px",
+                  backgroundColor: profileImageUrl.includes("ProfileIcon.png")
+                    ? "white"
+                    : "transparent", // White background only if default profile image
+                  cursor: "pointer",
+                }}
+                onClick={() => {
+                  isCurrentUserPost
+                    ? navigate("/privateUserProfile")
+                    : navigate(`/publicProfilePage/${post.username}`);
+                }}
+              />
+              <div className="relative group">
+                <a
+                  href={
+                    isCurrentUserPost
+                      ? "/privateUserProfile"
+                      : `/publicProfilePage/${post.username}`
+                  }
+                  className="ssu-textlink-bold font-title text-gray-900 dark:text-white"
+                >
+                  @{post.username}
+                </a>
+                {/* Tooltip with Followers and Following count */}
+                <div className="absolute hidden group-hover:flex group-hover:translate-y-2 translate-x-2 group-hover:shadow-xl bottom-0 left-full transform w-45 h-20  bg-white bg-opacity-90 text-gray-900 shadow-lg p-4 rounded-md z-25 border border-gray-300 dark:bg-gray-800 dark:text-white dark:border-gray-700">
+                  {/* Tooltip Arrow */}
+                  <div className="absolute w-3 h-3 top-1/2 right-full transform translate-x-1/2 translate-y-4 rotate-45 bg-white border border-gray-300 dark:bg-gray-800 dark:border-gray-700"></div>
 
-  <div className="flex items-center space-x-2">
-    <p className="text-sm font-medium mb-1">
-      <span className="font-semibold">
-        <span className="text-gray-900 dark:text-black">
-          {/* Safeguard for null or undefined post */}
-          <FollowerCount username={post?.username || ""} />
-        </span>
-      </span>
-    </p>
-    <span className="text-gray-900 dark:text-gray-900">|</span>
-    <p className="text-sm font-medium mb-1">
-      <span className="font-semibold">
-        <span className="text-gray-900 dark:text-black">
-          {/* Safeguard for null or undefined post */}
-          <FollowingCount username={post?.username || ""} />
-        </span>
-      </span>
-    </p>
+                  <div className="flex items-center space-x-2">
+                    <p className="text-sm font-medium mb-1">
+                      <span className="font-semibold">
+                        <span className="text-gray-900 dark:text-black">
+                          {/* Safeguard for null or undefined post */}
+                          <FollowerCount username={post?.username || ""} />
+                        </span>
+                      </span>
+                    </p>
+                    <span className="text-gray-900 dark:text-gray-900">|</span>
+                    <p className="text-sm font-medium mb-1">
+                      <span className="font-semibold">
+                        <span className="text-gray-900 dark:text-black">
+                          {/* Safeguard for null or undefined post */}
+                          <FollowingCount username={post?.username || ""} />
+                        </span>
+                      </span>
+                    </p>
 
-    {/* FollowButton with safeguards */}
-    <FollowButton
-      className="ssu-button-bold"
-      username={post?.username || ""}
-      targetUserId={user?.username} // Ensure post is not null here too
-
-    />
-  </div>
-</div>
+                    {/* FollowButton with safeguards */}
+                    <FollowButton
+                      className="ssu-button-bold"
+                      targetUserId={post?.username || ""}
+                      username={user?.username}
+                    />
+                  </div>
+                </div>
               </div>
             </div>
-          {/* Post text */}
-          <p className="font-display mt-2 text-gray-900 dark:text-white">
-            {displayContent}
-          </p>
-          {/* Image */}
-          {post.imageUri && (
-          <div className="relative">
-            <img
-              src={post.imageUri}
-              alt="Post"
-              className={`ssu-post-img mt-4 mb-3 ${
-                post.imageFlag && isBlurred ? "blur-lg" : ""
-              } transition-all duration-300`}
-            />
-            {/* Overlay with sensitive content message */}
-            {post.imageFlag && isBlurred && (
-              <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/50 text-white">
-                <p className="mb-2 text-center font-medium">
-                  Post could contain sensitive content
-                </p>
-                <button
-                  onClick={toggleBlur}
-                  className="bg-white/80 px-4 py-2 rounded-md text-sm font-medium text-black"
-                >
-                  View Image
-                </button>
+            {/* Post text */}
+            <p className="font-display mt-2 text-gray-900 dark:text-white">
+              {displayContent}
+            </p>
+            {/* Image */}
+            {post.imageUri && (
+              <div className="relative">
+                <img
+                  src={post.imageUri}
+                  alt="Post"
+                  className={`ssu-post-img mt-4 mb-3 ${
+                    post.imageFlag && isBlurred ? "blur-lg" : ""
+                  } transition-all duration-300`}
+                />
+                {/* Overlay with sensitive content message */}
+                {post.imageFlag && isBlurred && (
+                  <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/50 text-white">
+                    <p className="mb-2 text-center font-medium">
+                      Post could contain sensitive content
+                    </p>
+                    <button
+                      onClick={toggleBlur}
+                      className="bg-white/80 px-4 py-2 rounded-md text-sm font-medium text-black"
+                    >
+                      View Image
+                    </button>
+                  </div>
+                )}
+                {/* Hide Image Button */}
+                {!isBlurred && post.imageFlag && (
+                  <button
+                    onClick={toggleBlur}
+                    className=" bg-white/80 px-3 py-1 rounded-md text-sm font-medium text-black z-10"
+                  >
+                    Hide Image
+                  </button>
+                )}
               </div>
             )}
-            {/* Hide Image Button */}
-            {!isBlurred && post.imageFlag && (
-              <button
-                onClick={toggleBlur}
-                className=" bg-white/80 px-3 py-1 rounded-md text-sm font-medium text-black z-10"
-              >
-                Hide Image
-              </button>
-            )}
-          </div>
-        )}
 
             {/* YouTube Video Embed */}
             {youtubeThumbnail && (
@@ -490,7 +495,7 @@ const Post = ({ posts: post, isDiscover }) => {
                   height="350"
                   src={`https://www.youtube.com/embed/${
                     post.content.match(/(?:v=|\/)([a-zA-Z0-9_-]{11})/)[1]
-                    }`}
+                  }`}
                   title="YouTube video player"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
@@ -504,7 +509,9 @@ const Post = ({ posts: post, isDiscover }) => {
             >
               <FontAwesomeIcon
                 icon={isLiked ? solidHeartIcon : regularHeartIcon}
-                className={`hover:scale-125 transition-transform duration-300 ${isLiked ? "text-red-500" : ""}`}
+                className={`hover:scale-125 transition-transform duration-300 ${
+                  isLiked ? "text-red-500" : ""
+                }`}
               />
               <span className="ml-0.5">{` ${likeCount}`}</span>
             </button>
@@ -513,10 +520,14 @@ const Post = ({ posts: post, isDiscover }) => {
               className="mr-4 mt-2 font-menu text-gray-900 dark:text-white hover-outline-comment"
             >
               <FontAwesomeIcon
-                className={`hover:scale-125 transition-transform duration-300 ${showCommentCard ? "text-blue-500" : ""}`}
+                className={`hover:scale-125 transition-transform duration-300 ${
+                  showCommentCard ? "text-blue-500" : ""
+                }`}
                 icon={showCommentCard ? solidCommentIcon : regularCommentIcon}
               />
-              <span className="ml-1.5">{commentCount > 0 ? commentCount : "0"}</span>
+              <span className="ml-1.5">
+                {commentCount > 0 ? commentCount : "0"}
+              </span>
             </button>
             {/* Edit button */}
             {isCurrentUserPost && (
@@ -530,20 +541,22 @@ const Post = ({ posts: post, isDiscover }) => {
               </button>
             )}
 
-        {/* New button to view likes */}
-        <button
-          onClick={fetchLikesList}
-          className="ml-3 mt-2 font-menu text-gray-900 dark:text-white hover:text-blue-500"
-          title="View who liked this post"
-        >
-          <FontAwesomeIcon icon={solidHeartIcon} />
-        </button>
+            {/* New button to view likes */}
+            <button
+              onClick={fetchLikesList}
+              className="ml-3 mt-2 font-menu text-gray-900 dark:text-white hover:text-blue-500"
+              title="View who liked this post"
+            >
+              <FontAwesomeIcon icon={solidHeartIcon} />
+            </button>
 
             {/* Flag button */}
             <button
               onClick={handleFlagToggle}
               className="ml-3 mt-3 font-menu text-gray-900 dark:text-white hover:text-red-500"
-              title={post.imageFlag ? "Unflag as sensitive" : "Flag as sensitive"}
+              title={
+                post.imageFlag ? "Unflag as sensitive" : "Flag as sensitive"
+              }
             >
               <FontAwesomeIcon icon={faFlag} />
             </button>
@@ -587,33 +600,33 @@ const Post = ({ posts: post, isDiscover }) => {
       </div>
 
       <Modal show={showLikesModal} onHide={() => setShowLikesModal(false)}>
-    <Modal.Header closeButton>
-        <Modal.Title>People who liked this post</Modal.Title>
-    </Modal.Header>
-    <Modal.Body>
-        {likesList && likesList.length > 0 ? (
+        <Modal.Header closeButton>
+          <Modal.Title>People who liked this post</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {likesList && likesList.length > 0 ? (
             likesList.map((like) => (
-                <div key={like._id} className="d-flex align-items-center mb-2">
-                    <img
-                        src={like.profileImage || defaultProfileImageUrl}
-                        alt={like.username || 'User'}
-                        style={{
-                            width: "30px",
-                            height: "30px",
-                            borderRadius: "50%",
-                            marginRight: "8px",
-                        }}
-                    />
-                    <span style={{ color: 'black' }}>
-                        {like.username || 'Unknown User'}
-                    </span>
-                </div>
+              <div key={like._id} className="d-flex align-items-center mb-2">
+                <img
+                  src={like.profileImage || defaultProfileImageUrl}
+                  alt={like.username || "User"}
+                  style={{
+                    width: "30px",
+                    height: "30px",
+                    borderRadius: "50%",
+                    marginRight: "8px",
+                  }}
+                />
+                <span style={{ color: "black" }}>
+                  {like.username || "Unknown User"}
+                </span>
+              </div>
             ))
-        ) : (
+          ) : (
             <p>No likes yet.</p>
-        )}
-    </Modal.Body>
-</Modal>
+          )}
+        </Modal.Body>
+      </Modal>
 
       {/* Edit Modal */}
       <Modal show={showEditModal} onHide={handleCloseEditModal}>
@@ -679,9 +692,7 @@ const Post = ({ posts: post, isDiscover }) => {
         </Modal.Footer>
       </Modal>
     </div>
-    
   );
 };
-
 
 export default Post;
