@@ -468,7 +468,7 @@ bg-white bg-opacity-90 text-gray-900 shadow-lg p-4 rounded-md z-25 border border
                 </p>
                 <button
                   onClick={toggleBlur}
-                  className="bg-white/80 px-4 py-2 rounded-md text-sm font-medium text-black"
+                  className="bg-white/80 px-4 py-2 rounded-md text-sm font-medium text-black hover:bg-gray-50"
                 >
                   View Image
                 </button>
@@ -478,7 +478,7 @@ bg-white bg-opacity-90 text-gray-900 shadow-lg p-4 rounded-md z-25 border border
             {!isBlurred && post.imageFlag && (
               <button
                 onClick={toggleBlur}
-                className=" bg-white/80 px-3 py-1 rounded-md text-sm font-medium text-black z-10"
+                className=" bg-white/80 px-3 py-1 rounded-md text-sm font-medium text-black z-10 hover:bg-gray-50"
               >
                 Hide Image
               </button>
