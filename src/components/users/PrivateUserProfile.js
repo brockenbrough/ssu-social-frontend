@@ -390,9 +390,9 @@ const PrivateUserProfile = () => {
             <Modal.Header closeButton>
               <Modal.Title>Posts</Modal.Title>
             </Modal.Header>
-            <Modal.Body>
+            <Modal.Body className="dark:bg-gray-800">
               {mediaPosts.slice(selectedPostIndex).map((post, index) => (
-                <div key={post.id} className="modal-post-item">
+                <div key={post.id} className="modal-post-item dark:bg-gray-800">
                   <Post posts={post} />
                   <hr />
                 </div>
