@@ -561,7 +561,7 @@ bg-white bg-opacity-90 text-gray-900 shadow-lg p-4 rounded-md z-25 border border
               className="text-sm italic absolute right-0 mt-2 font-menu text-gray-900 dark:text-white hover:text-blue-500 hover:scale-125"
               title="View who liked this post"
             >
-              # of <FontAwesomeIcon icon={solidHeartIcon} />'s
+              View who <FontAwesomeIcon icon={solidHeartIcon} />'d
             </button>
 
             
