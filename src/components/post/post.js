@@ -374,16 +374,16 @@ const Post = ({ posts: post, isDiscover }) => {
             <div className="absolute top-2 right-2">
               <button
                 onClick={toggleMenu}
-                className="absolute text-xl p-2 hover:bg-gray-700 dark:hover:bg-gray-700 rounded-full"
+                className="absolute text-xl p-2 hover:bg-gray-300 dark:hover:bg-gray-700 rounded-full"
               >
                 &#x22EE;
               </button>
               {/*Edit post button under dropdown menu*/}
               {showMenu && (
-                <div className="absolute right-0 mt-2 w-28 bg-gray-700 rounded-md shadow-lg z-10">
+                <div className="absolute right-0 mt-2 w-28 bg-gray-300 dark:bg-gray-700 rounded-md shadow-lg z-10">
                   <button
                     onClick={handleShowEditModal}
-                    className="ssu-button-info-clickable"
+                    className="ssu-button-info bg-gray-300 hover:bg-blue-200 dark:hover:bg-orange-500"
                   >
                     Edit Post <FontAwesomeIcon icon={editIcon} />
                   </button>
