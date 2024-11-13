@@ -143,19 +143,16 @@ export default function PublicUserList() {
             />
           )}
 
-
-       
-
           <div className="profile-stats">
-            <div className="stat-item">
+            <div className="stat-item hover:scale-125">
               <span className="stat-number">{posts.length}</span>
               <span className="stat-label">posts</span>
             </div>
-            <div className="stat-item">
+            <div className="stat-item hover:scale-125">
               <span className="stat-number">{followerCount}</span>
               <span className="stat-label">followers</span>
             </div>
-            <div className="stat-item">
+            <div className="stat-item hover:scale-125">
               <span className="stat-number">{followingCount}</span>
               <span className="stat-label">following</span>
             </div>
@@ -184,9 +181,9 @@ export default function PublicUserList() {
 
       {/* Media Posts Grid */}
       {filter === "upload" && (
-        <div className="profile-posts">
+        <div className="profile-posts ">
           {mediaPosts.map((post, index) => (
-            <div key={post.id} className="profile-post-item" onClick={() => openPostModal(index)}>
+            <div key={post.id} className="profile-post-item " onClick={() => openPostModal(index)}>
               {post.imageUri && <img src={post.imageUri} alt="Post" />}
               {post.videoUri && <video src={post.videoUri} controls />}
             </div>
