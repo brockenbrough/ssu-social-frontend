@@ -301,8 +301,8 @@ const PrivateUserProfile = () => {
       <button onClick={toggleMenu} className="toggle-button">&#x22EE;</button>
       {showMenu && (
         <div className={`side-menu ${showMenu ? "open" : ""}`}>
-          <button className="menu-item" onClick={showAccountSettings}>Account Settings</button>
-          <button className="menu-item">Personal Information</button>
+          <button className="menu-item hover:bg-gray-500" onClick={showAccountSettings}>Account Settings</button>
+          <button className="menu-item hover:bg-gray-500">Personal Information</button>
           <button onClick={handleShowLogoutConfirmation} className="ssu-button-primary">log out</button>
         </div>
       )}
