@@ -104,7 +104,7 @@ function SearchPage() {
         {isPostsVisible ? (
           posts.length > 0 ? (
             // Use PostList to display posts
-            <PostList type="search" initialPosts={posts} />
+            <PostList type="search" searchInput={searchInput} />
           ) : (
             <p className="text-center">No posts found.</p>
           )
@@ -116,9 +116,24 @@ function SearchPage() {
                 className="p-3 border-b border-gray-300 hover:bg-orange-500 cursor-pointer hover:text-white"
                 onClick={() => handleUsernameClick(profile.username)}
               >
-                <span className="ssu-textlink-bold font-title text-gray-900 dark:text-white">
-                  @{profile.username}
-                </span>
+                <div className="flex items-center space-x-3">
+                  {/* Profile Picture */}
+                  <img
+                    src={profile.profileImage || "https://ssusocial.s3.amazonaws.com/profilepictures/ProfileIcon.png"}
+                    alt="Profile"
+                    className="w-10 h-10 rounded-full object-cover"
+                  />
+                  {/* Username */}
+                  <span className="ssu-textlink-bold font-title text-gray-900 dark:text-white">
+                    @{profile.username}
+                  </span>
+                </div>
+                {/* Add the user's bio here */}
+                {profile.biography && (
+                  <div className="pt-2 text-gray-700 dark:text-gray-300 text-sm">
+                    {profile.biography}
+                  </div>
+                )}
               </div>
             ))
           ) : (

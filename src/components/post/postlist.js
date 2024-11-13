@@ -14,7 +14,7 @@ import ScrollToTop from "./ScrollToTop";
 import Chat from "../chat/chat";
 import { PostContext, PostPageContext } from "../../App";
 
-function PostList({ type, profileUsername }) {
+function PostList({ type, profileUsername, searchInput }) {
   const POST_PER_PAGE = 10;
   const [user, setUser] = useState(null);
   const [posts, setPosts] = useContext(PostContext);
@@ -43,12 +43,15 @@ function PostList({ type, profileUsername }) {
     if (user) {
       getPosts();
     }
-  }, [user, page]);
+  }, [user, page, searchInput]);
 
   // Fetch posts
   async function getPosts() {
     let url;
-    if (type === "feed") {
+
+    if (type === "search" && searchInput) {
+      url = `${process.env.REACT_APP_BACKEND_SERVER_URI}/post/search/${searchInput}`;
+    } else if (type === "feed") {
       url = user
         ? `${process.env.REACT_APP_BACKEND_SERVER_URI}/feed/${user.username}`
         : `${process.env.REACT_APP_BACKEND_SERVER_URI}/feed/`;
