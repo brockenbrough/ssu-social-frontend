@@ -224,10 +224,6 @@ body .ssu-nav-link:hover .shoot-icon {
   backface-visibility: visible; 
 }
 
-.dark .ssu-nav-link:hover .shoot-icon {
-  color: yellow;
-}
-
 /* Discover Animation */
 @keyframes discoverAnimation {
   0% { transform: rotate(0deg) scale(1.25); }
@@ -250,6 +246,18 @@ body .ssu-nav-link:hover .shoot-icon {
 
 .shake-on-hover:hover .bell {
   animation: notificationAnimation 0.8s cubic-bezier(0.36, 0.07, 0.19, 0.97) infinite;
+  backface-visibility: hidden;
+  transform-origin: center center;
+}
+
+/* Profile Animation */
+@keyframes profileAnimation {
+  0%, 100% {transform: translateY(0)scale(1.25);}
+  50% {transform: translateY(-4px)scale(1.25);}
+}
+
+.bounce-on-hover:hover .icon {
+  animation: profileAnimation 0.7s ease-in-out infinite;
   backface-visibility: hidden;
   transform-origin: center center;
 }

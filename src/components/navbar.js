@@ -136,10 +136,10 @@ export default function Navbar() {
         </span>
         <a
           href="/privateUserProfile"
-          className="ssu-nav-link group flex items-center"
+          className="ssu-nav-link group flex items-center bounce-on-hover"
         >
           <FontAwesomeIcon
-            className="mr-4 text-lightMainText dark:text-darkMainText group-hover:text-white"
+            className="mr-4 text-lightMainText dark:text-darkMainText group-hover:text-white icon"
             icon={profileIcon}
           />
           <span className="hidden md:inline">Profile</span>{" "}
