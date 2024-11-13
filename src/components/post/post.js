@@ -45,7 +45,7 @@ const Post = ({ posts: post, isDiscover }) => {
   const { darkMode } = useDarkMode();
   const isCurrentUserPost = user && user.username === post.username;
   const [showEditModal, setShowEditModal] = useState(false);
-  const [editedPost, setEditedPost] = useState({ content: post.content });
+  const [editedPost, setEditedPost] = useState({ content: post.content, imageFlag: post.imageFlag });
   const [showCommentCard, setShowCommentCard] = useState(false);
   const postCardRef = useRef(null);
   const [postCardHeight, setPostCardHeight] = useState(0);
@@ -304,7 +304,7 @@ const Post = ({ posts: post, isDiscover }) => {
 
   const handleShowEditModal = () => {
     if (isCurrentUserPost) {
-      setEditedPost({ content: post.content });
+      setEditedPost({ content: post.content, imageFlag: post.imageFlag });
       setShowEditModal(true);
     } else {
       alert("You don't have permission to edit this post.");
@@ -319,14 +319,19 @@ const Post = ({ posts: post, isDiscover }) => {
     apiClient
       .put(`/posts/updatePost/${post._id}`, {
         content: editedPost.content,
+        imageFlag: editedPost.imageFlag,
       })
       .then((response) => {
+        const updatedPost = response.data.post;
+        setIsBlurred(updatedPost.imageFlag);
         handleCloseEditModal();
-        window.location.reload();
+        setPostPage(0);
+        
       })
       .catch((error) => {
         console.error(error);
       });
+    
   };
 
   const handleDeletePost = () => {
@@ -345,34 +350,13 @@ const Post = ({ posts: post, isDiscover }) => {
     setIsBlurred(!isBlurred);
   };
 
-  const handleFlagToggle = async () => {
-    try {
-      const token = localStorage.getItem("accessToken");
-
-      if (!token) {
-        console.error("No access token found. Please log in.");
-        return;
-      }
-
-      const response = await axios.put(
-        `${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/updatePost/${post._id}`,
-        { imageFlag: !post.imageFlag },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`, // Include the token here
-          },
-        }
-      );
-
-      if (response.status === 200) {
-        post.imageFlag = !post.imageFlag;
-        setIsBlurred(post.imageFlag); // Update local blur state based on the flag
-      }
-    } catch (error) {
-      console.error("Error flagging/unflagging post:", error);
-    }
+  const handleFlagToggle = () => {
+    setEditedPost((prev) => ({
+      ...prev,
+      imageFlag: !prev.imageFlag
+    }));
   };
+  
 
   return (
     <div className="position-relative" style={{ width: "100%" }}>
@@ -556,16 +540,7 @@ bg-white bg-opacity-90 text-gray-900 shadow-lg p-4 rounded-md z-25 border border
               <FontAwesomeIcon icon={solidHeartIcon} />
             </button>
 
-            {/* Flag button */}
-            <button
-              onClick={handleFlagToggle}
-              className="ml-3 mt-3 font-menu text-gray-900 dark:text-white hover:text-red-500"
-              title={
-                post.imageFlag ? "Unflag as sensitive" : "Flag as sensitive"
-              }
-            >
-              <FontAwesomeIcon icon={faFlag} />
-            </button>
+            
 
             {/* Post date */}
             <p className="ssu-text-tinyright font-menu mt-3 text-gray-900 dark:text-white">
@@ -681,11 +656,22 @@ bg-white bg-opacity-90 text-gray-900 shadow-lg p-4 rounded-md z-25 border border
                 }}
               />
             </Form.Group>
+            
           </Form>
         </Modal.Body>
         <Modal.Footer
           style={{ backgroundColor: darkMode ? "#181818" : "#f6f8fa" }}
         >
+          {/* Flag Button */}
+          <button
+              type="button" // Prevents form submission
+              onClick={handleFlagToggle}
+              className="ml-3 mt-3 font-menu text-gray-900 dark:text-white hover:text-red-500"
+              title={editedPost.imageFlag ? "Unflag as sensitive" : "Flag as sensitive"}
+            >
+              <FontAwesomeIcon icon={faFlag} />{" "}
+              {editedPost.imageFlag ? "Unflag sensitive content" : "Flag for sensitive content"}
+            </button>
           <Button variant="danger" onClick={handleDeletePost}>
             Delete
           </Button>
