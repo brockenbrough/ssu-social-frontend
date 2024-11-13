@@ -203,33 +203,25 @@
 }
 
 .group:hover .rotate-in-circle {
-  animation: searchAnimation 5.5s ease-in-out forwards;
+  animation: searchAnimation 2s ease-in-out forwards;
   backface-visibility: hidden;
   transform-origin: center;
 }
 
 /* For You Animation */
 @keyframes forYouAnimation {
-  0% { transform: translate(0, 0) scale(1) rotate(0deg); opacity: 1; filter: brightness(1); }
-  5% { transform: translate(10px, -10px) scale(1.05) rotate(18deg); opacity: 0.8; filter: brightness(1.2); }
-  10% { transform: translate(20px, -25px) scale(1.1) rotate(36deg); opacity: 1; filter: brightness(1.5); }
-  15% { transform: translate(30px, -40px) scale(1.15) rotate(54deg); opacity: 0.9; filter: brightness(1.3); }
-  20% { transform: translate(40px, -55px) scale(1.2) rotate(72deg); opacity: 1; filter: brightness(1.7); }
-  30% { transform: translate(55px, -60px) scale(1.25) rotate(108deg); opacity: 0.8; filter: brightness(1.4); }
-  40% { transform: translate(70px, -55px) scale(1.2) rotate(144deg); opacity: 1; filter: brightness(1.6); }
-  50% { transform: translate(85px, -40px) scale(1.15) rotate(180deg); opacity: 0.9; filter: brightness(1.8); }
-  60% { transform: translate(100px, -20px) scale(1.1) rotate(216deg); opacity: 1; filter: brightness(1.3); }
-  70% { transform: translate(115px, 0) scale(1.05) rotate(252deg); opacity: 0.8; filter: brightness(1.4); }
-  80% { transform: translate(125px, 20px) scale(1) rotate(288deg); opacity: 1; filter: brightness(1.5); }
-  90% { transform: translate(135px, 40px) scale(0.95) rotate(324deg); opacity: 0.8; filter: brightness(1.2); }
-  100% { transform: translate(145px, 60px) scale(0.9) rotate(360deg); opacity: 1; filter: brightness(1); }
+  0% { transform: rotateY(0deg) scale(1.25); }
+  25% { transform: rotateY(90deg) scale(1.25) skewY(5deg); }
+  50% { transform: rotateY(180deg) scale(1.25); }
+  75% { transform: rotateY(270deg) scale(1.25) skewY(5deg); }
+  100% { transform: rotateY(360deg) scale(1.25); }
 }
 
 body .ssu-nav-link:hover .shoot-icon {
-  animation: forYouAnimation 1.8s cubic-bezier(0.25, 1, 0.5, 1) infinite;
-  color: black;
-  backface-visibility: hidden;
-  transform-origin: center center;
+  animation: forYouAnimation 1.3s linear infinite;
+  transform-origin: center;
+  display: inline-block; 
+  backface-visibility: visible; 
 }
 
 .dark .ssu-nav-link:hover .shoot-icon {
@@ -243,7 +235,7 @@ body .ssu-nav-link:hover .shoot-icon {
 }
 
 .ssu-nav-link:hover .spin-icon {
-  animation: discoverAnimation 2.3s linear infinite;
+  animation: discoverAnimation 1.6s linear infinite;
   backface-visibility: hidden;
   transform-origin: center center;
 }
@@ -257,7 +249,7 @@ body .ssu-nav-link:hover .shoot-icon {
 }
 
 .shake-on-hover:hover .bell {
-  animation: notificationAnimation 1.0s cubic-bezier(0.36, 0.07, 0.19, 0.97) infinite;
+  animation: notificationAnimation 0.8s cubic-bezier(0.36, 0.07, 0.19, 0.97) infinite;
   backface-visibility: hidden;
   transform-origin: center center;
 }
