@@ -534,10 +534,10 @@ bg-white bg-opacity-90 text-gray-900 shadow-lg p-4 rounded-md z-25 border border
             {/* New button to view likes */}
             <button
               onClick={fetchLikesList}
-              className="ml-3 mt-2 font-menu text-gray-900 dark:text-white hover:text-blue-500 hover:scale-125"
+              className="text-sm italic absolute right-0 mt-2 font-menu text-gray-900 dark:text-white hover:text-blue-500 hover:scale-125"
               title="View who liked this post"
             >
-              <FontAwesomeIcon icon={solidHeartIcon} />
+              # of <FontAwesomeIcon icon={solidHeartIcon} />'s
             </button>
 
             
