@@ -324,7 +324,7 @@ const PrivateUserProfile = () => {
             </div>
             <div className="profile-info">
               <div className="username">{"@" + user.username}{user.role === "admin" && <span className="user-role"> (Admin)</span>}</div>
-              <button className="edit-profile-btn" onClick={showUserModal}>edit bio </button>
+              <button className="edit-profile-btn hover:bg-gray-600" onClick={showUserModal}>edit bio </button>
               <div className="profile-stats">
                 <div className="stat-item">
                   <span className="stat-number">{posts.length}</span>
