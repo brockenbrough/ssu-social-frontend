@@ -186,6 +186,17 @@
   @apply w-6 h-6 mr-2;
 }
 
+/* Create Post Animation */
+@keyframes createPostPulse {
+  0%, 100% { transform: scale(1.1); }
+  50% { transform: scale(1.25); }
+}
+
+.ssu-nav-link:hover .fa-plus-circle {
+  animation: createPostPulse 1.1s ease-in-out infinite;
+  transform-origin: center;
+}
+
 /* Search Animation */
 @keyframes searchAnimation {
   0% { transform: translate(0, 0) scale(1) rotate(0deg); }

@@ -73,7 +73,7 @@ export default function Navbar() {
           <CreatePost popupShow={popupShow} setPopupShow={setPopupShow} />
           <span onClick={() => setPopupShow(true)}>
             <FontAwesomeIcon
-              className="mr-4 text-lightMainText dark:text-darkMainText group-hover:text-white"
+              className="fa-plus-circle mr-4 text-lightMainText dark:text-darkMainText group-hover:text-white"
               icon={createIcon}
             />
             <span className="hidden md:inline">Create Post</span>
