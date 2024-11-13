@@ -298,7 +298,7 @@ const PrivateUserProfile = () => {
 
   return (
     <div className="ssu-profilePage-container">
-      <button onClick={toggleMenu} className="toggle-button">&#x22EE;</button>
+      <button onClick={toggleMenu} className="toggle-button absolute text-xl p-2 hover:bg-gray-300 dark:hover:bg-gray-700 rounded-full">&#x22EE;</button>
       {showMenu && (
         <div className={`side-menu ${showMenu ? "open" : ""}`}>
           <button className="menu-item hover:bg-gray-500" onClick={showAccountSettings}>Account Settings</button>
