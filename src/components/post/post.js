@@ -55,6 +55,7 @@ const Post = ({ posts: post, isDiscover }) => {
   const [profileImageUrl, setProfileImageUrl] = useState("");
   const [isBlurred, setIsBlurred] = useState(post.imageFlag); 
   const [showMenu, setShowMenu] = useState(false);
+  const [showImageModal, setShowImageModal] = useState(false);
 
 
   useEffect(() => {
@@ -82,6 +83,14 @@ const Post = ({ posts: post, isDiscover }) => {
       setShowCommentCard(true);
     }
   };
+
+  const handleImageClick = () => {
+    setShowImageModal(true);
+  }
+
+  const handleCloseImageModal = () => {
+    setShowImageModal(false);
+  }
 
   const hasMedia = !!(post.imageUri || youtubeThumbnail);
 
@@ -456,10 +465,25 @@ bg-white bg-opacity-90 text-gray-900 shadow-lg p-4 rounded-md z-25 border border
             <img
               src={post.imageUri}
               alt="Post"
+              onClick={handleImageClick}
               className={`ssu-post-img mt-4 mb-3 ${
                 post.imageFlag && isBlurred ? "blur-lg" : ""
               } transition-all duration-300`}
+              style={{ cursor: "pointer" }}
             />
+            {showImageModal && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80" onClick={handleCloseImageModal}>
+              <div className="relative">
+                <img src={post.imageUri} alt="Enlarged Post" className="max-w-full max-h-screen rounded-lg shadow-lg" />
+                <button
+                  className="absolute top-4 right-4 text-white text-2xl font-semibold"
+                  onClick={handleCloseImageModal}
+                >
+                  &times;
+                </button>
+              </div>
+            </div>
+          )}
             {/* Overlay with sensitive content message */}
             {post.imageFlag && isBlurred && (
               <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/50 text-white">
@@ -642,7 +666,7 @@ bg-white bg-opacity-90 text-gray-900 shadow-lg p-4 rounded-md z-25 border border
                 margin: "0 auto 14px auto",
               }}
             />
-          )}
+          )}          
           <Form>
             <Form.Group controlId="editPostContent">
               <Form.Control
