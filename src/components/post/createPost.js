@@ -24,6 +24,7 @@ const CreatePost = ({ popupShow, setPopupShow }) => {
   const [posts, setPosts] = useContext(PostContext);
   const [postPage, setPostPage] = useContext(PostPageContext);
   const [error, setError] = useState("");
+  const [imageFlag, setImageFlag] = useState(false);
 
   const fileInputRef = useRef(null);
 
@@ -152,6 +153,7 @@ const CreatePost = ({ popupShow, setPopupShow }) => {
         content: description,
         username: user.username,
         imageUri: post.imageUri,
+        imageFlag,
       };
       const response = await apiClient.post(`/posts/createPost`, post);
 
@@ -193,6 +195,7 @@ const CreatePost = ({ popupShow, setPopupShow }) => {
       description: description,
       thumbnail: thumbnail,
       charCountColor: charCountColor,
+      imageFlag,
     };
 
     if (!post.description.trim()) {
@@ -284,6 +287,15 @@ const CreatePost = ({ popupShow, setPopupShow }) => {
                   )}
                 </Form.Group>
 
+                <Form.Group controlId="formSensitiveContent" className="mt-3">
+                  <Form.Check
+                    type="checkbox"
+                    label="Mark as sensitive content"
+                    checked={imageFlag}
+                    onChange={(e) => setImageFlag(e.target.checked)}
+                  />
+                </Form.Group>
+
                 <div
                   onClick={handleImageClick}
                   style={{ marginBottom: "15px" }}
@@ -314,7 +326,7 @@ const CreatePost = ({ popupShow, setPopupShow }) => {
                     <img
                       id="imagePreview"
                       alt="Selected Image"
-                      className="image-preview"
+                      className={`image-preview ${imageFlag ? "blur-lg" : ""}`}
                       src={URL.createObjectURL(image)}
                     />
                     <button
