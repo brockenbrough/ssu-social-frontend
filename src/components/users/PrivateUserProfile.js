@@ -14,7 +14,7 @@ import ProfileImage from "../images/ProfileImage.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as solidHeartIcon, faComment as solidCommentIcon } from "@fortawesome/free-solid-svg-icons";
 import { faPhotoVideo, faAlignLeft } from "@fortawesome/free-solid-svg-icons";
-import { faLightbulb } from "@fortawesome/free-solid-svg-icons";
+import { faFileLines } from "@fortawesome/free-solid-svg-icons";
 import { faTh } from "@fortawesome/free-solid-svg-icons"; // Grid icon (9 small squares)
 import { faCamera } from "@fortawesome/free-solid-svg-icons";
 import Post from "../post/post.js";
@@ -327,17 +327,17 @@ const PrivateUserProfile = () => {
               <button className="edit-profile-btn hover:bg-gray-600" onClick={showUserModal}>edit bio </button>
               <div className="profile-stats">
                 <div className="stat-item">
-                  <span className="stat-number">{posts.length}</span>
+                  <span className="stat-number hover:scale-125">{posts.length}</span>
                   <span className="stat-label">
                     {posts.length === 1 ? "post" : "posts"}
                   </span>
                 </div>
                 <div className="stat-item" onClick={followerRouteChange} style={{ cursor: 'pointer' }}>
-                  <span className="stat-number">{followerCount}</span>
+                  <span className="stat-number hover:scale-125">{followerCount}</span>
                   <span className="stat-label">followers</span>
                 </div>
                 <div className="stat-item" onClick={followingRouteChange} style={{ cursor: 'pointer' }}>
-                  <span className="stat-number">{followingCount}</span>
+                  <span className="stat-number hover:scale-125">{followingCount}</span>
                   <span className="stat-label">following</span>
                 </div>
               </div>
@@ -357,7 +357,7 @@ const PrivateUserProfile = () => {
               className={filter === 'text' ? 'active' : ''}
               onClick={() => setFilter('text')}
             >
-              <FontAwesomeIcon icon={faLightbulb} />
+              <FontAwesomeIcon icon={faFileLines} />
             </button>
           </div>
 
