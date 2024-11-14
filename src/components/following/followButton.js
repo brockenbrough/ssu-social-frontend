@@ -22,16 +22,12 @@ export default function FollowButton(props) {
     setUser(getUserInfo());
   }, []); // Get user's info
 
-  const saveFollowNotification = async (
-    actionUsername,
-    username,
-    followUnfollow
-  ) => {
+  const saveFollowNotification = async (actionUsername, username) => {
     const data = {
       type: "follow",
       username: username,
       actionUsername: actionUsername,
-      text: `@${actionUsername} ${followUnfollow} you.`,
+      text: `@${actionUsername} followed you.`,
     };
 
     if (data.username === data.actionUsername) return;
@@ -60,7 +56,7 @@ export default function FollowButton(props) {
           props.targetUserId
         );
         onUpdateFollowerCount(updatedFollowerCount);
-        saveFollowNotification(user.username, props.username, "followed");
+        saveFollowNotification(user.username, props.targetUserId);
       } else {
         throw new Error("Failed to follow the user");
       }
@@ -87,7 +83,6 @@ export default function FollowButton(props) {
           props.targetUserId
         );
         onUpdateFollowerCount(updatedFollowerCount);
-        saveFollowNotification(user.username, props.username, "unfollowed");
       } else {
         console.error("Failed to unfollow the user");
       }
