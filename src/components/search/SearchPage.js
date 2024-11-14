@@ -3,12 +3,13 @@ import { useLocation, useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import getUserInfoAsync from "../../utilities/decodeJwt";
 import PostList from "../post/postlist";
+import Chat from "../chat/chat";
 
 function SearchPage() {
   const location = useLocation();
   const navigate = useNavigate();
-  const initialSearchInput = location.state?.searchInput || ""; 
-  const [searchInput, setSearchInput] = useState(initialSearchInput); 
+  const initialSearchInput = location.state?.searchInput || "";
+  const [searchInput, setSearchInput] = useState(initialSearchInput);
   const [user, setUser] = useState(null);
   const [posts, setPosts] = useState([]);
   const [profiles, setProfiles] = useState([]);
@@ -30,9 +31,13 @@ function SearchPage() {
         return;
       }
       try {
-        const url = `${process.env.REACT_APP_BACKEND_SERVER_URI}/post/search/${encodeURIComponent(searchInput)}`;
+        const url = `${
+          process.env.REACT_APP_BACKEND_SERVER_URI
+        }/post/search/${encodeURIComponent(searchInput)}`;
         const response = await axios.get(url);
-        const sortedPosts = response.data.sort((a, b) => new Date(b.date) - new Date(a.date));
+        const sortedPosts = response.data.sort(
+          (a, b) => new Date(b.date) - new Date(a.date)
+        );
         setPosts(sortedPosts);
       } catch (error) {
         console.error("Error fetching posts:", error);
@@ -77,15 +82,19 @@ function SearchPage() {
       <div className="flex items-center justify-center py-4 space-x-2">
         <button
           onClick={() => setIsPostsVisible(true)}
-          className={`ssu-nav-filter-btn ${isPostsVisible ? "ssu-nav-filter-btn-selected" : ""}`}
-          style={{ padding: '9px 15px', fontSize: '1.15rem' }}
+          className={`ssu-nav-filter-btn ${
+            isPostsVisible ? "ssu-nav-filter-btn-selected" : ""
+          }`}
+          style={{ padding: "9px 15px", fontSize: "1.15rem" }}
         >
           Posts
         </button>
         <button
           onClick={() => setIsPostsVisible(false)}
-          className={`ssu-nav-filter-btn ${!isPostsVisible ? "ssu-nav-filter-btn-selected" : ""}`}
-          style={{ padding: '9px 15px', fontSize: '1.15rem' }}
+          className={`ssu-nav-filter-btn ${
+            !isPostsVisible ? "ssu-nav-filter-btn-selected" : ""
+          }`}
+          style={{ padding: "9px 15px", fontSize: "1.15rem" }}
         >
           Profiles
         </button>
@@ -99,7 +108,9 @@ function SearchPage() {
           onChange={handleInputChange}
         />
       </div>
-      <h2 className="text-2xl font-bold pt-4 text-center">Results for "{searchInput}"</h2>
+      <h2 className="text-2xl font-bold pt-4 text-center">
+        Results for "{searchInput}"
+      </h2>
       <div className="pt-4">
         {isPostsVisible ? (
           posts.length > 0 ? (
@@ -108,39 +119,42 @@ function SearchPage() {
           ) : (
             <p className="text-center">No posts found.</p>
           )
-        ) : (
-          profiles.length > 0 ? (
-            profiles.map((profile) => (
-              <div
-                key={profile._id}
-                className="p-3 border-b border-gray-300 hover:bg-orange-500 cursor-pointer hover:text-white"
-                onClick={() => handleUsernameClick(profile.username)}
-              >
-                <div className="flex items-center space-x-3">
-                  {/* Profile Picture */}
-                  <img
-                    src={profile.profileImage || "https://ssusocial.s3.amazonaws.com/profilepictures/ProfileIcon.png"}
-                    alt="Profile"
-                    className="w-10 h-10 rounded-full object-cover"
-                  />
-                  {/* Username */}
-                  <span className="ssu-textlink-bold font-title text-gray-900 dark:text-white">
-                    @{profile.username}
-                  </span>
-                </div>
-                {/* Add the user's bio here */}
-                {profile.biography && (
-                  <div className="pt-2 text-gray-700 dark:text-gray-300 text-sm">
-                    {profile.biography}
-                  </div>
-                )}
+        ) : profiles.length > 0 ? (
+          profiles.map((profile) => (
+            <div
+              key={profile._id}
+              className="p-3 border-b border-gray-300 hover:bg-orange-500 cursor-pointer hover:text-white"
+              onClick={() => handleUsernameClick(profile.username)}
+            >
+              <div className="flex items-center space-x-3">
+                {/* Profile Picture */}
+                <img
+                  src={
+                    profile.profileImage ||
+                    "https://ssusocial.s3.amazonaws.com/profilepictures/ProfileIcon.png"
+                  }
+                  alt="Profile"
+                  className="w-10 h-10 rounded-full object-cover"
+                />
+                {/* Username */}
+                <span className="ssu-textlink-bold font-title text-gray-900 dark:text-white">
+                  @{profile.username}
+                </span>
               </div>
-            ))
-          ) : (
-            <p className="text-center">No profiles found.</p>
-          )
+              {/* Add the user's bio here */}
+              {profile.biography && (
+                <div className="pt-2 text-gray-700 dark:text-gray-300 text-sm">
+                  {profile.biography}
+                </div>
+              )}
+            </div>
+          ))
+        ) : (
+          <p className="text-center">No profiles found.</p>
         )}
       </div>
+
+      <Chat targetChatUser={null} />
     </div>
   );
 }

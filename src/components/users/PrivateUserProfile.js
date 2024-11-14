@@ -8,16 +8,20 @@ import moment from "moment";
 import { getUserInfoAsync } from "../../utilities/decodeJwtAsync";
 import { useDarkMode } from "../DarkModeContext.js";
 import PostList from "../post/postlist";
-import EditUserBio from './editUserBio.js';
+import EditUserBio from "./editUserBio.js";
 import EditUser from "./editUserPage.js";
 import ProfileImage from "../images/ProfileImage.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart as solidHeartIcon, faComment as solidCommentIcon } from "@fortawesome/free-solid-svg-icons";
+import {
+  faHeart as solidHeartIcon,
+  faComment as solidCommentIcon,
+} from "@fortawesome/free-solid-svg-icons";
 import { faPhotoVideo, faAlignLeft } from "@fortawesome/free-solid-svg-icons";
 import { faFileLines } from "@fortawesome/free-solid-svg-icons";
 import { faTh } from "@fortawesome/free-solid-svg-icons"; // Grid icon (9 small squares)
 import { faCamera } from "@fortawesome/free-solid-svg-icons";
 import Post from "../post/post.js";
+import Chat from "../chat/chat.js";
 
 const PrivateUserProfile = () => {
   const { darkMode } = useDarkMode();
@@ -42,7 +46,9 @@ const PrivateUserProfile = () => {
   const handleShowUploadModal = () => setShowUploadModal(true);
 
   const [selectedFile, setSelectedFile] = useState(null);
-  const [userProfileImage, setUserProfileImage] = useState("/defaultProfile.png");
+  const [userProfileImage, setUserProfileImage] = useState(
+    "/defaultProfile.png"
+  );
   const [username, setUsername] = useState(null);
   const [user, setUser] = useState(null);
   const [posts, setPosts] = useState([]);
@@ -64,14 +70,19 @@ const PrivateUserProfile = () => {
         setUsername(userInfo.username);
 
         // Fetch user data including biography and profileImage
-        const res = await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_URI}/user/getUserByUsername/${userInfo.username}`);
-        
-        const defaultProfileImageUrl = "https://ssusocial.s3.amazonaws.com/profilepictures/ProfileIcon.png";
-        
+        const res = await axios.get(
+          `${process.env.REACT_APP_BACKEND_SERVER_URI}/user/getUserByUsername/${userInfo.username}`
+        );
+
+        const defaultProfileImageUrl =
+          "https://ssusocial.s3.amazonaws.com/profilepictures/ProfileIcon.png";
+
         // Use fetched profile image if available, otherwise use default
-        const fetchedProfileImage = res.data.profileImage ? res.data.profileImage : defaultProfileImageUrl;
+        const fetchedProfileImage = res.data.profileImage
+          ? res.data.profileImage
+          : defaultProfileImageUrl;
         setUserProfileImage(fetchedProfileImage);
-        
+
         // Ensure biography is part of the fetched user data
         if (res.data.biography) {
           setUser((prevUser) => ({
@@ -92,7 +103,9 @@ const PrivateUserProfile = () => {
   // Fetch posts, followers, and following counts
   const fetchPosts = useCallback(async () => {
     try {
-      const res = await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getAllByUsername/${username}`);
+      const res = await axios.get(
+        `${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getAllByUsername/${username}`
+      );
       setPosts(res.data);
     } catch (error) {
       alert(`Unable to get posts: ${error.message}`);
@@ -101,8 +114,12 @@ const PrivateUserProfile = () => {
 
   const fetchFollowerCount = async () => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_URI}/followers/${username}`);
-      setFollowerCount(response.data.length > 0 ? response.data[0].followers.length : 0);
+      const response = await axios.get(
+        `${process.env.REACT_APP_BACKEND_SERVER_URI}/followers/${username}`
+      );
+      setFollowerCount(
+        response.data.length > 0 ? response.data[0].followers.length : 0
+      );
     } catch (error) {
       console.error(`Error fetching follower count: ${error.message}`);
     }
@@ -110,8 +127,12 @@ const PrivateUserProfile = () => {
 
   const fetchFollowingCount = async () => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_URI}/following/${username}`);
-      setFollowingCount(response.data.length > 0 ? response.data[0].following.length : 0);
+      const response = await axios.get(
+        `${process.env.REACT_APP_BACKEND_SERVER_URI}/following/${username}`
+      );
+      setFollowingCount(
+        response.data.length > 0 ? response.data[0].following.length : 0
+      );
     } catch (error) {
       console.error(`Error fetching following count: ${error.message}`);
     }
@@ -126,13 +147,19 @@ const PrivateUserProfile = () => {
   // Profile image upload
   const onFileChange = (event) => {
     const file = event.target.files[0];
-    const validImageTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif', 'image/webp'];
-  
+    const validImageTypes = [
+      "image/jpeg",
+      "image/png",
+      "image/jpg",
+      "image/gif",
+      "image/webp",
+    ];
+
     if (file && validImageTypes.includes(file.type)) {
       setSelectedFile(file);
     } else {
-      alert('Please select a valid image file.');
-      event.target.value = ''; // Clear the invalid file selection
+      alert("Please select a valid image file.");
+      event.target.value = ""; // Clear the invalid file selection
     }
   };
 
@@ -158,11 +185,15 @@ const PrivateUserProfile = () => {
     formData.append("name", username);
 
     try {
-      const response = await axios.post(`${process.env.REACT_APP_BACKEND_SERVER_URI}/profile/upload`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const response = await axios.post(
+        `${process.env.REACT_APP_BACKEND_SERVER_URI}/profile/upload`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
 
       if (response.status === 200) {
         const { imageUri } = response.data;
@@ -197,19 +228,22 @@ const PrivateUserProfile = () => {
   // New function to remove profile image
   const removeProfileImage = async () => {
     try {
-      const response = await axios.post(`${process.env.REACT_APP_BACKEND_SERVER_URI}/profile/remove`, {
-        name: username,
-      });
+      const response = await axios.post(
+        `${process.env.REACT_APP_BACKEND_SERVER_URI}/profile/remove`,
+        {
+          name: username,
+        }
+      );
 
       if (response.status === 200) {
-        setUserProfileImage(response.data.profileImage);  // Set the default profile picture
-        setShowUploadModal(false);  // Close the modal after removal
+        setUserProfileImage(response.data.profileImage); // Set the default profile picture
+        setShowUploadModal(false); // Close the modal after removal
       } else {
-        alert('Failed to remove profile image.');
+        alert("Failed to remove profile image.");
       }
     } catch (error) {
-      console.error('Error removing profile image:', error);
-      alert('An error occurred while removing the profile picture.');
+      console.error("Error removing profile image:", error);
+      alert("An error occurred while removing the profile picture.");
     }
   };
 
@@ -263,33 +297,35 @@ const PrivateUserProfile = () => {
     setAccountSettingModal(false);
   };
 
-  const filteredPosts = posts.filter(post => {
-    if (filter === 'text') {
+  const filteredPosts = posts.filter((post) => {
+    if (filter === "text") {
       return !post.imageUri && !post.videoUri && !post.link;
     }
     return post.imageUri || post.videoUri || post.link;
   });
 
   // Function to handle post click
-  const handlePostClick = (index) => { 
-    setSelectedPostIndex(index);       
-    setShowPostModal(true);            
-  };  
-  
-  const mediaPosts = posts.filter(post => post.imageUri || post.videoUri);
-  const textPosts = posts.filter(post => !post.imageUri && !post.videoUri && !post.link);
+  const handlePostClick = (index) => {
+    setSelectedPostIndex(index);
+    setShowPostModal(true);
+  };
+
+  const mediaPosts = posts.filter((post) => post.imageUri || post.videoUri);
+  const textPosts = posts.filter(
+    (post) => !post.imageUri && !post.videoUri && !post.link
+  );
 
   const filterButtons = (
     <div className="filter-buttons">
       <button
-        className={filter === 'upload' ? 'active' : ''}
-        onClick={() => setFilter('upload')}
+        className={filter === "upload" ? "active" : ""}
+        onClick={() => setFilter("upload")}
       >
         <FontAwesomeIcon icon={faCamera} /> Media
       </button>
       <button
-        className={filter === 'text' ? 'active' : ''}
-        onClick={() => setFilter('text')}
+        className={filter === "text" ? "active" : ""}
+        onClick={() => setFilter("text")}
       >
         <FontAwesomeIcon icon={faAlignLeft} /> Text
       </button>
@@ -298,12 +334,29 @@ const PrivateUserProfile = () => {
 
   return (
     <div className="ssu-profilePage-container">
-      <button onClick={toggleMenu} className="toggle-button absolute text-xl p-2 hover:bg-gray-300 dark:hover:bg-gray-700 rounded-full">&#x22EE;</button>
+      <button
+        onClick={toggleMenu}
+        className="toggle-button absolute text-xl p-2 hover:bg-gray-300 dark:hover:bg-gray-700 rounded-full"
+      >
+        &#x22EE;
+      </button>
       {showMenu && (
         <div className={`side-menu ${showMenu ? "open" : ""}`}>
-          <button className="menu-item hover:bg-gray-500" onClick={showAccountSettings}>Account Settings</button>
-          <button className="menu-item hover:bg-gray-500">Personal Information</button>
-          <button onClick={handleShowLogoutConfirmation} className="ssu-button-primary">log out</button>
+          <button
+            className="menu-item hover:bg-gray-500"
+            onClick={showAccountSettings}
+          >
+            Account Settings
+          </button>
+          <button className="menu-item hover:bg-gray-500">
+            Personal Information
+          </button>
+          <button
+            onClick={handleShowLogoutConfirmation}
+            className="ssu-button-primary"
+          >
+            log out
+          </button>
         </div>
       )}
 
@@ -323,21 +376,45 @@ const PrivateUserProfile = () => {
               />
             </div>
             <div className="profile-info">
-              <div className="username">{"@" + user.username}{user.role === "admin" && <span className="user-role"> (Admin)</span>}</div>
-              <button className="edit-profile-btn hover:bg-gray-600" onClick={showUserModal}>edit bio </button>
+              <div className="username">
+                {"@" + user.username}
+                {user.role === "admin" && (
+                  <span className="user-role"> (Admin)</span>
+                )}
+              </div>
+              <button
+                className="edit-profile-btn hover:bg-gray-600"
+                onClick={showUserModal}
+              >
+                edit bio{" "}
+              </button>
               <div className="profile-stats">
                 <div className="stat-item">
-                  <span className="stat-number hover:scale-125">{posts.length}</span>
+                  <span className="stat-number hover:scale-125">
+                    {posts.length}
+                  </span>
                   <span className="stat-label">
                     {posts.length === 1 ? "post" : "posts"}
                   </span>
                 </div>
-                <div className="stat-item" onClick={followerRouteChange} style={{ cursor: 'pointer' }}>
-                  <span className="stat-number hover:scale-125">{followerCount}</span>
+                <div
+                  className="stat-item"
+                  onClick={followerRouteChange}
+                  style={{ cursor: "pointer" }}
+                >
+                  <span className="stat-number hover:scale-125">
+                    {followerCount}
+                  </span>
                   <span className="stat-label">followers</span>
                 </div>
-                <div className="stat-item" onClick={followingRouteChange} style={{ cursor: 'pointer' }}>
-                  <span className="stat-number hover:scale-125">{followingCount}</span>
+                <div
+                  className="stat-item"
+                  onClick={followingRouteChange}
+                  style={{ cursor: "pointer" }}
+                >
+                  <span className="stat-number hover:scale-125">
+                    {followingCount}
+                  </span>
                   <span className="stat-label">following</span>
                 </div>
               </div>
@@ -348,14 +425,14 @@ const PrivateUserProfile = () => {
           {/* Post List */}
           <div className="filter-buttons">
             <button
-              className={filter === 'upload' ? 'active' : ''}
-              onClick={() => setFilter('upload')}
+              className={filter === "upload" ? "active" : ""}
+              onClick={() => setFilter("upload")}
             >
               <FontAwesomeIcon icon={faCamera} />
             </button>
             <button
-              className={filter === 'text' ? 'active' : ''}
-              onClick={() => setFilter('text')}
+              className={filter === "text" ? "active" : ""}
+              onClick={() => setFilter("text")}
             >
               <FontAwesomeIcon icon={faFileLines} />
             </button>
@@ -365,7 +442,11 @@ const PrivateUserProfile = () => {
           {filter === "upload" && (
             <div className="profile-posts">
               {mediaPosts.map((post, index) => (
-                <div key={post.id} className="profile-post-item" onClick={() => openPostModal(index)}>
+                <div
+                  key={post.id}
+                  className="profile-post-item"
+                  onClick={() => openPostModal(index)}
+                >
                   {post.imageUri && <img src={post.imageUri} alt="Post" />}
                   {post.videoUri && <video src={post.videoUri} controls />}
                 </div>
@@ -376,7 +457,7 @@ const PrivateUserProfile = () => {
           {/* Text Posts List */}
           {filter === "text" && (
             <div className="text-posts-list">
-              {textPosts.map(post => (
+              {textPosts.map((post) => (
                 <div key={post.id}>
                   <Post posts={post} />
                 </div>
@@ -399,7 +480,9 @@ const PrivateUserProfile = () => {
               ))}
             </Modal.Body>
             <Modal.Footer>
-              <Button variant="secondary" onClick={closePostModal}>Close</Button>
+              <Button variant="secondary" onClick={closePostModal}>
+                Close
+              </Button>
             </Modal.Footer>
           </Modal>
 
@@ -423,7 +506,11 @@ const PrivateUserProfile = () => {
           </Modal>
 
           {/* Profile Image Upload Modal */}
-          <Modal show={showUploadModal} onHide={handleCloseUploadModal} centered>
+          <Modal
+            show={showUploadModal}
+            onHide={handleCloseUploadModal}
+            centered
+          >
             <div
               className="popup"
               style={{
@@ -431,11 +518,19 @@ const PrivateUserProfile = () => {
                 color: darkMode ? "#fff" : "#000",
               }}
             >
-              <Modal.Header closeButton closeVariant={darkMode ? "white" : "black"}>
+              <Modal.Header
+                closeButton
+                closeVariant={darkMode ? "white" : "black"}
+              >
                 <Modal.Title>Change Profile Picture</Modal.Title>
               </Modal.Header>
-              <Modal.Body style={{ paddingBottom: "0" }}> {/* Adjusted padding to remove white line */}
-                <div onClick={() => fileInputRef.current.click()} style={{ marginBottom: "15px", textAlign: "center" }}>
+              <Modal.Body style={{ paddingBottom: "0" }}>
+                {" "}
+                {/* Adjusted padding to remove white line */}
+                <div
+                  onClick={() => fileInputRef.current.click()}
+                  style={{ marginBottom: "15px", textAlign: "center" }}
+                >
                   <img
                     src={darkMode ? "/addImageLight.png" : "/add-img-icon.png"}
                     alt="Add Image Icon"
@@ -446,7 +541,6 @@ const PrivateUserProfile = () => {
                     }}
                   />
                 </div>
-
                 <input
                   type="file"
                   id="profileImage"
@@ -456,7 +550,6 @@ const PrivateUserProfile = () => {
                   onChange={onFileChange}
                   style={{ display: "none" }}
                 />
-
                 {selectedFile && (
                   <div className="image-preview-container">
                     <img
@@ -485,7 +578,7 @@ const PrivateUserProfile = () => {
                 </Button>
                 <Button
                   variant="danger"
-                  onClick={removeProfileImage}  // Call the remove function here
+                  onClick={removeProfileImage} // Call the remove function here
                   className="w-full p-2 mt-2 text-white rounded-md"
                 >
                   Remove Current Picture
@@ -495,19 +588,33 @@ const PrivateUserProfile = () => {
           </Modal>
 
           {/* Delete Post Confirmation Modal */}
-          <Modal show={showDeleteConfirmation} onHide={handleCloseDeleteConfirmation}>
+          <Modal
+            show={showDeleteConfirmation}
+            onHide={handleCloseDeleteConfirmation}
+          >
             <Modal.Header closeButton>
               <Modal.Title>Delete Confirmation</Modal.Title>
             </Modal.Header>
             <Modal.Body>Are you sure you want to delete this post?</Modal.Body>
             <Modal.Footer>
-              <Button variant="secondary" onClick={handleCloseDeleteConfirmation}>No</Button>
-              <Button variant="primary" onClick={deleteConfirm}>Yes</Button>
+              <Button
+                variant="secondary"
+                onClick={handleCloseDeleteConfirmation}
+              >
+                No
+              </Button>
+              <Button variant="primary" onClick={deleteConfirm}>
+                Yes
+              </Button>
             </Modal.Footer>
           </Modal>
 
           {/* Logout Confirmation Modal */}
-          <Modal show={showLogoutConfirmation} onHide={handleCloseLogoutConfirmation} centered>
+          <Modal
+            show={showLogoutConfirmation}
+            onHide={handleCloseLogoutConfirmation}
+            centered
+          >
             <div
               className="popup"
               style={{
@@ -515,7 +622,10 @@ const PrivateUserProfile = () => {
                 color: darkMode ? "#fff" : "#000",
               }}
             >
-              <Modal.Header closeButton closeVariant={darkMode ? "white" : "black"}>
+              <Modal.Header
+                closeButton
+                closeVariant={darkMode ? "white" : "black"}
+              >
                 <Modal.Title>Log Out</Modal.Title>
               </Modal.Header>
               <Modal.Body>
@@ -537,10 +647,14 @@ const PrivateUserProfile = () => {
               </Modal.Footer>
             </div>
           </Modal>
+
+          <Chat targetChatUser={null} />
         </>
       ) : (
         <div className="text-center col-md-12">
-          <p>Please <Link to="/">log in</Link> to view your profile.</p>
+          <p>
+            Please <Link to="/">log in</Link> to view your profile.
+          </p>
         </div>
       )}
     </div>

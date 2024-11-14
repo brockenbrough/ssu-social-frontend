@@ -1,13 +1,18 @@
-import React, { useState, useCallback, useLayoutEffect, useEffect  } from "react";
+import React, {
+  useState,
+  useCallback,
+  useLayoutEffect,
+  useEffect,
+} from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import FollowButton from "../following/followButton";
 import Post from "../post/post.js";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCamera, faLightbulb } from '@fortawesome/free-solid-svg-icons';
-import Modal from 'react-bootstrap/Modal'; // Ensure you have this package installed for modal functionality
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCamera, faLightbulb } from "@fortawesome/free-solid-svg-icons";
+import Modal from "react-bootstrap/Modal"; // Ensure you have this package installed for modal functionality
 import { getUserInfoAsync } from "../../utilities/decodeJwtAsync";
-
+import Chat from "../chat/chat.js";
 
 export default function PublicUserList() {
   const [loggedInUsername, setLoggedInUsername] = useState({});
@@ -18,13 +23,15 @@ export default function PublicUserList() {
   const [followerCount, setFollowerCount] = useState(0);
   const [followingCount, setFollowingCount] = useState(0);
   const [loading, setLoading] = useState(true); // New loading state
-  const [filter, setFilter] = useState('upload'); // State for post filter
+  const [filter, setFilter] = useState("upload"); // State for post filter
   const [mediaPosts, setMediaPosts] = useState([]); // State for media posts
   const [textPosts, setTextPosts] = useState([]); // State for text posts
   const [showPostModal, setShowPostModal] = useState(false); // Modal visibility
   const [selectedPostIndex, setSelectedPostIndex] = useState(0); // Index for modal post
-  const [shouldRenderFollowButton, setShouldRenderFollowButton] = useState(false);
-  const defaultProfileImageUrl = "https://ssusocial.s3.amazonaws.com/profilepictures/ProfileIcon.png";
+  const [shouldRenderFollowButton, setShouldRenderFollowButton] =
+    useState(false);
+  const defaultProfileImageUrl =
+    "https://ssusocial.s3.amazonaws.com/profilepictures/ProfileIcon.png";
 
   const fetchUserInfo = async () => {
     try {
@@ -35,21 +42,22 @@ export default function PublicUserList() {
     } catch (error) {
       console.error("Error fetching user info:", error);
     }
-  };  
+  };
 
   const fetchUserInfoAndPosts = useCallback(async () => {
-      try {
-        const userInfo = await getUserInfoAsync();
-        if (userInfo) {
-          setLoggedInUsername(userInfo.username);
-        }
+    try {
+      const userInfo = await getUserInfoAsync();
+      if (userInfo) {
+        setLoggedInUsername(userInfo.username);
+      }
 
       const userResponse = await axios.get(
         `${process.env.REACT_APP_BACKEND_SERVER_URI}/user/getUserByUsername/${username}`
       );
       setUser(userResponse.data);
 
-      const fetchedProfileImage = userResponse.data.profileImage || defaultProfileImageUrl;
+      const fetchedProfileImage =
+        userResponse.data.profileImage || defaultProfileImageUrl;
       setProfileImage(fetchedProfileImage);
 
       const postsResponse = await axios.get(
@@ -60,19 +68,30 @@ export default function PublicUserList() {
         (a, b) => new Date(b.date) - new Date(a.date)
       );
       setPosts(sortedPosts);
-      setMediaPosts(sortedPosts.filter(post => post.imageUri || post.videoUri)); // Filter media posts
-      setTextPosts(sortedPosts.filter(post => !post.imageUri && !post.videoUri)); // Filter text posts
+      setMediaPosts(
+        sortedPosts.filter((post) => post.imageUri || post.videoUri)
+      ); // Filter media posts
+      setTextPosts(
+        sortedPosts.filter((post) => !post.imageUri && !post.videoUri)
+      ); // Filter text posts
 
       const followerResponse = await axios.get(
         `${process.env.REACT_APP_BACKEND_SERVER_URI}/followers/${username}`
       );
-      setFollowerCount(followerResponse.data.length > 0 ? followerResponse.data[0].followers.length : 0);
+      setFollowerCount(
+        followerResponse.data.length > 0
+          ? followerResponse.data[0].followers.length
+          : 0
+      );
 
       const followingResponse = await axios.get(
         `${process.env.REACT_APP_BACKEND_SERVER_URI}/following/${username}`
       );
-      setFollowingCount(followingResponse.data.length > 0 ? followingResponse.data[0].following.length : 0);
-
+      setFollowingCount(
+        followingResponse.data.length > 0
+          ? followingResponse.data[0].following.length
+          : 0
+      );
     } catch (error) {
       console.error(`Error fetching data: ${error.message}`);
     } finally {
@@ -85,7 +104,7 @@ export default function PublicUserList() {
       setShouldRenderFollowButton(true);
     }
   }, [loggedInUsername, user.username]);
-  
+
   const updateFollowerCount = (newFollowerCount) => {
     setFollowerCount(newFollowerCount);
   };
@@ -107,7 +126,8 @@ export default function PublicUserList() {
     setShowPostModal(false);
   };
 
-  if (!loading && (!user || !user.username)) { // Show message only if loading is false and user data is missing
+  if (!loading && (!user || !user.username)) {
+    // Show message only if loading is false and user data is missing
     return (
       <div style={{ textAlign: "center" }}>
         <h4>
@@ -157,23 +177,21 @@ export default function PublicUserList() {
               <span className="stat-label">following</span>
             </div>
           </div>
-          <div className="profile-bio">
-            {user.biography}
-          </div>
+          <div className="profile-bio">{user.biography}</div>
         </div>
       </div>
 
       {/* Filter Buttons */}
       <div className="filter-buttons">
         <button
-          className={filter === 'upload' ? 'active' : ''}
-          onClick={() => setFilter('upload')}
+          className={filter === "upload" ? "active" : ""}
+          onClick={() => setFilter("upload")}
         >
           <FontAwesomeIcon icon={faCamera} />
         </button>
         <button
-          className={filter === 'text' ? 'active' : ''}
-          onClick={() => setFilter('text')}
+          className={filter === "text" ? "active" : ""}
+          onClick={() => setFilter("text")}
         >
           <FontAwesomeIcon icon={faLightbulb} />
         </button>
@@ -183,7 +201,11 @@ export default function PublicUserList() {
       {filter === "upload" && (
         <div className="profile-posts ">
           {mediaPosts.map((post, index) => (
-            <div key={post.id} className="profile-post-item " onClick={() => openPostModal(index)}>
+            <div
+              key={post.id}
+              className="profile-post-item "
+              onClick={() => openPostModal(index)}
+            >
               {post.imageUri && <img src={post.imageUri} alt="Post" />}
               {post.videoUri && <video src={post.videoUri} controls />}
             </div>
@@ -194,7 +216,7 @@ export default function PublicUserList() {
       {/* Text Posts List */}
       {filter === "text" && (
         <div className="text-posts-list">
-          {textPosts.map(post => (
+          {textPosts.map((post) => (
             <div key={post.id}>
               <Post posts={post} />
             </div>
@@ -216,6 +238,8 @@ export default function PublicUserList() {
           ))}
         </Modal.Body>
       </Modal>
+
+      <Chat targetChatUser={null} />
     </div>
   );
 }
