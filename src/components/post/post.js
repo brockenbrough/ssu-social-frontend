@@ -45,7 +45,7 @@ const Post = ({ posts: post, isDiscover }) => {
   const { darkMode } = useDarkMode();
   const isCurrentUserPost = user && user.username === post.username;
   const [showEditModal, setShowEditModal] = useState(false);
-  const [editedPost, setEditedPost] = useState({ content: post.content, imageFlag: post.imageFlag });
+  const [editedPost, setEditedPost] = useState({ content: post.content, isSensitive: post.isSensitive });
   const [showCommentCard, setShowCommentCard] = useState(false);
   const postCardRef = useRef(null);
   const [postCardHeight, setPostCardHeight] = useState(0);
@@ -53,7 +53,7 @@ const Post = ({ posts: post, isDiscover }) => {
   const [isAnimationActive, setIsAnimationActive] = useState(false);
   const [isSlidingOut, setIsSlidingOut] = useState(false);
   const [profileImageUrl, setProfileImageUrl] = useState("");
-  const [isBlurred, setIsBlurred] = useState(post.imageFlag); 
+  const [isBlurred, setIsBlurred] = useState(post.isSensitive); 
   const [showMenu, setShowMenu] = useState(false);
   const [showImageModal, setShowImageModal] = useState(false);
 
@@ -313,7 +313,7 @@ const Post = ({ posts: post, isDiscover }) => {
 
   const handleShowEditModal = () => {
     if (isCurrentUserPost) {
-      setEditedPost({ content: post.content, imageFlag: post.imageFlag });
+      setEditedPost({ content: post.content, isSensitive: post.isSensitive });
       setShowEditModal(true);
     } else {
       alert("You don't have permission to edit this post.");
@@ -328,11 +328,11 @@ const Post = ({ posts: post, isDiscover }) => {
     apiClient
       .put(`/posts/updatePost/${post._id}`, {
         content: editedPost.content,
-        imageFlag: editedPost.imageFlag,
+        isSensitive: editedPost.isSensitive,
       })
       .then((response) => {
         const updatedPost = response.data.post;
-        setIsBlurred(updatedPost.imageFlag);
+        setIsBlurred(updatedPost.isSensitive);
         handleCloseEditModal();
         setPostPage(0);
         
@@ -362,7 +362,7 @@ const Post = ({ posts: post, isDiscover }) => {
   const handleFlagToggle = () => {
     setEditedPost((prev) => ({
       ...prev,
-      imageFlag: !prev.imageFlag
+      isSensitive: !prev.isSensitive
     }));
   };
   
@@ -467,7 +467,7 @@ bg-white bg-opacity-90 text-gray-900 shadow-lg p-4 rounded-md z-25 border border
               alt="Post"
               onClick={handleImageClick}
               className={`ssu-post-img mt-4 mb-3 ${
-                post.imageFlag && isBlurred ? "blur-lg" : ""
+                post.isSensitive && isBlurred ? "blur-lg" : ""
               } transition-all duration-300`}
               style={{ cursor: "pointer" }}
             />
@@ -485,7 +485,7 @@ bg-white bg-opacity-90 text-gray-900 shadow-lg p-4 rounded-md z-25 border border
             </div>
           )}
             {/* Overlay with sensitive content message */}
-            {post.imageFlag && isBlurred && (
+            {post.isSensitive && isBlurred && (
               <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/50 text-white">
                 <p className="mb-2 text-center font-medium">
                   Post could contain sensitive content
@@ -499,7 +499,7 @@ bg-white bg-opacity-90 text-gray-900 shadow-lg p-4 rounded-md z-25 border border
               </div>
             )}
             {/* Hide Image Button */}
-            {!isBlurred && post.imageFlag && (
+            {!isBlurred && post.isSensitive && (
               <button
                 onClick={toggleBlur}
                 className=" bg-gray-600 dark:bg-gray-500 px-3 py-1 rounded-md text-sm font-medium text-gray-50 z-10"
@@ -691,10 +691,10 @@ bg-white bg-opacity-90 text-gray-900 shadow-lg p-4 rounded-md z-25 border border
               type="button" // Prevents form submission
               onClick={handleFlagToggle}
               className="ml-3 mt-3 font-menu text-gray-900 dark:text-white hover:text-red-500"
-              title={editedPost.imageFlag ? "Unflag as sensitive" : "Flag as sensitive"}
+              title={editedPost.isSensitive ? "Unflag as sensitive" : "Flag as sensitive"}
             >
               <FontAwesomeIcon icon={faFlag} />{" "}
-              {editedPost.imageFlag ? "Unflag sensitive content" : "Flag for sensitive content"}
+              {editedPost.isSensitive ? "Unflag sensitive content" : "Flag for sensitive content"}
             </button>
           <Button variant="danger" onClick={handleDeletePost}>
             Delete
