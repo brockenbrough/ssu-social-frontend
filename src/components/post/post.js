@@ -30,7 +30,8 @@ import FollowerCount from "../following/getFollowerCount"; // Correct relative p
 import FollowingCount from "../following/getFollowingCount"; // Correct relative path
 import FollowButton from "../following/followButton"; // correct path for follow button
 
-const defaultProfileImageUrl = "https://ssusocial.s3.amazonaws.com/profilepictures/ProfileIcon.png";
+const defaultProfileImageUrl =
+  "https://ssusocial.s3.amazonaws.com/profilepictures/ProfileIcon.png";
 
 // Cache to store profile images temporarily
 const profileImageCache = {};
@@ -61,7 +62,9 @@ const Post = ({ posts: post, isDiscover }) => {
   const [postPage, setPostPage] = useContext(PostPageContext);
   const [isAnimationActive, setIsAnimationActive] = useState(false);
   const [isSlidingOut, setIsSlidingOut] = useState(false);
-  const [profileImageUrl, setProfileImageUrl] = useState(profileImageCache[post.username] || defaultProfileImageUrl);
+  const [profileImageUrl, setProfileImageUrl] = useState(
+    profileImageCache[post.username] || defaultProfileImageUrl
+  );
   const [isBlurred, setIsBlurred] = useState(post.isSensitive);
   const [showMenu, setShowMenu] = useState(false);
   const [showImageModal, setShowImageModal] = useState(false);
@@ -410,20 +413,20 @@ const Post = ({ posts: post, isDiscover }) => {
               <img
                 src={profileImageUrl}
                 alt="Profile"
-                style={{
-                  width: "40px",
-                  height: "40px",
-                  borderRadius: "50%",
-                  marginRight: "8px",
-                  backgroundColor: profileImageUrl === defaultProfileImageUrl ? "white" : "transparent",
-                }}
+                className={`w-10 h-10 mr-2 rounded-full cursor-pointer ${
+                  profileImageUrl === defaultProfileImageUrl
+                    ? "bg-white"
+                    : "bg-transparent"
+                }`}
                 onClick={() => {
                   navigate(
-                    post.username === "currentUser" ? "/privateUserProfile" : `/publicProfilePage/${post.username}`
+                    post.username === "currentUser"
+                      ? "/privateUserProfile"
+                      : `/publicProfilePage/${post.username}`
                   );
                 }}
               />
-              <div className="relative group">
+              <div className="group w-60 truncate hover:text-orange-500">
                 <a
                   href={
                     post.username === "currentUser"
@@ -467,10 +470,12 @@ bg-white bg-opacity-90 text-gray-900 shadow-lg p-4 rounded-md z-25 border border
                   </div>
                 </div>
               </div>
-                <span className="ml-4 mr-4 right-0 text-xs">
-                    {formattedDate}
-                </span>
+              <div className="w-20 text-end">
+                {/* <span className="ml-4 mr-4 right-0 text-xs">
+                  {formattedDate}
+                </span> */}
                 <span className="text-xs">{timeAgo(post.date)}</span>
+              </div>
             </div>
 
             {/* Post text */}
