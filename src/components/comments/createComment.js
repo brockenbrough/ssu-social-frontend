@@ -230,7 +230,7 @@ function CreateComment({ post, setParentCommentCount, postCardHeight }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!formData.commentContent.trim()) return; 
+    if (!formData.commentContent.trim()) return;
 
     setCommentCount(commentCount + 1);
     setParentCommentCount(commentCount + 1);
@@ -251,34 +251,20 @@ function CreateComment({ post, setParentCommentCount, postCardHeight }) {
 
     try {
       // Send a POST request to create the comment in MongoDB
-      const response = await fetch(
-        `${process.env.REACT_APP_BACKEND_SERVER_URI}/comments/comment/add`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(newComment),
-        }
-      );
+      await apiClient.post('/comments/comment/add', newComment);
 
-      if (response.ok) {
-        // Reset Form
-        setFormData({ commentContent: "" });
+      // Reset Form
+      setFormData({ commentContent: "" });
 
-        // Update comments
-        setComments([...comments, newComment]);
+      // Update comments
+      setComments([...comments, newComment]);
 
-        // Fetch comment count and comments
-        fetchCommentCount();
-        fetchComments();
-        saveCommentNotification(post);
-        setParentCommentCount();
-      } else {
-        // Handle errors if needed
-        console.error("Error:", response.status);
-        // Handle the error and provide user feedback
-      }
+      // Fetch comment count and comments
+      fetchCommentCount();
+      fetchComments();
+      saveCommentNotification(post);
+      setParentCommentCount();
+
     } catch (error) {
       console.error("Error:", error);
       // Handle any other errors that may occur during the fetch request
@@ -345,7 +331,7 @@ function CreateComment({ post, setParentCommentCount, postCardHeight }) {
             </div>
             {user.username === comment.username && (
               <button
-               className="custom-delete-button absolute right-0 top-2 hidden group-hover:flex"
+                className="custom-delete-button absolute right-0 top-2 hidden group-hover:flex"
                 onClick={async () => {
                   const success = await deleteComment(comment._id);
                   if (success) {
@@ -412,8 +398,7 @@ function CreateComment({ post, setParentCommentCount, postCardHeight }) {
           <textarea
             ref={textareaRef}
             className={`comment-input custom-scrollbar custom-scrollbar-dark resize-none w-full max-h-9 
-            ${
-              formData.commentContent.length === 0
+            ${formData.commentContent.length === 0
                 ? "overflow-hidden"
                 : "overflow-y-auto"
               }`}
@@ -468,8 +453,8 @@ function CreateComment({ post, setParentCommentCount, postCardHeight }) {
             pickerPosition="-258px"
             onPickerToggle={handleEmojiPickerToggle}
             textareaRef={textareaRef}
-            size="2xl" 
-            margin="ml-1" 
+            size="2xl"
+            margin="ml-1"
             padding="p-0"
           />
           {showSuggestions && (
