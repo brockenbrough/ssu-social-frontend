@@ -43,7 +43,7 @@ const Post = ({ posts: post, isDiscover }) => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const { darkMode } = useDarkMode();
-  const isCurrentUserPost = user && user.username === post.username;
+  const isCurrentUserPost = user && (user.username === post.username || user.role === "admin");
   const [showEditModal, setShowEditModal] = useState(false);
   const [editedPost, setEditedPost] = useState({ content: post.content, isSensitive: post.isSensitive });
   const [showCommentCard, setShowCommentCard] = useState(false);
@@ -645,7 +645,7 @@ bg-white bg-opacity-90 text-gray-900 shadow-lg p-4 rounded-md z-25 border border
           <Modal.Title
             style={{ backgroundColor: darkMode ? "#181818" : "#f6f8fa" }}
           >
-            Would you like to update or delete your post?
+            Would you like to update or delete this post?
           </Modal.Title>
         </Modal.Header>
         <Modal.Body
