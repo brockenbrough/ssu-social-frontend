@@ -145,10 +145,7 @@ function PostList({ type, profileUsername, searchInput }) {
 
                 return (
                   <div ref={isLastPost ? lastPostRef : null} key={post._id}>
-                    <Post
-                      posts={post}
-                      isDiscover={type === "all"}
-                    />
+                    <Post posts={post} isDiscover={type === "all"} />
                   </div>
                 );
               })}
@@ -156,15 +153,11 @@ function PostList({ type, profileUsername, searchInput }) {
           ) : (
             <div className="d-flex flex-column align-items-center">
               {posts.map((post) => (
-                <Post
-                  key={post._id}
-                  posts={post}
-                  isDiscover={type === "all"}
-                />
+                <Post key={post._id} posts={post} isDiscover={type === "all"} />
               ))}
             </div>
           )}
-          <Chat />
+          <Chat targetChatUser={null} />
           <ScrollToTop />
         </div>
       )}

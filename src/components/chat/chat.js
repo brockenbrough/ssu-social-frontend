@@ -11,10 +11,16 @@ import apiClient from "../../utilities/apiClient";
 import socket from "../../utilities/socket";
 const ChatNotificationSound = "/ChatNotificationSound.mp3";
 
-const Chat = () => {
+const Chat = ({ targetChatUser }) => {
   const defaultProfileImageUrl =
     "https://ssusocial.s3.amazonaws.com/profilepictures/ProfileIcon.png";
   const chatNotificationAudioRef = useRef(null);
+
+  useEffect(() => {
+    if (targetChatUser) {
+      handleSearchChatUserClick(targetChatUser);
+    }
+  }, [targetChatUser]);
 
   const TABS = { history: "history", search: "search", chat: "chat" };
   const [currentTab, setCurrentTab] = useState(TABS.history);
