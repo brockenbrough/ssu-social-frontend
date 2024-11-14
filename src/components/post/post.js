@@ -527,10 +527,12 @@ bg-white bg-opacity-90 text-gray-900 shadow-lg p-4 rounded-md z-25 border border
                 />
               </div>
             )}
+            <div className="flex flex-col items-start space-y-2 mt-2">
+              <div className="flex flex-row items-center space-x-4">
             {/* Like and comment buttons */}
             <button
               onClick={handleLikeClick}
-              className="ml-1 mr-4 mt-2 font-menu text-gray-900 dark:text-white hover-outline-heart"
+              className="ml-1 mr-0.25 mt-2 font-menu text-gray-900 dark:text-white hover-outline-heart"
             >
               <FontAwesomeIcon
                 icon={isLiked ? solidHeartIcon : regularHeartIcon}
@@ -554,16 +556,16 @@ bg-white bg-opacity-90 text-gray-900 shadow-lg p-4 rounded-md z-25 border border
                 {commentCount > 0 ? commentCount : "0"}
               </span>
             </button>
-
+          </div>
             {/* New button to view likes */}
             <button
               onClick={fetchLikesList}
-              className="text-sm italic absolute right-0 mt-2 font-menu text-gray-900 dark:text-white hover:text-orange-500 hover:scale-125"
+              className="text-sm italic right-0 mt-2 font-menu text-gray-900 dark:text-white hover:text-orange-500 hover:scale-125"
               title="View who liked this post"
             >
-              View who <FontAwesomeIcon icon={solidHeartIcon} />'d
+              Who <FontAwesomeIcon icon={solidHeartIcon} />'d
             </button>
-
+          </div>
             
 
             {/* Post date */}
