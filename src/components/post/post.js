@@ -43,7 +43,8 @@ const Post = ({ posts: post, isDiscover }) => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const { darkMode } = useDarkMode();
-  const isCurrentUserPost = user && (user.username === post.username || user.role === "admin");
+  const isCurrentUserPost =
+    user && (user.username === post.username || user.role === "admin");
   const [showEditModal, setShowEditModal] = useState(false);
   const [editedPost, setEditedPost] = useState({
     content: post.content,
@@ -56,7 +57,7 @@ const Post = ({ posts: post, isDiscover }) => {
   const [isAnimationActive, setIsAnimationActive] = useState(false);
   const [isSlidingOut, setIsSlidingOut] = useState(false);
   const [profileImageUrl, setProfileImageUrl] = useState("");
-  const [isBlurred, setIsBlurred] = useState(post.isSensitive); 
+  const [isBlurred, setIsBlurred] = useState(post.isSensitive);
   const [showMenu, setShowMenu] = useState(false);
   const [showImageModal, setShowImageModal] = useState(false);
 
@@ -360,7 +361,7 @@ const Post = ({ posts: post, isDiscover }) => {
   const handleSensitiveToggle = () => {
     setEditedPost((prev) => ({
       ...prev,
-      isSensitive: !prev.isSensitive
+      isSensitive: !prev.isSensitive,
     }));
   };
 
@@ -398,118 +399,135 @@ const Post = ({ posts: post, isDiscover }) => {
             </div>
           )}
           <div>
-    <div className="d-flex align-items-center mb-3">
-    
-      <img
-        src={profileImageUrl} // Profile image URL (already fetched)
-        alt="Profile"
-        style={{
-          width: "40px",
-          height: "40px",
-          borderRadius: "50%",
-          marginRight: "8px",
-          backgroundColor: profileImageUrl.includes("ProfileIcon.png") ? "white" : "transparent", // White background only if default profile image
-          cursor: "pointer",
-        }}
-        onClick={() => {
-          isCurrentUserPost
-            ? navigate("/privateUserProfile")
-            : navigate(`/publicProfilePage/${post.username}`);
-        }}
-      />
-      <div className="relative group">
-        <a
-          href={
-            isCurrentUserPost
-              ? "/privateUserProfile"
-              : `/publicProfilePage/${post.username}`
-          }
-          className="ssu-textlink-bold font-title text-gray-900 dark:text-white"
-        >
-          @{post.username}
-  </a>
-{/* Tooltip with Followers and Following count */}
-<div className="absolute hidden group-hover:flex group-hover:translate-y-2 translate-x-2 group-hover:shadow-xl bottom-0 left-full transform w-45 h-20 
-bg-white bg-opacity-90 text-gray-900 shadow-lg p-4 rounded-md z-25 border border-gray-300 dark:bg-gray-800 dark:text-white dark:border-gray-700">
-  {/* Tooltip Arrow */}
-  <div className="absolute w-3 h-3 top-1/2 right-full transform translate-x-1/2 translate-y-4 rotate-45 bg-white border border-gray-300 dark:bg-gray-800 dark:border-gray-700"></div>  
-  <div className="flex items-center space-x-2">
-    <p className="text-sm font-medium mb-1">
-      <span className="font-semibold">
-        <span className="text-gray-900 dark:text-black"><FollowerCount username={post?.username} /></span>
-      </span>
-    </p>
-    <span className="text-gray-900 dark:text-gray-900">|</span> 
-    <p className="text-sm font-medium mb-1">
-      <span className="font-semibold">
-        <span className="text-gray-900 dark:text-black"><FollowingCount username={post?.username} /></span>
-      </span>
-    </p>
-    {/* FollowButton */}
-    <FollowButton
-    className="ssu-button-bold"
-    targetUserId={post?.username || ""}
-    username={user?.username} 
-    />
-  </div>
-</div>
+            <div className="d-flex align-items-center mb-3">
+              <img
+                src={profileImageUrl} // Profile image URL (already fetched)
+                alt="Profile"
+                style={{
+                  width: "40px",
+                  height: "40px",
+                  borderRadius: "50%",
+                  marginRight: "8px",
+                  backgroundColor: profileImageUrl.includes("ProfileIcon.png")
+                    ? "white"
+                    : "transparent", // White background only if default profile image
+                  cursor: "pointer",
+                }}
+                onClick={() => {
+                  isCurrentUserPost
+                    ? navigate("/privateUserProfile")
+                    : navigate(`/publicProfilePage/${post.username}`);
+                }}
+              />
+              <div className="relative group">
+                <a
+                  href={
+                    isCurrentUserPost
+                      ? "/privateUserProfile"
+                      : `/publicProfilePage/${post.username}`
+                  }
+                  className="ssu-textlink-bold font-title text-gray-900 dark:text-white"
+                >
+                  @{post.username}
+                  {/* Post date */}
+                </a>
+                {/* Tooltip with Followers and Following count */}
+                <div
+                  className="absolute hidden group-hover:flex group-hover:translate-y-2 translate-x-2 group-hover:shadow-xl bottom-0 left-full transform w-45 h-20 
+bg-white bg-opacity-90 text-gray-900 shadow-lg p-4 rounded-md z-25 border border-gray-300 dark:bg-gray-800 dark:text-white dark:border-gray-700"
+                >
+                  {/* Tooltip Arrow */}
+                  <div className="absolute w-3 h-3 top-1/2 right-full transform translate-x-1/2 translate-y-4 rotate-45 bg-white border border-gray-300 dark:bg-gray-800 dark:border-gray-700"></div>
+                  <div className="flex items-center space-x-2">
+                    <p className="text-sm font-medium mb-1">
+                      <span className="font-semibold">
+                        <span className="text-gray-900 dark:text-black">
+                          <FollowerCount username={post?.username} />
+                        </span>
+                      </span>
+                    </p>
+                    <span className="text-gray-900 dark:text-gray-900">|</span>
+                    <p className="text-sm font-medium mb-1">
+                      <span className="font-semibold">
+                        <span className="text-gray-900 dark:text-black">
+                          <FollowingCount username={post?.username} />
+                        </span>
+                      </span>
+                    </p>
+                    {/* FollowButton */}
+                    <FollowButton
+                      className="ssu-button-bold"
+                      targetUserId={post?.username || ""}
+                      username={user?.username}
+                    />
+                  </div>
+                </div>
+                <span className="mr-4 right-0 text-sm"> {formattedDate}</span>
+                <span className="text-sm">{timeAgo(post.date)}</span>
               </div>
             </div>
-            
-          {/* Post text */}
-          <p className="font-display mt-2 text-gray-900 dark:text-white">
-            {displayContent}
-          </p>
-          {/* Image */}
-          {post.imageUri && (
-          <div className="relative">
-            <img
-              src={post.imageUri}
-              alt="Post"
-              onClick={handleImageClick}
-              className={`ssu-post-img mt-4 mb-3 ${
-                post.isSensitive && isBlurred ? "blur-lg" : ""
-              } transition-all duration-300`}
-              style={{ cursor: "pointer" }}
-            />
-            {showImageModal && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80" onClick={handleCloseImageModal}>
+
+            {/* Post text */}
+            <p className="font-display mt-2 text-gray-900 dark:text-white">
+              {displayContent}
+            </p>
+            {/* Image */}
+            {post.imageUri && (
               <div className="relative">
-                <img src={post.imageUri} alt="Enlarged Post" className="max-w-full max-h-screen rounded-lg shadow-lg" />
-                <button
-                  className="absolute top-4 right-4 text-white text-2xl font-semibold"
-                  onClick={handleCloseImageModal}
-                >
-                  &times;
-                </button>
-              </div>
-            </div>
-          )}
-            {/* Overlay with sensitive content message */}
-            {post.isSensitive && isBlurred && (
-              <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/50 text-white">
-                <p className="mb-2 text-center font-medium">
-                  Post could contain sensitive content
-                </p>
-                <button
-                  onClick={toggleBlur}
-                  className="bg-white/80 px-4 py-2 rounded-md text-sm font-medium text-black hover:bg-gray-50"
-                >
-                  View Image
-                </button>
+                <img
+                  src={post.imageUri}
+                  alt="Post"
+                  onClick={handleImageClick}
+                  className={`ssu-post-img mt-4 mb-3 ${
+                    post.isSensitive && isBlurred ? "blur-lg" : ""
+                  } transition-all duration-300`}
+                  style={{ cursor: "pointer" }}
+                />
+                {showImageModal && (
+                  <div
+                    className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80"
+                    onClick={handleCloseImageModal}
+                  >
+                    <div className="relative">
+                      <img
+                        src={post.imageUri}
+                        alt="Enlarged Post"
+                        className="max-w-full max-h-screen rounded-lg shadow-lg"
+                      />
+                      <button
+                        className="absolute top-4 right-4 text-white text-2xl font-semibold"
+                        onClick={handleCloseImageModal}
+                      >
+                        &times;
+                      </button>
+                    </div>
+                  </div>
+                )}
+                {/* Overlay with sensitive content message */}
+                {post.isSensitive && isBlurred && (
+                  <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/50 text-white">
+                    <p className="mb-2 text-center font-medium">
+                      Post could contain sensitive content
+                    </p>
+                    <button
+                      onClick={toggleBlur}
+                      className="bg-white/80 px-4 py-2 rounded-md text-sm font-medium text-black hover:bg-gray-50"
+                    >
+                      View Image
+                    </button>
+                  </div>
+                )}
+                {/* Hide Image Button */}
+                {!isBlurred && post.isSensitive && (
+                  <button
+                    onClick={toggleBlur}
+                    className=" bg-gray-600 dark:bg-gray-500 px-3 py-1 rounded-md text-sm font-medium text-gray-50 z-10"
+                  >
+                    Hide Image
+                  </button>
+                )}
               </div>
             )}
-            {/* Hide Image Button */}
-            {!isBlurred && post.isSensitive && (
-              <button
-                onClick={toggleBlur}
-                className=" bg-gray-600 dark:bg-gray-500 px-3 py-1 rounded-md text-sm font-medium text-gray-50 z-10"
-              >
-                Hide Image
-              </button>
-            )}
-          </div>
-        )}
 
             {/* YouTube Video Embed */}
             {youtubeThumbnail && (
@@ -530,50 +548,45 @@ bg-white bg-opacity-90 text-gray-900 shadow-lg p-4 rounded-md z-25 border border
             )}
             <div className="flex flex-col items-start space-y-2 mt-2">
               <div className="flex flex-row items-center space-x-4">
-            {/* Like and comment buttons */}
-            <button
-              onClick={handleLikeClick}
-              className="ml-1 mr-0.25 mt-2 font-menu text-gray-900 dark:text-white hover-outline-heart"
-            >
-              <FontAwesomeIcon
-                icon={isLiked ? solidHeartIcon : regularHeartIcon}
-                className={`hover:scale-125 transition-transform duration-300 ${
-                  isLiked ? "text-red-500" : ""
-                }`}
-              />
-              <span className="ml-0.5">{` ${likeCount}`}</span>
-            </button>
-            <button
-              onClick={handleShowPostModal}
-              className="mr-4 mt-2 font-menu text-gray-900 dark:text-white hover-outline-comment"
-            >
-              <FontAwesomeIcon
-                className={`hover:scale-125 transition-transform duration-300 ${
-                  showCommentCard ? "text-blue-500" : ""
-                }`}
-                icon={showCommentCard ? solidCommentIcon : regularCommentIcon}
-              />
-              <span className="ml-1.5">
-                {commentCount > 0 ? commentCount : "0"}
-              </span>
-            </button>
-          </div>
-            {/* New button to view likes */}
-            <button
-              onClick={fetchLikesList}
-              className="text-sm italic right-0 mt-2 font-menu text-gray-600 dark:text-white hover:text-orange-500 hover:scale-115"
-              title="View who liked this post"
-            >
-              View likes
-            </button>
-
-            
-
-            {/* Post date */}
-            <p className="ssu-text-tinyright font-menu mt-3 text-gray-900 dark:text-white">
-              <span className="mr-4">{formattedDate}</span>
-              <span>{timeAgo(post.date)}</span>
-            </p>
+                {/* Like and comment buttons */}
+                <button
+                  onClick={handleLikeClick}
+                  className="ml-1 mr-0.25 mt-2 font-menu text-gray-900 dark:text-white hover-outline-heart"
+                >
+                  <FontAwesomeIcon
+                    icon={isLiked ? solidHeartIcon : regularHeartIcon}
+                    className={`hover:scale-125 transition-transform duration-300 ${
+                      isLiked ? "text-red-500" : ""
+                    }`}
+                  />
+                  <span className="ml-0.5">{` ${likeCount}`}</span>
+                </button>
+                <button
+                  onClick={handleShowPostModal}
+                  className="mr-4 mt-2 font-menu text-gray-900 dark:text-white hover-outline-comment"
+                >
+                  <FontAwesomeIcon
+                    className={`hover:scale-125 transition-transform duration-300 ${
+                      showCommentCard ? "text-blue-500" : ""
+                    }`}
+                    icon={
+                      showCommentCard ? solidCommentIcon : regularCommentIcon
+                    }
+                  />
+                  <span className="ml-1.5">
+                    {commentCount > 0 ? commentCount : "0"}
+                  </span>
+                </button>
+              </div>
+              {/* New button to view likes */}
+              <button
+                onClick={fetchLikesList}
+                className="text-sm italic right-0 mt-2 font-menu text-gray-00 dark:text-white hover:text-orange-500 hover:scale-115"
+                title="View who liked this post"
+              >
+                View likes
+              </button>
+            </div>
           </div>
         </div>
         {/* Comment Section */}
@@ -690,14 +703,20 @@ bg-white bg-opacity-90 text-gray-900 shadow-lg p-4 rounded-md z-25 border border
         >
           {/* Toggle Sensitive Button */}
           <button
-              type="button" // Prevents form submission
-              onClick={handleSensitiveToggle}
-              className="ml-3 mt-3 font-menu text-gray-900 dark:text-white hover:text-red-500"
-              title={editedPost.isSensitive ? "Unmark as sensitive" : "Mark as sensitive"}
-            >
-              <FontAwesomeIcon icon={faFlag} />{" "}
-              {editedPost.isSensitive ? "Unmark sensitive content" : "Mark for sensitive content"}
-            </button>
+            type="button" // Prevents form submission
+            onClick={handleSensitiveToggle}
+            className="ml-3 mt-3 font-menu text-gray-900 dark:text-white hover:text-red-500"
+            title={
+              editedPost.isSensitive
+                ? "Unmark as sensitive"
+                : "Mark as sensitive"
+            }
+          >
+            <FontAwesomeIcon icon={faFlag} />{" "}
+            {editedPost.isSensitive
+              ? "Unmark sensitive content"
+              : "Mark for sensitive content"}
+          </button>
           <Button variant="danger" onClick={handleDeletePost}>
             Delete
           </Button>
