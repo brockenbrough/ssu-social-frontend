@@ -451,8 +451,8 @@ bg-white bg-opacity-90 text-gray-900 shadow-lg p-4 rounded-md z-25 border border
     {/* FollowButton */}
     <FollowButton
     className="ssu-button-bold"
-    username={post?.username || ""}
-    targetUserId={user?.username} 
+    targetUserId={post?.username || ""}
+    username={user?.username} 
     />
   </div>
 </div>
