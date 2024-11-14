@@ -67,18 +67,17 @@ const Post = ({ posts: post, isDiscover }) => {
   const [showImageModal, setShowImageModal] = useState(false);
 
   useEffect(() => {
-    // Only fetch if the profile image isn't already in the cache
-    const fetchImage = async () => {
+    const loadImage = async () => {
       if (!profileImageCache[post.username]) {
         const imageUrl = await fetchProfileImage(post.username);
-        profileImageCache[post.username] = imageUrl || defaultProfileImageUrl; // Cache the fetched image
-        setProfileImageUrl(profileImageCache[post.username]); // Update state
+        profileImageCache[post.username] = imageUrl || defaultProfileImageUrl;
+        setProfileImageUrl(profileImageCache[post.username]);
       } else {
-        setProfileImageUrl(profileImageCache[post.username]); // Use cached image if available
+        setProfileImageUrl(profileImageCache[post.username]);
       }
     };
 
-    fetchImage();
+    loadImage();
   }, [post.username]);
 
   const handleShowPostModal = () => {
@@ -409,17 +408,14 @@ const Post = ({ posts: post, isDiscover }) => {
           <div>
             <div className="d-flex align-items-center mb-3">
               <img
-                src={profileImageUrl} // Profile image URL (cached or fetched)
+                src={profileImageUrl}
                 alt="Profile"
                 style={{
                   width: "40px",
                   height: "40px",
                   borderRadius: "50%",
                   marginRight: "8px",
-                  backgroundColor: profileImageUrl.includes("ProfileIcon.png")
-                    ? "white"
-                    : "transparent",
-                  cursor: "pointer",
+                  backgroundColor: profileImageUrl === defaultProfileImageUrl ? "white" : "transparent",
                 }}
                 onClick={() => {
                   navigate(

@@ -14,6 +14,8 @@ import ScrollToTop from "./ScrollToTop";
 import Chat from "../chat/chat";
 import { PostContext, PostPageContext } from "../../App";
 
+const profileImageCache = {}; // Cache for profile images
+
 function PostList({ type, profileUsername, searchInput }) {
   const POST_PER_PAGE = 10;
   const [user, setUser] = useState(null);
@@ -45,7 +47,7 @@ function PostList({ type, profileUsername, searchInput }) {
     }
   }, [user, page, searchInput]);
 
-  // Fetch posts
+  // Fetch posts and pre-fetch profile images
   async function getPosts() {
     let url;
 
@@ -69,6 +71,10 @@ function PostList({ type, profileUsername, searchInput }) {
         type === "feed"
           ? await fetchFeedPosts(response.data.feed)
           : response.data;
+
+      // Pre-fetch profile images
+      await prefetchProfileImages(newPosts);
+
       setPosts((prev) => (page <= 1 ? newPosts : [...prev, ...newPosts]));
       setHasMore(newPosts.length > 0);
     } catch (error) {
@@ -90,6 +96,26 @@ function PostList({ type, profileUsername, searchInput }) {
         )
     );
     return await Promise.all(postsPromises);
+  };
+
+  // Fetches and caches profile images for a batch of posts
+  const prefetchProfileImages = async (posts) => {
+    const fetchPromises = posts.map(async (post) => {
+      const username = post.username;
+      if (!profileImageCache[username]) {
+        try {
+          const response = await axios.get(
+            `${process.env.REACT_APP_BACKEND_SERVER_URI}/user/getUserByUsername/${username}`
+          );
+          profileImageCache[username] = response.data.profileImage || "https://ssusocial.s3.amazonaws.com/profilepictures/ProfileIcon.png";
+        } catch (error) {
+          console.error(`Error fetching profile image for ${username}:`, error);
+          profileImageCache[username] = "https://ssusocial.s3.amazonaws.com/profilepictures/ProfileIcon.png"; // Fallback image
+        }
+      }
+    });
+
+    await Promise.all(fetchPromises);
   };
 
   const lastPostRef = useCallback(
