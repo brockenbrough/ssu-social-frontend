@@ -448,8 +448,12 @@ bg-white bg-opacity-90 text-gray-900 shadow-lg p-4 rounded-md z-25 border border
         <span className="text-gray-900 dark:text-black"><FollowingCount username={post?.username} /></span>
       </span>
     </p>
-    
-    
+    {/* FollowButton */}
+    <FollowButton
+    className="ssu-button-bold"
+    targetUserId={post?.username || ""}
+    username={user?.username} 
+    />
   </div>
 </div>
               </div>
