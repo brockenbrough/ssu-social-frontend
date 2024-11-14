@@ -430,6 +430,8 @@ const Post = ({ posts: post, isDiscover }) => {
           className="ssu-textlink-bold font-title text-gray-900 dark:text-white"
         >
           @{post.username}
+          {/* Post date */}
+          
   </a>
 {/* Tooltip with Followers and Following count */}
 <div className="absolute hidden group-hover:flex group-hover:translate-y-2 translate-x-2 group-hover:shadow-xl bottom-0 left-full transform w-45 h-20 
@@ -456,6 +458,8 @@ bg-white bg-opacity-90 text-gray-900 shadow-lg p-4 rounded-md z-25 border border
     />
   </div>
 </div>
+          <span className="mr-4 right-0 text-sm">          {formattedDate}</span>
+          <span className="text-sm">{timeAgo(post.date)}</span>
               </div>
             </div>
             
@@ -564,19 +568,12 @@ bg-white bg-opacity-90 text-gray-900 shadow-lg p-4 rounded-md z-25 border border
             {/* New button to view likes */}
             <button
               onClick={fetchLikesList}
-              className="text-sm italic right-0 mt-2 font-menu text-gray-600 dark:text-white hover:text-orange-500 hover:scale-115"
+              className="text-sm italic right-0 mt-2 font-menu text-gray-00 dark:text-white hover:text-orange-500 hover:scale-115"
               title="View who liked this post"
             >
               View likes
             </button>
           </div>
-            
-
-            {/* Post date */}
-            <p className="ssu-text-tinyright font-menu mt-3 text-gray-900 dark:text-white">
-              <span className="mr-4">{formattedDate}</span>
-              <span>{timeAgo(post.date)}</span>
-            </p>
           </div>
         </div>
         {/* Comment Section */}
