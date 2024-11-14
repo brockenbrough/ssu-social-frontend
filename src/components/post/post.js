@@ -359,7 +359,7 @@ const Post = ({ posts: post, isDiscover }) => {
     setIsBlurred(!isBlurred);
   };
 
-  const handleFlagToggle = () => {
+  const handleSensitiveToggle = () => {
     setEditedPost((prev) => ({
       ...prev,
       isSensitive: !prev.isSensitive
@@ -686,15 +686,15 @@ bg-white bg-opacity-90 text-gray-900 shadow-lg p-4 rounded-md z-25 border border
         <Modal.Footer
           style={{ backgroundColor: darkMode ? "#181818" : "#f6f8fa" }}
         >
-          {/* Flag Button */}
+          {/* Toggle Sensitive Button */}
           <button
               type="button" // Prevents form submission
-              onClick={handleFlagToggle}
+              onClick={handleSensitiveToggle}
               className="ml-3 mt-3 font-menu text-gray-900 dark:text-white hover:text-red-500"
-              title={editedPost.isSensitive ? "Unflag as sensitive" : "Flag as sensitive"}
+              title={editedPost.isSensitive ? "Unmark as sensitive" : "Mark as sensitive"}
             >
               <FontAwesomeIcon icon={faFlag} />{" "}
-              {editedPost.isSensitive ? "Unflag sensitive content" : "Flag for sensitive content"}
+              {editedPost.isSensitive ? "Unmark sensitive content" : "Mark for sensitive content"}
             </button>
           <Button variant="danger" onClick={handleDeletePost}>
             Delete
