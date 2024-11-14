@@ -154,7 +154,7 @@ function SearchPage() {
         )}
       </div>
 
-      <Chat targetChatUser={null} />
+      <Chat />
     </div>
   );
 }

@@ -157,7 +157,7 @@ function PostList({ type, profileUsername, searchInput }) {
               ))}
             </div>
           )}
-          <Chat targetChatUser={null} />
+          <Chat />
           <ScrollToTop />
         </div>
       )}

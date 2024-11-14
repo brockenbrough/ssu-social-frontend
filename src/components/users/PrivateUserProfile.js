@@ -648,7 +648,7 @@ const PrivateUserProfile = () => {
             </div>
           </Modal>
 
-          <Chat targetChatUser={null} />
+          <Chat />
         </>
       ) : (
         <div className="text-center col-md-12">

@@ -28,6 +28,7 @@ export default function PublicUserList() {
   const [textPosts, setTextPosts] = useState([]); // State for text posts
   const [showPostModal, setShowPostModal] = useState(false); // Modal visibility
   const [selectedPostIndex, setSelectedPostIndex] = useState(0); // Index for modal post
+  const [targetChatUser, setTargetChatUser] = useState(null);
   const [shouldRenderFollowButton, setShouldRenderFollowButton] =
     useState(false);
   const defaultProfileImageUrl =
@@ -126,6 +127,10 @@ export default function PublicUserList() {
     setShowPostModal(false);
   };
 
+  const handleMessageBtnClick = () => {
+    setTargetChatUser(user);
+  };
+
   if (!loading && (!user || !user.username)) {
     // Show message only if loading is false and user data is missing
     return (
@@ -154,14 +159,27 @@ export default function PublicUserList() {
         </div>
         <div className="profile-info">
           <div className="username">{"@" + user.username}</div>
-          {shouldRenderFollowButton && (
-            <FollowButton
-              className="ssu-button-bold"
-              username={loggedInUsername}
-              targetUserId={user.username}
-              onUpdateFollowerCount={updateFollowerCount}
-            />
-          )}
+
+          <div className="flex">
+            <div>
+              {shouldRenderFollowButton && (
+                <FollowButton
+                  className="ssu-button-bold"
+                  username={loggedInUsername}
+                  targetUserId={user.username}
+                  onUpdateFollowerCount={updateFollowerCount}
+                />
+              )}
+            </div>
+            <div>
+              <button
+                className="ssu-button-primary py-2 px-3"
+                onClick={handleMessageBtnClick}
+              >
+                Message
+              </button>
+            </div>
+          </div>
 
           <div className="profile-stats">
             <div className="stat-item hover:scale-125">
@@ -239,7 +257,10 @@ export default function PublicUserList() {
         </Modal.Body>
       </Modal>
 
-      <Chat targetChatUser={null} />
+      <Chat
+        targetChatUser={targetChatUser}
+        setTargetChatUser={setTargetChatUser}
+      />
     </div>
   );
 }

@@ -11,16 +11,10 @@ import apiClient from "../../utilities/apiClient";
 import socket from "../../utilities/socket";
 const ChatNotificationSound = "/ChatNotificationSound.mp3";
 
-const Chat = ({ targetChatUser }) => {
+const Chat = ({ targetChatUser, setTargetChatUser }) => {
   const defaultProfileImageUrl =
     "https://ssusocial.s3.amazonaws.com/profilepictures/ProfileIcon.png";
   const chatNotificationAudioRef = useRef(null);
-
-  useEffect(() => {
-    if (targetChatUser) {
-      handleSearchChatUserClick(targetChatUser);
-    }
-  }, [targetChatUser]);
 
   const TABS = { history: "history", search: "search", chat: "chat" };
   const [currentTab, setCurrentTab] = useState(TABS.history);
@@ -36,6 +30,13 @@ const Chat = ({ targetChatUser }) => {
   useEffect(() => {
     currentTabRef.current = currentTab;
   }, [currentTab]);
+
+  useEffect(() => {
+    if (targetChatUser) {
+      handleSearchChatUserClick(targetChatUser);
+      setChatOpen(true);
+    }
+  }, [targetChatUser]);
 
   const [user, setUser] = useState(getUserInfo());
   const [chatUser, setChatUser] = useState({});
@@ -173,6 +174,7 @@ const Chat = ({ targetChatUser }) => {
   }, []);
 
   const toogleChat = () => {
+    if (setTargetChatUser) setTargetChatUser(null);
     setChatOpen(!chatOpen);
 
     const isChatOpen = !chatOpenRef.current;
@@ -195,6 +197,7 @@ const Chat = ({ targetChatUser }) => {
   };
 
   const handleChatBackClick = () => {
+    if (setTargetChatUser) setTargetChatUser(null);
     setCurrentTab(TABS.history);
     markMessagesAsReadByChatRoomId(currentChatRoom._id);
   };
