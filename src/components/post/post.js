@@ -470,11 +470,11 @@ bg-white bg-opacity-90 text-gray-900 shadow-lg p-4 rounded-md z-25 border border
                     />
                   </div>
                 </div>
+              </div>
                 <span className="ml-4 mr-4 right-0 text-xs">
-                  {formattedDate}
+                    {formattedDate}
                 </span>
                 <span className="text-xs">{timeAgo(post.date)}</span>
-              </div>
             </div>
 
             {/* Post text */}
