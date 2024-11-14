@@ -25,14 +25,15 @@ export default function Navbar() {
 
   useEffect(() => {
     const userInfo = getUserInfo();
-    fetchNotifications(userInfo.username);
+    if (userInfo) {
+      fetchNotifications(userInfo.username);
+    }
     setUser(userInfo);
   }, []);
 
   const fetchNotifications = async (username) => {
     try {
       const response = await apiClient.get(`/notification/${username}`);
-
       const notifications = response.data.notifications;
       setNotifications(notifications);
     } catch (error) {
@@ -48,6 +49,11 @@ export default function Navbar() {
     event.preventDefault();
     navigate("/searchPage", { state: { searchInput: "" } });
   };
+
+  // Don't render Navbar if user is not defined
+  if (!user) {
+    return null;
+  }
 
   return (
     <>
