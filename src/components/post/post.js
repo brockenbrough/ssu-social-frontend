@@ -30,6 +30,11 @@ import FollowerCount from "../following/getFollowerCount"; // Correct relative p
 import FollowingCount from "../following/getFollowingCount"; // Correct relative path
 import FollowButton from "../following/followButton"; // correct path for follow button
 
+const defaultProfileImageUrl = "https://ssusocial.s3.amazonaws.com/profilepictures/ProfileIcon.png";
+
+// Cache to store profile images temporarily
+const profileImageCache = {};
+
 const Post = ({ posts: post, isDiscover }) => {
   const [youtubeThumbnail, setYoutubeThumbnail] = useState(null);
   const [likeCount, setLikeCount] = useState(0);
@@ -56,22 +61,25 @@ const Post = ({ posts: post, isDiscover }) => {
   const [postPage, setPostPage] = useContext(PostPageContext);
   const [isAnimationActive, setIsAnimationActive] = useState(false);
   const [isSlidingOut, setIsSlidingOut] = useState(false);
-  const [profileImageUrl, setProfileImageUrl] = useState("");
+  const [profileImageUrl, setProfileImageUrl] = useState(profileImageCache[post.username] || defaultProfileImageUrl);
   const [isBlurred, setIsBlurred] = useState(post.isSensitive);
   const [showMenu, setShowMenu] = useState(false);
   const [showImageModal, setShowImageModal] = useState(false);
 
   useEffect(() => {
+    // Only fetch if the profile image isn't already in the cache
     const fetchImage = async () => {
-      const imageUrl = await fetchProfileImage(post.username);
-      setProfileImageUrl(imageUrl);
+      if (!profileImageCache[post.username]) {
+        const imageUrl = await fetchProfileImage(post.username);
+        profileImageCache[post.username] = imageUrl || defaultProfileImageUrl; // Cache the fetched image
+        setProfileImageUrl(profileImageCache[post.username]); // Update state
+      } else {
+        setProfileImageUrl(profileImageCache[post.username]); // Use cached image if available
+      }
     };
 
     fetchImage();
   }, [post.username]);
-
-  const defaultProfileImageUrl =
-    "https://ssusocial.s3.amazonaws.com/profilepictures/ProfileIcon.png";
 
   const handleShowPostModal = () => {
     if (showCommentCard) {
@@ -401,7 +409,7 @@ const Post = ({ posts: post, isDiscover }) => {
           <div>
             <div className="d-flex align-items-center mb-3">
               <img
-                src={profileImageUrl} // Profile image URL (already fetched)
+                src={profileImageUrl} // Profile image URL (cached or fetched)
                 alt="Profile"
                 style={{
                   width: "40px",
@@ -410,19 +418,19 @@ const Post = ({ posts: post, isDiscover }) => {
                   marginRight: "8px",
                   backgroundColor: profileImageUrl.includes("ProfileIcon.png")
                     ? "white"
-                    : "transparent", // White background only if default profile image
+                    : "transparent",
                   cursor: "pointer",
                 }}
                 onClick={() => {
-                  isCurrentUserPost
-                    ? navigate("/privateUserProfile")
-                    : navigate(`/publicProfilePage/${post.username}`);
+                  navigate(
+                    post.username === "currentUser" ? "/privateUserProfile" : `/publicProfilePage/${post.username}`
+                  );
                 }}
               />
               <div className="relative group">
                 <a
                   href={
-                    isCurrentUserPost
+                    post.username === "currentUser"
                       ? "/privateUserProfile"
                       : `/publicProfilePage/${post.username}`
                   }
