@@ -440,7 +440,7 @@ const Post = ({ posts: post, isDiscover }) => {
                 </a>
                 {/* Tooltip with Followers and Following count */}
                 <div
-                  className="absolute hidden group-hover:flex group-hover:translate-y-2 translate-x-2 group-hover:shadow-xl bottom-0 left-full transform w-45 h-20 
+                  className="absolute hidden group-hover:flex group-hover:translate-y-2 translate-x-2 group-hover:shadow-xl top-1 left-40 transform w-45 h-20 
 bg-white bg-opacity-90 text-gray-900 shadow-lg p-4 rounded-md z-25 border border-gray-300 dark:bg-gray-800 dark:text-white dark:border-gray-700"
                 >
                   {/* Tooltip Arrow */}
