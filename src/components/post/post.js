@@ -439,34 +439,28 @@ const Post = ({ posts: post, isDiscover }) => {
                   {/* Post date */}
                 </a>
                 {/* Tooltip with Followers and Following count */}
-                <div
-                  className="absolute hidden group-hover:flex group-hover:translate-y-2 translate-x-2 group-hover:shadow-xl top-1 left-40 transform w-45 h-20 
-bg-white bg-opacity-90 text-gray-900 shadow-lg p-4 rounded-md z-25 border border-gray-300 dark:bg-gray-800 dark:text-white dark:border-gray-700"
-                >
+                <div className="absolute hidden group-hover:flex group-hover:translate-y-2 translate-x-2 group-hover:shadow-xl top-1 left-40 transform w-fit h-fit bg-white dark:bg-gray-800 bg-opacity-90 text-gray-900 shadow-lg p-3 rounded-md z-20 border border-gray-300 dark:text-white dark:border-gray-700">
                   {/* Tooltip Arrow */}
-                  <div className="absolute w-3 h-3 top-1/2 right-full transform translate-x-1/2 translate-y-4 rotate-45 bg-white border border-gray-300 dark:bg-gray-800 dark:border-gray-700"></div>
+                  <div className="absolute w-3 h-3 top-1/2 right-full transform translate-x-1/2 translate-y-4 rotate-45 bg-white border border-gray-300 dark:bg-gray-800 dark:border-gray-700" />
+
                   <div className="flex items-center space-x-2">
-                    <p className="text-sm font-medium mb-1">
-                      <span className="font-semibold">
-                        <span className="text-gray-900 dark:text-black">
+                    <div>
+                      <div className="flex justify-between mb-2 text-sm font-semibold text-gray-900">
+                        <div className="mr-4">
                           <FollowerCount username={post?.username} />
-                        </span>
-                      </span>
-                    </p>
-                    <span className="text-gray-900 dark:text-gray-900">|</span>
-                    <p className="text-sm font-medium mb-1">
-                      <span className="font-semibold">
-                        <span className="text-gray-900 dark:text-black">
+                        </div>
+                        <div>
                           <FollowingCount username={post?.username} />
-                        </span>
-                      </span>
-                    </p>
-                    {/* FollowButton */}
-                    <FollowButton
-                      className="ssu-button-bold"
-                      targetUserId={post?.username || ""}
-                      username={user?.username}
-                    />
+                        </div>
+                      </div>
+                      <div className="justify-items-center">
+                        <FollowButton
+                          className=""
+                          targetUserId={post?.username || ""}
+                          username={user?.username}
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
