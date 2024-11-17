@@ -47,7 +47,7 @@ const PrivateUserProfile = () => {
 
   const [selectedFile, setSelectedFile] = useState(null);
   const [userProfileImage, setUserProfileImage] = useState(
-    "/defaultProfile.png"
+    "https://ssusocial.s3.amazonaws.com/profilepictures/ProfileIcon.png"
   );
   const [username, setUsername] = useState(null);
   const [user, setUser] = useState(null);
@@ -372,6 +372,10 @@ const PrivateUserProfile = () => {
                 style={{
                   boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
                   border: "1px solid rgba(0, 0, 0, 0.1)",
+                }}
+                onError={(e) => {
+                  e.target.onerror = null; // Prevents infinite loop if default image fails
+                  e.target.src = "https://ssusocial.s3.amazonaws.com/profilepictures/ProfileIcon.png"; // Fallback to default image
                 }}
               />
             </div>
