@@ -12,6 +12,7 @@ import { faComment as solidCommentIcon } from "@fortawesome/free-solid-svg-icons
 import { faComment as regularCommentIcon } from "@fortawesome/free-regular-svg-icons";
 import { faEdit as editIcon } from "@fortawesome/free-solid-svg-icons";
 import { faFlag } from "@fortawesome/free-solid-svg-icons";
+import { faEye } from "@fortawesome/free-solid-svg-icons";
 import getUserInfoAsync from "../../utilities/decodeJwt";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
@@ -68,6 +69,7 @@ const Post = ({ posts: post, isDiscover }) => {
   const [isBlurred, setIsBlurred] = useState(post.isSensitive);
   const [showMenu, setShowMenu] = useState(false);
   const [showImageModal, setShowImageModal] = useState(false);
+  const [viewCount, setViewCount] = useState(0);
 
   useEffect(() => {
     const loadImage = async () => {
@@ -322,6 +324,41 @@ const Post = ({ posts: post, isDiscover }) => {
     }
   };
 
+  useEffect(() => {
+    const fetchViewCount = async () => {
+      try {
+        console.log("Fetching views for post:", post._id);
+        const response = await axios.get(
+          `${process.env.REACT_APP_BACKEND_SERVER_URI}/views/${post._id}`
+        );
+        console.log("API Response:", response.data); // Log the API response
+        setViewCount(response.data.length); // Update view count
+      } catch (error) {
+        console.error("Error fetching view count:", error);
+      }
+    };
+  
+    fetchViewCount();
+  }, [post._id]);
+
+  const handleIsViewed = async () => {
+    if (!user || !user.id) return;
+  
+    try {
+      await axios.post(
+        `${process.env.REACT_APP_BACKEND_SERVER_URI}/views/increase`,
+        { postId, userId: user.id }
+      );
+    } catch (error) {
+      console.error("Error updating view count:", error);
+    }
+  };
+
+  // Trigger the view count increment on mount
+  useEffect(() => {
+    handleIsViewed();
+  }, [post._id, user]);
+
   const handleShowEditModal = () => {
     if (isCurrentUserPost) {
       setEditedPost({ content: post.content, isSensitive: post.isSensitive });
@@ -375,11 +412,14 @@ const Post = ({ posts: post, isDiscover }) => {
     }));
   };
 
+
+  //Tracking the Division
   return (
-    <div className="position-relative" style={{ width: "100%" }}>
+    <div className="position-relative" style={{ width: "100%" }}> 
       <div
         className="d-flex justify-content-center margin: 0, padding: 0"
         style={{ width: "100%" }}
+        onClick={handleIsViewed}
       >
         <div
           ref={postCardRef}
@@ -552,37 +592,49 @@ const Post = ({ posts: post, isDiscover }) => {
               </div>
             )}
             <div className="flex flex-col items-start space-y-2 mt-2">
-              <div className="flex flex-row items-center space-x-4">
-                {/* Like and comment buttons */}
-                <button
-                  onClick={handleLikeClick}
-                  className="ml-1 mr-0.25 mt-2 font-menu text-gray-900 dark:text-white hover-outline-heart"
-                >
-                  <FontAwesomeIcon
-                    icon={isLiked ? solidHeartIcon : regularHeartIcon}
-                    className={`hover:scale-125 transition-transform duration-300 ${
-                      isLiked ? "text-red-500" : ""
-                    }`}
-                  />
-                  <span className="ml-0.5">{` ${likeCount}`}</span>
-                </button>
-                <button
-                  onClick={handleShowPostModal}
-                  className="mr-4 mt-2 font-menu text-gray-900 dark:text-white hover-outline-comment"
-                >
-                  <FontAwesomeIcon
-                    className={`hover:scale-125 transition-transform duration-300 ${
-                      showCommentCard ? "text-blue-500" : ""
-                    }`}
-                    icon={
-                      showCommentCard ? solidCommentIcon : regularCommentIcon
-                    }
-                  />
-                  <span className="ml-1.5">
-                    {commentCount > 0 ? commentCount : "0"}
-                  </span>
-                </button>
-              </div>
+            <div className="flex flex-row items-center space-x-4">
+
+  {/* Like button */}
+  <button
+    onClick={handleLikeClick}
+    className="ml-1 mr-0.25 mt-2 font-menu text-gray-900 dark:text-white hover-outline-heart"
+  >
+    <FontAwesomeIcon
+      icon={isLiked ? solidHeartIcon : regularHeartIcon}
+      className={`hover:scale-125 transition-transform duration-300 ${
+        isLiked ? "text-red-500" : ""
+      }`}
+    />
+    <span className="ml-0.5">{` ${likeCount}`}</span>
+  </button>
+
+  {/* Comment button */}
+  <button
+    onClick={handleShowPostModal}
+    className="mr-4 mt-2 font-menu text-gray-900 dark:text-white hover-outline-comment"
+  >
+    <FontAwesomeIcon
+      className={`hover:scale-125 transition-transform duration-300 ${
+        showCommentCard ? "text-blue-500" : ""
+      }`}
+      icon={showCommentCard ? solidCommentIcon : regularCommentIcon}
+    />
+    <span className="ml-1.5">
+      {commentCount > 0 ? commentCount : "0"}
+    </span>
+  </button>
+
+  {/* View count icon */}
+  <div className="flex items-center mt-2 font-menu text-gray-900 dark:text-white">
+  <FontAwesomeIcon
+    icon={faEye}
+    className="text-gray-600 hover:scale-110 transition-transform duration-300"
+  />
+  {/* Ensure viewCount is properly interpolated */}
+  <span className="ml-1.5">{viewCount !== undefined ? viewCount : 0}</span>
+</div>
+</div>
+
               {/* New button to view likes */}
               <button
                 onClick={fetchLikesList}
