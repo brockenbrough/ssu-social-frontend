@@ -18,7 +18,9 @@ export default function PublicUserList() {
   const [loggedInUsername, setLoggedInUsername] = useState({});
   const [user, setUser] = useState({});
   const [posts, setPosts] = useState([]);
-  const [profileImage, setProfileImage] = useState(""); // State for profile image
+  const [profileImage, setProfileImage] = useState(
+    "https://ssusocial.s3.amazonaws.com/profilepictures/ProfileIcon.png"
+  );
   const { username } = useParams();
   const [followerCount, setFollowerCount] = useState(0);
   const [followingCount, setFollowingCount] = useState(0);
@@ -154,6 +156,10 @@ export default function PublicUserList() {
             style={{
               boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
               border: "1px solid rgba(0, 0, 0, 0.1)",
+            }}
+            onError={(e) => {
+              e.target.onerror = null; // Prevents infinite loop if default image fails
+              e.target.src = "https://ssusocial.s3.amazonaws.com/profilepictures/ProfileIcon.png"; // Fallback to default image
             }}
           />
         </div>
