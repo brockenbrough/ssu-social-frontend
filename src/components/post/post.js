@@ -326,20 +326,26 @@ const Post = ({ posts: post, isDiscover }) => {
 
   useEffect(() => {
     const fetchViewCount = async () => {
-      try {
-        console.log("Fetching views for post:", post._id);
-        const response = await axios.get(
-          `${process.env.REACT_APP_BACKEND_SERVER_URI}/views/${post._id}`
-        );
-        console.log("API Response:", response.data); // Log the API response
-        setViewCount(response.data.length); // Update view count
-      } catch (error) {
-        console.error("Error fetching view count:", error);
-      }
+        try {
+            console.log("Fetching views for post:", post._id);
+            const response = await axios.get(
+                `${process.env.REACT_APP_BACKEND_SERVER_URI}/views/${post._id}`
+            );
+            console.log("Response Data:", response.data); // Debug response structure
+
+            if (response.data && response.data.viewCount !== undefined) {
+                console.log("Updating viewCount state:", response.data.viewCount);
+                setViewCount(response.data.viewCount); // Update state
+            } else {
+                console.error("Invalid response format:", response.data);
+            }
+        } catch (error) {
+            console.error("Error fetching view count:", error);
+        }
     };
-  
-    fetchViewCount();
-  }, [post._id]);
+
+    if (post?._id) fetchViewCount();
+}, [post?._id]);
 
   const handleIsViewed = async () => {
     if (!user || !user.id) return;
