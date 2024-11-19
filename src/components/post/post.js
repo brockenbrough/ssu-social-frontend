@@ -333,9 +333,9 @@ const Post = ({ posts: post, isDiscover }) => {
             );
             console.log("Response Data:", response.data); // Debug response structure
 
-            if (response.data && response.data.viewCount !== undefined) {
+            if (response && response.data !== undefined) {
                 console.log("Updating viewCount state:", response.data.viewCount);
-                setViewCount(response.data.viewCount); // Update state
+                setViewCount(response.data); // Update state
             } else {
                 console.error("Invalid response format:", response.data);
             }
