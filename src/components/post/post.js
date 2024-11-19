@@ -701,9 +701,12 @@ const Post = ({ posts: post, isDiscover }) => {
                     marginRight: "8px",
                   }}
                 />
-                <span style={{ color: "black" }}>
+                <a 
+                  href={`/publicProfilePage/${like.username}`} 
+                  style={{ color: "black", textDecoration: "none" }}
+                >
                   {like.username || "Unknown User"}
-                </span>
+                </a>
               </div>
             ))
           ) : (

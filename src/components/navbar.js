@@ -57,21 +57,21 @@ export default function Navbar() {
 
   return (
     <>
-      <div className="sidebar-navbar sm:w-18 md:w-18 lg:w-34 pt-6 ">
-        <div className="flex flex-col items-start md:items-center">
+      <div className="sidebar-navbar sm:w-18 md:w-18 lg:w-34 pt-6">
+        <div className="logo-container hidden md:flex">
           <Link to="/feed-algorithm">
             <img
               ref={hoverRef}
               src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXPnHm79GDZXZjpifapjAOWRsJcA_C3FgxWQLlbto&s"
               alt="SSUSocial Logo"
-              className="rounded-full border-2 border-black w-16 h-16 mb-2 object-cover cursor-pointer"
+              className="rounded-full border-2 border-black w-16 h-16 object-cover cursor-pointer"
             />
           </Link>
-          <div className="mt-2 mb-5 text-center hidden md:block">
-            <Link to="/feed-algorithm" className="ssu-social-word">
-              SSUSocial
-            </Link>
-          </div>
+        </div>
+        <div className="mt-2 mb-5 text-center hidden md:block">
+          <Link to="/feed-algorithm" className="ssu-social-word">
+            SSUSocial
+          </Link>
         </div>
 
         {/* Create Post Button */}
@@ -107,16 +107,14 @@ export default function Navbar() {
             className="shoot-icon mr-4 text-lightMainText dark:text-darkMainText group-hover:text-white"
             icon={forYouIcon}
           />
-          <span className="hidden md:inline">For You</span>{" "}
-          {/* Text hidden on small screens */}
+          <span className="hidden md:inline">For You</span>
         </a>
         <a href="/getallpost" className="ssu-nav-link group flex items-center">
           <FontAwesomeIcon
             className="spin-icon mr-4 text-lightMainText dark:text-darkMainText group-hover:text-white"
             icon={discoverIcon}
           />
-          <span className="hidden md:inline">Discover</span>{" "}
-          {/* Text hidden on small screens */}
+          <span className="hidden md:inline">Discover</span>
         </a>
 
         {/* Create Inbox Button */}
@@ -137,7 +135,7 @@ export default function Navbar() {
                 </span>
               )}
             </div>
-            <span className="hidden md:inline">Notifications</span>{" "}
+            <span className="hidden md:inline">Notifications</span>
           </span>
         </span>
         <a
@@ -148,8 +146,7 @@ export default function Navbar() {
             className="mr-4 text-lightMainText dark:text-darkMainText group-hover:text-white icon"
             icon={profileIcon}
           />
-          <span className="hidden md:inline">Profile</span>{" "}
-          {/* Text hidden on small screens */}
+          <span className="hidden md:inline">Profile</span>
         </a>
 
         {/* Dark Mode Button */}
