@@ -759,15 +759,6 @@ body .ssu-nav-link:hover .shoot-icon {
   @apply inline-flex items-center justify-center text-xs text-center rounded-full bg-orange-500 text-white w-6 h-6 mt-1 group-hover:bg-white group-hover:text-orange-500
 }
 
-/* Ensure text colors adapt to dark mode */
-.text-lightMainText {
-  @apply text-gray-800 dark:text-gray-200;
-}
-
-.text-darkMainText {
-  @apply text-gray-200 dark:text-gray-800;
-}
-
 /* Logo Container */
 .logo-container {
   @apply flex justify-center items-center w-full mb-5; /* Center the logo */
