@@ -22,7 +22,6 @@
 
 .ssu-button-primary {
   @apply px-2 py-1 mt-1 mb-1 ml-1 mr-1 font-bold text-white bg-orange-500 rounded font-menu dark:bg-orange-500 hover:bg-orange-600;
-  bottom: 60px;
 }
 
 .ssu-button-disabled {
@@ -173,16 +172,16 @@
 /* Mobile adjustments */
 @media (max-width: 640px) {
   .sidebar-navbar {
-    position: fixed !important;
-    bottom: 0 !important;
-    top: auto !important; /* Remove top positioning */
-    left: 0 !important;
-    width: 100% !important;
-    height: 3.7rem !important; /* Adjust height for bottom positioning */
-    flex-direction: row !important; /* Change to horizontal layout */
-    justify-content: space-around !important; /* Space items evenly */
-    border-top: 1px solid #ccc !important;
-    z-index: 1000 !important; /* Ensure it is above other content */
+    position: fixed;
+    bottom: 0;
+    top: auto; /* Remove top positioning */
+    left: 0;
+    width: 100%;
+    height: 3.7rem; /* Adjust height for bottom positioning */
+    flex-direction: row; /* Change to horizontal layout */
+    justify-content: space-around; /* Space items evenly */
+    border-top: 1px solid #ccc;
+    z-index: 1000; /* Ensure it is above other content */
     @apply bg-white dark:bg-darkBackground shadow-lg; /* Ensure dark mode background and shadow */
   }
 
@@ -194,7 +193,7 @@
   .sidebar-navbar span .hidden,
   .sidebar-navbar a .hidden,
   .sidebar-navbar .logo {
-    display: none !important; /* Hide text and logo on mobile */
+    display: none; /* Hide text and logo on mobile */
   }
 }
 
@@ -757,6 +756,15 @@ body .ssu-nav-link:hover .shoot-icon {
 
 .chat-unread-chat-count {
   @apply inline-flex items-center justify-center text-xs text-center rounded-full bg-orange-500 text-white w-6 h-6 mt-1 group-hover:bg-white group-hover:text-orange-500
+}
+
+/* Ensure text colors adapt to dark mode */
+.text-lightMainText {
+  @apply text-gray-800 dark:text-gray-200;
+}
+
+.text-darkMainText {
+  @apply text-gray-200 dark:text-gray-800;
 }
 
 /* Logo Container */
