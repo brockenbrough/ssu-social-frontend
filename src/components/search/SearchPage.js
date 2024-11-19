@@ -81,7 +81,10 @@ function SearchPage() {
     <div className="pl-40 dark:bg-gray-800 min-h-screen">
       <div className="flex items-center justify-center py-4 space-x-2">
         <button
-          onClick={() => setIsPostsVisible(true)}
+          onClick={() => {
+            setIsPostsVisible(true);
+            setSearchInput(""); // Clear the search input when switching to posts
+          }}
           className={`ssu-nav-filter-btn ${
             isPostsVisible ? "ssu-nav-filter-btn-selected" : ""
           }`}
@@ -90,7 +93,10 @@ function SearchPage() {
           Posts
         </button>
         <button
-          onClick={() => setIsPostsVisible(false)}
+          onClick={() => {
+            setIsPostsVisible(false);
+            setSearchInput(""); // Clear the search input when switching to profiles
+          }}
           className={`ssu-nav-filter-btn ${
             !isPostsVisible ? "ssu-nav-filter-btn-selected" : ""
           }`}
