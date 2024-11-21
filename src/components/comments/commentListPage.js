@@ -46,7 +46,7 @@ export default function CommentList() {
 		socket.on("deleteComment", (data) => {
 			if (data.postId === location.state) {
 				setComments((prevComments) =>
-					prevComments.filter((c) => c._id !== data.commentId)
+					prevComments.filter((c) => c._id !== data._id)
 				);
 			}
 		});
@@ -65,10 +65,9 @@ export default function CommentList() {
 			}
 		);
 
-		const newRecords = comments.filter((el) => el._id !== id);
-		setComments(newRecords);
+		const deletedComment = comments.filter((el) => el._id === id)[0];
 
-		socket.emit("deleteComment", { postId: location.state, commentId: id });
+		socket.emit("deleteComment", deletedComment);
 	}
 
 	function commentList() {
