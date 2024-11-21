@@ -57,19 +57,21 @@ const Register = () => {
     if (!data.username) {
       errors.username = "Username is required.";
       } else if (data.username.length < 6) {
-        errors.username = "Username must contain 6 haracters or more.";
+        errors.username = "Username must be 6 characters or longer.";
+      } else if (data.username.length > 28){
+        errors.username = "Username must be less than 28 characters."
       }
 
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;  
     if (!data.email) {
-      errors.email = "Email is required";
+      errors.email = "Email is required.";
     } else if (!emailRegex.test(data.email)) {
-      errors.email = "Invalid. Enter a valid email address.";
+      errors.email = "Email address is invalid";
     }
     if (!data.password) {
       errors.password = "Password is required.";
     } else if (data.password.length < 8) {
-      errors.password = "Password must be 8 Characters or More.";
+      errors.password = "Password must be 8 characters or more.";
     }
     // If there are validation errors, set them and stop submission
     if (Object.keys(errors).length > 0) {
@@ -85,11 +87,11 @@ const Register = () => {
     } catch (error) {
       setLoading(false);
       if (error.response) {
-        setFieldErrors({ ...fieldErrors, username: "Username must contain 6 Characters or more" });
+        setFieldErrors({ ...fieldErrors, username: "Username must contain 6 characters or more" });
         console.log(error.response.data);
-        setFieldErrors({ ...fieldErrors, email: "Enter a Valid Email Address" });
+        setFieldErrors({ ...fieldErrors, email: "Enter a valid email address" });
         console.log(error.response.data);
-        setFieldErrors({ ...fieldErrors, password: "Password must be 8 Characters or More" });
+        setFieldErrors({ ...fieldErrors, password: "Password must be 8 characters or more" });
         console.log(error.response.data);
       } else {
         setError("The Username, Email, or Password you've entered is invalid. Please try again");
@@ -114,16 +116,6 @@ const Register = () => {
     position: 'relative'
   };
 
-  const formStyling = {
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    padding: '2rem',
-    borderRadius: '8px',
-    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-    maxWidth: '500px',
-    width: '100%',
-    margin: '1rem'
-  };
-
   const buttonStyling = {
     background: PRIMARY_COLOR,
     borderStyle: "none",
@@ -132,8 +124,8 @@ const Register = () => {
 
   return (
     <div style={backgroundStyling}>
-      <div style={formStyling}>
-        <h2 className="text-center" style={{ color: PRIMARY_COLOR }}>Register</h2>
+      <div>
+        <h2 className="text-center" style={{ color: PRIMARY_COLOR }}>Create an Account</h2>
         <Form onSubmit={handleSubmit}>
           <Form.Group className="mb-3" controlId="formBasicUsername">
             <Form.Label style={labelStyling}>Username</Form.Label>
@@ -141,19 +133,17 @@ const Register = () => {
             type="username" 
             name="username" 
             onChange={handleChange} 
-            placeholder="Enter username" 
+            placeholder="6-28 characters" 
             isInvalid={!!fieldErrors.username}/>
                   {fieldErrors.username && (
-                    <Form.Text className="text-danger">{fieldErrors.username}</Form.Text>
+                    <Form.Text style={{ color: '#ff9999'}}>{fieldErrors.username}</Form.Text>
                   )}
             {error.username && (
               <Form.Control.Feedback type="invalid">
                 {error.username}
               </Form.Control.Feedback>
             )}
-            <Form.Text className="text-muted" style={labelStyling}>
-              The Username must be 6 characters or more
-            </Form.Text>
+           
           </Form.Group>
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Label style={labelStyling}>Email</Form.Label>
@@ -164,27 +154,25 @@ const Register = () => {
             placeholder="Enter email" 
             isInvalid={!!fieldErrors.email}/>
                   {fieldErrors.email && (
-                    <Form.Text className="text-danger">{fieldErrors.email}</Form.Text>
+                    <Form.Text style={{ color: '#ff9999'}}>{fieldErrors.email}</Form.Text>
                   )}
             {error.email && (
               <Form.Control.Feedback type="invalid">
                 {error.email}
               </Form.Control.Feedback>
             )}
-            <Form.Text className="text-muted" style={labelStyling}>
-              Please input a valid email
-            </Form.Text>
+           
           </Form.Group>
           <Form.Group className="mb-3" controlId="formBasicPassword">
             <Form.Label style={labelStyling}>Password</Form.Label>
             <Form.Control 
             type="password" 
             name="password" 
-            placeholder="Password" 
+            placeholder="8 characters or more" 
             onChange={handleChange} 
             isInvalid={!!fieldErrors.password}/>
                   {fieldErrors.password && (
-                    <Form.Text className="text-danger">{fieldErrors.password}</Form.Text>
+                    <Form.Text style={{ color: '#ff9999'}}>{fieldErrors.password}</Form.Text>
                   )
                   }
             {error.password && (
@@ -192,9 +180,7 @@ const Register = () => {
                 {error.password}
               </Form.Control.Feedback>
             )}
-            <Form.Text className="text-muted" style={labelStyling}>
-              The password has to contain at least 8 characters.
-            </Form.Text>
+            
           </Form.Group>
           {error && (
             <div className="text-danger mb-3">
