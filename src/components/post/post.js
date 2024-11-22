@@ -434,7 +434,7 @@ const Post = ({ posts: post, isDiscover }) => {
 				<div
 					ref={postCardRef}
 					id={`post-${post._id}`}
-					className="ssu-post-card"
+					className="ssu-post-card relative"
 				>
 					{/* This is the dropdown menu ":" on the top right corner of one's own post */}
 					{isCurrentUserPost && (
