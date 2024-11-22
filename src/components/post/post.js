@@ -386,7 +386,7 @@ const Post = ({ posts: post, isDiscover }) => {
 	const handleEditPost = () => {
 		apiClient
 			.put(`/posts/updatePost/${post._id}`, {
-				content: editedPost.content,
+				content: editedPost.content.trim(),
 				isSensitive: editedPost.isSensitive,
 			})
 			.then((response) => {
@@ -760,14 +760,20 @@ const Post = ({ posts: post, isDiscover }) => {
 						<Form.Group controlId="editPostContent">
 							<Form.Control
 								as="textarea"
+								maxLength={280}
 								rows={3}
 								value={editedPost.content}
-								onChange={(e) => setEditedPost({ content: e.target.value })}
+								onChange={(e) => {
+									const content = e.target.value;
+									setEditedPost((prev) => ({ ...prev, content }));
+								}}
+								
 								style={{
 									backgroundColor: darkMode ? "#181818" : "#f6f8fa",
 									color: darkMode ? "white" : "black",
 								}}
 							/>
+							<p>{editedPost.content.length}/280</p> 
 						</Form.Group>
 					</Form>
 				</Modal.Body>
