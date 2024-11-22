@@ -576,6 +576,10 @@ body .ssu-nav-link:hover .shoot-icon {
 	@apply p-6 bg-white rounded-lg dark:bg-gray-800;
 }
 
+.ssu-nav-logo {
+	@apply rounded-full border-2 border-white dark:border-gray-900 w-10 h-10 md:w-16 md:h-16 object-cover cursor-pointer
+}
+
 /* Start - Private User Profile Page Layout*/
 .ssu-profilePage-container {
 	@apply min-h-screen pl-64 bg-lightBackground text-lightMainText dark:bg-darkBackground dark:text-darkMainText;
