@@ -504,7 +504,7 @@ const PrivateUserProfile = () => {
             <Modal.Header closeButton>
               <Modal.Title>Edit Bio</Modal.Title>
             </Modal.Header>
-            <Modal.Body>
+            <Modal.Body className="dark:bg-darkBackground">
               <EditUserBio />
             </Modal.Body>
           </Modal>
