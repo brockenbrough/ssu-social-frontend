@@ -122,9 +122,8 @@ export default function FollowerList() {
 
 	function errorMessage() {
 		return (
-			<h6 style={{ color: "red" }}>
-				Error Occurred! User could exist, but not in the Follower's Collection
-				yet. GET SOME FOLLOWERS!
+			<h6 style={{ color: "red", marginLeft: "1.5rem" }}>
+				Error Occurred! User could exist, but not in the Follower's Collection yet. GET SOME FOLLOWERS!
 			</h6>
 		);
 	}

@@ -77,7 +77,7 @@ export default function FollowingList() {
 
   function errorMessage() {
     return (
-      <h6 style={{ color: "red" }}>
+      <h6 style={{ color: "red", marginLeft: "1.5rem" }}>
         Error Occurred! User could exist, but not in the Following's Collection yet. GO FOLLOW SOME PEOPLE!
       </h6>
     );
