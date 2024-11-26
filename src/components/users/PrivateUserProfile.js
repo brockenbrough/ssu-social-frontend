@@ -139,9 +139,11 @@ const PrivateUserProfile = () => {
   };
 
   useEffect(() => {
-    fetchPosts();
-    fetchFollowerCount();
-    fetchFollowingCount();
+    if (username) {
+      fetchPosts();
+      fetchFollowerCount();
+      fetchFollowingCount();
+    }
   }, [username, fetchPosts]);
 
   // Profile image upload
