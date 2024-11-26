@@ -348,9 +348,6 @@ const PrivateUserProfile = () => {
           >
             Account Settings
           </button>
-          <button className="menu-item hover:bg-gray-500">
-            Personal Information
-          </button>
           <button
             onClick={handleShowLogoutConfirmation}
             className="ssu-button-primary"
