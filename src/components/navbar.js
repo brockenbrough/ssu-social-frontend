@@ -75,17 +75,17 @@ export default function Navbar() {
 				</div>
 
 				{/* Create Post Button */}
-				<span className="ssu-nav-link group">
-					<CreatePost popupShow={popupShow} setPopupShow={setPopupShow} />
-					<span onClick={() => setPopupShow(true)}>
-						<FontAwesomeIcon
-							className="fa-plus-circle mr-4 text-lightMainText dark:text-darkMainText group-hover:text-white"
-							icon={createIcon}
-						/>
-						<span className="hidden md:inline">Create Post</span>
+					<span
+					className="ssu-nav-link group flex items-center justify-start"
+					onClick={() => setPopupShow(true)}
+					>
+					<FontAwesomeIcon
+						className="fa-plus-circle mr-4 text-lightMainText dark:text-darkMainText group-hover:text-white"
+						icon={createIcon}
+					/>
+					<span className="hidden md:inline">Create Post</span>
 					</span>
-				</span>
-
+					<CreatePost popupShow={popupShow} setPopupShow={setPopupShow} />
 				{/* Direct Links Instead of Dropdown */}
 				<a
 					href="/searchPage"
