@@ -112,6 +112,7 @@ function SearchPage() {
           className="w-full max-w-md mx-auto block p-2 text-gray-900 dark:text-gray-800 dark:bg-gray-300 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
           value={searchInput}
           onChange={handleInputChange}
+          maxLength={25}  // Set the character limit here
         />
       </div>
       <h2 className="text-2xl font-bold pt-4 text-center">
