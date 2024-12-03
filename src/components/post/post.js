@@ -479,10 +479,10 @@ const Post = ({ posts: post, isDiscover }) => {
 							<div className="group w-60 truncate hover:text-orange-500">
 								<a
 									href={
-										post.username === "currentUser"
-											? "/privateUserProfile"
-											: `/publicProfilePage/${post.username}`
-									}
+                    user && post.username === user.username
+                        ? "/privateUserProfile"
+                        : `/publicProfilePage/${post.username}`
+                }
 									className="ssu-textlink-bold font-title text-gray-900 dark:text-white"
 								>
 									@{post.username}
