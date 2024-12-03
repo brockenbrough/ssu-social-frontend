@@ -514,11 +514,11 @@ const Post = ({ posts: post, isDiscover }) => {
 									</div>
 								</div>
 							</div>
-							<div className="w-20 text-end">
-								{/* <span className="ml-4 mr-4 right-0 text-xs">
-                  {formattedDate}
-                </span> */}
+							<div className="w-20 text-end group">
 								<span className="text-xs">{timeAgo(post.date)}</span>
+                <div className="absolute  hidden group-hover:block bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-xs p-2 rounded shadow-md mt-1 -right-28">
+                    {formattedDate}
+                </div>
 							</div>
 						</div>
 
