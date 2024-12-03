@@ -493,7 +493,7 @@ const PrivateUserProfile = () => {
             <Modal.Header closeButton>
               <Modal.Title>Account Settings</Modal.Title>
             </Modal.Header>
-            <Modal.Body>
+            <Modal.Body className ="dark:bg-gray-700">
               <EditUser />
             </Modal.Body>
           </Modal>
