@@ -97,8 +97,9 @@ const Login = () => {
       setLoading(true);
 
       const { data: res } = await axios.post(url, data);
-      const { accessToken } = res;
+      const { accessToken, refreshToken } = res;
       localStorage.setItem("accessToken", accessToken);
+      localStorage.setItem("refreshToken", refreshToken);
       window.location.reload();
 
       setLoading(false);

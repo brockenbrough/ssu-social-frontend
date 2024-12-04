@@ -1,44 +1,45 @@
-import jwt_decode from 'jwt-decode';
+import jwt_decode from "jwt-decode";
+import apiClient from "./apiClient";
 
 const backendRefreshTokenURL = `${process.env.REACT_APP_BACKEND_SERVER_URI}/user/refresh-token`;
 const getBioURL = `${process.env.REACT_APP_BACKEND_SERVER_URI}/get-bio`;
 
-const refreshAccessToken = async (decodedAccessToken) => {
+const refreshAccessToken = async () => {
   try {
-    const response = await fetch(backendRefreshTokenURL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        id: decodedAccessToken.id,
-        email: decodedAccessToken.email,
-        username: decodedAccessToken.username,
-        role: decodedAccessToken.role
-      }),
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to refresh access token');
+    const refreshToken = localStorage.getItem("refreshToken");
+    if (!refreshToken) {
+      throw new Error("No refresh token available");
     }
 
-    const data = await response.json();
-    const newAccessToken = data.accessToken;  // Extract new access token
+    const response = await apiClient.post(backendRefreshTokenURL, {
+      refreshToken,
+    });
 
-    // Set the new access token to localStorage
-    localStorage.setItem('accessToken', newAccessToken);
+    if (response.status !== 200) {
+      throw new Error("Failed to refresh access token");
+    }
 
-    // Return the new decoded access token
+    const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
+      response.data;
+
+    // Store the new tokens
+    localStorage.setItem("accessToken", newAccessToken);
+    localStorage.setItem("refreshToken", newRefreshToken);
+
+    // Decode and return the new access token
     const newDecodedToken = jwt_decode(newAccessToken);
     return newDecodedToken;
   } catch (error) {
-    console.error('Error refreshing access token:', error);
+    console.error("Error refreshing access token:", error);
+    // Clear tokens if refresh failed
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
     throw error;
   }
 };
 
 const getUserInfoAsync = async () => {
-  const accessToken = localStorage.getItem('accessToken');
+  const accessToken = localStorage.getItem("accessToken");
   if (!accessToken) return undefined; // Return undefined directly
 
   const decodedAccessToken = jwt_decode(accessToken);
@@ -47,9 +48,10 @@ const getUserInfoAsync = async () => {
   // If token has expired
   if (exp < new Date().getTime() / 1000) {
     try {
-      localStorage.removeItem('accessToken');
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
     } catch (error) {
-      console.error('Token has expired', error);
+      console.error("Token has expired", error);
       throw error;
     }
   }
