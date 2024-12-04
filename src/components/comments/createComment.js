@@ -449,10 +449,16 @@ function CreateComment({ post, setParentCommentCount, postCardHeight }) {
 					/>
 					<EmojiPickerButton
 						onEmojiSelect={(emoji) => {
-							setFormData((prevState) => ({
-								...prevState,
-								commentContent: prevState.commentContent + emoji,
-							}));
+							const currentContent = formData.commentContent;
+    						const newContent = currentContent + emoji;
+    						if (newContent.length <= 255) {
+      							setFormData((prevState) => ({
+        							...prevState,
+        							commentContent: newContent,
+      							}));
+    						} else {
+      							console.warn("Cannot add emoji; comment exceeds character limit.");
+    						}
 							setShowSuggestions(false);
 						}}
 						pickerPosition="-258px"
