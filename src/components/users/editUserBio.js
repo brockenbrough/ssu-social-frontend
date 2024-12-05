@@ -67,13 +67,20 @@ const EditUserBio = () => {
           Biography
         </label>
         <textarea
-          id="biography"
-          placeholder="Enter your bio"
-          rows="4"
-          value={form.biography}
-          onChange={handleChange}
-          className={`w-full bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white border ${errors.biography ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'} rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400`}
-        ></textarea>
+  id="biography"
+  placeholder="Enter your bio"
+  rows="4"
+  value={form.biography}
+  onChange={handleChange}
+  className={`w-full bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white border ${
+    errors.biography ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
+  } rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400`}
+  style={{
+    maxHeight: "150px", // Limits the height
+    overflowY: "auto", // Adds vertical scrolling
+    resize: "vertical", // Allows user to manually resize vertically
+  }}
+></textarea>
         {errors.biography && (
           <p className="text-red-500 text-sm mt-1">{errors.biography}</p>
         )}
