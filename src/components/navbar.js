@@ -155,7 +155,7 @@ export default function Navbar() {
 				</div>
 
 				{/* Dark Mode Button (Smaller Window)*/}
-				<div className="mt-auto p-6 block md:hidden">
+				<div className="center justify-center block md:hidden">
 					<DarkModeButton />
 				</div>
 			</div>
