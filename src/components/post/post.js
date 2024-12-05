@@ -423,7 +423,7 @@ const Post = ({ posts: post, isDiscover }) => {
 		}));
 	};
 
-	//Tracking the Division
+	
 	return (
 		<div className="position-relative" style={{ width: "100%" }}>
 			<div
@@ -694,7 +694,12 @@ const Post = ({ posts: post, isDiscover }) => {
 				<Modal.Header closeButton>
 					<Modal.Title>People who liked this post</Modal.Title>
 				</Modal.Header>
-				<Modal.Body>
+				<Modal.Body
+        style={{
+          backgroundColor: darkMode ? "#181818" : "#ffffff", // Entire modal background
+          color: darkMode ? "#ffffff" : "#000000",            // Text color
+        }}
+        >
 					{likesList && likesList.length > 0 ? (
 						likesList.map((like) => (
 							<div key={like._id} className="d-flex align-items-center mb-2">
@@ -703,21 +708,32 @@ const Post = ({ posts: post, isDiscover }) => {
 									alt={like.username || "User"}
 									style={{
 										width: "30px",
-										height: "30px",
+										 height: "30px",
 										borderRadius: "50%",
 										marginRight: "8px",
 									}}
 								/>
 								<a
 									href={`/publicProfilePage/${like.username}`}
-									style={{ color: "black", textDecoration: "none" }}
+                  style={{
+                    color: darkMode ? "#ffffff" : "#000000", // Username dynamically changes color
+                    textDecoration: "none",
+                  }}
 								>
 									{like.username || "Unknown User"}
 								</a>
 							</div>
 						))
 					) : (
-						<p>No likes yet.</p>
+						<p
+            // style={{
+            //   textAlign: "center",
+            //   padding: "10px 0",
+            //   backgroundColor: darkMode ? "#282828" : "#f6f8fa",
+            //   color: darkMode ? "#ffffff" : "#000000",
+            //   borderRadius: "8px",
+            // }}
+            >No likes yet.</p>
 					)}
 				</Modal.Body>
 			</Modal>
