@@ -153,6 +153,11 @@ export default function Navbar() {
 				<div className="mt-auto p-6 hidden md:block">
 					<DarkModeButton />
 				</div>
+
+				{/* Dark Mode Button (Smaller Window)*/}
+				<div className="mt-auto p-6 block md:hidden">
+					<DarkModeButton />
+				</div>
 			</div>
 
 			{/* Notification Popup */}
