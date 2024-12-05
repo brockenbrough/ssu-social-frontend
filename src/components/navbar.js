@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import getUserInfo from "../utilities/decodeJwt";
-import Image from "react-bootstrap/Image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell as notificationIcon } from "@fortawesome/free-solid-svg-icons";
 import { faCirclePlus as createIcon } from "@fortawesome/free-solid-svg-icons";
@@ -8,6 +7,7 @@ import { faStar as forYouIcon } from "@fortawesome/free-solid-svg-icons";
 import { faCompass as discoverIcon } from "@fortawesome/free-solid-svg-icons";
 import { faUser as profileIcon } from "@fortawesome/free-solid-svg-icons";
 import { faMagnifyingGlass as searchButton } from "@fortawesome/free-solid-svg-icons";
+import { faMoon as moonIcon, faSun as sunIcon } from "@fortawesome/free-solid-svg-icons"; // Added sun and moon icons for dark mode
 import apiClient from "./../utilities/apiClient";
 import CreatePost from "./post/createPost";
 import DarkModeButton from "./DarkModeButton";
@@ -20,6 +20,7 @@ export default function Navbar() {
 	const [popupShow, setPopupShow] = useState(false);
 	const [inboxPopupShow, setInboxPopupShow] = useState(false);
 	const [notifications, setNotifications] = useState([]);
+	const [isDarkMode, setIsDarkMode] = useState(document.documentElement.classList.contains('dark')); // Track dark mode state
 	const navigate = useNavigate();
 	const hoverRef = useHoverButton();
 
@@ -55,6 +56,12 @@ export default function Navbar() {
 		return null;
 	}
 
+	// Toggle Dark Mode and update the state
+	const toggleDarkMode = () => {
+		document.documentElement.classList.toggle('dark');
+		setIsDarkMode(!isDarkMode); // Update the dark mode state
+	};
+
 	return (
 		<>
 			<div className="sidebar-navbar sm:w-18 md:w-18 lg:w-34 pt-6">
@@ -75,17 +82,18 @@ export default function Navbar() {
 				</div>
 
 				{/* Create Post Button */}
-					<span
+				<span
 					className="ssu-nav-link group flex items-center justify-start"
 					onClick={() => setPopupShow(true)}
-					>
+				>
 					<FontAwesomeIcon
 						className="fa-plus-circle mr-4 text-lightMainText dark:text-darkMainText group-hover:text-white"
 						icon={createIcon}
 					/>
 					<span className="hidden md:inline">Create Post</span>
-					</span>
-					<CreatePost popupShow={popupShow} setPopupShow={setPopupShow} />
+				</span>
+				<CreatePost popupShow={popupShow} setPopupShow={setPopupShow} />
+				
 				{/* Direct Links Instead of Dropdown */}
 				<a
 					href="/searchPage"
@@ -149,14 +157,20 @@ export default function Navbar() {
 					<span className="hidden md:inline">Profile</span>
 				</a>
 
-				{/* Dark Mode Button */}
+				{/* Dark Mode Button (Full Button for Larger Screens) */}
 				<div className="mt-auto p-6 hidden md:block">
 					<DarkModeButton />
 				</div>
 
-				{/* Dark Mode Button (Smaller Window)*/}
+				{/* Dark Mode Icon for Collapsed Window (Smaller Screens) */}
 				<div className="center justify-center block md:hidden">
-					<DarkModeButton />
+					{/* Icon Button for Dark Mode on small screens */}
+					<button onClick={toggleDarkMode}>
+						<FontAwesomeIcon
+							icon={isDarkMode ? sunIcon : moonIcon} // Switch between sun and moon
+							className="text-lightMainText dark:text-darkMainText group-hover:text-white"
+						/>
+					</button>
 				</div>
 			</div>
 
