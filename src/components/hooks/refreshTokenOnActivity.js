@@ -5,7 +5,7 @@ import { UserContext } from '../../App';
 import { useLocation } from 'react-router-dom';
 import { TokenRefreshContext } from '../contexts/tokenRefreshContext';
 
-const TOKEN_REFRESH_INTERVAL = 45 * 60 * 1000; // 45 minutes
+const TOKEN_REFRESH_INTERVAL = 45 * 60 * 1000; // 45 minutes - can be modified if needed
 const THROTTLE_DELAY = 1000; // 1 second delay for throttling
 
 const useRefreshTokenOnActivity = () => {
@@ -33,7 +33,7 @@ const useRefreshTokenOnActivity = () => {
 
         const decodedAccessToken = jwt_decode(accessToken);
 
-        // Refresh the token
+        // Refresh the token - Don't need the argument here anymore, but don't want to get rid of it because it's too late to test. Reference decodeJwtAsync.js
         const newDecodedToken = await refreshAccessToken(decodedAccessToken);
 
         // Update the last refresh time
