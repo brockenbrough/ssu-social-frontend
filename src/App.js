@@ -35,6 +35,7 @@ import SearchResultsPosts from "./components/search/SearchResultsPosts";
 import SearchResultsProfiles from "./components/search/SearchResultsProfiles";
 import Test from "./Test";
 import ProtectedRoute from "./components/ProtectedRoute";
+import SmartPostSearch from "./components/search/smartPostSearch";
 
 export const UserContext = createContext();
 export const PostContext = createContext();
@@ -97,6 +98,7 @@ const App = () => {
                 <Route path="/searchResultsPosts" element={<SearchResultsPosts />} />
                 <Route path="/searchResultsProfiles" element={<SearchResultsProfiles />} />
                 <Route path="/removeProfileImage" element={<PrivateUserProfile />} />
+                <Route path="/smartPostSearch/:userId" element={<SmartPostSearch />} />
               </Route>
             </Routes>
           </UserContext.Provider>

@@ -338,7 +338,7 @@ const PrivateUserProfile = () => {
     <div className="ssu-profilePage-container">
       <button
         onClick={toggleMenu}
-        className="toggle-button absolute text-xl p-2 hover:bg-gray-300 dark:hover:bg-gray-700 rounded-full"
+        className="absolute p-2 text-xl rounded-full toggle-button hover:bg-gray-300 dark:hover:bg-gray-700"
       >
         &#x22EE;
       </button>

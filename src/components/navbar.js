@@ -17,6 +17,7 @@ import { useHoverButton } from "./useHoverButton";
 
 export default function Navbar() {
 	const [user, setUser] = useState(getUserInfo());
+  const [userId, setUserId] = useState(getUserInfo()?.id);
 	const [popupShow, setPopupShow] = useState(false);
 	const [inboxPopupShow, setInboxPopupShow] = useState(false);
 	const [notifications, setNotifications] = useState([]);
@@ -26,12 +27,15 @@ export default function Navbar() {
 
 	useEffect(() => {
 		const userInfo = getUserInfo();
+    const userId = userInfo.id;
 		if (userInfo) {
 			fetchNotifications(userInfo.username);
 		}
+    setUserId(userInfo.id);
 		setUser(userInfo);
 	}, []);
 
+  
 	const fetchNotifications = async (username) => {
 		try {
 			const response = await apiClient.get(`/notification/${username}`);
@@ -51,6 +55,16 @@ export default function Navbar() {
 		navigate("/searchPage", { state: { searchInput: "" } });
 	};
 
+  const handleSmartClick = (e) => {
+    e.preventDefault();
+    if (userId) {
+      navigate(`/smartPostSearch/${userId}`);
+    } else {
+      console.error("User ID is not available.");
+    }
+  };
+
+
 	// Don't render Navbar if user is not defined
 	if (!user) {
 		return null;
@@ -62,126 +76,138 @@ export default function Navbar() {
 		setIsDarkMode(!isDarkMode); // Update the dark mode state
 	};
 
-	return (
-		<>
-			<div className="sidebar-navbar sm:w-18 md:w-18 lg:w-34 pt-6">
-				<div className="logo-container hidden md:flex">
-					<Link to="/feed-algorithm">
-						<img
-							ref={hoverRef}
-							src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXPnHm79GDZXZjpifapjAOWRsJcA_C3FgxWQLlbto&s"
-							alt="SSUSocial Logo"
-							className="ssu-nav-logo"
-						/>
-					</Link>
-				</div>
-				<div className="mt-2 mb-5 text-center hidden md:block">
-					<Link to="/feed-algorithm" className="ssu-social-word">
-						SSUSocial
-					</Link>
-				</div>
+return (
+  <>
+    <div className="pt-6 sidebar-navbar sm:w-18 md:w-18 lg:w-34">
+      <div className="hidden logo-container md:flex">
+        <Link to="/feed-algorithm">
+          <img
+            ref={hoverRef}
+            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXPnHm79GDZXZjpifapjAOWRsJcA_C3FgxWQLlbto&s"
+            alt="SSUSocial Logo"
+            className="ssu-nav-logo"
+          />
+        </Link>
+      </div>
+      <div className="hidden mt-2 mb-5 text-center md:block">
+        <Link to="/feed-algorithm" className="ssu-social-word">
+          SSUSocial
+        </Link>
+      </div>
 
-				{/* Create Post Button */}
-				<span
-					className="ssu-nav-link group flex items-center justify-start"
-					onClick={() => setPopupShow(true)}
-				>
-					<FontAwesomeIcon
-						className="fa-plus-circle mr-4 text-lightMainText dark:text-darkMainText group-hover:text-white"
-						icon={createIcon}
-					/>
-					<span className="hidden md:inline">Create Post</span>
-				</span>
-				<CreatePost popupShow={popupShow} setPopupShow={setPopupShow} />
-				
-				{/* Direct Links Instead of Dropdown */}
-				<a
-					href="/searchPage"
-					onClick={handleSearchClick}
-					className="ssu-nav-link group flex items-center justify-start"
-				>
-					<FontAwesomeIcon
-						className="mr-4 text-lightMainText dark:text-darkMainText group-hover:text-white rotate-in-circle"
-						icon={searchButton}
-					/>
-					<span className="hidden md:inline">Search</span>
-				</a>
+      {/* Create Post Button */}
+      <span
+        className="flex items-center justify-start ssu-nav-link group"
+        onClick={() => setPopupShow(true)}
+      >
+        <FontAwesomeIcon
+          className="mr-4 fa-plus-circle text-lightMainText dark:text-darkMainText group-hover:text-white"
+          icon={createIcon}
+        />
+        <span className="hidden md:inline">Create Post</span>
+      </span>
+      <CreatePost popupShow={popupShow} setPopupShow={setPopupShow} />
+      
+      {/* Direct Links Instead of Dropdown */}
+      <a
+        href="/searchPage"
+        onClick={handleSearchClick}
+        className="flex items-center justify-start ssu-nav-link group"
+      >
+        <FontAwesomeIcon
+          className="mr-4 text-lightMainText dark:text-darkMainText group-hover:text-white rotate-in-circle"
+          icon={searchButton}
+        />
+        <span className="hidden md:inline">Search</span>
+      </a>
 
-				<a
-					href="/feed-algorithm"
-					className="ssu-nav-link group flex items-center"
-				>
-					<FontAwesomeIcon
-						className="shoot-icon mr-4 text-lightMainText dark:text-darkMainText group-hover:text-white"
-						icon={forYouIcon}
-					/>
-					<span className="hidden md:inline">For You</span>
-				</a>
-				<a href="/getallpost" className="ssu-nav-link group flex items-center">
-					<FontAwesomeIcon
-						className="spin-icon mr-4 text-lightMainText dark:text-darkMainText group-hover:text-white"
-						icon={discoverIcon}
-					/>
-					<span className="hidden md:inline">Discover</span>
-				</a>
+      <a
+          href={`/smartPostSearch/${userId}`}
+          onClick={handleSmartClick}
+          className="flex items-center justify-start ssu-nav-link group"
+        >
+          <FontAwesomeIcon
+            className="mr-4 text-lightMainText dark:text-darkMainText group-hover:text-white rotate-in-circle"
+            icon={searchButton}
+          />
+          <span className="hidden md:inline">SmartSearch</span>
+        </a>
 
-				{/* Create Inbox Button */}
-				<span
-					className="ssu-nav-link group flex items-center shake-on-hover"
-					onClick={() => handleInboxClick()}
-				>
-					<span className="flex items-center">
-						<div className="relative mr-1">
-							<FontAwesomeIcon
-								className="bell mr-3 text-lightMainText dark:text-darkMainText group-hover:text-white"
-								icon={notificationIcon}
-							/>
-							{/* Notification count */}
-							{notifications.filter((n) => n.isRead === false).length > 0 && (
-								<span className="absolute -top-2 -right-0 bg-red-600 text-white text-xs font-normal rounded-full w-5 h-5 flex items-center justify-center">
-									{notifications.filter((n) => n.isRead === false).length}
-								</span>
-							)}
-						</div>
-						<span className="hidden md:inline">Notifications</span>
-					</span>
-				</span>
-				<a
-					href="/privateUserProfile"
-					className="ssu-nav-link group flex items-center bounce-on-hover"
-				>
-					<FontAwesomeIcon
-						className="mr-4 text-lightMainText dark:text-darkMainText group-hover:text-white icon"
-						icon={profileIcon}
-					/>
-					<span className="hidden md:inline">Profile</span>
-				</a>
+      <a
+        href="/feed-algorithm"
+        className="flex items-center ssu-nav-link group"
+      >
+        <FontAwesomeIcon
+          className="mr-4 shoot-icon text-lightMainText dark:text-darkMainText group-hover:text-white"
+          icon={forYouIcon}
+        />
+        <span className="hidden md:inline">For You</span>
+      </a>
+      <a href="/getallpost" className="flex items-center ssu-nav-link group">
+        <FontAwesomeIcon
+          className="mr-4 spin-icon text-lightMainText dark:text-darkMainText group-hover:text-white"
+          icon={discoverIcon}
+        />
+        <span className="hidden md:inline">Discover</span>
+      </a>
 
-				{/* Dark Mode Button (Full Button for Larger Screens) */}
-				<div className="mt-auto p-6 hidden md:block">
-					<DarkModeButton />
-				</div>
+      {/* Create Inbox Button */}
+      <span
+        className="flex items-center ssu-nav-link group shake-on-hover"
+        onClick={() => handleInboxClick()}
+      >
+        <span className="flex items-center">
+          <div className="relative mr-1">
+            <FontAwesomeIcon
+              className="mr-3 bell text-lightMainText dark:text-darkMainText group-hover:text-white"
+              icon={notificationIcon}
+            />
+            {/* Notification count */}
+            {notifications.filter((n) => n.isRead === false).length > 0 && (
+              <span className="absolute flex items-center justify-center w-5 h-5 text-xs font-normal text-white bg-red-600 rounded-full -top-2 -right-0">
+                {notifications.filter((n) => n.isRead === false).length}
+              </span>
+            )}
+          </div>
+          <span className="hidden md:inline">Notifications</span>
+        </span>
+      </span>
+      <a
+        href="/privateUserProfile"
+        className="flex items-center ssu-nav-link group bounce-on-hover"
+      >
+        <FontAwesomeIcon
+          className="mr-4 text-lightMainText dark:text-darkMainText group-hover:text-white icon"
+          icon={profileIcon}
+        />
+        <span className="hidden md:inline">Profile</span>
+      </a>
 
-				{/* Dark Mode Icon for Collapsed Window (Smaller Screens) */}
-				<div className="center justify-center block md:hidden">
-					{/* Icon Button for Dark Mode on small screens */}
-					<button onClick={toggleDarkMode}>
-						<FontAwesomeIcon
-							icon={isDarkMode ? sunIcon : moonIcon} // Switch between sun and moon
-							className="text-lightMainText dark:text-darkMainText group-hover:text-white"
-						/>
-					</button>
-				</div>
-			</div>
+      {/* Dark Mode Button (Full Button for Larger Screens) */}
+      <div className="hidden p-6 mt-auto md:block">
+        <DarkModeButton />
+      </div>
 
-			{/* Notification Popup */}
-			{inboxPopupShow && (
-				<Notification
-					notifications={notifications}
-					setNotifications={setNotifications}
-					handleHideNotificationPopup={() => setInboxPopupShow(false)}
-				/>
-			)}
-		</>
-	);
+      {/* Dark Mode Icon for Collapsed Window (Smaller Screens) */}
+      <div className="justify-center block center md:hidden">
+        {/* Icon Button for Dark Mode on small screens */}
+        <button onClick={toggleDarkMode}>
+          <FontAwesomeIcon
+            icon={isDarkMode ? sunIcon : moonIcon} // Switch between sun and moon
+            className="text-lightMainText dark:text-darkMainText group-hover:text-white"
+          />
+        </button>
+      </div>
+    </div>
+
+    {/* Notification Popup */}
+    {inboxPopupShow && (
+      <Notification
+        notifications={notifications}
+        setNotifications={setNotifications}
+        handleHideNotificationPopup={() => setInboxPopupShow(false)}
+      />
+    )}
+  </>
+);
 }

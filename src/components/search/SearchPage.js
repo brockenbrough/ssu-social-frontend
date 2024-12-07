@@ -78,7 +78,7 @@ function SearchPage() {
   };
 
   return (
-    <div className="pl-40 dark:bg-gray-800 min-h-screen">
+    <div className="min-h-screen pl-40 dark:bg-gray-800">
       <div className="flex items-center justify-center py-4 space-x-2">
         <button
           onClick={() => {
@@ -109,13 +109,13 @@ function SearchPage() {
         <input
           type="text"
           placeholder="Search for ..."
-          className="w-full max-w-md mx-auto block p-2 text-gray-900 dark:text-gray-800 dark:bg-gray-300 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+          className="block w-full max-w-md p-2 mx-auto text-gray-900 bg-gray-100 rounded-lg dark:text-gray-800 dark:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500"
           value={searchInput}
           onChange={handleInputChange}
           maxLength={25}  // Set the character limit here
         />
       </div>
-      <h2 className="text-2xl font-bold pt-4 text-center">
+      <h2 className="pt-4 text-2xl font-bold text-center">
         Results for "{searchInput}"
       </h2>
       <div className="pt-4">
@@ -130,7 +130,7 @@ function SearchPage() {
           profiles.map((profile) => (
             <div
               key={profile._id}
-              className="p-3 border-b border-gray-300 hover:bg-orange-500 cursor-pointer hover:text-white"
+              className="p-3 border-b border-gray-300 cursor-pointer hover:bg-orange-500 hover:text-white"
               onClick={() => handleUsernameClick(profile.username)}
             >
               <div className="flex items-center space-x-3">
@@ -141,16 +141,16 @@ function SearchPage() {
                     "https://ssusocial.s3.amazonaws.com/profilepictures/ProfileIcon.png"
                   }
                   alt="Profile"
-                  className="w-10 h-10 rounded-full object-cover"
+                  className="object-cover w-10 h-10 rounded-full"
                 />
                 {/* Username */}
-                <span className="ssu-textlink-bold font-title text-gray-900 dark:text-white">
+                <span className="text-gray-900 ssu-textlink-bold font-title dark:text-white">
                   @{profile.username}
                 </span>
               </div>
               {/* Add the user's bio here */}
               {profile.biography && (
-                <div className="pt-2 text-gray-700 dark:text-gray-300 text-sm">
+                <div className="pt-2 text-sm text-gray-700 dark:text-gray-300">
                   {profile.biography}
                 </div>
               )}

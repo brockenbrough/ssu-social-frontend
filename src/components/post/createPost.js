@@ -169,6 +169,11 @@ const CreatePost = ({ popupShow, setPopupShow }) => {
 		} catch (err) {
 			if (err.response && err.response.data) {
 				const { error: errMsg, categories, flaggedWords } = err.response.data;
+				if (errMsg === "The image contains offensive content.") {
+					setError("Image flagged for offensive content. Please use a different image.");
+				  } else {
+					setError(errMsg);
+				  }
 				if (categories) {
 					setError(
 						`${errMsg} Categories: ${Object.keys(categories)
@@ -247,6 +252,7 @@ const CreatePost = ({ popupShow, setPopupShow }) => {
 					<Modal.Body>
 						{user ? (
 							<Form id="createPostID" onSubmit={handleSubmit}>
+								{error && (<div className="mb-4 text-center text-red-500">{error} </div>)}	
 								<Form.Group controlId="formBasicPassword">
 									<Form.Control
 										as="textarea"
@@ -342,14 +348,14 @@ const CreatePost = ({ popupShow, setPopupShow }) => {
 
 								<div className="w-full">
 									{isSubmitting && (
-										<div className="w-14 mb-2 mx-auto">
+										<div className="mx-auto mb-2 w-14">
 											<img src="/loading.gif" alt="Loading..." />
 										</div>
 									)}
 								</div>
 								<button
 									type="submit"
-									className="w-full bg-orange-600 p-2 rounded-md text-white"
+									className="w-full p-2 text-white bg-orange-600 rounded-md"
 									disabled={isSubmitting}
 								>
 									Create Post
