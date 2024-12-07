@@ -450,6 +450,7 @@ const PrivateUserProfile = () => {
                   className="profile-post-item"
                   onClick={() => openPostModal(index)}
                 >
+                  <Post posts={post} disableTooltip={true} />
                   {post.imageUri && <img src={post.imageUri} alt="Post" />}
                   {post.videoUri && <video src={post.videoUri} controls />}
                 </div>
@@ -462,7 +463,7 @@ const PrivateUserProfile = () => {
             <div className="text-posts-list">
               {textPosts.map((post) => (
                 <div key={post.id}>
-                  <Post posts={post} />
+                  <Post posts={post} disableTooltip={true}/>
                 </div>
               ))}
             </div>
