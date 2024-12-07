@@ -609,7 +609,7 @@ const Post = ({ posts: post, isDiscover, disableTooltip = false }) => {
 								{/* Like button */}
 								<button
 									onClick={handleLikeClick}
-									className="ml-1 mr-0.25 mt-2 font-menu text-gray-900 dark:text-white hover-outline-heart"
+									className={`like-button ${isLiked ? 'active' : ''}`}
 								>
 									<FontAwesomeIcon
 										icon={isLiked ? solidHeartIcon : regularHeartIcon}

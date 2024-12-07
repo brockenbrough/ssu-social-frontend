@@ -110,6 +110,17 @@
 	-webkit-text-stroke: 1px red;
 }
 
+.like-button.active {
+    animation: pulse 0.6s ease;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+
 .hover-outline-comment .fa-comment {
 	transition: transform 0.3s ease, color 0.3s ease;
 }
