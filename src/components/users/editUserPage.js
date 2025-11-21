@@ -35,7 +35,7 @@ const EditUser = () => {
           userId: userInfo.id,
           username: userInfo.username,
           email: userInfo.email,
-          password: userInfo.password,
+          password: "", //userInfo.password,
           biography: userInfo.biography
         })
       })
@@ -63,9 +63,13 @@ const EditUser = () => {
     else {
       try {
         const { data: res } = await apiClient.put(url, form);
-        const { accessToken } = res;
-        //store token in localStorage
-        localStorage.setItem("accessToken", accessToken);
+        //store tokens in local storage
+        if (res && res.accessToken) {
+          localStorage.setItem("accessToken", res.accessToken);
+        }
+        if (res && res.refreshToken) {
+          localStorage.setItem("refreshToken", res.refreshToken);
+        }
         window.location.reload(true);
       } catch (error) {
       if (
