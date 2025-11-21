@@ -14,8 +14,6 @@ import ScrollToTop from "./ScrollToTop";
 import Chat from "../chat/chat";
 import { PostContext, PostPageContext } from "../../App";
 
-const profileImageCache = {}; // Cache for profile images
-
 function PostList({ type, profileUsername, searchInput }) {
   const POST_PER_PAGE = 10;
   const [user, setUser] = useState(null);
@@ -45,92 +43,55 @@ function PostList({ type, profileUsername, searchInput }) {
     if (user) {
       getPosts();
     }
-  }, [user, page, searchInput]);
+  }, [user, page]); // refetch posts whenever page increments
+
+
 
   // Fetch posts and pre-fetch profile images
-  async function getPosts() {
-    let url;
+      async function getPosts() {
+        if (!user) return;
+        setIsLoading(true);
 
-    if (type === "search" && searchInput) {
-      url = `${process.env.REACT_APP_BACKEND_SERVER_URI}/post/search/${searchInput}`;
-    } else if (type === "feed") {
-      url = user
-        ? `${process.env.REACT_APP_BACKEND_SERVER_URI}/feed/${user.username}`
-        : `${process.env.REACT_APP_BACKEND_SERVER_URI}/feed/`;
-    } else if (type === "privateuserprofile") {
-      url = `${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getPostPageByUsername/${user.username}?page=${page}&postPerPage=${POST_PER_PAGE}`;
-    } else if (type === "publicuserprofile") {
-      url = `${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getPostPageByUsername/${profileUsername}?page=${page}&postPerPage=${POST_PER_PAGE}`;
-    } else if (type === "all") {
-      url = `${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getPostPage?page=${page}&postPerPage=${POST_PER_PAGE}`;
-    }
-
-    try {
-      const response = await axios.get(url);
-      const newPosts =
-        type === "feed"
-          ? await fetchFeedPosts(response.data.feed)
-          : response.data;
-
-      // Pre-fetch profile images
-      await prefetchProfileImages(newPosts);
-
-      setPosts((prev) => (page <= 1 ? newPosts : [...prev, ...newPosts]));
-      setHasMore(newPosts.length > 0);
-    } catch (error) {
-      console.error("Failed to fetch posts:", error.message);
-    } finally {
-      setIsLoading(false);
-    }
-  }
-
-  const fetchFeedPosts = async (feed) => {
-    const postsPromises = feed.map((postId) =>
-      axios
-        .get(
-          `${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getPostById/${postId}`
-        )
-        .then((res) => res.data)
-        .catch((error) =>
-          console.error(`Failed to fetch post ID ${postId}:`, error)
-        )
-    );
-    return await Promise.all(postsPromises);
-  };
-
-  // Fetches and caches profile images for a batch of posts
-  const prefetchProfileImages = async (posts) => {
-    const fetchPromises = posts.map(async (post) => {
-      const username = post.username;
-      if (!profileImageCache[username]) {
+        
         try {
-          const response = await axios.get(
-            `${process.env.REACT_APP_BACKEND_SERVER_URI}/user/getUserByUsername/${username}`
-          );
-          profileImageCache[username] = response.data.profileImage || "https://ssusocial.s3.amazonaws.com/profilepictures/ProfileIcon.png";
+          const url = `${process.env.REACT_APP_BACKEND_SERVER_URI}/feed/${user.username}?page=${page}&limit=${POST_PER_PAGE}`;
+          const res = await axios.get(url);
+          const newPosts = res.data || [];
+
+          const normalizedPosts = newPosts.map(p => ({
+            ...p,
+            profileImage: p.profileImage || "https://ssusocial.s3.amazonaws.com/profilepictures/ProfileIcon.png",
+            likeCount: p.likeCount ?? 0,
+            commentCount: p.commentCount ?? 0,
+            viewCount: p.viewCount ?? 0,
+            followerCount: p.followerCount ?? 0,   // use feed batch data
+            followingCount: p.followingCount ?? 0,
+          }));
+
+          setPosts(prev => page === 1 ? normalizedPosts : [...prev, ...normalizedPosts]);
+          setHasMore(newPosts.length === POST_PER_PAGE);
+
         } catch (error) {
-          console.error(`Error fetching profile image for ${username}:`, error);
-          profileImageCache[username] = "https://ssusocial.s3.amazonaws.com/profilepictures/ProfileIcon.png"; // Fallback image
+          console.error("Failed to fetch posts:", error);
+        } finally {
+          setIsLoading(false);
         }
       }
-    });
 
-    await Promise.all(fetchPromises);
-  };
 
-  const lastPostRef = useCallback(
-    (node) => {
-      if (isLoading) return;
-      if (observer.current) observer.current.disconnect();
-      observer.current = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting && hasMore) {
-          setPage((prev) => prev + 1);
-        }
-      });
-      if (node) observer.current.observe(node);
-    },
-    [isLoading, hasMore]
-  );
+      const lastPostRef = useCallback(
+        (node) => {
+          if (isLoading) return;
+          if (observer.current) observer.current.disconnect();
+          observer.current = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting && hasMore) {
+              setPage((prev) => prev + 1);
+            }
+          });
+              if (node) observer.current.observe(node);
+            },
+            [isLoading, hasMore]
+          );
 
   return (
     <>
@@ -171,15 +132,25 @@ function PostList({ type, profileUsername, searchInput }) {
 
                 return (
                   <div ref={isLastPost ? lastPostRef : null} key={post._id}>
-                    <Post posts={post} isDiscover={type === "all"} />
+                    <Post 
+                      posts={post} 
+                      isDiscover={type === "all"} 
+                    />
                   </div>
                 );
               })}
             </div>
           ) : (
             <div className="d-flex flex-column align-items-center">
-              {posts.map((post) => (
-                <Post key={post._id} posts={post} isDiscover={type === "all"} />
+              {posts.map((post, index) => (
+                <Post 
+                  key={post._id} 
+                  posts={post} 
+                  isDiscover={type === "all"} 
+                  profileImage={post.profileImage || "https://ssusocial.s3.amazonaws.com/profilepictures/ProfileIcon.png"}  
+                  followerCount={post.followerCount}
+                  followingCount={post.followingCount} 
+                /> 
               ))}
             </div>
           )}

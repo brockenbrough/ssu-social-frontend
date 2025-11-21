@@ -28,17 +28,14 @@ import { PostPageContext } from "../../App";
 import { useNavigate } from "react-router-dom";
 import { fetchProfileImage } from "../../components/post/fetchProfileImage";
 import FollowerCount from "../following/getFollowerCount"; // Correct relative path
-import FollowingCount from "../following/getFollowingCount"; // Correct relative path
+import FollowingCount from "../following/getFollowingCount"; // Correct relative path ; edited these out to stop mass calls
 import FollowButton from "../following/followButton"; // correct path for follow button
 import socket from "../../utilities/socket";
 
 const defaultProfileImageUrl =
 	"https://ssusocial.s3.amazonaws.com/profilepictures/ProfileIcon.png";
 
-// Cache to store profile images temporarily
-const profileImageCache = {};
-
-const Post = ({ posts: post, isDiscover, disableTooltip = false }) => {
+const Post = ({ posts: post, isDiscover, disableTooltip = false, followerCount, followingCount }) => {
 	const [youtubeThumbnail, setYoutubeThumbnail] = useState(null);
 	const [likeCount, setLikeCount] = useState(0);
 	const [commentCount, setCommentCount] = useState(0);
@@ -65,26 +62,12 @@ const Post = ({ posts: post, isDiscover, disableTooltip = false }) => {
 	const [isAnimationActive, setIsAnimationActive] = useState(false);
 	const [isSlidingOut, setIsSlidingOut] = useState(false);
 	const [profileImageUrl, setProfileImageUrl] = useState(
-		profileImageCache[post.username] || defaultProfileImageUrl
+	post.profileImage || "https://ssusocial.s3.amazonaws.com/profilepictures/ProfileIcon.png"
 	);
 	const [isBlurred, setIsBlurred] = useState(post.isSensitive);
 	const [showMenu, setShowMenu] = useState(false);
 	const [showImageModal, setShowImageModal] = useState(false);
 	const [viewCount, setViewCount] = useState(0);
-
-	useEffect(() => {
-		const loadImage = async () => {
-			if (!profileImageCache[post.username]) {
-				const imageUrl = await fetchProfileImage(post.username);
-				profileImageCache[post.username] = imageUrl || defaultProfileImageUrl;
-				setProfileImageUrl(profileImageCache[post.username]);
-			} else {
-				setProfileImageUrl(profileImageCache[post.username]);
-			}
-		};
-
-		loadImage();
-	}, [post.username]);
 
 	const handleShowPostModal = () => {
 		if (showCommentCard) {
@@ -145,16 +128,41 @@ const Post = ({ posts: post, isDiscover, disableTooltip = false }) => {
 	const displayContent = rendercontent(post.content);
 
 	useEffect(() => {
-		const currentUser = getUserInfoAsync();
-		setUser(currentUser);
-		fetchLikeCount();
-		fetchCommentCount();
-		fetchProfileImage();
+		const load = async () => {
+			const currentUser = await getUserInfoAsync();
+			setUser(currentUser);
 
+			try {
+				const response = await fetch(
+					`${process.env.REACT_APP_BACKEND_SERVER_URI}/feed/${currentUser.username}`
+				);
+				const data = await response.json();
+
+				// Find THIS post inside the feed
+				const feedPost = data.find((p) => p._id === post._id);
+				if (feedPost) {
+					setLikeCount(feedPost.likeCount);
+					setCommentCount(feedPost.commentCount);
+					setProfileImageUrl(feedPost.profileImage); // <-- correct setter
+					setViewCount(feedPost.viewCount);
+				}
+			} catch (error) {
+				console.error("Error fetching feed:", error);
+			}
+		};
+
+		load();
+
+		// Keep socket for real-time updates
 		socket.on("comment", (data) => {
-			fetchCommentCount();
+			setCommentCount((prev) => prev + 1); // increment comment count in real-time
 		});
+
+		return () => {
+			socket.off("comment"); // cleanup
+		};
 	}, [post._id]);
+
 
 	const fetchLikeCount = () => {
 		fetch(
@@ -170,6 +178,7 @@ const Post = ({ posts: post, isDiscover, disableTooltip = false }) => {
 				setDataLoaded(true);
 			});
 	};
+
 
 	const fetchLikesList = async () => {
 		if (!postId) {
@@ -498,10 +507,10 @@ const Post = ({ posts: post, isDiscover, disableTooltip = false }) => {
 										<div>
 											<div className="flex justify-between mb-2 text-sm font-semibold text-gray-900">
 												<div className="mr-4">
-													<FollowerCount username={post?.username} />
+													<FollowerCount count={followerCount || 0} />
 												</div>
 												<div>
-													<FollowingCount username={post?.username} />
+													<FollowingCount count={followingCount || 0} />
 												</div>
 											</div>
 											<div className="justify-items-center">

@@ -5,23 +5,20 @@ import Post from "./post";
 export default function PostList() {
   const [posts, setPosts] = useState([]);
 
-  async function getPosts() {
-    let feed = [];
-    let postData = [];
-    const res = await axios.get(`http://localhost:8093/feed/`)
-      .then(res => {
-        feed = res.data.feed
-      })
-      .catch(error => alert("An error has occurred while fetching feed data"))
-    for (let i = 0; i < feed.length; i++) {
-      const res = await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_URI}/posts/getPostById/${feed[i]}`)
-        .then(res => {
-          postData.push(res.data)
-        })
-        .catch(error => alert("An error has occurred while fetching post data"))
+
+    async function getPosts() {
+      try {
+        // Call the new feed route (backend handles user context)
+        const res = await axios.get(
+          `${process.env.REACT_APP_BACKEND_SERVER_URI}/feed/`
+        );
+
+        // Feed now returns full post objects, no need for separate getPostById calls
+        setPosts(res.data.feed);
+      } catch (error) {
+        console.error("An error has occurred while fetching feed data", error);
+      }
     }
-    setPosts(postData)
-  }
 
   useEffect(() => {
     getPosts();
