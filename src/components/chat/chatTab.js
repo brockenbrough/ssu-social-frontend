@@ -9,7 +9,7 @@ import EmojiPicker from "../comments/EmojiPickerButton";
 
 let scrollEffect = "smooth";
 
-const ChatTab = ({ chatRoom, chatRoomMessages, currentUser, chatUser }) => {
+const ChatTab = ({ chatRoom, chatRoomMessages, currentUser, chatUser, setMessages }) => {
   const [newMessage, setNewMessage] = useState("");
   const newMessageRef = useRef(null);
   const messagesEndRef = useRef(null);
@@ -50,12 +50,28 @@ const ChatTab = ({ chatRoom, chatRoomMessages, currentUser, chatUser }) => {
 
     if (message === "") return;
 
+    // Create a temporary message object
+    const tempMessage = {
+       _id: "temp-" + Date.now(),
+       chatRoomId: chatRoom._id,
+       senderId: currentUser._id,
+       receiverId: chatUser._id,
+       text: message,
+       date: new Date().toISOString(),
+       isRead: true,
+  };
+
+  // Immediately add to messages so it shows in UI
+  setMessages((prev) => [...prev, tempMessage]);
+
     const response = await saveMessage(message);
     const savedMessage = response.data;
 
     if (!savedMessage) {
-      setNewMessage(message);
-      return;
+    // If save failed, remove temp message
+    setMessages((prev) => prev.filter((m) => m._id !== tempMessage._id));
+    setNewMessage(message);
+    return;
     }
 
     socket.emit("message", savedMessage);

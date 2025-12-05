@@ -358,6 +358,7 @@ const Chat = ({ targetChatUser, setTargetChatUser }) => {
                   chatRoomMessages={getChatRoomMessages(currentChatRoom._id)}
                   currentUser={user}
                   chatUser={chatUser}
+                  setMessages={setMessages}
                 />
               </div>
             )}

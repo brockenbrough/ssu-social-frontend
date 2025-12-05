@@ -144,12 +144,18 @@ function PostList({ type, profileUsername, searchInput }) {
             <div className="d-flex flex-column align-items-center">
               {posts.map((post, index) => (
                 <Post 
+                //past info from parent class into posts this avoids many calls repeating
                   key={post._id} 
                   posts={post} 
                   isDiscover={type === "all"} 
+                  user = {user}
                   profileImage={post.profileImage || "https://ssusocial.s3.amazonaws.com/profilepictures/ProfileIcon.png"}  
                   followerCount={post.followerCount}
                   followingCount={post.followingCount} 
+                  likeCount={post.likeCount}          
+                  commentCount={post.commentCount}    
+                  viewCount={post.viewCount}   
+                  isLiked={post.isLiked}      
                 /> 
               ))}
             </div>

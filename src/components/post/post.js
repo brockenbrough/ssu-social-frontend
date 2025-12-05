@@ -35,18 +35,15 @@ import socket from "../../utilities/socket";
 const defaultProfileImageUrl =
 	"https://ssusocial.s3.amazonaws.com/profilepictures/ProfileIcon.png";
 
-const Post = ({ posts: post, isDiscover, disableTooltip = false, followerCount, followingCount }) => {
+const Post = ({ posts: post, isDiscover, disableTooltip = false, followerCount, followingCount, user }) => {
 	const [youtubeThumbnail, setYoutubeThumbnail] = useState(null);
-	const [likeCount, setLikeCount] = useState(0);
-	const [commentCount, setCommentCount] = useState(0);
-	const [isLiked, setIsLiked] = useState(false);
+	const [isLiked, setIsLiked] = useState(post.isLiked ?? false);
 	const [likesList, setLikesList] = useState([]); // List of users who liked the post
 	const [showLikesModal, setShowLikesModal] = useState(false); // Modal state for likes
 	const [dataLoaded, setDataLoaded] = useState(false);
 	const formattedDate = moment(post.date).format("h:mm A • M/D/YYYY");
 	const { _id: postId } = post;
 	const navigate = useNavigate();
-	const [user, setUser] = useState(null);
 	const { darkMode } = useDarkMode();
 	const isCurrentUserPost =
 		user && (user.username === post.username || user.role === "admin");
@@ -67,7 +64,9 @@ const Post = ({ posts: post, isDiscover, disableTooltip = false, followerCount, 
 	const [isBlurred, setIsBlurred] = useState(post.isSensitive);
 	const [showMenu, setShowMenu] = useState(false);
 	const [showImageModal, setShowImageModal] = useState(false);
-	const [viewCount, setViewCount] = useState(0);
+	const [likeCount, setLikeCount] = useState(post.likeCount ?? 0);
+  	const [commentCount, setCommentCount] = useState(post.commentCount ?? 0);
+ 	const [viewCount, setViewCount] = useState(post.viewCount ?? 0);
 
 	const handleShowPostModal = () => {
 		if (showCommentCard) {
@@ -126,32 +125,7 @@ const Post = ({ posts: post, isDiscover, disableTooltip = false, followerCount, 
 	}, [post, showCommentCard]);
 
 	const displayContent = rendercontent(post.content);
-
 	useEffect(() => {
-		const load = async () => {
-			const currentUser = await getUserInfoAsync();
-			setUser(currentUser);
-
-			try {
-				const response = await fetch(
-					`${process.env.REACT_APP_BACKEND_SERVER_URI}/feed/${currentUser.username}`
-				);
-				const data = await response.json();
-
-				// Find THIS post inside the feed
-				const feedPost = data.find((p) => p._id === post._id);
-				if (feedPost) {
-					setLikeCount(feedPost.likeCount);
-					setCommentCount(feedPost.commentCount);
-					setProfileImageUrl(feedPost.profileImage); // <-- correct setter
-					setViewCount(feedPost.viewCount);
-				}
-			} catch (error) {
-				console.error("Error fetching feed:", error);
-			}
-		};
-
-		load();
 
 		// Keep socket for real-time updates
 		socket.on("comment", (data) => {
@@ -208,7 +182,7 @@ const Post = ({ posts: post, isDiscover, disableTooltip = false, followerCount, 
 			);
 		}
 	};
-
+	
 	// Like count click handler
 	const handleLikeCountClick = () => {
 		fetchLikesList(); // Fetch and display likes when like count is clicked
@@ -338,47 +312,6 @@ const Post = ({ posts: post, isDiscover, disableTooltip = false, followerCount, 
 		}
 	};
 
-	useEffect(() => {
-		const fetchViewCount = async () => {
-			try {
-				console.log("Fetching views for post:", post._id);
-				const response = await axios.get(
-					`${process.env.REACT_APP_BACKEND_SERVER_URI}/views/${post._id}`
-				);
-				console.log("Response Data:", response.data); // Debug response structure
-
-				if (response && response.data !== undefined && response.data.viewCount !== undefined) {
-					console.log("Updating viewCount state:", response.data.viewCount);
-					setViewCount(response.data.viewCount); // Update state
-				} else {
-					console.error("Invalid response format:", response.data);
-				}
-			} catch (error) {
-				console.error("Error fetching view count:", error);
-			}
-		};
-
-		if (post?._id) fetchViewCount();
-	}, [post?._id]);
-
-	const handleIsViewed = async () => {
-		if (!user || !user.id) return;
-
-		try {
-			await axios.post(
-				`${process.env.REACT_APP_BACKEND_SERVER_URI}/views/increase`,
-				{ postId, userId: user.id }
-			);
-		} catch (error) {
-			console.error("Error updating view count:", error);
-		}
-	};
-
-	// Trigger the view count increment on mount
-	useEffect(() => {
-		handleIsViewed();
-	}, [post._id, user]);
-
 	const handleShowEditModal = () => {
 		if (isCurrentUserPost) {
 			setEditedPost({ content: post.content, isSensitive: post.isSensitive });
@@ -438,7 +371,6 @@ const Post = ({ posts: post, isDiscover, disableTooltip = false, followerCount, 
 			<div
 				className="d-flex justify-content-center margin: 0, padding: 0"
 				style={{ width: "100%" }}
-				onClick={handleIsViewed}
 			>
 				<div
 					ref={postCardRef}
@@ -692,7 +624,7 @@ const Post = ({ posts: post, isDiscover, disableTooltip = false, followerCount, 
 							<Card.Body>
 								<CreateComment
 									post={post}
-									setParentCommentCount={fetchCommentCount}
+  									setParentCommentCount={() => setCommentCount(prev => prev + 1)}
 									postCardHeight={postCardHeight}
 									hasMedia={hasMedia}
 								/>
