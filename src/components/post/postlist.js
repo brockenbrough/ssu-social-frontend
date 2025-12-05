@@ -14,7 +14,7 @@ import ScrollToTop from "./ScrollToTop";
 import Chat from "../chat/chat";
 import { PostContext, PostPageContext } from "../../App";
 
-function PostList({ type, profileUsername, searchInput }) {
+function PostList({ type, profileUsername, searchInput, posts: searchPosts }) {
   const POST_PER_PAGE = 10;
   const [user, setUser] = useState(null);
   const [posts, setPosts] = useContext(PostContext);
@@ -92,6 +92,22 @@ function PostList({ type, profileUsername, searchInput }) {
             },
             [isLoading, hasMore]
           );
+
+                    // --- SEARCH MODE ---
+          if (type === "search") {
+            return (
+              <div className="ssu-post-list">
+                {searchPosts?.length === 0 ? (
+                  <p className="text-center">No posts found.</p>
+                ) : (
+                  searchPosts.map((post) => (
+                    <Post key={post._id} posts={post} isDiscover={false} />
+                  ))
+                )}
+              </div>
+            );
+          }
+
 
   return (
     <>

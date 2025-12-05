@@ -122,7 +122,7 @@ function SearchPage() {
         {isPostsVisible ? (
           posts.length > 0 ? (
             // Use PostList to display posts
-            <PostList type="search" searchInput={searchInput} />
+            <PostList type="search" posts={posts} />
           ) : (
             <p className="text-center">No posts found.</p>
           )
